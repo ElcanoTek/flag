@@ -1,0 +1,84 @@
+{
+  "font": {
+    "heading": "Dubai",
+    "body": "Dubai",
+    "weight": {
+      "regular": 400,
+      "bold": 700
+    },
+    "size": {
+      "title": "28px",
+      "subtitle": "18px",
+      "bodyLarge": "14px",
+      "body": "13px",
+      "caption": "12px"
+    },
+    "lineHeight": {
+      "title": "34px",
+      "subtitle": "24px",
+      "bodyLarge": "20px",
+      "body": "18px",
+      "caption": "16px"
+    }
+  },
+  "color": {
+    "primary": "#7272AB",
+    "secondary": "#586F7C",
+    "accent": "#9DA7EF",
+    "background": "#1A0B1E",
+    "surface": {
+      "default": "#241B31",
+      "elevated": "#2F2741"
+    },
+    "border": {
+      "default": "rgba(114, 114, 171, 0.35)",
+      "strong": "rgba(114, 114, 171, 0.55)"
+    },
+    "text": {
+      "primary": "#FFFFFF",
+      "secondary": "#D2D9DE",
+      "muted": "#BEB6CD"
+    },
+    "status": {
+      "success": "#50FA7B",
+      "warning": "#FFB86C",
+      "danger": "#FF5555",
+      "info": "#8A8BC0"
+    }
+  },
+  "space": {
+    "1": "4px",
+    "2": "8px",
+    "3": "12px",
+    "4": "16px",
+    "5": "20px",
+    "6": "24px",
+    "7": "32px",
+    "8": "40px",
+    "9": "48px"
+  },
+  "radius": {
+    "sm": "8px",
+    "md": "10px",
+    "lg": "14px",
+    "xl": "18px",
+    "pill": "999px"
+  },
+  "shadow": {
+    "sm": "0 10px 24px rgba(0, 0, 0, 0.28)",
+    "md": "0 12px 24px rgba(0, 0, 0, 0.34)",
+    "lg": "0 22px 54px rgba(0, 0, 0, 0.52)"
+  },
+  "layout": {
+    "container": {
+      "default": "1160px",
+      "dense": "1400px"
+    },
+    "breakpoint": {
+      "sm": "640px",
+      "md": "768px",
+      "lg": "1024px",
+      "xl": "1280px"
+    }
+  }
+}

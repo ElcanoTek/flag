@@ -1,0 +1,51 @@
+# Migration Guidance
+
+## Adoption Strategy
+
+### Phase 1 - Foundations First
+- Import `tokens/design-tokens.css` into each microservice UI.
+- Replace local color variables with canonical semantic tokens.
+- Switch typography to Dubai Bold/Regular and fixed scale.
+
+### Phase 2 - Shared Primitives
+- Standardize button variants, input fields, badges, cards, and empty states.
+- Normalize focus/hover/disabled/loading behavior.
+
+### Phase 3 - Complex Components
+- Align modals, table/list rows, filters, pagination, date pickers, and file upload.
+- Replace divergent scheduling and chips implementation styling with tokenized variants.
+
+### Phase 4 - Cleanup and Enforcement
+- Remove deprecated component classes.
+- Add lint/check rules to block forbidden colors/fonts.
+- Update contribution templates to require design-system compliance.
+
+## Repo-by-Repo Priority
+
+## Explorer
+- Remove CDN dependency for datepicker styles/scripts.
+- Replace remaining ad hoc sizes with tokenized spacing/radius.
+
+## Lens
+- Migrate typography from IBM Plex to Dubai.
+- Keep existing component structure; mostly token refactor.
+
+## Home
+- Convert Avenir-based typography and bespoke spacing to system tokens.
+- Keep launchpad pattern but align controls, badges, and states.
+
+## MOC
+- Keep IA and feature model; replace visual language (fonts, glow-heavy effects, status palette mapping).
+- Prioritize consistency of buttons/forms/tables/modals with system primitives.
+
+## Victoria Voice (`victoria-phone`)
+- Extract inline CSS into tokenized stylesheet.
+- Align typography, button/input/table styles, and status badges.
+
+## Victoria
+- No active frontend surface identified in current repo.
+
+## Definition of Done for Each Repo
+- Uses canonical tokens for color, spacing, radius, typography.
+- Ships required button/input/modal/table/status variants only.
+- Passes interaction/accessibility baseline in `INTERACTION_ACCESSIBILITY.md`.
