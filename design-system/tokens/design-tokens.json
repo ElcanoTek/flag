@@ -7,18 +7,22 @@
       "bold": 700
     },
     "size": {
-      "title": "28px",
-      "subtitle": "18px",
-      "bodyLarge": "14px",
-      "body": "13px",
-      "caption": "12px"
+      "display": "clamp(2rem, 1.75rem + 0.8vw, 2.5rem)",
+      "title": "1.75rem",
+      "subtitle": "1.125rem",
+      "bodyLarge": "0.875rem",
+      "body": "0.8125rem",
+      "caption": "0.75rem",
+      "overline": "0.6875rem"
     },
     "lineHeight": {
-      "title": "34px",
-      "subtitle": "24px",
-      "bodyLarge": "20px",
-      "body": "18px",
-      "caption": "16px"
+      "display": "1.15",
+      "title": "1.2143",
+      "subtitle": "1.3334",
+      "bodyLarge": "1.4286",
+      "body": "1.3847",
+      "caption": "1.3334",
+      "overline": "1.2728"
     }
   },
   "color": {
@@ -43,26 +47,93 @@
       "success": "#50FA7B",
       "warning": "#FFB86C",
       "danger": "#FF5555",
-      "info": "#8A8BC0"
+      "info": "#8A8BC0",
+      "pending": {
+        "fg": "#D2D9DE",
+        "bg": "rgba(88, 111, 124, 0.18)",
+        "border": "rgba(88, 111, 124, 0.55)"
+      },
+      "scheduled": {
+        "fg": "#E9DBB8",
+        "bg": "rgba(255, 184, 108, 0.14)",
+        "border": "rgba(255, 184, 108, 0.55)"
+      },
+      "assigned": {
+        "fg": "#D4DEFF",
+        "bg": "rgba(138, 139, 192, 0.18)",
+        "border": "rgba(138, 139, 192, 0.55)"
+      },
+      "leased": {
+        "fg": "#D4DEFF",
+        "bg": "rgba(138, 139, 192, 0.14)",
+        "border": "rgba(114, 114, 171, 0.55)"
+      },
+      "running": {
+        "fg": "#D4DEFF",
+        "bg": "rgba(114, 114, 171, 0.2)",
+        "border": "rgba(114, 114, 171, 0.6)"
+      },
+      "analyzing": {
+        "fg": "#D8E5FF",
+        "bg": "rgba(62, 146, 196, 0.18)",
+        "border": "rgba(62, 146, 196, 0.52)"
+      },
+      "completed": {
+        "fg": "#CBFDD8",
+        "bg": "rgba(80, 250, 123, 0.14)",
+        "border": "rgba(80, 250, 123, 0.6)"
+      },
+      "errorState": {
+        "fg": "#FFD2D2",
+        "bg": "rgba(255, 85, 85, 0.14)",
+        "border": "rgba(255, 85, 85, 0.6)"
+      },
+      "cancelled": {
+        "fg": "#D2D9DE",
+        "bg": "rgba(88, 111, 124, 0.2)",
+        "border": "rgba(88, 111, 124, 0.52)"
+      }
+    }
+  },
+  "gradient": {
+    "background": {
+      "homeSignature": "radial-gradient(circle at 8% -4%, rgba(114, 114, 171, 0.34), transparent 34%), radial-gradient(circle at 92% 2%, rgba(88, 111, 124, 0.28), transparent 32%), radial-gradient(circle at 72% 82%, rgba(114, 114, 171, 0.18), transparent 30%), linear-gradient(150deg, #0f0612 0%, #1a0b1e 52%, #090409 100%)",
+      "productStandard": "radial-gradient(circle at 10% 20%, rgba(114, 114, 171, 0.3), transparent 55%), radial-gradient(circle at 80% 0%, rgba(88, 111, 124, 0.35), transparent 50%), linear-gradient(160deg, #1a0b1e 0%, #000000 100%)",
+      "opsConsole": "radial-gradient(ellipse at center, rgba(113, 114, 170, 0.06) 0%, transparent 60%), linear-gradient(180deg, #1a0b1e 0%, #241b31 40%, #1a0b1e 100%)"
+    },
+    "surface": {
+      "panel": "linear-gradient(165deg, rgba(26, 11, 30, 0.88), rgba(52, 43, 73, 0.82))",
+      "card": "linear-gradient(145deg, rgba(38, 21, 44, 0.92), rgba(23, 13, 29, 0.88))",
+      "elevated": "linear-gradient(150deg, rgba(30, 17, 36, 0.94), rgba(22, 12, 28, 0.92))"
+    },
+    "action": {
+      "primary": "linear-gradient(140deg, #7272ab, #586f7c)",
+      "success": "linear-gradient(155deg, rgba(44, 78, 59, 0.82), rgba(32, 53, 41, 0.9))",
+      "disabled": "linear-gradient(150deg, rgba(69, 74, 86, 0.5), rgba(54, 59, 70, 0.38))"
     }
   },
   "space": {
-    "1": "4px",
-    "2": "8px",
-    "3": "12px",
-    "4": "16px",
-    "5": "20px",
-    "6": "24px",
-    "7": "32px",
-    "8": "40px",
-    "9": "48px"
+    "1": "0.25rem",
+    "2": "0.5rem",
+    "3": "0.75rem",
+    "4": "1rem",
+    "5": "1.25rem",
+    "6": "1.5rem",
+    "7": "2rem",
+    "8": "2.5rem",
+    "9": "3rem",
+    "controlInline": "0.75rem",
+    "controlStack": "0.5rem",
+    "cardPadding": "1.5rem",
+    "sectionStack": "2rem",
+    "pageGutter": "1.5rem"
   },
   "radius": {
-    "sm": "8px",
-    "md": "10px",
-    "lg": "14px",
-    "xl": "18px",
-    "pill": "999px"
+    "sm": "0.5rem",
+    "md": "0.625rem",
+    "lg": "0.875rem",
+    "xl": "1.125rem",
+    "pill": "999rem"
   },
   "shadow": {
     "sm": "0 10px 24px rgba(0, 0, 0, 0.28)",
@@ -71,8 +142,8 @@
   },
   "layout": {
     "container": {
-      "default": "1160px",
-      "dense": "1400px"
+      "default": "72.5rem",
+      "dense": "87.5rem"
     },
     "breakpoint": {
       "sm": "640px",

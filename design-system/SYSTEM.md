@@ -39,4 +39,5 @@ Establish a durable, implementation-ready, cross-service design language for Elc
 - New surfaces must import `tokens/design-tokens.css` first.
 - Components should follow specs in `COMPONENTS.md`.
 - Interactions must satisfy `INTERACTION_ACCESSIBILITY.md`.
+- Background and gradient choices must follow `BACKGROUNDS.md`.
 - Any deviation requires explicit documentation in the owning repo.

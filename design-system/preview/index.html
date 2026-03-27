@@ -4,19 +4,30 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Elcano Design System Preview</title>
+  <link rel="stylesheet" href="./vendor/flatpickr/flatpickr.min.css" />
   <link rel="stylesheet" href="../tokens/design-tokens.css" />
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
   <div class="shell">
-    <header class="header">
-      <h1>Elcano Design System</h1>
-      <p>Canonical visual reference from the Flag repo.</p>
+    <header class="ds-app-header ds-app-header--hero" role="banner">
+      <div class="ds-app-header__brand">
+        <img class="ds-app-header__mark" src="../logos/elcano-mark-primary.svg" alt="Elcano" />
+        <div class="ds-app-header__text">
+          <p class="ds-app-header__eyebrow">Elcano Internal</p>
+          <h1 class="ds-app-header__title">Elcano Design System</h1>
+        </div>
+      </div>
     </header>
+    <p class="hero-intro">Canonical visual reference from the Flag repo. Includes foundations, logos, unified inputs, and component patterns for all products.</p>
 
     <section class="section">
-      <h2>Color Tokens</h2>
-      <div class="tokens-grid">
+      <details class="section-accordion" open>
+        <summary>
+          <h2>Color Tokens</h2>
+        </summary>
+        <div class="section-body">
+<div class="tokens-grid">
         <div class="swatch"><div class="swatch-chip" style="background:#7272ab"></div><div class="swatch-meta"><strong>Primary</strong><span>#7272AB</span></div></div>
         <div class="swatch"><div class="swatch-chip" style="background:#586f7c"></div><div class="swatch-meta"><strong>Secondary</strong><span>#586F7C</span></div></div>
         <div class="swatch"><div class="swatch-chip" style="background:#9da7ef"></div><div class="swatch-meta"><strong>Accent</strong><span>#9DA7EF</span></div></div>
@@ -24,22 +35,208 @@
         <div class="swatch"><div class="swatch-chip" style="background:#241b31"></div><div class="swatch-meta"><strong>Surface 1</strong><span>#241B31</span></div></div>
         <div class="swatch"><div class="swatch-chip" style="background:#2f2741"></div><div class="swatch-meta"><strong>Surface 2</strong><span>#2F2741</span></div></div>
       </div>
+        </div>
+      </details>
     </section>
 
     <section class="section">
-      <h2>Typography</h2>
-      <div class="type-stack">
-        <div class="type-item"><h1 style="font-size:28px;line-height:34px">Title 28px / Dubai Bold</h1></div>
-        <div class="type-item"><h2 style="font-size:18px;line-height:24px">Subtitle 18px / Dubai Bold</h2></div>
-        <div class="type-item"><p style="font-size:14px;line-height:20px">Body Large 14px / Dubai Regular</p></div>
-        <div class="type-item"><p style="font-size:13px;line-height:18px">Body Base 13px / Dubai Regular</p></div>
-        <div class="type-item"><p style="font-size:12px;line-height:16px">Body Small 12px / Dubai Regular</p></div>
+      <details class="section-accordion" open>
+        <summary>
+          <h2>Typography (Rem Scale)</h2>
+        </summary>
+        <div class="section-body">
+<div class="type-stack">
+        <div class="type-item"><p class="type-meta">Display / clamp(2rem, 1.75rem + 0.8vw, 2.5rem)</p><p class="type-display">Operations Intelligence Platform</p></div>
+        <div class="type-item"><p class="type-meta">Title / 1.75rem</p><p class="type-title">Campaign Delivery Health</p></div>
+        <div class="type-item"><p class="type-meta">Subtitle / 1.125rem</p><p class="type-subtitle">Today</p></div>
+        <div class="type-item"><p class="type-meta">Body Large / 0.875rem</p><p class="type-body-lg">Use body large for readable copy and operational descriptions.</p></div>
+        <div class="type-item"><p class="type-meta">Body Base / 0.8125rem</p><p class="type-body">Use body base for controls, table rows, and compact UI copy.</p></div>
+        <div class="type-item"><p class="type-meta">Caption / 0.75rem</p><p class="type-caption">Used for helper text, metadata, and low-emphasis labels.</p></div>
       </div>
+        </div>
+      </details>
     </section>
 
     <section class="section">
-      <h2>Buttons and Inputs</h2>
+      <details class="section-accordion" open>
+        <summary>
+          <h2>Common Spacing</h2>
+        </summary>
+        <div class="section-body">
+<div class="space-stack">
+        <div class="space-item"><span class="space-label">space-1 / 0.25rem</span><span class="space-bar" style="width:0.25rem"></span></div>
+        <div class="space-item"><span class="space-label">space-2 / 0.5rem</span><span class="space-bar" style="width:0.5rem"></span></div>
+        <div class="space-item"><span class="space-label">space-3 / 0.75rem</span><span class="space-bar" style="width:0.75rem"></span></div>
+        <div class="space-item"><span class="space-label">space-4 / 1rem</span><span class="space-bar" style="width:1rem"></span></div>
+        <div class="space-item"><span class="space-label">space-5 / 1.25rem</span><span class="space-bar" style="width:1.25rem"></span></div>
+        <div class="space-item"><span class="space-label">space-6 / 1.5rem</span><span class="space-bar" style="width:1.5rem"></span></div>
+        <div class="space-item"><span class="space-label">space-7 / 2rem</span><span class="space-bar" style="width:2rem"></span></div>
+      </div>
+      <p class="section-note">Use semantic spacing primitives for consistency: control inline, control stack, card padding, section stack, page gutter.</p>
+        </div>
+      </details>
+    </section>
+
+    <section class="section">
+      <details class="section-accordion" open>
+        <summary>
+          <h2>Gradient and Background Standard</h2>
+        </summary>
+        <div class="section-body">
+<p class="section-note">Default and enforced shell background across products is Home Signature. Other shell gradients are reserved and require explicit exception approval.</p>
+      <div class="bg-grid">
+        <article class="bg-card bg-home">
+          <h3>Home Signature (Default)</h3>
+          <p>Use for all standard app shells across Lens, Explorer, Home, MOC, and Victoria surfaces.</p>
+        </article>
+        <article class="bg-card bg-product">
+          <h3>Product Standard (Reserved)</h3>
+          <p>Reserved fallback for constrained environments only.</p>
+        </article>
+        <article class="bg-card bg-ops">
+          <h3>Ops Console (Reserved)</h3>
+          <p>Reserved for highly specialized dashboards after design approval.</p>
+        </article>
+      </div>
+      <div class="bg-grid surface-grid">
+        <article class="bg-card bg-surface-panel"><h3>Surface Panel</h3><p>Default section and panel background.</p></article>
+        <article class="bg-card bg-surface-card"><h3>Surface Card</h3><p>Feature cards and highlighted grouped content.</p></article>
+        <article class="bg-card bg-surface-elevated"><h3>Surface Elevated</h3><p>Modals and elevated detail surfaces.</p></article>
+      </div>
+        </div>
+      </details>
+    </section>
+
+    <section class="section">
+      <details class="section-accordion" open>
+        <summary>
+          <h2>Logos and Brand Marks</h2>
+        </summary>
+        <div class="section-body">
+<p class="section-note">Use only approved marks from `design-system/logos`. Each logo below includes its approved usage context.</p>
+      <div class="logo-grid">
+        <article class="logo-card">
+          <div class="logo-stage logo-stage-dark">
+            <img src="../logos/elcano-mark-primary.svg" alt="Elcano primary mark" />
+          </div>
+          <h3>Elcano Primary Mark</h3>
+          <p>Corporate and suite-level identity. Use in global headers, launch surfaces, and brand-level navigation.</p>
+        </article>
+
+        <article class="logo-card">
+          <div class="logo-stage logo-stage-dark">
+            <img src="../logos/elcano-mark-favicon.svg" alt="Elcano favicon mark" />
+          </div>
+          <h3>Elcano Favicon Mark</h3>
+          <p>Browser tab, touch icon source, and compact brand placements where square mark format is required.</p>
+        </article>
+
+        <article class="logo-card">
+          <div class="logo-stage logo-stage-dark">
+            <img src="../logos/victoria-ship-white.svg" alt="Victoria ship mark" />
+          </div>
+          <h3>Victoria Product Mark</h3>
+          <p>Victoria-specific touchpoints only. Do not replace Elcano suite branding in global shell.</p>
+        </article>
+
+        <article class="logo-card">
+          <div class="logo-stage logo-stage-dark">
+            <img src="../logos/lens-favicon.svg" alt="Lens app mark" />
+          </div>
+          <h3>Lens App Mark</h3>
+          <p>Lens product identity for app-level branding, favicon usage, and app launch tiles.</p>
+        </article>
+
+        <article class="logo-card">
+          <div class="logo-stage logo-stage-dark">
+            <img src="../logos/explorer-favicon.svg" alt="Explorer app mark" />
+          </div>
+          <h3>Explorer App Mark</h3>
+          <p>Explorer product identity for app-level branding, favicon usage, and app launch tiles.</p>
+        </article>
+
+        <article class="logo-card">
+          <div class="logo-stage logo-stage-dark">
+            <img src="../logos/moc-icon-192.png" alt="MOC app icon" />
+          </div>
+          <h3>MOC App Icon</h3>
+          <p>MOC product icon for launch surfaces and icon contexts. Keep 1:1 aspect ratio and no color edits.</p>
+        </article>
+      </div>
+        </div>
+      </details>
+    </section>
+
+    <section class="section">
+      <details class="section-accordion" open>
+        <summary>
+          <h2>Core Icons</h2>
+        </summary>
+        <div class="section-body">
+<div class="icons-grid">
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#download"></use></svg><span>download</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#trash"></use></svg><span>trash</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#logout"></use></svg><span>logout</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#paperclip"></use></svg><span>paperclip</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#calendar"></use></svg><span>calendar</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#clock"></use></svg><span>clock</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#search"></use></svg><span>search</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#filter"></use></svg><span>filter</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#plus"></use></svg><span>plus</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#close"></use></svg><span>close</span></div>
+      </div>
       <div class="demo-row">
+        <button class="btn btn-primary"><svg class="icon-inline" aria-hidden="true"><use href="../icons/core-icons.svg#download"></use></svg> Download</button>
+        <button class="btn btn-danger"><svg class="icon-inline" aria-hidden="true"><use href="../icons/core-icons.svg#trash"></use></svg> Delete</button>
+        <button class="btn btn-ghost"><svg class="icon-inline" aria-hidden="true"><use href="../icons/core-icons.svg#logout"></use></svg> Logout</button>
+        <button class="btn btn-secondary"><svg class="icon-inline" aria-hidden="true"><use href="../icons/core-icons.svg#paperclip"></use></svg> Attach</button>
+      </div>
+        </div>
+      </details>
+    </section>
+
+    <section class="section">
+      <details class="section-accordion" open>
+        <summary>
+          <h2>Common Header Pattern</h2>
+        </summary>
+        <div class="section-body">
+<p class="section-note">Standard header pattern for all products: brand mark + suite label + page title + right-side actions. This mirrors the Home topbar style and should be reused across apps.</p>
+      <article class="header-pattern-card">
+        <header class="ds-app-header" role="banner">
+          <div class="ds-app-header__brand">
+            <img class="ds-app-header__mark" src="../logos/elcano-mark-primary.svg" alt="Elcano" />
+            <div class="ds-app-header__text">
+              <p class="ds-app-header__eyebrow">Elcano Internal</p>
+              <h3 class="ds-app-header__title">Home</h3>
+            </div>
+          </div>
+          <div class="ds-app-header__actions">
+            <button class="icon-action header-logout-btn" type="button" aria-label="Log out" title="Log out">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                <path d="M16 17l5-5-5-5"></path>
+                <path d="M21 12H9"></path>
+              </svg>
+            </button>
+          </div>
+        </header>
+      </article>
+      <div class="header-pattern-guidance">
+        <p><strong>Use this in all products:</strong> Lens, Explorer, Home, MOC, and Victoria surfaces.</p>
+        <p><strong>Title slot:</strong> set to current page name (`Home`, `Lens`, `Explorer`, `Operations Center`, etc.).</p>
+      </div>
+        </div>
+      </details>
+    </section>
+
+    <section class="section">
+      <details class="section-accordion" open>
+        <summary>
+          <h2>Buttons and Standard Inputs</h2>
+        </summary>
+        <div class="section-body">
+<div class="demo-row">
         <button class="btn btn-primary">Primary</button>
         <button class="btn btn-secondary">Secondary</button>
         <button class="btn btn-ghost">Tertiary</button>
@@ -47,46 +244,288 @@
         <button class="btn btn-primary" disabled>Disabled</button>
         <button class="btn btn-primary"><span class="spinner" aria-hidden="true"></span> Loading</button>
       </div>
-      <div class="demo-row">
-        <div class="field">
-          <label for="name">Label</label>
-          <input id="name" type="text" placeholder="Text input" />
-        </div>
-        <div class="field">
-          <label for="status">Select</label>
-          <select id="status">
-            <option>Option A</option>
-            <option>Option B</option>
-          </select>
-        </div>
+
+      <div class="form-grid">
+        <div class="field"><label for="f-text">Text</label><input id="f-text" type="text" placeholder="Text input" /></div>
+        <div class="field"><label for="f-search">Search</label><input id="f-search" type="search" placeholder="Search" /></div>
+        <div class="field"><label for="f-email">Email</label><input id="f-email" type="email" placeholder="team@elcanotek.com" /></div>
+        <div class="field"><label for="f-password">Password</label><input id="f-password" type="password" value="password123" /></div>
+        <div class="field"><label for="f-select">Select</label><select id="f-select"><option>Option A</option><option>Option B</option></select></div>
       </div>
+        </div>
+      </details>
     </section>
 
     <section class="section">
-      <h2>Cards, Badges, Table</h2>
-      <div class="card-grid">
-        <article class="card"><h3>Card Title</h3><p>Card body text for system surfaces.</p></article>
-        <article class="card"><h3>Status Badges</h3><div class="demo-row"><span class="badge badge-success">Success</span><span class="badge badge-warning">Warning</span><span class="badge badge-danger">Error</span></div></article>
+      <details class="section-accordion" open>
+        <summary>
+          <h2>Inputs</h2>
+        </summary>
+        <div class="section-body">
+<p class="section-note">Unified input patterns from Home, Lens, Explorer, and MOC: basic fields, dropzone upload, number stepper, date picker, accordion disclosure, file radio select, and checkbox.</p>
+
+      <div class="production-grid">
+        <article class="card">
+          <h3>File Upload Dropzone</h3>
+          <p class="card-copy">Reference pattern from Lens and MOC with drag states, browse affordance, and file list.</p>
+          <div class="file-upload-area">
+            <div class="file-upload-dropzone" id="dropzone" tabindex="0" role="button" aria-label="Upload files">
+              <div class="dropzone-content">
+                <svg class="dropzone-icon" aria-hidden="true"><use href="../icons/core-icons.svg#paperclip"></use></svg>
+                <p class="dropzone-text">Drag and drop files here</p>
+                <p class="dropzone-subtext">or</p>
+                <button type="button" class="dropzone-browse-btn" id="browse-btn">Browse files</button>
+                <p class="dropzone-limit">Max 250 MB per file · Up to 10 files</p>
+              </div>
+              <input id="file-input" class="file-input-hidden" type="file" multiple />
+            </div>
+            <div class="file-list" id="file-list">
+              <div class="file-item uploading">
+                <span class="file-item-icon">#</span>
+                <div class="file-item-info">
+                  <span class="file-item-name">march-forecast.csv</span>
+                  <span class="file-item-size">2.4 MB</span>
+                </div>
+                <div class="file-item-actions">
+                  <div class="file-item-progress"><div class="file-item-progress-fill" style="width:68%"></div></div>
+                  <span class="file-item-percent">68%</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Number Input Stepper</h3>
+          <p class="card-copy">Explorer pattern: compact + and - controls, centered value, and focus-within ring on wrapper.</p>
+          <label for="budget-input" class="field-label">Max Results</label>
+          <div class="number-input" data-number-input>
+            <button class="number-input__btn" type="button" data-step="-1" aria-label="Decrease value">-</button>
+            <input id="budget-input" class="number-input__field" type="number" min="1" max="100" step="1" value="25" />
+            <button class="number-input__btn" type="button" data-step="1" aria-label="Increase value">+</button>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Themed Date Picker</h3>
+          <p class="card-copy">Explorer treatment for date inputs and calendar popover theme (Flatpickr-compatible classes).</p>
+          <div class="field">
+            <label for="f-date">Date</label>
+            <div class="date-input-wrap">
+              <input id="f-date" class="custom-datepicker" type="text" placeholder="Select date" />
+              <svg class="date-input-icon" aria-hidden="true"><use href="../icons/core-icons.svg#calendar"></use></svg>
+            </div>
+          </div>
+          <div class="field">
+            <label for="f-datetime">Datetime</label>
+            <div class="date-input-wrap">
+              <input id="f-datetime" class="custom-datepicker custom-datetimepicker" type="text" placeholder="Select date and time" />
+              <svg class="date-input-icon" aria-hidden="true"><use href="../icons/core-icons.svg#clock"></use></svg>
+            </div>
+          </div>
+        </article>
       </div>
-      <div class="table-wrap" style="margin-top:16px">
+
+      <div class="production-grid">
+        <article class="card">
+          <h3>Accordion (Home Pattern)</h3>
+          <p class="card-copy">Use for grouped navigation or secondary tool catalogs. Plus/minus indicator shows disclosure state.</p>
+          <div class="ds-accordion">
+            <details open>
+              <summary>Trading and Supply</summary>
+              <div class="links">
+                <a class="link-tile" href="#"><span class="link-title">OpenX</span><span class="link-meta">Manage deals within SSP workflows.</span></a>
+                <a class="link-tile" href="#"><span class="link-title">Index Exchange</span><span class="link-meta">Inventory and marketplace controls.</span></a>
+              </div>
+            </details>
+            <details>
+              <summary>Files and Docs</summary>
+              <div class="links">
+                <a class="link-tile" href="#"><span class="link-title">OneDrive</span><span class="link-meta">Shared files and cloud folders.</span></a>
+              </div>
+            </details>
+          </div>
+        </article>
+
+        <article class="card">
+          <h3>Custom File Radio Select (Lens)</h3>
+          <p class="card-copy">Use for selecting one uploaded file before running a task.</p>
+          <ul class="file-list input-files-list selectable-input-list">
+            <li class="input-file-item selectable-item">
+              <label class="input-file-select">
+                <input type="radio" name="preview_input_file" value="q1.csv" checked>
+                <span class="input-file-name" title="q1_publishers.csv">q1_publishers.csv</span>
+              </label>
+              <div class="input-file-actions">
+                <button class="icon-action" type="button" aria-label="Download q1_publishers.csv" title="Download q1_publishers.csv">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M12 3v12"></path>
+                    <path d="M7 10l5 5 5-5"></path>
+                    <path d="M5 21h14"></path>
+                  </svg>
+                </button>
+                <button class="icon-action danger" type="button" aria-label="Delete q1_publishers.csv" title="Delete q1_publishers.csv">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M3 6h18"></path>
+                    <path d="M8 6V4h8v2"></path>
+                    <path d="M19 6l-1 14H6L5 6"></path>
+                    <path d="M10 11v6"></path>
+                    <path d="M14 11v6"></path>
+                  </svg>
+                </button>
+              </div>
+            </li>
+            <li class="input-file-item selectable-item">
+              <label class="input-file-select">
+                <input type="radio" name="preview_input_file" value="q2.csv">
+                <span class="input-file-name" title="q2_streaming.csv">q2_streaming.csv</span>
+              </label>
+              <div class="input-file-actions">
+                <button class="icon-action" type="button" aria-label="Download q2_streaming.csv" title="Download q2_streaming.csv">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M12 3v12"></path>
+                    <path d="M7 10l5 5 5-5"></path>
+                    <path d="M5 21h14"></path>
+                  </svg>
+                </button>
+                <button class="icon-action danger" type="button" aria-label="Delete q2_streaming.csv" title="Delete q2_streaming.csv">
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M3 6h18"></path>
+                    <path d="M8 6V4h8v2"></path>
+                    <path d="M19 6l-1 14H6L5 6"></path>
+                    <path d="M10 11v6"></path>
+                    <path d="M14 11v6"></path>
+                  </svg>
+                </button>
+              </div>
+            </li>
+          </ul>
+        </article>
+
+        <article class="card">
+          <h3>Common Checkbox</h3>
+          <p class="card-copy">Use this checkbox style for toggles and optional settings across all products.</p>
+          <label class="ds-checkbox" for="notify-checkbox">
+            <input id="notify-checkbox" type="checkbox" checked />
+            <span class="ds-checkbox__box" aria-hidden="true">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3.5 8.5l3 3 6-7"></path>
+              </svg>
+            </span>
+            <span class="ds-checkbox__label">Send status updates to stakeholders</span>
+          </label>
+          <label class="ds-checkbox" for="archive-checkbox">
+            <input id="archive-checkbox" type="checkbox" />
+            <span class="ds-checkbox__box" aria-hidden="true">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3.5 8.5l3 3 6-7"></path>
+              </svg>
+            </span>
+            <span class="ds-checkbox__label">Archive source files after processing</span>
+          </label>
+        </article>
+
+        <article class="card">
+          <h3>Email Selection Pills (MOC)</h3>
+          <p class="card-copy">Use this pill selector pattern for choosing one or more notification recipients in task forms.</p>
+          <div class="chips-container" id="emailChipsPreview" role="group" aria-label="Email recipients">
+            <span class="chip chip-email" data-email="ops@elcanotek.com">ops@elcanotek.com<span class="chip-delete" aria-hidden="true">x</span></span>
+            <span class="chip chip-email selected" data-email="ads@elcanotek.com">ads@elcanotek.com<span class="chip-delete" aria-hidden="true">x</span></span>
+            <span class="chip chip-email" data-email="finance@elcanotek.com">finance@elcanotek.com<span class="chip-delete" aria-hidden="true">x</span></span>
+          </div>
+          <div class="custom-email-row">
+            <input id="customEmailPreviewInput" type="email" placeholder="Add custom email..." maxlength="254" />
+            <button id="addEmailPreviewBtn" class="btn btn-secondary" type="button">+ Add</button>
+          </div>
+          <p class="chip-help">Click a pill to select/deselect. Click the `x` to remove a custom email.</p>
+        </article>
+      </div>
+        </div>
+      </details>
+    </section>
+
+    <section class="section">
+      <details class="section-accordion" open>
+        <summary>
+          <h2>Cards, Badges, Table</h2>
+        </summary>
+        <div class="section-body">
+<div class="card-grid">
+        <article class="card">
+          <h3>Clickable Action Cards</h3>
+          <p class="card-copy">Use this Home-modeled card pattern for primary navigation actions and app launch tiles. Includes default, hover/focus, selected, and disabled states.</p>
+          <div class="card-grid featured-grid">
+            <a class="card featured featured-link" href="#">
+              <div class="featured-head">
+                <p class="featured-kicker">Reporting</p>
+                <h4>Explorer</h4>
+              </div>
+              <p class="description">View reporting that keeps Victoria optimizations aligned.</p>
+            </a>
+            <a class="card featured featured-link is-selected" href="#" aria-current="true">
+              <div class="featured-head">
+                <p class="featured-kicker">Operations</p>
+                <h4>MOC</h4>
+              </div>
+              <p class="description">Manage active automation workflows and task execution.</p>
+            </a>
+            <a class="card featured featured-link is-disabled" href="#" aria-disabled="true" tabindex="-1">
+              <div class="featured-head">
+                <p class="featured-kicker">Voice</p>
+                <h4>Victoria Voice</h4>
+              </div>
+              <p class="description">Coming soon across all product surfaces.</p>
+            </a>
+          </div>
+        </article>
+        <article class="card">
+          <h3>Status Badges</h3>
+          <div class="badge-grid">
+            <span class="badge badge-pending">pending</span>
+            <span class="badge badge-scheduled">scheduled</span>
+            <span class="badge badge-assigned">assigned</span>
+            <span class="badge badge-leased">leased</span>
+            <span class="badge badge-running">running</span>
+            <span class="badge badge-analyzing">analyzing</span>
+            <span class="badge badge-success">success</span>
+            <span class="badge badge-danger">error</span>
+            <span class="badge badge-cancelled">cancelled</span>
+          </div>
+        </article>
+      </div>
+      <div class="table-wrap">
         <table>
           <thead><tr><th>ID</th><th>Name</th><th>Status</th></tr></thead>
           <tbody>
             <tr><td>T-1023</td><td>Daily Optimization</td><td><span class="badge badge-success">success</span></td></tr>
-            <tr><td>T-1024</td><td>Supply Audit</td><td><span class="badge badge-warning">running</span></td></tr>
+            <tr><td>T-1024</td><td>Supply Audit</td><td><span class="badge badge-running">running</span></td></tr>
+            <tr><td>T-1025</td><td>Weekly Forecast</td><td><span class="badge badge-scheduled">scheduled</span></td></tr>
+            <tr><td>T-1026</td><td>Deal Sync</td><td><span class="badge badge-assigned">assigned</span></td></tr>
+            <tr><td>T-1027</td><td>Archive Cleanup</td><td><span class="badge badge-cancelled">cancelled</span></td></tr>
           </tbody>
         </table>
       </div>
+        </div>
+      </details>
     </section>
 
     <section class="section">
-      <h2>Feedback States</h2>
-      <div class="state-row">
+      <details class="section-accordion" open>
+        <summary>
+          <h2>Feedback States</h2>
+        </summary>
+        <div class="section-body">
+<div class="state-row">
         <div class="state"><h3>Empty</h3><p>No records yet. Start by creating your first job.</p></div>
         <div class="state"><h3>Loading</h3><p><span class="spinner" aria-hidden="true"></span> Processing request...</p></div>
-        <div class="state"><h3>Error</h3><p style="color:#ffd2d2">Something failed. Check configuration and retry.</p></div>
+        <div class="state"><h3>Error</h3><p class="danger-text">Something failed. Check configuration and retry.</p></div>
       </div>
+        </div>
+      </details>
     </section>
   </div>
+
+  <script src="./vendor/flatpickr/flatpickr.min.js"></script>
+  <script src="./preview.js"></script>
 </body>
 </html>

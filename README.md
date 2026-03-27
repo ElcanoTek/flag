@@ -7,4 +7,8 @@ Start here:
 - `design-system/AGENT_GUIDE.md` - strict implementation rules for coding agents
 - `design-system/tokens/design-tokens.css` - production-ready CSS tokens
 - `design-system/tokens/design-tokens.json` - machine-readable token source
+- `design-system/BACKGROUNDS.md` - approved gradient/background patterns
+- `design-system/LOGOS.md` - approved logos and usage rules
+- `design-system/ICONS.md` - canonical shared icon vocabulary
+- `design-system/icons/core-icons.svg` - reusable icon sprite
 - `design-system/preview/index.html` - visual style guide and component reference
