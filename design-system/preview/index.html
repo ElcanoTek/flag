@@ -20,6 +20,16 @@
       </div>
     </header>
     <p class="hero-intro">Canonical visual reference from the Flag repo. Includes foundations, logos, unified inputs, and component patterns for all products.</p>
+    <div class="section-review-controls" role="group" aria-label="Section controls">
+      <button id="expandAllSections" class="btn btn-secondary" type="button" aria-label="Expand all sections">Expand all</button>
+      <button id="collapseAllSections" class="btn btn-ghost" type="button" aria-label="Collapse all sections">Collapse all</button>
+      <button id="toggleTheme" class="btn btn-secondary" type="button" aria-label="Switch to light mode" aria-pressed="false">Light mode</button>
+    </div>
+
+    <section class="section section-stage">
+      <h2>Design System</h2>
+      <p>Foundations, brand assets, and global patterns that define the visual language across all products.</p>
+    </section>
 
     <section class="section">
       <details class="section-accordion" open>
@@ -27,10 +37,12 @@
           <h2>Color Tokens</h2>
         </summary>
         <div class="section-body">
-<div class="tokens-grid">
+        <div class="tokens-grid">
         <div class="swatch"><div class="swatch-chip" style="background:#7272ab"></div><div class="swatch-meta"><strong>Primary</strong><span>#7272AB</span></div></div>
         <div class="swatch"><div class="swatch-chip" style="background:#586f7c"></div><div class="swatch-meta"><strong>Secondary</strong><span>#586F7C</span></div></div>
         <div class="swatch"><div class="swatch-chip" style="background:#9da7ef"></div><div class="swatch-meta"><strong>Accent</strong><span>#9DA7EF</span></div></div>
+        <div class="swatch"><div class="swatch-chip" style="background:#ffffff"></div><div class="swatch-meta"><strong>White</strong><span>#FFFFFF</span></div></div>
+        <div class="swatch"><div class="swatch-chip" style="background:#000000"></div><div class="swatch-meta"><strong>Black</strong><span>#000000</span></div></div>
         <div class="swatch"><div class="swatch-chip" style="background:#1a0b1e"></div><div class="swatch-meta"><strong>Background</strong><span>#1A0B1E</span></div></div>
         <div class="swatch"><div class="swatch-chip" style="background:#241b31"></div><div class="swatch-meta"><strong>Surface 1</strong><span>#241B31</span></div></div>
         <div class="swatch"><div class="swatch-chip" style="background:#2f2741"></div><div class="swatch-meta"><strong>Surface 2</strong><span>#2F2741</span></div></div>
@@ -230,16 +242,60 @@
       </details>
     </section>
 
+    <section class="section section-stage">
+      <h2>Component Library</h2>
+      <p>Interactive components, state coverage, and implementation-ready UI patterns for product teams.</p>
+    </section>
+
+    <section class="section">
+      <details class="section-accordion" open>
+        <summary>
+          <h2>Component States</h2>
+        </summary>
+        <div class="section-body">
+          <p class="section-note">Quick state matrix for implementation QA and visual parity checks.</p>
+          <div class="state-matrix">
+            <article class="state-strip">
+              <h3>Buttons</h3>
+              <div class="demo-row">
+                <button class="btn btn-primary" type="button">Default</button>
+                <button class="btn btn-primary" type="button">Hover</button>
+                <button class="btn btn-primary" type="button" disabled>Disabled</button>
+              </div>
+            </article>
+            <article class="state-strip">
+              <h3>Featured Cards</h3>
+              <div class="card-grid featured-grid state-featured-grid">
+                <a class="card featured featured-link" href="#"><div class="featured-head"><p class="featured-kicker">Default</p><h4>Explorer</h4></div><p class="description">Standard card state.</p></a>
+                <a class="card featured featured-link is-selected" href="#" aria-current="true"><div class="featured-head"><p class="featured-kicker">Selected</p><h4>MOC</h4></div><p class="description">Selected state contract.</p></a>
+                <a class="card featured featured-link is-disabled" href="#" aria-disabled="true" tabindex="-1"><div class="featured-head"><p class="featured-kicker">Disabled</p><h4>Victoria</h4></div><p class="description">Disabled and non-interactive.</p></a>
+              </div>
+            </article>
+            <article class="state-strip">
+              <h3>Status Badges</h3>
+              <div class="badge-grid">
+                <span class="badge badge-running">running</span>
+                <span class="badge badge-warning">warning</span>
+                <span class="badge badge-success">success</span>
+                <span class="badge badge-danger">error</span>
+                <span class="badge badge-cancelled">cancelled</span>
+              </div>
+            </article>
+          </div>
+        </div>
+      </details>
+    </section>
+
     <section class="section">
       <details class="section-accordion" open>
         <summary>
           <h2>Buttons and Standard Inputs</h2>
         </summary>
         <div class="section-body">
-<div class="demo-row">
+      <div class="demo-row">
         <button class="btn btn-primary">Primary</button>
         <button class="btn btn-secondary">Secondary</button>
-        <button class="btn btn-ghost">Tertiary</button>
+        <button class="btn btn-ghost">Ghost</button>
         <button class="btn btn-danger">Danger</button>
         <button class="btn btn-primary" disabled>Disabled</button>
         <button class="btn btn-primary"><span class="spinner" aria-hidden="true"></span> Loading</button>
@@ -249,8 +305,17 @@
         <div class="field"><label for="f-text">Text</label><input id="f-text" type="text" placeholder="Text input" /></div>
         <div class="field"><label for="f-search">Search</label><input id="f-search" type="search" placeholder="Search" /></div>
         <div class="field"><label for="f-email">Email</label><input id="f-email" type="email" placeholder="team@elcanotek.com" /></div>
-        <div class="field"><label for="f-password">Password</label><input id="f-password" type="password" value="password123" /></div>
-        <div class="field"><label for="f-select">Select</label><select id="f-select"><option>Option A</option><option>Option B</option></select></div>
+        <div class="field"><label for="f-password">Password</label><input id="f-password" type="password" placeholder="Enter password" /></div>
+        <div class="field">
+          <label for="f-select">Select</label>
+          <div class="select-wrap">
+            <select id="f-select">
+              <option>Option A</option>
+              <option>Option B</option>
+            </select>
+            <svg class="select-icon" aria-hidden="true"><use href="../icons/core-icons.svg#chevron-down"></use></svg>
+          </div>
+        </div>
       </div>
         </div>
       </details>

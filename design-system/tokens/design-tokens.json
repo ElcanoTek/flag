@@ -29,6 +29,8 @@
     "primary": "#7272AB",
     "secondary": "#586F7C",
     "accent": "#9DA7EF",
+    "white": "#FFFFFF",
+    "black": "#000000",
     "background": "#1A0B1E",
     "surface": {
       "default": "#241B31",
@@ -36,12 +38,18 @@
     },
     "border": {
       "default": "rgba(114, 114, 171, 0.35)",
-      "strong": "rgba(114, 114, 171, 0.55)"
+      "strong": "rgba(114, 114, 171, 0.55)",
+      "subtle": "rgba(255, 255, 255, 0.14)"
     },
     "text": {
       "primary": "#FFFFFF",
       "secondary": "#D2D9DE",
-      "muted": "#BEB6CD"
+      "muted": "#BEB6CD",
+      "disabled": "rgba(210, 217, 222, 0.45)"
+    },
+    "overlay": {
+      "soft": "rgba(0, 0, 0, 0.2)",
+      "strong": "rgba(0, 0, 0, 0.4)"
     },
     "status": {
       "success": "#50FA7B",
@@ -78,12 +86,12 @@
         "bg": "rgba(62, 146, 196, 0.18)",
         "border": "rgba(62, 146, 196, 0.52)"
       },
-      "completed": {
+      "success": {
         "fg": "#CBFDD8",
         "bg": "rgba(80, 250, 123, 0.14)",
         "border": "rgba(80, 250, 123, 0.6)"
       },
-      "errorState": {
+      "error": {
         "fg": "#FFD2D2",
         "bg": "rgba(255, 85, 85, 0.14)",
         "border": "rgba(255, 85, 85, 0.6)"
@@ -110,6 +118,10 @@
       "primary": "linear-gradient(140deg, #7272ab, #586f7c)",
       "success": "linear-gradient(155deg, rgba(44, 78, 59, 0.82), rgba(32, 53, 41, 0.9))",
       "disabled": "linear-gradient(150deg, rgba(69, 74, 86, 0.5), rgba(54, 59, 70, 0.38))"
+    },
+    "featured": {
+      "topAccent": "linear-gradient(90deg, rgba(200, 201, 237, 0.95), rgba(114, 114, 171, 0.45))",
+      "topAccentSelected": "linear-gradient(90deg, rgba(157, 167, 239, 0.98), rgba(114, 114, 171, 0.72))"
     }
   },
   "space": {
@@ -138,7 +150,8 @@
   "shadow": {
     "sm": "0 10px 24px rgba(0, 0, 0, 0.28)",
     "md": "0 12px 24px rgba(0, 0, 0, 0.34)",
-    "lg": "0 22px 54px rgba(0, 0, 0, 0.52)"
+    "lg": "0 22px 54px rgba(0, 0, 0, 0.52)",
+    "section": "0 6px 16px rgba(0, 0, 0, 0.22)"
   },
   "layout": {
     "container": {

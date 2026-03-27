@@ -24,6 +24,7 @@ Use this when a prompt says: "Follow the design system in the flag repo."
 - Primary: `--color-primary`
 - Secondary: `--color-secondary`
 - Accent: `--color-accent`
+- White/Black: `--color-white`, `--color-black`
 - Background: `--color-bg`
 - Surface: `--color-surface-1`, `--color-surface-2`
 - Border: `--color-border`
@@ -34,7 +35,7 @@ Use this when a prompt says: "Follow the design system in the flag repo."
 - Surface gradients: `--gradient-surface-panel`, `--gradient-surface-card`, `--gradient-surface-elevated`
 
 ## Component Defaults
-- Buttons: `primary`, `secondary`, `tertiary`, `danger`, `icon`.
+- Buttons: `primary`, `secondary`, `ghost`, `danger`.
 - Inputs: `2.5rem` min height, `radius-md`, token border/focus styles.
 - Include full input coverage: text, search, password, email, number, tel, url, textarea, select, date, time, datetime-local, file.
 - Number input must use Explorer-style stepper (`.number-input`, `.number-input__field`, `.number-input__btn`) where increment/decrement controls are needed.
@@ -45,6 +46,7 @@ Use this when a prompt says: "Follow the design system in the flag repo."
 - Checkbox controls should use the shared design-system checkbox pattern (custom box + visible focus ring).
 - Tables: sticky headers optional, row hover subtle, status badges use semantic tokens.
 - Clickable action cards must use Home-style featured structure (`featured-head`, kicker, title, description) and explicit selected state (accent border/top accent/elevation).
+- Do not implement clickable action cards without both explicit `selected` and `focus-visible` states.
 - Use full task status badge set where applicable: pending, scheduled, assigned, leased, running, analyzing, success, error, cancelled.
 - For recipient selection in task forms, use MOC-style email selection pills (`chips-container`, `chip chip-email`, `chip-delete`).
 - App header must use the common Home-style pattern (brand mark + `Elcano Internal` eyebrow + page title + right-side utility actions).

@@ -95,6 +95,36 @@
     });
   });
 
+  var expandAllBtn = document.getElementById("expandAllSections");
+  var collapseAllBtn = document.getElementById("collapseAllSections");
+  var toggleThemeBtn = document.getElementById("toggleTheme");
+  var sectionAccordions = document.querySelectorAll(".section-accordion");
+
+  if (expandAllBtn) {
+    expandAllBtn.addEventListener("click", function () {
+      sectionAccordions.forEach(function (accordion) {
+        accordion.open = true;
+      });
+    });
+  }
+
+  if (collapseAllBtn) {
+    collapseAllBtn.addEventListener("click", function () {
+      sectionAccordions.forEach(function (accordion) {
+        accordion.open = false;
+      });
+    });
+  }
+
+  if (toggleThemeBtn) {
+    toggleThemeBtn.addEventListener("click", function () {
+      var isLight = document.body.classList.toggle("theme-light");
+      toggleThemeBtn.setAttribute("aria-pressed", isLight ? "true" : "false");
+      toggleThemeBtn.textContent = isLight ? "Dark mode" : "Light mode";
+      toggleThemeBtn.setAttribute("aria-label", isLight ? "Switch to dark mode" : "Switch to light mode");
+    });
+  }
+
   if (typeof window.flatpickr === "function") {
     document.querySelectorAll(".custom-datepicker").forEach(function (input) {
       var isDateTime = input.classList.contains("custom-datetimepicker");

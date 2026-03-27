@@ -24,7 +24,7 @@ This spec standardizes shared components used across Lens, Explorer, Home, MOC, 
 - Purpose: alternative actions.
 - Surface: `color.surface.2`; border: `color.border`.
 
-### Tertiary/Ghost
+### Ghost
 - Purpose: low-emphasis actions in dense UI.
 - Transparent or low-contrast fill; must keep visible focus ring.
 
@@ -129,6 +129,14 @@ Clickable action card standard (Home-modeled, required for card-based navigation
 - Required structure:
   - `featured-head` block with `featured-kicker` + title
   - support/meta description text
+- Required class mapping:
+  - base: `.featured-link`
+  - selected: `.is-selected` or `[aria-current="true"]`
+  - disabled: `.is-disabled` or `[aria-disabled="true"]` and `tabindex="-1"`
+- Required internal anatomy:
+  - kicker: `.featured-kicker`
+  - title: `h4`
+  - description: `.description`
 - Required states:
   - default
   - hover
@@ -197,6 +205,19 @@ Task status badge set (required for MOC-aligned workflows):
 - `success`
 - `error`
 - `cancelled`
+
+| Status | CSS Class |
+|---|---|
+| pending | `.badge-pending` |
+| scheduled | `.badge-scheduled` |
+| assigned | `.badge-assigned` |
+| leased | `.badge-leased` |
+| running | `.badge-running` |
+| analyzing | `.badge-analyzing` |
+| success | `.badge-success` |
+| warning | `.badge-warning` |
+| error | `.badge-danger` |
+| cancelled | `.badge-cancelled` |
 
 Node status badge set (recommended):
 - `idle`
