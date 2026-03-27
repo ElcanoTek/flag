@@ -1,5 +1,9 @@
 # Cross-Repo Audit Summary
 
+> Historical context: This audit is a point-in-time snapshot taken during initial system consolidation.
+> It is useful for understanding origin decisions and debt categories, but it is not the day-to-day implementation guide.
+> For active implementation, use `AGENT_GUIDE.md`, `TOKENS.md`, and `COMPONENTS.md`.
+
 Scope audited:
 - `lens`
 - `explorer`
@@ -69,3 +73,9 @@ Scope audited:
 - Deprecate retro-only visual language in `moc` as shared default.
 - Deprecate inline-only stylesheet approach for Victoria Voice dashboard.
 - Deprecate external CDN dependency for core datepicker presentation in Explorer.
+
+## Lasting Takeaways (Still Applicable)
+- Token-first implementation is required to avoid drift.
+- Typography standardization is foundational and should be completed early in migration.
+- Shared primitives (button/input/badge/card) must be aligned before complex workflows.
+- Accessibility behavior must be standardized together with visual styling.

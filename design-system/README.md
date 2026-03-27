@@ -3,25 +3,36 @@
 This directory is the single documented source of truth for shared UI design decisions.
 
 ## Read Order
-- `AGENT_GUIDE.md` - non-negotiable implementation contract
-- `SYSTEM.md` - principles, architecture, approved patterns
-- `TOKENS.md` - colors, typography, spacing, radii, elevation, layout
-- `BACKGROUNDS.md` - gradient and background audit plus approved patterns
-- `LOGOS.md` - approved logo assets and usage rules
-- `ICONS.md` - canonical icon names, sizing, and usage
-- `COMPONENTS.md` - component specs, variants, states, usage
-- `INTERACTION_ACCESSIBILITY.md` - hover/focus/active/disabled/loading behavior
-- `AUDIT.md` - cross-repo inconsistency audit and recommended deprecations
-- `MIGRATION.md` - phased adoption plan per microservice
+1. `AGENT_GUIDE.md` - strict implementation contract (human + agent)
+2. `TOKENS.md` - canonical foundations and token usage
+3. `COMPONENTS.md` - component structures, states, and class mappings
+4. `INTERACTION_ACCESSIBILITY.md` - required interaction and accessibility behavior
+5. `SYSTEM.md` - system principles and architecture
+6. `APPLY_TO_PRODUCT.md` - adoption guide for another product repo
+7. `MIGRATION.md` - rollout strategy and sequencing
+8. `AUDIT.md` - historical audit context and long-lived takeaways
+9. supporting docs: `BACKGROUNDS.md`, `LOGOS.md`, `ICONS.md`
 
 ## Source Files
-- `tokens/design-tokens.json` - machine-readable tokens
-- `tokens/design-tokens.css` - CSS variable implementation
+- `tokens/design-tokens.css` - canonical runtime token source
+- `tokens/design-tokens.json` - canonical machine-readable token source
 - `logos/` - approved SVG/PNG logo assets
 - `icons/core-icons.svg` - canonical SVG sprite
 
+Source precedence (when docs and examples differ):
+1. `tokens/design-tokens.css`
+2. `tokens/design-tokens.json`
+3. `AGENT_GUIDE.md`
+4. component/pattern docs
+
 ## Visual Review
 - `preview/index.html` - browsable style guide and component showcase
+
+Preview includes:
+- dark and light theme toggle
+- section expand/collapse controls
+- component state strips
+- implementation examples for key patterns
 
 Open locally:
 

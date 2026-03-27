@@ -25,6 +25,7 @@
       <button id="collapseAllSections" class="btn btn-ghost" type="button" aria-label="Collapse all sections">Collapse all</button>
       <button id="toggleTheme" class="btn btn-secondary" type="button" aria-label="Switch to light mode" aria-pressed="false">Light mode</button>
     </div>
+    <p id="previewAnnouncer" class="sr-only" aria-live="polite"></p>
 
     <section class="section section-stage">
       <h2>Design System</h2>
@@ -470,8 +471,8 @@
         <article class="card">
           <h3>Common Checkbox</h3>
           <p class="card-copy">Use this checkbox style for toggles and optional settings across all products.</p>
+          <input id="notify-checkbox" type="checkbox" checked />
           <label class="ds-checkbox" for="notify-checkbox">
-            <input id="notify-checkbox" type="checkbox" checked />
             <span class="ds-checkbox__box" aria-hidden="true">
               <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M3.5 8.5l3 3 6-7"></path>
@@ -479,8 +480,8 @@
             </span>
             <span class="ds-checkbox__label">Send status updates to stakeholders</span>
           </label>
+          <input id="archive-checkbox" type="checkbox" />
           <label class="ds-checkbox" for="archive-checkbox">
-            <input id="archive-checkbox" type="checkbox" />
             <span class="ds-checkbox__box" aria-hidden="true">
               <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                 <path d="M3.5 8.5l3 3 6-7"></path>
@@ -494,9 +495,9 @@
           <h3>Email Selection Pills (MOC)</h3>
           <p class="card-copy">Use this pill selector pattern for choosing one or more notification recipients in task forms.</p>
           <div class="chips-container" id="emailChipsPreview" role="group" aria-label="Email recipients">
-            <span class="chip chip-email" data-email="ops@elcanotek.com">ops@elcanotek.com<span class="chip-delete" aria-hidden="true">x</span></span>
-            <span class="chip chip-email selected" data-email="ads@elcanotek.com">ads@elcanotek.com<span class="chip-delete" aria-hidden="true">x</span></span>
-            <span class="chip chip-email" data-email="finance@elcanotek.com">finance@elcanotek.com<span class="chip-delete" aria-hidden="true">x</span></span>
+            <span class="chip chip-email" data-email="ops@elcanotek.com" role="button" tabindex="0" aria-pressed="false" aria-label="Toggle recipient ops@elcanotek.com">ops@elcanotek.com<button class="chip-delete" type="button" aria-label="Remove recipient ops@elcanotek.com">x</button></span>
+            <span class="chip chip-email selected" data-email="ads@elcanotek.com" role="button" tabindex="0" aria-pressed="true" aria-label="Toggle recipient ads@elcanotek.com">ads@elcanotek.com<button class="chip-delete" type="button" aria-label="Remove recipient ads@elcanotek.com">x</button></span>
+            <span class="chip chip-email" data-email="finance@elcanotek.com" role="button" tabindex="0" aria-pressed="false" aria-label="Toggle recipient finance@elcanotek.com">finance@elcanotek.com<button class="chip-delete" type="button" aria-label="Remove recipient finance@elcanotek.com">x</button></span>
           </div>
           <div class="custom-email-row">
             <input id="customEmailPreviewInput" type="email" placeholder="Add custom email..." maxlength="254" />
@@ -560,7 +561,7 @@
       </div>
       <div class="table-wrap">
         <table>
-          <thead><tr><th>ID</th><th>Name</th><th>Status</th></tr></thead>
+          <thead><tr><th scope="col">ID</th><th scope="col">Name</th><th scope="col">Status</th></tr></thead>
           <tbody>
             <tr><td>T-1023</td><td>Daily Optimization</td><td><span class="badge badge-success">success</span></td></tr>
             <tr><td>T-1024</td><td>Supply Audit</td><td><span class="badge badge-running">running</span></td></tr>
@@ -582,7 +583,7 @@
         <div class="section-body">
 <div class="state-row">
         <div class="state"><h3>Empty</h3><p>No records yet. Start by creating your first job.</p></div>
-        <div class="state"><h3>Loading</h3><p><span class="spinner" aria-hidden="true"></span> Processing request...</p></div>
+        <div class="state"><h3>Loading</h3><p id="processingStatus" role="status" aria-live="polite"><span class="spinner" aria-hidden="true"></span> Processing request...</p></div>
         <div class="state"><h3>Error</h3><p class="danger-text">Something failed. Check configuration and retry.</p></div>
       </div>
         </div>

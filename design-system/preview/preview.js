@@ -3,6 +3,8 @@
   var fileInput = document.getElementById("file-input");
   var browseBtn = document.getElementById("browse-btn");
   var fileList = document.getElementById("file-list");
+  var announcer = document.getElementById("previewAnnouncer");
+  var processingStatus = document.getElementById("processingStatus");
 
   if (dropzone && fileInput && browseBtn) {
     var setDrag = function (enabled) {
@@ -63,6 +65,10 @@
       );
     }
     fileList.innerHTML = html.join("");
+    if (processingStatus) {
+      processingStatus.innerHTML = '<span class="spinner" aria-hidden="true"></span> ' + files.length + ' file' + (files.length === 1 ? '' : 's') + ' queued for processing.';
+    }
+    announce(files.length + ' file' + (files.length === 1 ? '' : 's') + ' added.');
   }
 
   function escapeHtml(value) {
@@ -153,8 +159,10 @@
     emailChips.addEventListener("click", function (event) {
       var deleteBtn = event.target.closest(".chip-delete");
       if (deleteBtn) {
+        event.stopPropagation();
         var deleteChip = deleteBtn.closest(".chip");
         if (deleteChip) {
+          announce('Removed recipient ' + (deleteChip.dataset.email || ''));
           deleteChip.remove();
         }
         return;
@@ -163,6 +171,24 @@
       var chip = event.target.closest(".chip");
       if (chip) {
         chip.classList.toggle("selected");
+        chip.setAttribute("aria-pressed", chip.classList.contains("selected") ? "true" : "false");
+        announce((chip.classList.contains("selected") ? 'Selected ' : 'Deselected ') + (chip.dataset.email || 'recipient'));
+      }
+    });
+
+    emailChips.addEventListener("keydown", function (event) {
+      if (event.target.closest(".chip-delete")) {
+        return;
+      }
+      var chip = event.target.closest('.chip[role="button"]');
+      if (!chip) {
+        return;
+      }
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        chip.classList.toggle("selected");
+        chip.setAttribute("aria-pressed", chip.classList.contains("selected") ? "true" : "false");
+        announce((chip.classList.contains("selected") ? 'Selected ' : 'Deselected ') + (chip.dataset.email || 'recipient'));
       }
     });
   }
@@ -190,16 +216,22 @@
     var chip = document.createElement("span");
     chip.className = "chip chip-email selected";
     chip.dataset.email = email;
+    chip.setAttribute("role", "button");
+    chip.setAttribute("tabindex", "0");
+    chip.setAttribute("aria-pressed", "true");
+    chip.setAttribute("aria-label", "Toggle recipient " + email);
     chip.appendChild(document.createTextNode(email));
 
-    var deleteBtn = document.createElement("span");
+    var deleteBtn = document.createElement("button");
+    deleteBtn.type = "button";
     deleteBtn.className = "chip-delete";
-    deleteBtn.setAttribute("aria-hidden", "true");
+    deleteBtn.setAttribute("aria-label", "Remove recipient " + email);
     deleteBtn.textContent = "x";
     chip.appendChild(deleteBtn);
 
     emailChips.appendChild(chip);
     customEmailInput.value = "";
+    announce('Added recipient ' + email);
   }
 
   if (addEmailBtn) {
@@ -217,5 +249,15 @@
 
   function cssEscape(value) {
     return value.replace(/(["\\])/g, "\\$1");
+  }
+
+  function announce(message) {
+    if (!announcer) {
+      return;
+    }
+    announcer.textContent = "";
+    window.setTimeout(function () {
+      announcer.textContent = message;
+    }, 10);
   }
 })();

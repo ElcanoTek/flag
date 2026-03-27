@@ -151,7 +151,8 @@
     "sm": "0 10px 24px rgba(0, 0, 0, 0.28)",
     "md": "0 12px 24px rgba(0, 0, 0, 0.34)",
     "lg": "0 22px 54px rgba(0, 0, 0, 0.52)",
-    "section": "0 6px 16px rgba(0, 0, 0, 0.22)"
+    "section": "0 6px 16px rgba(0, 0, 0, 0.22)",
+    "controlSelected": "0 0 0 2px var(--color-status-running-border)"
   },
   "layout": {
     "container": {
@@ -163,6 +164,107 @@
       "md": "768px",
       "lg": "1024px",
       "xl": "1280px"
+    }
+  },
+  "themes": {
+    "light": {
+      "color": {
+        "background": "#F4F6FB",
+        "surface": {
+          "default": "#FFFFFF",
+          "elevated": "#E9EEFC"
+        },
+        "border": {
+          "default": "rgba(38, 55, 92, 0.2)",
+          "strong": "rgba(38, 55, 92, 0.32)",
+          "subtle": "rgba(38, 55, 92, 0.18)"
+        },
+        "text": {
+          "primary": "#141824",
+          "secondary": "#33415F",
+          "muted": "#5C6A87",
+          "disabled": "rgba(92, 106, 135, 0.6)"
+        },
+        "overlay": {
+          "soft": "rgba(114, 114, 171, 0.08)",
+          "strong": "rgba(20, 24, 36, 0.16)"
+        },
+        "status": {
+          "pending": {
+            "fg": "#33415F",
+            "bg": "rgba(88, 111, 124, 0.12)",
+            "border": "rgba(88, 111, 124, 0.36)"
+          },
+          "scheduled": {
+            "fg": "#7A4A12",
+            "bg": "rgba(255, 184, 108, 0.22)",
+            "border": "rgba(255, 184, 108, 0.5)"
+          },
+          "assigned": {
+            "fg": "#33415F",
+            "bg": "rgba(138, 139, 192, 0.14)",
+            "border": "rgba(138, 139, 192, 0.38)"
+          },
+          "leased": {
+            "fg": "#33415F",
+            "bg": "rgba(138, 139, 192, 0.12)",
+            "border": "rgba(114, 114, 171, 0.36)"
+          },
+          "running": {
+            "fg": "#2F3F64",
+            "bg": "rgba(114, 114, 171, 0.16)",
+            "border": "rgba(114, 114, 171, 0.44)"
+          },
+          "analyzing": {
+            "fg": "#1E4F6F",
+            "bg": "rgba(62, 146, 196, 0.14)",
+            "border": "rgba(62, 146, 196, 0.38)"
+          },
+          "success": {
+            "fg": "#1C5A33",
+            "bg": "rgba(80, 250, 123, 0.16)",
+            "border": "rgba(80, 250, 123, 0.42)"
+          },
+          "warning": {
+            "fg": "#8F5A18",
+            "bg": "rgba(255, 184, 108, 0.2)",
+            "border": "rgba(255, 184, 108, 0.46)"
+          },
+          "error": {
+            "fg": "#7C1F1F",
+            "bg": "rgba(255, 85, 85, 0.18)",
+            "border": "rgba(255, 85, 85, 0.44)"
+          },
+          "cancelled": {
+            "fg": "#4F5F7F",
+            "bg": "rgba(88, 111, 124, 0.14)",
+            "border": "rgba(88, 111, 124, 0.36)"
+          }
+        }
+      },
+      "gradient": {
+        "background": {
+          "homeSignature": "radial-gradient(circle at 9% -8%, rgba(114, 114, 171, 0.28), transparent 42%), radial-gradient(circle at 90% 0%, rgba(88, 111, 124, 0.24), transparent 38%), linear-gradient(150deg, #f7f9ff 0%, #eaf0ff 52%, #e2e9fb 100%)",
+          "productStandard": "radial-gradient(circle at 12% 16%, rgba(114, 114, 171, 0.3), transparent 52%), radial-gradient(circle at 82% 0%, rgba(88, 111, 124, 0.24), transparent 44%), linear-gradient(160deg, #eef3ff 0%, #dde6fb 100%)",
+          "opsConsole": "radial-gradient(circle at 18% 22%, rgba(88, 111, 124, 0.28), transparent 48%), radial-gradient(circle at 80% 82%, rgba(114, 114, 171, 0.22), transparent 46%), linear-gradient(180deg, #edf2ff 0%, #dce6fb 45%, #e7edfc 100%)"
+        },
+        "surface": {
+          "panel": "linear-gradient(165deg, #ffffff, #f2f6ff)",
+          "card": "linear-gradient(145deg, #ffffff, #eef3ff)",
+          "elevated": "linear-gradient(150deg, #ffffff, #e8efff)"
+        },
+        "featured": {
+          "topAccent": "linear-gradient(90deg, rgba(114, 114, 171, 0.42), rgba(88, 111, 124, 0.22))",
+          "topAccentSelected": "linear-gradient(90deg, rgba(114, 114, 171, 0.78), rgba(88, 111, 124, 0.42))"
+        }
+      },
+      "shadow": {
+        "sm": "0 6px 14px rgba(40, 52, 86, 0.12)",
+        "md": "0 10px 18px rgba(38, 55, 92, 0.16)",
+        "lg": "0 16px 34px rgba(38, 55, 92, 0.2)",
+        "section": "0 4px 10px rgba(40, 52, 86, 0.08)"
+      },
+      "focusRing": "0 0 0 2px var(--color-white), 0 0 0 4px var(--color-accent)"
     }
   }
 }

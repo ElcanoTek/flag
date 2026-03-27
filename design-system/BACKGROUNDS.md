@@ -19,6 +19,10 @@ This document defines approved gradient and background options and when to use t
 
 Use only these gradient tokens for production UIs.
 
+Theme note:
+- These gradient token names are stable across themes.
+- Light mode uses canonical `body.theme-light` token overrides in `tokens/design-tokens.css`.
+
 ### App Shell Backgrounds
 - `--gradient-bg-home-signature`
   - Source: Home (CTO preferred direction)

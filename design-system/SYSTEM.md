@@ -11,10 +11,15 @@ Establish a durable, implementation-ready, cross-service design language for Elc
 - Token-first implementation for scalability across services.
 
 ## System Architecture
-- Foundations: tokens, typography, spacing, radii, shadows.
+- Foundations: tokens, typography, spacing, radii, shadows, themes.
 - Primitives: buttons, inputs, badges, cards, table rows.
 - Complex components: upload zones, filters, scheduling controls, modals.
 - Patterns: app shell, empty/loading/error feedback, detail panel flows.
+
+## Theme Model
+- Dark mode is the default token set (`:root`).
+- Light mode is canonical and implemented via `body.theme-light` token overrides in `tokens/design-tokens.css`.
+- Component CSS should consume the same semantic variables in both themes.
 
 ## Approved Patterns
 
@@ -40,4 +45,5 @@ Establish a durable, implementation-ready, cross-service design language for Elc
 - Components should follow specs in `COMPONENTS.md`.
 - Interactions must satisfy `INTERACTION_ACCESSIBILITY.md`.
 - Background and gradient choices must follow `BACKGROUNDS.md`.
+- New product adoption should follow `APPLY_TO_PRODUCT.md`.
 - Any deviation requires explicit documentation in the owning repo.

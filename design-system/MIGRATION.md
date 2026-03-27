@@ -1,19 +1,24 @@
 # Migration Guidance
 
+This document is operational and current.
+
 ## Adoption Strategy
 
 ### Phase 1 - Foundations First
 - Import `tokens/design-tokens.css` into each microservice UI.
 - Replace local color variables with canonical semantic tokens.
-- Switch typography to Dubai Bold/Regular and fixed scale.
+- Switch typography to Dubai Bold/Regular and tokenized scale.
+- Add theme toggle support using the canonical `body.theme-light` override model.
 
 ### Phase 2 - Shared Primitives
 - Standardize button variants, input fields, badges, cards, and empty states.
 - Normalize focus/hover/disabled/loading behavior.
+- Replace hardcoded radii/shadows/transitions with token variables.
 
 ### Phase 3 - Complex Components
 - Align modals, table/list rows, filters, pagination, date pickers, and file upload.
 - Replace divergent scheduling and chips implementation styling with tokenized variants.
+- Ensure keyboard and screen-reader behavior for custom controls (chips, icon-only actions, disclosures).
 
 ### Phase 4 - Cleanup and Enforcement
 - Remove deprecated component classes.
@@ -49,3 +54,12 @@
 - Uses canonical tokens for color, spacing, radius, typography.
 - Ships required button/input/modal/table/status variants only.
 - Passes interaction/accessibility baseline in `INTERACTION_ACCESSIBILITY.md`.
+- Supports canonical dark/light theming without per-component ad hoc theme values.
+
+## Fast Path Checklist
+Use this for small repos or new UIs:
+1. Import `tokens/design-tokens.css`.
+2. Map existing UI colors/radius/spacing to tokens.
+3. Implement buttons + inputs + badges + cards using `COMPONENTS.md` contracts.
+4. Add required interactive states and accessibility attributes.
+5. Add theme toggle (`body.theme-light`) and verify parity.

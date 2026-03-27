@@ -2,6 +2,12 @@
 
 All values below are canonical for Elcano products.
 
+Canonical token files:
+- Runtime CSS: `tokens/design-tokens.css`
+- Machine-readable JSON: `tokens/design-tokens.json`
+
+When docs/examples conflict, token files win.
+
 ## 1) Color System
 
 Palette roots observed across products:
@@ -29,6 +35,10 @@ Canonical semantic tokens:
 | `color.warning` | `#FFB86C` | Warning state | Caution messages only |
 | `color.danger` | `#FF5555` | Error/destructive | Error and destructive actions only |
 | `color.info` | `#8A8BC0` | Informational state | Neutral/informational badges |
+
+Neutral utility tokens:
+- `color.white` = `#FFFFFF`
+- `color.black` = `#000000`
 
 Status mapping for task/node badges:
 
@@ -165,3 +175,13 @@ Action/state gradients:
 - `gradient.action.disabled` (`--gradient-action-disabled`)
 
 Usage reference and rationale are in `BACKGROUNDS.md`.
+
+## 6) Theme Support
+
+Theme behavior is canonical and token-based:
+- Dark theme: default `:root` values.
+- Light theme: `body.theme-light` overrides in `tokens/design-tokens.css`.
+
+Rules:
+- Do not define ad hoc per-component theme values in product styles.
+- If a light/dark value is missing, add it to token files first.

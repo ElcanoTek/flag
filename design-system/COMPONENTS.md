@@ -2,6 +2,10 @@
 
 This spec standardizes shared components used across Lens, Explorer, Home, MOC, and Victoria Voice.
 
+Implementation note:
+- Examples in this file are based on real patterns in `preview/index.html` and `preview/styles.css`.
+- Keep class names and state contracts aligned with these examples for deterministic implementation.
+
 ## Logos and Logo Usage
 - Approved logo assets and rules are defined in `LOGOS.md`.
 - Use the correct mark for the correct context (global brand vs product brand).
@@ -15,6 +19,10 @@ This spec standardizes shared components used across Lens, Explorer, Home, MOC, 
 - Canonical icon set and names live in `ICONS.md` and `icons/core-icons.svg`.
 
 ## Buttons
+
+Theme behavior:
+- Button variants are theme-aware through canonical tokens; do not hardcode light/dark button values in component styles.
+- Each variant must explicitly define `hover`, `active`, and `focus-visible` states.
 
 ### Primary
 - Purpose: strongest positive action (`Submit`, `Start`, `Save`).
@@ -34,6 +42,15 @@ This spec standardizes shared components used across Lens, Explorer, Home, MOC, 
 
 States for all button variants:
 - Default, hover, focus-visible, active, disabled, loading.
+
+Example:
+
+```html
+<button class="btn btn-primary" type="button">Primary</button>
+<button class="btn btn-secondary" type="button">Secondary</button>
+<button class="btn btn-ghost" type="button">Ghost</button>
+<button class="btn btn-danger" type="button">Delete</button>
+```
 
 ## Form Inputs
 - Canonical input types:
@@ -98,6 +115,22 @@ Theme contract (Explorer-aligned):
 - Summary indicator uses `+` when collapsed and `-` when expanded.
 - Use for grouped secondary content, tool directories, and progressive disclosure.
 
+Example:
+
+```html
+<div class="ds-accordion">
+  <details open>
+    <summary>Trading and Supply</summary>
+    <div class="links">
+      <a class="link-tile" href="#">
+        <span class="link-title">OpenX</span>
+        <span class="link-meta">Manage deals within SSP workflows.</span>
+      </a>
+    </div>
+  </details>
+</div>
+```
+
 ## Custom File Radio Select
 - Canonical pattern source: Lens "Select existing input file" list.
 - Use for single-choice file selection before an action.
@@ -115,6 +148,7 @@ Theme contract (Explorer-aligned):
   - visible focus ring on keyboard focus
   - proper label hit area
   - disabled styling where applicable
+- Keep checkbox checked styling separate from focus styling (focus ring appears on keyboard focus only).
 
 ## Modals
 - Surface: `surface.1`; border `strong`; shadow `lg`.
@@ -145,6 +179,18 @@ Clickable action card standard (Home-modeled, required for card-based navigation
   - disabled
 - Selected state must be explicit (accent border + top accent treatment + elevation change) and keyboard-discernible.
 - Visual treatment should follow Home-style featured cards using design-system tokenized colors, spacing, and typography.
+
+Example:
+
+```html
+<a class="card featured featured-link is-selected" href="#" aria-current="true">
+  <div class="featured-head">
+    <p class="featured-kicker">Operations</p>
+    <h4>MOC</h4>
+  </div>
+  <p class="description">Manage active automation workflows.</p>
+</a>
+```
 
 ## Tables and List Rows
 - Head row: uppercase optional, but consistent across app.
@@ -192,8 +238,24 @@ Email selection pills (MOC task modal pattern):
 - Remove affordance: small inline `x` control (`chip-delete`) for custom/saved entries.
 - Interaction rules:
   - click pill toggles selection
+  - Enter/Space toggles selection when pill is focused
   - click delete removes pill
+  - delete affordance must be keyboard and screen-reader accessible
   - custom email input can add new pills
+
+Theme behavior:
+- Chips must consume semantic tokens for default, selected, hover, and focus-visible states in both dark and light themes.
+
+Example:
+
+```html
+<div class="chips-container" role="group" aria-label="Email recipients">
+  <span class="chip chip-email selected" data-email="ads@elcanotek.com" role="button" tabindex="0" aria-pressed="true" aria-label="Toggle recipient ads@elcanotek.com">
+    ads@elcanotek.com
+    <button class="chip-delete" type="button" aria-label="Remove recipient ads@elcanotek.com">x</button>
+  </span>
+</div>
+```
 
 Task status badge set (required for MOC-aligned workflows):
 - `pending`

@@ -2,13 +2,20 @@
 
 ## State Rules
 
+Every interactive control must define all of:
+- `:hover`
+- `:focus-visible`
+- `:active`
+- `:disabled` (where applicable)
+
 ### Hover
 - Interactive controls: subtle visual delta only (slight lift or stronger border/fill).
 - Avoid large positional movement in data-heavy interfaces.
 
 ### Focus
 - Use `2px` visible ring + `2px` offset.
-- Focus ring color: `color.accent`.
+- Use `var(--focus-ring)` token.
+- Focus must remain more prominent than hover.
 
 ### Active
 - Reduce elevation and slightly darken fill.
@@ -42,3 +49,8 @@
   - modals: trap focus and close on escape
   - menus/dropdowns: keyboard navigation
   - custom controls: proper role and state attributes
+  - chip-style controls: Enter/Space support when using `role="button"`
+  - delete/remove affordances: keyboard focusable and screen-reader labeled
+
+Dynamic status messaging:
+- Loading/progress text should use a polite live region (`aria-live="polite"`) when content changes dynamically.

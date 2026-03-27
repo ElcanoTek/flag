@@ -152,6 +152,7 @@
   --shadow-md: 0 12px 24px rgba(0, 0, 0, 0.34);
   --shadow-lg: 0 22px 54px rgba(0, 0, 0, 0.52);
   --shadow-section: 0 6px 16px rgba(0, 0, 0, 0.22);
+  --shadow-control-selected: 0 0 0 2px var(--color-status-running-border);
 
   --breakpoint-sm: 640px;
   --breakpoint-md: 768px;
@@ -164,4 +165,78 @@
   --transition-fast: 140ms ease;
   --transition-base: 200ms ease;
   --focus-ring: 0 0 0 2px var(--color-bg), 0 0 0 4px var(--color-accent);
+}
+
+body.theme-light {
+  --color-bg: #f4f6fb;
+  --color-surface-1: #ffffff;
+  --color-surface-2: #e9eefc;
+  --color-border: rgba(38, 55, 92, 0.2);
+  --color-border-strong: rgba(38, 55, 92, 0.32);
+  --color-border-subtle: rgba(38, 55, 92, 0.18);
+  --color-text-primary: #141824;
+  --color-text-secondary: #33415f;
+  --color-text-muted: #5c6a87;
+  --color-text-disabled: rgba(92, 106, 135, 0.6);
+  --color-overlay-soft: rgba(114, 114, 171, 0.08);
+  --color-overlay-strong: rgba(20, 24, 36, 0.16);
+
+  --color-status-pending-fg: #33415f;
+  --color-status-pending-bg: rgba(88, 111, 124, 0.12);
+  --color-status-pending-border: rgba(88, 111, 124, 0.36);
+  --color-status-scheduled-fg: #7a4a12;
+  --color-status-scheduled-bg: rgba(255, 184, 108, 0.22);
+  --color-status-scheduled-border: rgba(255, 184, 108, 0.5);
+  --color-status-assigned-fg: #33415f;
+  --color-status-assigned-bg: rgba(138, 139, 192, 0.14);
+  --color-status-assigned-border: rgba(138, 139, 192, 0.38);
+  --color-status-leased-fg: #33415f;
+  --color-status-leased-bg: rgba(138, 139, 192, 0.12);
+  --color-status-leased-border: rgba(114, 114, 171, 0.36);
+  --color-status-running-fg: #2f3f64;
+  --color-status-running-bg: rgba(114, 114, 171, 0.16);
+  --color-status-running-border: rgba(114, 114, 171, 0.44);
+  --color-status-analyzing-fg: #1e4f6f;
+  --color-status-analyzing-bg: rgba(62, 146, 196, 0.14);
+  --color-status-analyzing-border: rgba(62, 146, 196, 0.38);
+  --color-status-success-fg: #1c5a33;
+  --color-status-success-bg: rgba(80, 250, 123, 0.16);
+  --color-status-success-border: rgba(80, 250, 123, 0.42);
+  --color-status-warning-fg: #8f5a18;
+  --color-status-warning-bg: rgba(255, 184, 108, 0.2);
+  --color-status-warning-border: rgba(255, 184, 108, 0.46);
+  --color-status-error-fg: #7c1f1f;
+  --color-status-error-bg: rgba(255, 85, 85, 0.18);
+  --color-status-error-border: rgba(255, 85, 85, 0.44);
+  --color-status-cancelled-fg: #4f5f7f;
+  --color-status-cancelled-bg: rgba(88, 111, 124, 0.14);
+  --color-status-cancelled-border: rgba(88, 111, 124, 0.36);
+
+  --gradient-bg-home-signature:
+    radial-gradient(circle at 9% -8%, rgba(114, 114, 171, 0.28), transparent 42%),
+    radial-gradient(circle at 90% 0%, rgba(88, 111, 124, 0.24), transparent 38%),
+    linear-gradient(150deg, #f7f9ff 0%, #eaf0ff 52%, #e2e9fb 100%);
+  --gradient-bg-product-standard:
+    radial-gradient(circle at 12% 16%, rgba(114, 114, 171, 0.3), transparent 52%),
+    radial-gradient(circle at 82% 0%, rgba(88, 111, 124, 0.24), transparent 44%),
+    linear-gradient(160deg, #eef3ff 0%, #dde6fb 100%);
+  --gradient-bg-ops-console:
+    radial-gradient(circle at 18% 22%, rgba(88, 111, 124, 0.28), transparent 48%),
+    radial-gradient(circle at 80% 82%, rgba(114, 114, 171, 0.22), transparent 46%),
+    linear-gradient(180deg, #edf2ff 0%, #dce6fb 45%, #e7edfc 100%);
+  --gradient-surface-panel: linear-gradient(165deg, #ffffff, #f2f6ff);
+  --gradient-surface-card: linear-gradient(145deg, #ffffff, #eef3ff);
+  --gradient-surface-elevated: linear-gradient(150deg, #ffffff, #e8efff);
+  --gradient-featured-top-accent:
+    linear-gradient(90deg, rgba(114, 114, 171, 0.42), rgba(88, 111, 124, 0.22));
+  --gradient-featured-top-accent-selected:
+    linear-gradient(90deg, rgba(114, 114, 171, 0.78), rgba(88, 111, 124, 0.42));
+
+  --shadow-sm: 0 6px 14px rgba(40, 52, 86, 0.12);
+  --shadow-md: 0 10px 18px rgba(38, 55, 92, 0.16);
+  --shadow-lg: 0 16px 34px rgba(38, 55, 92, 0.2);
+  --shadow-section: 0 4px 10px rgba(40, 52, 86, 0.08);
+  --shadow-control-selected: 0 0 0 2px var(--color-status-running-border);
+
+  --focus-ring: 0 0 0 2px var(--color-white), 0 0 0 4px var(--color-accent);
 }
