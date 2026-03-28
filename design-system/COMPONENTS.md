@@ -72,9 +72,9 @@ Example:
 - Error state uses `color.danger`; warning uses `color.warning`.
 
 Production baseline requirements:
-- Number controls must use the Explorer `number-input` stepper pattern (minus button, centered value, plus button, focus-within ring).
-- Date and datetime controls must use the Explorer `custom-datepicker` treatment (left-aligned value, right icon affordance, themed popover classes).
-- File attachment controls must use the Lens/MOC dropzone pattern with drag-over state, browse action, and file queue list.
+- Number controls must use the canonical `number-input` stepper pattern (minus button, centered value, plus button, focus-within ring).
+- Date and datetime controls must use the canonical `custom-datepicker` treatment (left-aligned value, right icon affordance, themed popover classes).
+- File attachment controls must use the canonical dropzone pattern with drag-over state, browse action, and file queue list.
 
 ## Dropdowns
 - Match input styling and radius.
@@ -85,13 +85,12 @@ Production baseline requirements:
 - Trigger/focus states must match input field behavior.
 - Date range fields must use same spacing and validation treatments as text/select fields.
 
-Theme contract (Explorer-aligned):
+Theme contract:
 - Input uses `.custom-datepicker` spacing and right-side icon affordance.
 - Flatpickr-compatible classes (`.flatpickr-calendar`, `.flatpickr-day`, `.flatpickr-weekday`) must be themed to token colors.
 - Selected date state uses primary gradient and maintains accessible contrast.
 
 ## File Upload Dropzone
-- Canonical pattern source: Lens + MOC.
 - Required parts:
   - `.file-upload-dropzone`
   - `.dropzone-content`
@@ -110,7 +109,6 @@ Theme contract (Explorer-aligned):
   - progress indicator (when uploading)
 
 ## Accordion / Disclosure
-- Canonical pattern source: Home.
 - Use semantic `<details>/<summary>` structure where feasible.
 - Summary indicator uses `+` when collapsed and `-` when expanded.
 - Use for grouped secondary content, tool directories, and progressive disclosure.
@@ -132,7 +130,6 @@ Example:
 ```
 
 ## Custom File Radio Select
-- Canonical pattern source: Lens "Select existing input file" list.
 - Use for single-choice file selection before an action.
 - Required elements:
   - list row container
@@ -159,7 +156,7 @@ Example:
 - Base: `surface.1`, border standard, radius `lg`, shadow `sm`.
 - Interactive card hover: subtle lift and border strengthen.
 
-Clickable action card standard (Home-modeled, required for card-based navigation actions):
+Clickable action card standard (required for card-based navigation actions):
 - Required structure:
   - `featured-head` block with `featured-kicker` + title
   - support/meta description text
@@ -178,7 +175,7 @@ Clickable action card standard (Home-modeled, required for card-based navigation
   - selected
   - disabled
 - Selected state must be explicit (accent border + top accent treatment + elevation change) and keyboard-discernible.
-- Visual treatment should follow Home-style featured cards using design-system tokenized colors, spacing, and typography.
+- Visual treatment must follow the canonical featured card structure using design-system tokenized colors, spacing, and typography.
 
 Example:
 
@@ -202,7 +199,6 @@ Example:
 - Section navigation uses tabs or segmented buttons, not ad hoc card toggles unless justified.
 
 ## Common App Header
-- Canonical pattern source: Home topbar (`Elcano Internal` + page title).
 - Structure:
   - left: brand mark + suite label (eyebrow) + current page title
   - right: utility and session actions (`Settings`, `Log out`, profile)
@@ -231,7 +227,7 @@ Example:
 - Status and priority colors must map to semantic token set.
 - Chips in multi-select/email patterns should support remove affordance.
 
-Email selection pills (MOC task modal pattern):
+Email selection pills:
 - Use this when selecting one or more recipient emails.
 - Container: `chips-container` style region with wrap and spacing.
 - Pill: `chip chip-email` with selectable state (`selected`).
@@ -257,7 +253,7 @@ Example:
 </div>
 ```
 
-Task status badge set (required for MOC-aligned workflows):
+Task status badge set:
 - `pending`
 - `scheduled`
 - `assigned`
@@ -290,6 +286,6 @@ Node status badge set (recommended):
 ## Do / Don't
 - Do use one canonical component variant per intent.
 - Do use status badges consistently across tables.
-- Do reuse upload dropzone pattern from Lens/MOC.
+- Do reuse the canonical upload dropzone pattern defined in this system.
 - Don't mix wildly different button typography in the same screen.
 - Don't ship un-themed third-party UI defaults.

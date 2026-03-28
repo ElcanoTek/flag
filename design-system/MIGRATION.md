@@ -1,6 +1,6 @@
 # Migration Guidance
 
-This document is operational and current.
+> **Note:** This is a historical document from the initial creation of the design system. It is preserved for context only. Do not use this file as a reference for current component patterns. The single source of truth is COMPONENTS.md.
 
 ## Adoption Strategy
 

@@ -1,5 +1,7 @@
 # Cross-Repo Audit Summary
 
+> **Note:** This is a historical document from the initial creation of the design system. It is preserved for context only. Do not use this file as a reference for current component patterns. The single source of truth is COMPONENTS.md.
+
 > Historical context: This audit is a point-in-time snapshot taken during initial system consolidation.
 > It is useful for understanding origin decisions and debt categories, but it is not the day-to-day implementation guide.
 > For active implementation, use `AGENT_GUIDE.md`, `TOKENS.md`, and `COMPONENTS.md`.

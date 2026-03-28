@@ -55,18 +55,18 @@ Use this precedence when implementing:
 - Interactive controls must define explicit `hover`, `active`, and `focus-visible` states.
 - Inputs: `2.5rem` min height, `radius-md`, token border/focus styles.
 - Include full input coverage: text, search, password, email, number, tel, url, textarea, select, date, time, datetime-local, file.
-- Number input must use Explorer-style stepper (`.number-input`, `.number-input__field`, `.number-input__btn`) where increment/decrement controls are needed.
-- Date picker must use Explorer-themed classes (`.custom-datepicker` and themed `.flatpickr-*` styles when Flatpickr is used).
-- File upload must use Lens/MOC dropzone structure (`.file-upload-dropzone`, `.dropzone-content`, `.file-list`).
-- Accordion disclosure should use Home-style plus/minus summary indicator.
-- Single-file selection lists should use Lens custom radio file selector pattern.
+- Number input must use the canonical stepper pattern (`.number-input`, `.number-input__field`, `.number-input__btn`) where increment/decrement controls are needed.
+- Date picker must use canonical themed classes (`.custom-datepicker` and themed `.flatpickr-*` styles when Flatpickr is used).
+- File upload must use the canonical dropzone structure (`.file-upload-dropzone`, `.dropzone-content`, `.file-list`).
+- Accordion disclosure should use the canonical plus/minus summary indicator.
+- Single-file selection lists should use the canonical custom radio file selector pattern.
 - Checkbox controls should use the shared design-system checkbox pattern (custom box + visible focus ring).
 - Tables: sticky headers optional, row hover subtle, status badges use semantic tokens.
-- Clickable action cards must use Home-style featured structure (`featured-head`, kicker, title, description) and explicit selected state (accent border/top accent/elevation).
+- Clickable action cards must use the canonical featured structure (`featured-head`, kicker, title, description) and explicit selected state (accent border/top accent/elevation).
 - Do not implement clickable action cards without both explicit `selected` and `focus-visible` states.
 - Use full task status badge set where applicable: pending, scheduled, assigned, leased, running, analyzing, success, error, cancelled.
-- For recipient selection in task forms, use MOC-style email selection pills (`chips-container`, `chip chip-email`, `chip-delete`).
-- App header must use the common Home-style pattern (brand mark + `Elcano Internal` eyebrow + page title + right-side utility actions).
+- For recipient selection in task forms, use canonical email selection pills (`chips-container`, `chip chip-email`, `chip-delete`).
+- App header must use the common canonical pattern (brand mark + `Elcano Internal` eyebrow + page title + right-side utility actions).
 - Modals: surface container, max-width tokens, explicit close button and escape key.
 - Empty/Loading/Error: always include heading, explanatory body text, and next action.
 - Common icon glyphs must come from `icons/core-icons.svg` (`download`, `trash`, `logout`, `paperclip`, etc.).

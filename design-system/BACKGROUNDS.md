@@ -2,19 +2,6 @@
 
 This document defines approved gradient and background options and when to use them.
 
-## Audit Findings (Cross-Repo)
-
-## What Works Best
-- **Home has the strongest background composition**: layered radial + linear gradients with atmospheric depth and subtle overlays.
-- Lens and Explorer use a consistent dark product backdrop that is close to reusable baseline.
-- Victoria Voice uses strong hero gradients but is less standardized with the rest of the stack.
-
-## What Is Inconsistent
-- Gradient directions and opacity stacks differ significantly by repo.
-- Some screens use many layered effects; others are almost flat.
-- Surface gradients and app-shell gradients are mixed without clear role boundaries.
-- Ops-focused screens (MOC) include stylistic overlays that can reduce readability when reused elsewhere.
-
 ## Canonical Gradient Tokens
 
 Use only these gradient tokens for production UIs.
@@ -25,7 +12,6 @@ Theme note:
 
 ### App Shell Backgrounds
 - `--gradient-bg-home-signature`
-  - Source: Home (CTO preferred direction)
   - **Default and enforced shell background across products**.
 - `--gradient-bg-product-standard`
   - Reserved fallback token (do not use by default).
