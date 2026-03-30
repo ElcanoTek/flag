@@ -29,7 +29,7 @@ Source precedence (when docs and examples differ):
 - `preview/index.html` - browsable style guide and component showcase
 
 Preview includes:
-- dark and light theme toggle
+- canonical sun/moon light-dark theme toggle (system-default + persisted user preference)
 - section expand/collapse controls
 - component state strips
 - implementation examples for key patterns

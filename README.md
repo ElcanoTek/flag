@@ -50,4 +50,17 @@ For coding agents working in product repos:
 1. Read `design-system/AGENT_GUIDE.md` first.
 2. Follow `design-system/APPLY_TO_PRODUCT.md` for adoption steps.
 3. Use token variables; do not hardcode colors, radii, spacing, or transition values.
-4. Support light/dark via canonical theme tokens (`body.theme-light` override model).
+4. Support light/dark via the canonical root theme contract (`html[data-theme]`) and shared theme controller behavior.
+
+## Canonical Theme Behavior
+- This repo is the source-of-truth implementation for light/dark mode across all Elcano products.
+- Default behavior is system-driven: preview resolves theme from `prefers-color-scheme` when there is no stored user preference.
+- Explicit user choice is persisted in `localStorage` using `flag-theme-preference`.
+- Stored user choice wins over system changes; system changes only auto-apply when preference is `system`/unset.
+- The canonical root selector is `html[data-theme="light"]` or `html[data-theme="dark"]`.
+
+Implementation lives in:
+- `design-system/preview/index.html` (theme toggle UI with shared sun/moon icons)
+- `design-system/preview/preview.js` (theme controller + persistence + system sync)
+- `design-system/preview/styles.css` (theme toggle visuals + transition polish)
+- `design-system/tokens/design-tokens.css` and `design-system/tokens/design-tokens.json` (theme token contract)

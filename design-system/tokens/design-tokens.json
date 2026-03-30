@@ -27,6 +27,7 @@
   },
   "color": {
     "primary": "#7272AB",
+    "primaryHover": "#8686C4",
     "secondary": "#586F7C",
     "accent": "#9DA7EF",
     "white": "#FFFFFF",
@@ -167,9 +168,22 @@
     }
   },
   "themes": {
+    "contract": {
+      "rootSelector": "html[data-theme='<mode>']",
+      "storageKey": "flag-theme-preference",
+      "defaultMode": "system",
+      "modes": ["light", "dark", "system"],
+      "legacyCompatibilitySelector": "body.theme-light"
+    },
+    "dark": {
+      "selector": "[data-theme='dark']",
+      "inheritsFrom": "root"
+    },
     "light": {
+      "selector": "[data-theme='light']",
       "color": {
         "background": "#F4F6FB",
+        "primaryHover": "#5F5F97",
         "surface": {
           "default": "#FFFFFF",
           "elevated": "#E9EEFC"

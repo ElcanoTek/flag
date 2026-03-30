@@ -25,6 +25,8 @@ This is the shared icon vocabulary for all Elcano microservices.
 - `close` - dismiss modal/toast
 - `chevron-down` - dropdown disclosure
 - `info` - helper and tooltip affordance
+- `sun` - light mode indicator and theme toggle
+- `moon` - dark mode indicator and theme toggle
 
 ## Accessibility Rules
 - Decorative icons: `aria-hidden="true"`.

@@ -18,6 +18,30 @@ Implementation note:
 - Icon-only buttons require visible tooltip/title and `aria-label`.
 - Canonical icon set and names live in `ICONS.md` and `icons/core-icons.svg`.
 
+## Theme Toggle (Shared Control)
+- Purpose: provide a single canonical control for switching between light and dark modes across Elcano products.
+- Icon usage: use shared sprite icons `sun` and `moon` from `icons/core-icons.svg`; icons are decorative (`aria-hidden="true"`).
+- Root contract: toggle updates `html[data-theme]` (`light` or `dark`); components must react via token variables.
+- Default behavior: if no explicit user preference exists, active theme follows `prefers-color-scheme`.
+- Persistence behavior: explicit user selection is stored at `localStorage` key `flag-theme-preference`.
+- System behavior: system theme changes auto-apply only while preference is unset/`system`.
+- Accessibility requirements:
+  - control keeps an explicit `aria-label` that describes next action (`Switch to dark mode` / `Switch to light mode`)
+  - use `aria-pressed` to expose current dark-mode state
+  - preserve keyboard activation and `focus-visible` treatment
+
+Example:
+
+```html
+<button class="btn btn-secondary theme-toggle" type="button" aria-label="Switch to light mode" aria-pressed="true">
+  <span class="theme-toggle__icon-wrap" aria-hidden="true">
+    <svg class="icon-inline theme-toggle__icon theme-toggle__icon--sun" aria-hidden="true"><use href="../icons/core-icons.svg#sun"></use></svg>
+    <svg class="icon-inline theme-toggle__icon theme-toggle__icon--moon" aria-hidden="true"><use href="../icons/core-icons.svg#moon"></use></svg>
+  </span>
+  <span class="theme-toggle__text">Dark mode</span>
+</button>
+```
+
 ## Buttons
 
 Theme behavior:

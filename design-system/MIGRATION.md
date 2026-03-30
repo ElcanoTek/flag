@@ -8,7 +8,7 @@
 - Import `tokens/design-tokens.css` into each microservice UI.
 - Replace local color variables with canonical semantic tokens.
 - Switch typography to Dubai Bold/Regular and tokenized scale.
-- Add theme toggle support using the canonical `body.theme-light` override model.
+- Add theme toggle support using the canonical root selector contract (`html[data-theme="light|dark"]`) and shared persistence/system-default behavior.
 
 ### Phase 2 - Shared Primitives
 - Standardize button variants, input fields, badges, cards, and empty states.
@@ -62,4 +62,4 @@ Use this for small repos or new UIs:
 2. Map existing UI colors/radius/spacing to tokens.
 3. Implement buttons + inputs + badges + cards using `COMPONENTS.md` contracts.
 4. Add required interactive states and accessibility attributes.
-5. Add theme toggle (`body.theme-light`) and verify parity.
+5. Add theme toggle (`html[data-theme]` + `flag-theme-preference`) and verify parity.

@@ -179,8 +179,10 @@ Usage reference and rationale are in `BACKGROUNDS.md`.
 ## 6) Theme Support
 
 Theme behavior is canonical and token-based:
-- Dark theme: default `:root` values.
-- Light theme: `body.theme-light` overrides in `tokens/design-tokens.css`.
+- Dark theme: `:root` values applied via `html[data-theme="dark"]` (or default when no explicit override).
+- Light theme: `:root[data-theme="light"]` overrides in `tokens/design-tokens.css`.
+- Theme preference storage key: `flag-theme-preference`.
+- Default mode: `system` (`prefers-color-scheme`), with explicit user choice taking precedence when stored.
 
 Rules:
 - Do not define ad hoc per-component theme values in product styles.

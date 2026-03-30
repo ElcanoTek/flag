@@ -1,4 +1,7 @@
 :root {
+  color-scheme: dark;
+  --theme-selector-attribute: data-theme;
+  --theme-preference-storage-key: flag-theme-preference;
   --font-heading: "Dubai", "Segoe UI", sans-serif;
   --font-body: "Dubai", "Segoe UI", sans-serif;
 
@@ -21,6 +24,7 @@
   --line-height-overline: 1.2728;
 
   --color-primary: #7272ab;
+  --color-primary-hover: #8686c4;
   --color-secondary: #586f7c;
   --color-accent: #9da7ef;
   --color-white: #ffffff;
@@ -167,8 +171,15 @@
   --focus-ring: 0 0 0 2px var(--color-bg), 0 0 0 4px var(--color-accent);
 }
 
+:root[data-theme="dark"] {
+  color-scheme: dark;
+}
+
+:root[data-theme="light"],
 body.theme-light {
+  color-scheme: light;
   --color-bg: #f4f6fb;
+  --color-primary-hover: #5f5f97;
   --color-surface-1: #ffffff;
   --color-surface-2: #e9eefc;
   --color-border: rgba(38, 55, 92, 0.2);

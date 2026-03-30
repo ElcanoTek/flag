@@ -4,6 +4,33 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Elcano Design System Preview</title>
+  <script>
+    (function () {
+      var storageKey = "flag-theme-preference";
+      var themes = { light: true, dark: true, system: true };
+      var preferredTheme = null;
+
+      try {
+        preferredTheme = window.localStorage.getItem(storageKey);
+      } catch (error) {
+        preferredTheme = null;
+      }
+
+      var resolvedTheme = "dark";
+      if (preferredTheme === "light" || preferredTheme === "dark") {
+        resolvedTheme = preferredTheme;
+      } else {
+        var isSystemDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        resolvedTheme = isSystemDark ? "dark" : "light";
+      }
+
+      if (!themes[resolvedTheme]) {
+        resolvedTheme = "dark";
+      }
+
+      document.documentElement.setAttribute("data-theme", resolvedTheme);
+    })();
+  </script>
   <link rel="stylesheet" href="./vendor/flatpickr/flatpickr.min.css" />
   <link rel="stylesheet" href="../tokens/design-tokens.css" />
   <link rel="stylesheet" href="./styles.css" />
@@ -21,9 +48,17 @@
     </header>
     <p class="hero-intro">Canonical visual reference from the Flag repo. Includes foundations, logos, unified inputs, and component patterns for all products.</p>
     <div class="section-review-controls" role="group" aria-label="Section controls">
-      <button id="expandAllSections" class="btn btn-secondary" type="button" aria-label="Expand all sections">Expand all</button>
-      <button id="collapseAllSections" class="btn btn-ghost" type="button" aria-label="Collapse all sections">Collapse all</button>
-      <button id="toggleTheme" class="btn btn-secondary" type="button" aria-label="Switch to light mode" aria-pressed="false">Light mode</button>
+      <div class="section-review-controls__group">
+        <button id="expandAllSections" class="btn btn-secondary" type="button" aria-label="Expand all sections">Expand all</button>
+        <button id="collapseAllSections" class="btn btn-ghost" type="button" aria-label="Collapse all sections">Collapse all</button>
+      </div>
+      <button id="toggleTheme" class="btn btn-secondary theme-toggle" type="button" aria-label="Toggle color theme" aria-pressed="false">
+        <span class="theme-toggle__icon-wrap" aria-hidden="true">
+          <svg class="icon-inline theme-toggle__icon theme-toggle__icon--sun" aria-hidden="true"><use href="../icons/core-icons.svg#sun"></use></svg>
+          <svg class="icon-inline theme-toggle__icon theme-toggle__icon--moon" aria-hidden="true"><use href="../icons/core-icons.svg#moon"></use></svg>
+        </span>
+        <span class="theme-toggle__text" data-theme-toggle-text>Theme</span>
+      </button>
     </div>
     <p id="previewAnnouncer" class="sr-only" aria-live="polite"></p>
 
@@ -146,7 +181,7 @@
 
         <article class="logo-card">
           <div class="logo-stage logo-stage-dark">
-            <img src="../logos/victoria-ship-white.svg" alt="Victoria ship mark" />
+            <img class="theme-logo" src="../logos/victoria-ship-white.svg" data-logo-dark="../logos/victoria-ship-white.svg" data-logo-light="../logos/victoria-ship-dark.svg" alt="Victoria ship mark" />
           </div>
           <h3>Victoria Product Mark</h3>
           <p>Victoria-specific touchpoints only. Do not replace Elcano suite branding in global shell.</p>
@@ -154,7 +189,7 @@
 
         <article class="logo-card">
           <div class="logo-stage logo-stage-dark">
-            <img src="../logos/lens-favicon.svg" alt="Lens app mark" />
+            <img class="theme-logo" src="../logos/lens-favicon.svg" data-logo-dark="../logos/lens-favicon.svg" data-logo-light="../logos/lens-favicon-light.svg" alt="Lens app mark" />
           </div>
           <h3>Lens App Mark</h3>
           <p>Lens product identity for app-level branding, favicon usage, and app launch tiles.</p>
@@ -162,7 +197,7 @@
 
         <article class="logo-card">
           <div class="logo-stage logo-stage-dark">
-            <img src="../logos/explorer-favicon.svg" alt="Explorer app mark" />
+            <img class="theme-logo" src="../logos/explorer-favicon.svg" data-logo-dark="../logos/explorer-favicon.svg" data-logo-light="../logos/explorer-favicon-light.svg" alt="Explorer app mark" />
           </div>
           <h3>Explorer App Mark</h3>
           <p>Explorer product identity for app-level branding, favicon usage, and app launch tiles.</p>
@@ -170,7 +205,7 @@
 
         <article class="logo-card">
           <div class="logo-stage logo-stage-dark">
-            <img src="../logos/moc-icon-192.png" alt="MOC app icon" />
+            <img class="theme-logo" src="../logos/moc-icon-192.png" data-logo-dark="../logos/moc-icon-192.png" data-logo-light="../logos/moc-icon-192-light.png" alt="MOC app icon" />
           </div>
           <h3>MOC App Icon</h3>
           <p>MOC product icon for launch surfaces and icon contexts. Keep 1:1 aspect ratio and no color edits.</p>
@@ -197,6 +232,8 @@
         <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#filter"></use></svg><span>filter</span></div>
         <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#plus"></use></svg><span>plus</span></div>
         <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#close"></use></svg><span>close</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#sun"></use></svg><span>sun</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#moon"></use></svg><span>moon</span></div>
       </div>
       <div class="demo-row">
         <button class="btn btn-primary"><svg class="icon-inline" aria-hidden="true"><use href="../icons/core-icons.svg#download"></use></svg> Download</button>
@@ -204,6 +241,7 @@
         <button class="btn btn-ghost"><svg class="icon-inline" aria-hidden="true"><use href="../icons/core-icons.svg#logout"></use></svg> Logout</button>
         <button class="btn btn-secondary"><svg class="icon-inline" aria-hidden="true"><use href="../icons/core-icons.svg#paperclip"></use></svg> Attach</button>
       </div>
+      <p class="section-note">Text link example: <a href="#">Open component guidelines</a></p>
         </div>
       </details>
     </section>

@@ -24,7 +24,10 @@ Use this precedence when implementing:
 - Type scale is tokenized in `rem` (Title `1.75rem`, Subtitle `1.125rem`, Body `0.75rem-0.875rem`).
 - Do not introduce arbitrary values like `0.8125rem` radius or `0.98rem` body text outside token scale.
 - Keep border/radius/shadow values on token scale only.
-- Light mode is canonical and must use canonical theme tokens (`body.theme-light` override model in token CSS).
+- The canonical theme contract is root-level `html[data-theme="light|dark"]`.
+- Theme behavior must default to system preference and only persist explicit user choice (`flag-theme-preference`).
+- Shared theme toggle must use sun/moon icons from `icons/core-icons.svg`.
+- Do not invent product-specific theme state logic when the shared flag pattern applies.
 - Shell background default is `--gradient-bg-home-signature` unless exception is explicitly documented.
 - Primary actions must use primary variant semantics.
 - Danger actions must use danger semantics.
@@ -45,10 +48,20 @@ Use this precedence when implementing:
 - Surface gradients: `--gradient-surface-panel`, `--gradient-surface-card`, `--gradient-surface-elevated`
 
 ## Theme Rules
-- Default theme uses `:root` tokens.
-- Light theme uses `body.theme-light` token overrides from `tokens/design-tokens.css`.
+- Default mode is `system` (`prefers-color-scheme`) with no stored explicit preference.
+- Root selector contract is `html[data-theme="light"]` or `html[data-theme="dark"]`.
+- Token overrides for light mode live in `tokens/design-tokens.css` under `:root[data-theme="light"]`.
+- Store explicit user preference in `localStorage` with key `flag-theme-preference`.
+- System theme changes should auto-apply only when preference is unset/`system`.
 - Do not define per-component ad hoc light-mode values in product CSS.
 - If a theme value is missing, add it to token files first.
+
+Recommended implementation order for new product adoption:
+1. Import `tokens/design-tokens.css` and apply root `data-theme` attribute contract.
+2. Add the shared theme controller (resolve stored preference -> resolve system preference -> apply root theme).
+3. Add the shared sun/moon toggle control and wire accessible labels/states (`aria-label`, `aria-pressed`).
+4. Add localStorage persistence using `flag-theme-preference` and system-change listener behavior.
+5. Verify theme parity for all canonical component states and announce theme changes when appropriate.
 
 ## Component Defaults
 - Buttons: `primary`, `secondary`, `ghost`, `danger`.

@@ -17,8 +17,10 @@ Establish a durable, implementation-ready, cross-service design language for Elc
 - Patterns: app shell, empty/loading/error feedback, detail panel flows.
 
 ## Theme Model
-- Dark mode is the default token set (`:root`).
-- Light mode is canonical and implemented via `body.theme-light` token overrides in `tokens/design-tokens.css`.
+- Theme application uses the root selector contract `html[data-theme="light|dark"]`.
+- Dark mode token set is the base `:root` configuration (resolved by system preference or explicit user choice).
+- Light mode is implemented via `:root[data-theme="light"]` token overrides in `tokens/design-tokens.css`.
+- Explicit user theme choice persists to `flag-theme-preference`; default behavior follows system preference.
 - Component CSS should consume the same semantic variables in both themes.
 
 ## Approved Patterns

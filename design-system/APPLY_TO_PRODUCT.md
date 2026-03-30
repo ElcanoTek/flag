@@ -1,30 +1,71 @@
 # Apply to Another Product
 
-Use this guide to adopt the Elcano Design System in another repo (for example `lens`, `explorer`, or a new UI).
+Use this guide to port the canonical Flag design system behavior into another Elcano app (`lens`, `explorer`, `home`, `moc`, or new products).
 
-## 1) Import Tokens First
+## Canonical Theme Contract (Do Not Change)
 
-Import canonical token CSS before product styles.
+- Root selector: `html[data-theme="light"]` or `html[data-theme="dark"]`
+- Preference storage key: `flag-theme-preference`
+- Default mode: `system` (`prefers-color-scheme`)
+- Explicit user preference (`light`/`dark`) persists and overrides system changes
+- Shared iconography for theme toggle: `sun` and `moon` from `icons/core-icons.svg`
+
+If a product needs additional behavior, extend this contract. Do not replace it with product-specific theme logic.
+
+## 1) Copy Foundations First
+
+Copy or import these sources before product component work:
+- `tokens/design-tokens.css`
+- `tokens/design-tokens.json`
+- `icons/core-icons.svg`
+
+Import token CSS first:
 
 ```html
 <link rel="stylesheet" href="/path/to/design-tokens.css" />
 ```
 
-Do not start component work until tokens are available.
+## 2) Wire Theme in App Shell
 
-## 2) Enable Theme Model
-
-Default theme uses `:root` token values.
-
-Light theme uses `body.theme-light` token overrides from `tokens/design-tokens.css`.
-
-Example toggle:
+Apply theme on initial load before main UI render when possible:
 
 ```js
-document.body.classList.toggle("theme-light")
+var root = document.documentElement;
+var key = "flag-theme-preference";
+var media = window.matchMedia("(prefers-color-scheme: dark)");
+var stored = window.localStorage.getItem(key);
+var effectiveTheme = stored === "light" || stored === "dark"
+  ? stored
+  : (media.matches ? "dark" : "light");
+
+root.setAttribute("data-theme", effectiveTheme);
 ```
 
-## 3) Use Semantic Tokens in Product CSS
+Then add a listener for system theme changes that only runs while preference is unset/`system`.
+
+## 3) Add Shared Sun/Moon Toggle
+
+Use the canonical accessible toggle structure:
+
+```html
+<button id="toggleTheme" class="btn btn-secondary theme-toggle" type="button" aria-label="Switch to light mode" aria-pressed="true">
+  <span class="theme-toggle__icon-wrap" aria-hidden="true">
+    <svg class="icon-inline theme-toggle__icon theme-toggle__icon--sun" aria-hidden="true"><use href="../icons/core-icons.svg#sun"></use></svg>
+    <svg class="icon-inline theme-toggle__icon theme-toggle__icon--moon" aria-hidden="true"><use href="../icons/core-icons.svg#moon"></use></svg>
+  </span>
+  <span class="theme-toggle__text">Dark mode</span>
+</button>
+```
+
+Required behavior:
+- click toggles between `light` and `dark`
+- updates `aria-label` to describe next action
+- updates `aria-pressed` to reflect dark mode state
+- updates visible text/icon state
+
+## 4) Consume Semantic Tokens in Product CSS
+
+Do not write product-local theme color values.
 
 ```css
 .page {
@@ -39,47 +80,31 @@ document.body.classList.toggle("theme-light")
 }
 ```
 
-## 4) Use Canonical Icon Sprite
+## 5) Keep Accessibility + Persistence Intact
 
-```html
-<button class="icon-action" type="button" aria-label="Delete">
-  <svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#trash"></use></svg>
-</button>
-```
+- Icon-only controls require `aria-label`.
+- Decorative SVGs remain `aria-hidden="true"`.
+- Keep keyboard behavior and `:focus-visible` (`var(--focus-ring)`) on custom controls.
+- If using a live region, announce theme changes when users toggle manually.
+- Persist only explicit user choice; do not persist inferred system value as explicit choice.
 
-## 5) Implement Component Contracts
+## 6) What to Configure
 
-Use `COMPONENTS.md` class/state contracts directly.
+- Path aliases/import paths for tokens and icons in your app.
+- Placement of the theme toggle in app shell/header.
+- Optional wiring into app state/store (the root `data-theme` value remains the source of applied theme).
 
-Examples:
-- buttons: `.btn btn-primary|btn-secondary|btn-ghost|btn-danger`
-- action cards: `.featured-link` + selected/disabled contracts
-- chips: `.chip chip-email` + keyboard-accessible delete control
+## 7) What Not to Change
 
-## 6) Required Interaction and A11y
+- Do not replace `html[data-theme]` with ad hoc selectors.
+- Do not rename `flag-theme-preference` per product unless there is a hard requirement.
+- Do not swap in custom sun/moon artwork when the shared icon sprite is available.
+- Do not add per-component local light/dark overrides when token overrides already exist.
 
-Every interactive control must implement:
-- `:hover`
-- `:focus-visible` using `var(--focus-ring)`
-- `:active`
-- `:disabled` (when applicable)
+## 8) Recommended Migration Order
 
-Accessibility requirements:
-- `aria-label` for icon-only controls
-- explicit label/input association
-- keyboard support for custom `role="button"` controls
-
-## 7) Common Mistakes to Avoid
-
-- Using hardcoded hex values instead of token variables.
-- Using px one-offs instead of token scale (`var(--space-*)`, `var(--radius-*)`).
-- Mixing non-Dubai fonts with system UI.
-- Creating local light-mode values instead of token overrides.
-- Missing focus-visible state on custom controls.
-
-## 8) Migration Order (Recommended)
-
-1. tokens and typography
-2. buttons/inputs/badges/cards
-3. complex components (dropzone, datepicker, chips)
-4. final accessibility and parity verification
+1. Import tokens/icons and apply root `data-theme` selector contract.
+2. Add theme controller (system default + persisted preference + system-change sync).
+3. Add shared theme toggle and verify accessibility attributes.
+4. Migrate component styles to semantic tokens only.
+5. Validate visual parity and interaction/accessibility behavior in both themes.
