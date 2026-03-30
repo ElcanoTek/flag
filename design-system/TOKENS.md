@@ -60,6 +60,11 @@ Required family:
 - Headlines/Subheadlines: `Dubai Bold`, weight `700`
 - Body/UI: `Dubai Regular`, weight `400`
 
+Code-component typography (logs code display + task tracker only):
+- `font.code` / `--font-code`: `Share Tech Mono`
+- `font.codeUi` / `--font-code-ui`: `VT323`
+- Font files are provided in `design-system/fonts/` and loaded via `design-system/fonts/code-fonts.css`.
+
 Use `rem` as the canonical unit (not hard-coded `px`) for type sizing.
 
 Core scale:

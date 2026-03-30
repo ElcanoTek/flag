@@ -1741,6 +1741,156 @@ span.flatpickr-weekday {
   fill: var(--color-primary) !important;
 }
 
+.tool-call-item {
+  margin-top: var(--space-3);
+  padding: var(--space-3);
+  background: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.tool-call-name {
+  color: var(--color-primary);
+  margin-bottom: var(--space-2);
+  font-family: var(--font-code);
+  font-size: var(--font-size-body-lg);
+}
+
+.tool-call-id {
+  color: var(--color-text-secondary);
+  margin-bottom: var(--space-3);
+  font-family: var(--font-code);
+  font-size: var(--font-size-caption);
+}
+
+.tool-call-id code,
+.tool-call-other-args code {
+  display: inline-block;
+  background: var(--color-overlay-soft);
+  color: var(--color-accent);
+  border-radius: var(--radius-sm);
+  padding: 0.125rem 0.5rem;
+  font-family: var(--font-code);
+}
+
+.tool-call-code {
+  margin: 0;
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-sm);
+  overflow-x: auto;
+}
+
+.tool-call-code code {
+  display: block;
+  margin: 0;
+  padding: var(--space-3);
+  white-space: pre;
+  font-family: var(--font-code);
+  font-size: var(--font-size-body);
+  line-height: 1.6;
+  color: var(--color-text-secondary);
+  background: color-mix(in srgb, var(--color-black) 25%, transparent);
+}
+
+.tool-call-other-args {
+  margin-top: var(--space-2);
+  color: var(--color-text-secondary);
+  font-size: var(--font-size-caption);
+}
+
+.task-tracker-container {
+  margin-top: var(--space-3);
+  background: color-mix(in srgb, var(--color-black) 30%, transparent);
+  border: 1px solid var(--color-border-subtle);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+}
+
+.task-tracker-cmd {
+  padding: var(--space-2) var(--space-3);
+  background: color-mix(in srgb, var(--color-primary) 14%, transparent);
+  border-bottom: 1px solid var(--color-border-subtle);
+  color: var(--color-accent);
+  font-family: var(--font-code-ui);
+  font-size: var(--font-size-caption);
+}
+
+.task-tracker-list {
+  padding: var(--space-2);
+}
+
+.task-tracker-item {
+  display: flex;
+  align-items: baseline;
+  gap: var(--space-2);
+  padding: 0.375rem 0.5rem;
+  margin-bottom: 0.125rem;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-code);
+  font-size: var(--font-size-body);
+}
+
+.task-tracker-item:last-child {
+  margin-bottom: 0;
+}
+
+.tt-icon {
+  width: 1rem;
+  text-align: center;
+  font-weight: var(--font-weight-bold);
+}
+
+.tt-id {
+  color: var(--color-text-muted);
+  font-size: var(--font-size-caption);
+}
+
+.tt-title {
+  color: var(--color-text-secondary);
+  flex: 1;
+}
+
+.task-tracker-item.status-done .tt-icon {
+  color: var(--color-success);
+}
+
+.task-tracker-item.status-done .tt-title {
+  color: color-mix(in srgb, var(--color-text-secondary) 72%, var(--color-white) 28%);
+  text-decoration: line-through;
+}
+
+.task-tracker-item.status-inprogress {
+  background: color-mix(in srgb, var(--color-warning) 16%, transparent);
+}
+
+.task-tracker-item.status-inprogress .tt-icon {
+  color: var(--color-warning);
+  animation: spin 2s linear infinite;
+  display: inline-block;
+}
+
+.task-tracker-item.status-inprogress .tt-title {
+  color: var(--color-warning);
+}
+
+.task-tracker-item.status-todo .tt-icon,
+.task-tracker-item.status-todo .tt-title {
+  color: var(--color-text-muted);
+}
+
+[data-theme="light"] .tool-call-item {
+  background: var(--color-surface-2);
+}
+
+[data-theme="light"] .tool-call-code code {
+  color: var(--color-text-primary);
+  background: color-mix(in srgb, var(--color-secondary) 10%, var(--color-white) 90%);
+}
+
+[data-theme="light"] .task-tracker-container {
+  background: color-mix(in srgb, var(--color-secondary) 8%, var(--color-white) 92%);
+}
+
 .badge {
   display: inline-flex;
   align-items: center;

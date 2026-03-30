@@ -2,6 +2,8 @@
   "font": {
     "heading": "Dubai",
     "body": "Dubai",
+    "code": "Share Tech Mono",
+    "codeUi": "VT323",
     "weight": {
       "regular": 400,
       "bold": 700
@@ -54,38 +56,38 @@
     },
     "status": {
       "success": "#50FA7B",
-      "warning": "#FFB86C",
+      "warning": "#FF8847",
       "danger": "#FF5555",
       "info": "#8A8BC0",
       "pending": {
-        "fg": "#D2D9DE",
-        "bg": "rgba(88, 111, 124, 0.18)",
-        "border": "rgba(88, 111, 124, 0.55)"
+        "fg": "#D3DDE6",
+        "bg": "rgba(124, 140, 152, 0.2)",
+        "border": "rgba(124, 140, 152, 0.6)"
       },
       "scheduled": {
-        "fg": "#E9DBB8",
-        "bg": "rgba(255, 184, 108, 0.14)",
-        "border": "rgba(255, 184, 108, 0.55)"
+        "fg": "#FFE4B8",
+        "bg": "rgba(224, 171, 74, 0.18)",
+        "border": "rgba(224, 171, 74, 0.62)"
       },
       "assigned": {
-        "fg": "#D4DEFF",
-        "bg": "rgba(138, 139, 192, 0.18)",
-        "border": "rgba(138, 139, 192, 0.55)"
+        "fg": "#CFE3FF",
+        "bg": "rgba(90, 132, 255, 0.2)",
+        "border": "rgba(90, 132, 255, 0.58)"
       },
       "leased": {
-        "fg": "#D4DEFF",
-        "bg": "rgba(138, 139, 192, 0.14)",
-        "border": "rgba(114, 114, 171, 0.55)"
+        "fg": "#E5D6FF",
+        "bg": "rgba(168, 119, 255, 0.2)",
+        "border": "rgba(168, 119, 255, 0.58)"
       },
       "running": {
-        "fg": "#D4DEFF",
-        "bg": "rgba(114, 114, 171, 0.2)",
-        "border": "rgba(114, 114, 171, 0.6)"
+        "fg": "#C9F0FF",
+        "bg": "rgba(47, 183, 220, 0.22)",
+        "border": "rgba(47, 183, 220, 0.62)"
       },
       "analyzing": {
-        "fg": "#D8E5FF",
-        "bg": "rgba(62, 146, 196, 0.18)",
-        "border": "rgba(62, 146, 196, 0.52)"
+        "fg": "#D6DDFF",
+        "bg": "rgba(124, 107, 255, 0.22)",
+        "border": "rgba(124, 107, 255, 0.62)"
       },
       "success": {
         "fg": "#CBFDD8",
@@ -98,9 +100,9 @@
         "border": "rgba(255, 85, 85, 0.6)"
       },
       "cancelled": {
-        "fg": "#D2D9DE",
-        "bg": "rgba(88, 111, 124, 0.2)",
-        "border": "rgba(88, 111, 124, 0.52)"
+        "fg": "#C7CED4",
+        "bg": "rgba(108, 118, 130, 0.16)",
+        "border": "rgba(108, 118, 130, 0.48)"
       }
     }
   },
@@ -206,33 +208,33 @@
         "status": {
           "pending": {
             "fg": "#33415F",
-            "bg": "rgba(88, 111, 124, 0.12)",
-            "border": "rgba(88, 111, 124, 0.36)"
+            "bg": "rgba(124, 140, 152, 0.18)",
+            "border": "rgba(124, 140, 152, 0.42)"
           },
           "scheduled": {
             "fg": "#7A4A12",
-            "bg": "rgba(255, 184, 108, 0.22)",
-            "border": "rgba(255, 184, 108, 0.5)"
+            "bg": "rgba(224, 171, 74, 0.24)",
+            "border": "rgba(224, 171, 74, 0.54)"
           },
           "assigned": {
-            "fg": "#33415F",
-            "bg": "rgba(138, 139, 192, 0.14)",
-            "border": "rgba(138, 139, 192, 0.38)"
+            "fg": "#1F3F87",
+            "bg": "rgba(90, 132, 255, 0.2)",
+            "border": "rgba(90, 132, 255, 0.44)"
           },
           "leased": {
-            "fg": "#33415F",
-            "bg": "rgba(138, 139, 192, 0.12)",
-            "border": "rgba(114, 114, 171, 0.36)"
+            "fg": "#5A2F8F",
+            "bg": "rgba(168, 119, 255, 0.18)",
+            "border": "rgba(168, 119, 255, 0.42)"
           },
           "running": {
-            "fg": "#2F3F64",
-            "bg": "rgba(114, 114, 171, 0.16)",
-            "border": "rgba(114, 114, 171, 0.44)"
+            "fg": "#0F5E78",
+            "bg": "rgba(47, 183, 220, 0.22)",
+            "border": "rgba(47, 183, 220, 0.46)"
           },
           "analyzing": {
-            "fg": "#1E4F6F",
-            "bg": "rgba(62, 146, 196, 0.14)",
-            "border": "rgba(62, 146, 196, 0.38)"
+            "fg": "#3B3391",
+            "bg": "rgba(124, 107, 255, 0.2)",
+            "border": "rgba(124, 107, 255, 0.44)"
           },
           "success": {
             "fg": "#1C5A33",
@@ -240,9 +242,9 @@
             "border": "rgba(80, 250, 123, 0.42)"
           },
           "warning": {
-            "fg": "#8F5A18",
-            "bg": "rgba(255, 184, 108, 0.2)",
-            "border": "rgba(255, 184, 108, 0.46)"
+            "fg": "#8F3E10",
+            "bg": "rgba(255, 136, 71, 0.24)",
+            "border": "rgba(255, 136, 71, 0.48)"
           },
           "error": {
             "fg": "#7C1F1F",
@@ -250,9 +252,9 @@
             "border": "rgba(255, 85, 85, 0.44)"
           },
           "cancelled": {
-            "fg": "#4F5F7F",
-            "bg": "rgba(88, 111, 124, 0.14)",
-            "border": "rgba(88, 111, 124, 0.36)"
+            "fg": "#59657A",
+            "bg": "rgba(108, 118, 130, 0.16)",
+            "border": "rgba(108, 118, 130, 0.34)"
           }
         }
       },

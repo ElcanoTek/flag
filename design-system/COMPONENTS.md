@@ -218,6 +218,60 @@ Example:
 - Row hover allowed for clickable rows only.
 - Status columns should use standardized status badge tokens.
 
+## Logs Code Display and Task Tracker (MOC Baseline)
+- This component set is canonical for logs UIs that render agent tool calls.
+- Preserve MOC class contracts and structure for cross-product reuse.
+- Typography exception: these components use MOC code fonts instead of Dubai:
+  - code/content: `font.code` (`--font-code`, Share Tech Mono stack)
+  - command/terminal labels: `font.codeUi` (`--font-code-ui`, VT323 stack)
+- Font sourcing requirement: self-host fonts and load `design-system/fonts/code-fonts.css` before component styles.
+
+### Code Display Block
+- Use this for code execution payloads (for example, `run_python` tool calls).
+- Required classes:
+  - `.tool-call-item`
+  - `.tool-call-name`
+  - `.tool-call-id`
+  - `.tool-call-code`
+  - `.tool-call-other-args` (optional)
+
+Example:
+
+```html
+<div class="tool-call-item">
+  <div class="tool-call-name"><strong>run_python</strong></div>
+  <div class="tool-call-id">ID: <code>call_9f8a2ce1</code></div>
+  <pre class="tool-call-code"><code class="language-python">print("hello")</code></pre>
+  <div class="tool-call-other-args">Other arguments: <code>{"timeout": 45}</code></div>
+</div>
+```
+
+### Task Tracker Block
+- Use this for `task_tracker` tool call arguments and progress snapshots.
+- Required classes:
+  - `.task-tracker-container`
+  - `.task-tracker-cmd`
+  - `.task-tracker-list`
+  - `.task-tracker-item`
+  - `.tt-icon`, `.tt-id`, `.tt-title`
+- Supported item state classes:
+  - `.status-done`
+  - `.status-inprogress`
+  - `.status-todo`
+
+Example:
+
+```html
+<div class="task-tracker-container" role="group" aria-label="Task tracker">
+  <div class="task-tracker-cmd">Command: <strong>RECONCILE DELIVERY REPORT</strong></div>
+  <div class="task-tracker-list">
+    <div class="task-tracker-item status-done"><span class="tt-icon">&#10003;</span><span class="tt-id">[1]</span><span class="tt-title">Validate file schema</span></div>
+    <div class="task-tracker-item status-inprogress"><span class="tt-icon">&#8635;</span><span class="tt-id">[2]</span><span class="tt-title">Aggregate publisher metrics</span></div>
+    <div class="task-tracker-item status-todo"><span class="tt-icon">&#9675;</span><span class="tt-id">[3]</span><span class="tt-title">Write QA summary</span></div>
+  </div>
+</div>
+```
+
 ## Navigation Patterns
 - Topbar with product title + single primary context action area.
 - Section navigation uses tabs or segmented buttons, not ad hoc card toggles unless justified.

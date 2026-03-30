@@ -31,6 +31,7 @@
       document.documentElement.setAttribute("data-theme", resolvedTheme);
     })();
   </script>
+  <link rel="stylesheet" href="../fonts/code-fonts.css" />
   <link rel="stylesheet" href="./vendor/flatpickr/flatpickr.min.css" />
   <link rel="stylesheet" href="../tokens/design-tokens.css" />
   <link rel="stylesheet" href="./styles.css" />
@@ -544,6 +545,58 @@
           <p class="chip-help">Click a pill to select/deselect. Click the `x` to remove a custom email.</p>
         </article>
       </div>
+        </div>
+      </details>
+    </section>
+
+    <section class="section">
+      <details class="section-accordion" open>
+        <summary>
+          <h2>Logs Code Display and Task Tracker</h2>
+        </summary>
+        <div class="section-body">
+          <p class="section-note">Canonical logs-ui components from MOC, preserved as baseline contracts for code execution display and task tracker rendering.</p>
+          <div class="production-grid">
+            <article class="card">
+              <h3>Code Display (MOC Logs)</h3>
+              <p class="card-copy">Use this tool-call code presentation in log timelines when showing `run_python` or comparable code execution payloads.</p>
+              <div class="tool-call-item">
+                <div class="tool-call-name"><strong>run_python</strong></div>
+                <div class="tool-call-id">ID: <code>call_9f8a2ce1</code></div>
+                <pre class="tool-call-code"><code class="language-python">import statistics
+
+samples = [123.4, 128.1, 120.9, 131.7]
+average = statistics.mean(samples)
+print(f"Mean latency: {average:.2f} ms")</code></pre>
+                <div class="tool-call-other-args">Other arguments: <code>{"timeout": 45}</code></div>
+              </div>
+            </article>
+
+            <article class="card">
+              <h3>Task Tracker (MOC Logs)</h3>
+              <p class="card-copy">Use this when rendering `task_tracker` tool calls so planning/progress state remains consistent across products.</p>
+              <div class="task-tracker-container" role="group" aria-label="Task tracker">
+                <div class="task-tracker-cmd">Command: <strong>RECONCILE DELIVERY REPORT</strong></div>
+                <div class="task-tracker-list">
+                  <div class="task-tracker-item status-done">
+                    <span class="tt-icon" aria-hidden="true">&#10003;</span>
+                    <span class="tt-id">[1]</span>
+                    <span class="tt-title">Validate file schema</span>
+                  </div>
+                  <div class="task-tracker-item status-inprogress">
+                    <span class="tt-icon" aria-hidden="true">&#8635;</span>
+                    <span class="tt-id">[2]</span>
+                    <span class="tt-title">Aggregate publisher metrics</span>
+                  </div>
+                  <div class="task-tracker-item status-todo">
+                    <span class="tt-icon" aria-hidden="true">&#9675;</span>
+                    <span class="tt-id">[3]</span>
+                    <span class="tt-title">Write QA summary</span>
+                  </div>
+                </div>
+              </div>
+            </article>
+          </div>
         </div>
       </details>
     </section>

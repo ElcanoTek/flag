@@ -16,6 +16,7 @@ This directory is the single documented source of truth for shared UI design dec
 ## Source Files
 - `tokens/design-tokens.css` - canonical runtime token source
 - `tokens/design-tokens.json` - canonical machine-readable token source
+- `fonts/code-fonts.css` + `fonts/*.ttf` - canonical self-hosted MOC code-component fonts
 - `logos/` - approved SVG/PNG logo assets
 - `icons/core-icons.svg` - canonical SVG sprite
 

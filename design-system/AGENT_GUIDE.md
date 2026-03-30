@@ -21,6 +21,7 @@ Use this precedence when implementing:
 - Typography is fixed:
   - Headlines/subheadlines: `Dubai Bold`
   - Body/UI text: `Dubai Regular`
+- Exception: logs code display and task tracker components use code fonts (`--font-code`, `--font-code-ui`) to match canonical MOC baseline.
 - Type scale is tokenized in `rem` (Title `1.75rem`, Subtitle `1.125rem`, Body `0.75rem-0.875rem`).
 - Do not introduce arbitrary values like `0.8125rem` radius or `0.98rem` body text outside token scale.
 - Keep border/radius/shadow values on token scale only.
@@ -84,6 +85,8 @@ Recommended implementation order for new product adoption:
 - Empty/Loading/Error: always include heading, explanatory body text, and next action.
 - Common icon glyphs must come from `icons/core-icons.svg` (`download`, `trash`, `logout`, `paperclip`, etc.).
 - Logos must come from `design-system/logos/` and follow `LOGOS.md` usage mapping.
+- Logs code display must use canonical classes: `.tool-call-item`, `.tool-call-name`, `.tool-call-id`, `.tool-call-code`, `.tool-call-other-args`.
+- Task tracker must use canonical classes: `.task-tracker-container`, `.task-tracker-cmd`, `.task-tracker-list`, `.task-tracker-item`, `.tt-icon`, `.tt-id`, `.tt-title` with `status-done|status-inprogress|status-todo`.
 
 ## Accessibility Requirements
 - Icon-only controls require `aria-label`.
@@ -97,6 +100,6 @@ Recommended implementation order for new product adoption:
 ## Disallowed Patterns
 - External font/CDN dependencies for core UI styles.
 - New ad hoc status colors.
-- Mixed font systems within one screen.
+- Mixed font systems within one screen (except canonical MOC-baseline code display/task tracker components).
 - Invisible focus states.
 - Gradient-heavy controls for every element (reserve gradients for hero/high-emphasis surfaces).

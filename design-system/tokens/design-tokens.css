@@ -4,6 +4,8 @@
   --theme-preference-storage-key: flag-theme-preference;
   --font-heading: "Dubai", "Segoe UI", sans-serif;
   --font-body: "Dubai", "Segoe UI", sans-serif;
+  --font-code: "Share Tech Mono", "SF Mono", "Consolas", monospace;
+  --font-code-ui: "VT323", "Share Tech Mono", monospace;
 
   --font-weight-regular: 400;
   --font-weight-bold: 700;
@@ -47,49 +49,49 @@
   --color-overlay-strong: rgba(0, 0, 0, 0.4);
 
   --color-success: #50fa7b;
-  --color-warning: #ffb86c;
+  --color-warning: #ff8847;
   --color-danger: #ff5555;
   --color-info: #8a8bc0;
 
-  --color-status-pending-fg: #d2d9de;
-  --color-status-pending-bg: rgba(88, 111, 124, 0.18);
-  --color-status-pending-border: rgba(88, 111, 124, 0.55);
+  --color-status-pending-fg: #d3dde6;
+  --color-status-pending-bg: rgba(124, 140, 152, 0.2);
+  --color-status-pending-border: rgba(124, 140, 152, 0.6);
 
-  --color-status-scheduled-fg: #e9dbb8;
-  --color-status-scheduled-bg: rgba(255, 184, 108, 0.14);
-  --color-status-scheduled-border: rgba(255, 184, 108, 0.55);
+  --color-status-scheduled-fg: #ffe4b8;
+  --color-status-scheduled-bg: rgba(224, 171, 74, 0.18);
+  --color-status-scheduled-border: rgba(224, 171, 74, 0.62);
 
-  --color-status-assigned-fg: #d4deff;
-  --color-status-assigned-bg: rgba(138, 139, 192, 0.18);
-  --color-status-assigned-border: rgba(138, 139, 192, 0.55);
+  --color-status-assigned-fg: #cfe3ff;
+  --color-status-assigned-bg: rgba(90, 132, 255, 0.2);
+  --color-status-assigned-border: rgba(90, 132, 255, 0.58);
 
-  --color-status-leased-fg: #d4deff;
-  --color-status-leased-bg: rgba(138, 139, 192, 0.14);
-  --color-status-leased-border: rgba(114, 114, 171, 0.55);
+  --color-status-leased-fg: #e5d6ff;
+  --color-status-leased-bg: rgba(168, 119, 255, 0.2);
+  --color-status-leased-border: rgba(168, 119, 255, 0.58);
 
-  --color-status-running-fg: #d4deff;
-  --color-status-running-bg: rgba(114, 114, 171, 0.2);
-  --color-status-running-border: rgba(114, 114, 171, 0.6);
+  --color-status-running-fg: #c9f0ff;
+  --color-status-running-bg: rgba(47, 183, 220, 0.22);
+  --color-status-running-border: rgba(47, 183, 220, 0.62);
 
-  --color-status-analyzing-fg: #d8e5ff;
-  --color-status-analyzing-bg: rgba(62, 146, 196, 0.18);
-  --color-status-analyzing-border: rgba(62, 146, 196, 0.52);
+  --color-status-analyzing-fg: #d6ddff;
+  --color-status-analyzing-bg: rgba(124, 107, 255, 0.22);
+  --color-status-analyzing-border: rgba(124, 107, 255, 0.62);
 
   --color-status-success-fg: #cbfdd8;
   --color-status-success-bg: rgba(80, 250, 123, 0.14);
   --color-status-success-border: rgba(80, 250, 123, 0.6);
 
-  --color-status-warning-fg: #ffb86c;
-  --color-status-warning-bg: rgba(255, 184, 108, 0.14);
-  --color-status-warning-border: rgba(255, 184, 108, 0.6);
+  --color-status-warning-fg: #ffd2a1;
+  --color-status-warning-bg: rgba(255, 136, 71, 0.2);
+  --color-status-warning-border: rgba(255, 136, 71, 0.62);
 
   --color-status-error-fg: #ffd2d2;
   --color-status-error-bg: rgba(255, 85, 85, 0.14);
   --color-status-error-border: rgba(255, 85, 85, 0.6);
 
-  --color-status-cancelled-fg: #d2d9de;
-  --color-status-cancelled-bg: rgba(88, 111, 124, 0.2);
-  --color-status-cancelled-border: rgba(88, 111, 124, 0.52);
+  --color-status-cancelled-fg: #c7ced4;
+  --color-status-cancelled-bg: rgba(108, 118, 130, 0.16);
+  --color-status-cancelled-border: rgba(108, 118, 130, 0.48);
 
   --gradient-bg-home-signature:
     radial-gradient(circle at 8% -4%, rgba(114, 114, 171, 0.34), transparent 34%),
@@ -193,35 +195,35 @@ body.theme-light {
   --color-overlay-strong: rgba(20, 24, 36, 0.16);
 
   --color-status-pending-fg: #33415f;
-  --color-status-pending-bg: rgba(88, 111, 124, 0.12);
-  --color-status-pending-border: rgba(88, 111, 124, 0.36);
+  --color-status-pending-bg: rgba(124, 140, 152, 0.18);
+  --color-status-pending-border: rgba(124, 140, 152, 0.42);
   --color-status-scheduled-fg: #7a4a12;
-  --color-status-scheduled-bg: rgba(255, 184, 108, 0.22);
-  --color-status-scheduled-border: rgba(255, 184, 108, 0.5);
-  --color-status-assigned-fg: #33415f;
-  --color-status-assigned-bg: rgba(138, 139, 192, 0.14);
-  --color-status-assigned-border: rgba(138, 139, 192, 0.38);
-  --color-status-leased-fg: #33415f;
-  --color-status-leased-bg: rgba(138, 139, 192, 0.12);
-  --color-status-leased-border: rgba(114, 114, 171, 0.36);
-  --color-status-running-fg: #2f3f64;
-  --color-status-running-bg: rgba(114, 114, 171, 0.16);
-  --color-status-running-border: rgba(114, 114, 171, 0.44);
-  --color-status-analyzing-fg: #1e4f6f;
-  --color-status-analyzing-bg: rgba(62, 146, 196, 0.14);
-  --color-status-analyzing-border: rgba(62, 146, 196, 0.38);
+  --color-status-scheduled-bg: rgba(224, 171, 74, 0.24);
+  --color-status-scheduled-border: rgba(224, 171, 74, 0.54);
+  --color-status-assigned-fg: #1f3f87;
+  --color-status-assigned-bg: rgba(90, 132, 255, 0.2);
+  --color-status-assigned-border: rgba(90, 132, 255, 0.44);
+  --color-status-leased-fg: #5a2f8f;
+  --color-status-leased-bg: rgba(168, 119, 255, 0.18);
+  --color-status-leased-border: rgba(168, 119, 255, 0.42);
+  --color-status-running-fg: #0f5e78;
+  --color-status-running-bg: rgba(47, 183, 220, 0.22);
+  --color-status-running-border: rgba(47, 183, 220, 0.46);
+  --color-status-analyzing-fg: #3b3391;
+  --color-status-analyzing-bg: rgba(124, 107, 255, 0.2);
+  --color-status-analyzing-border: rgba(124, 107, 255, 0.44);
   --color-status-success-fg: #1c5a33;
   --color-status-success-bg: rgba(80, 250, 123, 0.16);
   --color-status-success-border: rgba(80, 250, 123, 0.42);
-  --color-status-warning-fg: #8f5a18;
-  --color-status-warning-bg: rgba(255, 184, 108, 0.2);
-  --color-status-warning-border: rgba(255, 184, 108, 0.46);
+  --color-status-warning-fg: #8f3e10;
+  --color-status-warning-bg: rgba(255, 136, 71, 0.24);
+  --color-status-warning-border: rgba(255, 136, 71, 0.48);
   --color-status-error-fg: #7c1f1f;
   --color-status-error-bg: rgba(255, 85, 85, 0.18);
   --color-status-error-border: rgba(255, 85, 85, 0.44);
-  --color-status-cancelled-fg: #4f5f7f;
-  --color-status-cancelled-bg: rgba(88, 111, 124, 0.14);
-  --color-status-cancelled-border: rgba(88, 111, 124, 0.36);
+  --color-status-cancelled-fg: #59657a;
+  --color-status-cancelled-bg: rgba(108, 118, 130, 0.16);
+  --color-status-cancelled-border: rgba(108, 118, 130, 0.34);
 
   --gradient-bg-home-signature:
     radial-gradient(circle at 9% -8%, rgba(114, 114, 171, 0.28), transparent 42%),
