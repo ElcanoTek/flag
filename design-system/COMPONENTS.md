@@ -21,6 +21,10 @@ Implementation note:
 ## Theme Toggle (Shared Control)
 - Purpose: provide a single canonical control for switching between light and dark modes across Elcano products.
 - Icon usage: use shared sprite icons `sun` and `moon` from `icons/core-icons.svg`; icons are decorative (`aria-hidden="true"`).
+- Preferred shell placement: top-right of the shared `.page-header` / app header action row.
+- Header behavior on mobile: theme toggle and other icon-only header actions stay in a single non-wrapping row aligned top-right.
+- When paired with other icon-only header actions, theme toggle should use the same `icon-action` sizing contract (`2rem` square) rather than a wider text button.
+- Visible text is optional. If the control is icon-only, keep `aria-label` and `aria-pressed` accurate.
 - Root contract: toggle updates `html[data-theme]` (`light` or `dark`); components must react via token variables.
 - Default behavior: if no explicit user preference exists, active theme follows `prefers-color-scheme`.
 - Persistence behavior: explicit user selection is stored at `localStorage` key `flag-theme-preference`.
@@ -51,6 +55,7 @@ Theme behavior:
 ### Primary
 - Purpose: strongest positive action (`Submit`, `Start`, `Save`).
 - Fill: `color.primary`; text: `color.text.primary`.
+- Light-theme clarification: primary buttons use a solid `color.primary` fill with `color.white` text.
 
 ### Secondary
 - Purpose: alternative actions.
@@ -113,6 +118,11 @@ Theme contract:
 - Input uses `.custom-datepicker` spacing and right-side icon affordance.
 - Flatpickr-compatible classes (`.flatpickr-calendar`, `.flatpickr-day`, `.flatpickr-weekday`) must be themed to token colors.
 - Selected date state uses primary gradient and maintains accessible contrast.
+- Light-theme clarification: selected day uses solid `color.primary` with `color.white` text.
+
+Shared disclosure/search-panel spacing:
+- When date filters and secondary search filters appear in the same disclosure block, keep visible spacing between the date range area, any add/remove controls, and the next filter group.
+- Secondary filter groups may add spacing/padding, but should not introduce a new contrasting panel background unless that nested surface is intentionally part of the component spec.
 
 ## File Upload Dropzone
 - Required parts:
@@ -170,6 +180,20 @@ Example:
   - proper label hit area
   - disabled styling where applicable
 - Keep checkbox checked styling separate from focus styling (focus ring appears on keyboard focus only).
+- Required structure contract:
+  - visually hidden checkbox input immediately before its label
+  - label uses `.ds-checkbox`
+  - visual box uses `.ds-checkbox__box`
+  - label text uses `.ds-checkbox__label`
+- Checkmark contract:
+  - use a guaranteed-available checkmark asset or inline path inside `.ds-checkbox__box`
+  - do not reference a sprite symbol name that is not present in `icons/core-icons.svg`
+- Reuse the same checkbox pattern in filter popovers, settings lists, and dense forms; do not create alternate checkbox implementations per product.
+
+## App Header
+- Use the shared `.page-header` with `.ds-app-header` brand/actions anatomy as the default page-level header.
+- Optional support copy (`header_intro`) may be omitted when the page already communicates purpose through surrounding UI.
+- Login pages may reuse the same shared page header instead of introducing a separate hero/header pattern.
 
 ## Modals
 - Surface: `surface.1`; border `strong`; shadow `lg`.

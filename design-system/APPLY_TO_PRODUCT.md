@@ -48,12 +48,11 @@ Then add a listener for system theme changes that only runs while preference is 
 Use the canonical accessible toggle structure:
 
 ```html
-<button id="toggleTheme" class="btn btn-secondary theme-toggle" type="button" aria-label="Switch to light mode" aria-pressed="true">
+<button id="toggleTheme" class="icon-action theme-toggle" type="button" aria-label="Switch to light mode" aria-pressed="true">
   <span class="theme-toggle__icon-wrap" aria-hidden="true">
     <svg class="icon-inline theme-toggle__icon theme-toggle__icon--sun" aria-hidden="true"><use href="../icons/core-icons.svg#sun"></use></svg>
     <svg class="icon-inline theme-toggle__icon theme-toggle__icon--moon" aria-hidden="true"><use href="../icons/core-icons.svg#moon"></use></svg>
   </span>
-  <span class="theme-toggle__text">Dark mode</span>
 </button>
 ```
 
@@ -61,7 +60,13 @@ Required behavior:
 - click toggles between `light` and `dark`
 - updates `aria-label` to describe next action
 - updates `aria-pressed` to reflect dark mode state
-- updates visible text/icon state
+- updates visible icon state
+- if the product header already uses icon-only actions, keep the toggle icon-only and match the same button size
+- on mobile, keep the theme toggle and sibling header actions in one non-wrapping top-right row
+
+Recommended header adoption:
+- Reuse the shared `.page-header` and `.ds-app-header` in login and authenticated pages unless the product has a documented exception.
+- Header support copy is optional; omit it rather than inventing page-specific intro text when the screen is already self-explanatory.
 
 ## 4) Consume Semantic Tokens in Product CSS
 
@@ -78,7 +83,16 @@ Do not write product-local theme color values.
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
 }
+
+a {
+  color: var(--color-secondary);
+}
 ```
+
+Additional implementation requirements:
+- Primary buttons in light theme must render as solid `var(--color-primary)` with white text.
+- Selected calendar days in light theme must render as solid `var(--color-primary)` with white text.
+- When porting the shared checkbox pattern, copy the full structure and verify the checkmark asset actually exists.
 
 ## 5) Keep Accessibility + Persistence Intact
 

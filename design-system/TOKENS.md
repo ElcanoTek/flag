@@ -40,6 +40,11 @@ Neutral utility tokens:
 - `color.white` = `#FFFFFF`
 - `color.black` = `#000000`
 
+Default semantic usage clarifications:
+- Links and email-address affordances default to `color.secondary`.
+- Primary buttons in light theme use a solid `color.primary` fill with `color.white` text.
+- Selected calendar days in light theme use a solid `color.primary` fill with `color.white` text.
+
 Status mapping for task/node badges:
 
 | Status | Foreground | Background | Border |
@@ -192,3 +197,4 @@ Theme behavior is canonical and token-based:
 Rules:
 - Do not define ad hoc per-component theme values in product styles.
 - If a light/dark value is missing, add it to token files first.
+- If a component needs a special light-theme override for contrast, document it in `COMPONENTS.md` and keep the value token-derived.
