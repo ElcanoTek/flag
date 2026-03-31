@@ -43,3 +43,78 @@ python3 -m http.server 8765
 ```
 
 Then visit `http://localhost:8765`.
+
+## Example Implementation Prompt
+
+Use the prompt below when assigning design-system adoption work in another Elcano repo:
+
+```text
+Pull the latest changes from both the `flag` repo and the `<target-repo>` repo.
+
+Your task is to update the `<target-repo>` repo so that it strictly conforms to the design system defined in the `flag` repo.
+
+Requirements:
+- Treat the `flag` repo as the single source of truth for all design decisions.
+- Read and follow the documented design system exactly, especially:
+  - `design-system/README.md`
+  - `design-system/TOKENS.md`
+  - `design-system/COMPONENTS.md`
+  - `design-system/APPLY_TO_PRODUCT.md`
+- Also inspect the canonical implementation artifacts in `flag`, including:
+  - `design-system/tokens/design-tokens.css`
+  - `design-system/icons/core-icons.svg`
+  - `design-system/logos/`
+  - `design-system/preview/`
+- Follow the documented design system exactly, including but not limited to:
+  - color palette
+  - typography
+  - spacing
+  - padding and margin
+  - border radius
+  - border treatments
+  - buttons
+  - links and email link styling
+  - icons
+  - layout patterns
+  - header patterns
+  - component styling
+  - interaction states
+  - light mode and dark mode behavior
+  - mobile behavior
+- Reuse or mirror established design tokens, component patterns, class naming, and behavior from `flag` wherever appropriate.
+- Do not invent new styles or patterns unless absolutely necessary. If something is not clearly defined, infer from the existing `flag` repo system and stay consistent with it.
+- Update existing UI in `<target-repo>` to align with the design system, but do not make unrelated product, backend, or architectural changes.
+- Preserve existing functionality while improving the UI implementation to match the `flag` repo standards.
+- Refactor inconsistent styling patterns in `<target-repo>` so the implementation is clean and maintainable.
+- Prefer replacing local ad hoc UI patterns with canonical `flag` patterns rather than approximating them.
+
+Implementation expectations:
+- Import or vendor the canonical design-system assets from `flag` if needed instead of re-creating them.
+- Use `flag`’s canonical theme contract:
+  - `html[data-theme="light" | "dark"]`
+  - `flag-theme-preference`
+  - shared sun/moon theme toggle behavior
+- Ensure shared header behavior follows `flag`, including mobile layout.
+- Ensure icon-only actions match canonical sizing and accessibility requirements.
+- Ensure checkboxes, date pickers, buttons, links, and selected states match the documented `flag` implementation exactly.
+- If the target repo has login/auth pages, make them use the same shared header/app-shell patterns as defined in `flag` unless the repo has a documented exception.
+
+Verification requirements:
+- Verify the `<target-repo>` UI is visually consistent with the `flag` design system.
+- Verify there are no obvious mismatches in typography, spacing, colors, links, checkbox styling, component styling, button states, date picker states, header layout, or mobile behavior.
+- Verify the app still runs correctly.
+- Verify all changes are scoped to bringing `<target-repo>` into compliance with the `flag` repo design system.
+
+Git workflow requirements:
+- Create a new feature branch in the `<target-repo>` repo for this work.
+- Make all required UI updates in that branch.
+- Commit the changes with a clear, professional commit message.
+- Push the feature branch to the remote `<target-repo>` repo.
+
+Output:
+1. A short summary of what design system elements were updated in `<target-repo>`
+2. Any areas where `<target-repo>` could not fully match `flag` and why
+3. The branch name created
+4. The commit hash / commit message used
+5. The verification steps performed
+```
