@@ -65,6 +65,13 @@ Required family:
 - Headlines/Subheadlines: `Dubai Bold`, weight `700`
 - Body/UI: `Dubai Regular`, weight `400`
 
+Dubai font files are self-hosted in `design-system/fonts/dubai/` and loaded via `design-system/fonts/dubai-fonts.css`.
+Include this stylesheet before `design-tokens.css` in any product that needs to load Dubai locally:
+```html
+<link rel="stylesheet" href="/path/to/design-system/fonts/dubai-fonts.css" />
+```
+Font files provided: `DubaiW23-Regular.woff2`, `DubaiW23-Regular.ttf`, `DubaiW23-Bold.woff2`, `DubaiW23-Bold.ttf`.
+
 Code-component typography (logs code display + task tracker only):
 - `font.code` / `--font-code`: `Share Tech Mono`
 - `font.codeUi` / `--font-code-ui`: `VT323`
