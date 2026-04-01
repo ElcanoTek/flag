@@ -18,6 +18,7 @@ Copy or import these sources before product component work:
 - `tokens/design-tokens.css`
 - `tokens/design-tokens.json`
 - `icons/core-icons.svg`
+- `theme/theme-controller.js`
 - `fonts/dubai-fonts.css` + `fonts/dubai/` (self-hosted Dubai font files)
 
 Import the Dubai font stylesheet **before** `design-tokens.css` so the font is available when tokens are applied:
@@ -29,7 +30,14 @@ Import the Dubai font stylesheet **before** `design-tokens.css` so the font is a
 
 ## 2) Wire Theme in App Shell
 
-Apply theme on initial load before main UI render when possible:
+Preferred option: copy or import `theme/theme-controller.js` and use the canonical toggle marker:
+
+```html
+<script src="/path/to/theme-controller.js"></script>
+<button data-flag-theme-toggle class="icon-action theme-toggle" type="button" aria-label="Switch to dark mode" aria-pressed="false">...</button>
+```
+
+If a product cannot import the shared controller directly, preserve the same behavior and storage contract. Apply theme on initial load before main UI render when possible:
 
 ```js
 var root = document.documentElement;
@@ -50,7 +58,7 @@ Then add a listener for system theme changes that only runs while preference is 
 Use the canonical accessible toggle structure:
 
 ```html
-<button id="toggleTheme" class="icon-action theme-toggle" type="button" aria-label="Switch to light mode" aria-pressed="true">
+<button data-flag-theme-toggle class="icon-action theme-toggle" type="button" aria-label="Switch to light mode" aria-pressed="true">
   <span class="theme-toggle__icon-wrap" aria-hidden="true">
     <svg class="icon-inline theme-toggle__icon theme-toggle__icon--sun" aria-hidden="true"><use href="../icons/core-icons.svg#sun"></use></svg>
     <svg class="icon-inline theme-toggle__icon theme-toggle__icon--moon" aria-hidden="true"><use href="../icons/core-icons.svg#moon"></use></svg>
@@ -107,17 +115,27 @@ Additional implementation requirements:
 ## 6) What to Configure
 
 - Path aliases/import paths for tokens and icons in your app.
+- Optional local wrapper around `theme/theme-controller.js` if your bundler or app shell requires it.
 - Placement of the theme toggle in app shell/header.
 - Optional wiring into app state/store (the root `data-theme` value remains the source of applied theme).
 
-## 7) What Not to Change
+## 7) Launchpads and Resource Directories
+
+When implementing an internal home/launchpad screen:
+- Use the shared `.page-header` and standard shell first.
+- Prefer featured cards for top-priority workflows.
+- Use `details/summary` groups with `.link-tile` entries for secondary resource directories.
+- Include the live Flag design-system site in docs/resources sections when the product exposes internal reference links.
+- If directory links need app/service icons, use the shared iconography rules from `COMPONENTS.md` and `LOGOS.md` rather than inventing custom badge treatments.
+
+## 8) What Not to Change
 
 - Do not replace `html[data-theme]` with ad hoc selectors.
 - Do not rename `flag-theme-preference` per product unless there is a hard requirement.
 - Do not swap in custom sun/moon artwork when the shared icon sprite is available.
 - Do not add per-component local light/dark overrides when token overrides already exist.
 
-## 8) Recommended Migration Order
+## 9) Recommended Migration Order
 
 1. Import tokens/icons and apply root `data-theme` selector contract.
 2. Add theme controller (system default + persisted preference + system-change sync).

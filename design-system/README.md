@@ -17,6 +17,7 @@ This directory is the single documented source of truth for shared UI design dec
 - `tokens/design-tokens.css` - canonical runtime token source
 - `tokens/design-tokens.json` - canonical machine-readable token source
 - `fonts/code-fonts.css` + `fonts/*.ttf` - canonical self-hosted MOC code-component fonts
+- `theme/theme-controller.js` - canonical light/dark theme controller for product adoption
 - `logos/` - approved SVG/PNG logo assets
 - `icons/core-icons.svg` - canonical SVG sprite
 
@@ -28,11 +29,14 @@ Source precedence (when docs and examples differ):
 
 ## Visual Review
 - `preview/index.html` - browsable style guide and component showcase
+- Live preview: `https://flag-71q.pages.dev/`
+- Cloudflare Pages is connected to GitHub; changes go live automatically when they are pushed to `main`.
 
 Preview includes:
 - canonical sun/moon light-dark theme toggle (system-default + persisted user preference)
 - section expand/collapse controls
 - component state strips
+- launchpad/directory link-tile and app-icon usage patterns
 - implementation examples for key patterns
 
 Open locally:
