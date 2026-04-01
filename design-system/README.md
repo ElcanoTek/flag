@@ -29,6 +29,8 @@ Source precedence (when docs and examples differ):
 
 ## Visual Review
 - `preview/index.html` - browsable style guide and component showcase
+- Live preview: `https://flag-71q.pages.dev/`
+- Cloudflare Pages is connected to GitHub; changes go live automatically when they are pushed to `main`.
 
 Preview includes:
 - canonical sun/moon light-dark theme toggle (system-default + persisted user preference)
