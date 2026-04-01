@@ -146,6 +146,7 @@ Shared disclosure/search-panel spacing:
 - Use semantic `<details>/<summary>` structure where feasible.
 - Summary indicator uses `+` when collapsed and `-` when expanded.
 - Use for grouped secondary content, tool directories, and progressive disclosure.
+- When used for internal launchpads/resource hubs, prefer a stack of `.link-tile` entries with consistent meta copy length and icon alignment.
 
 Example:
 
@@ -200,6 +201,16 @@ Example:
 - Must include: title, close affordance, escape key close, backdrop close policy.
 - Actions aligned right on desktop; stacked on narrow screens.
 
+Modal action-grid variant:
+- Use when a modal presents 2-4 mutually exclusive next-step destinations or workflow entry points.
+- Required parts:
+  - close action in top-right
+  - kicker/eyebrow (optional)
+  - title
+  - support copy
+  - grid of action tiles or buttons
+- Action tiles may reuse `.link-tile` or a product-local modal option class, but must preserve standard hover/focus-visible behavior and accessible labeling.
+
 ## Cards
 - Base: `surface.1`, border standard, radius `lg`, shadow `sm`.
 - Interactive card hover: subtle lift and border strengthen.
@@ -224,6 +235,7 @@ Clickable action card standard (required for card-based navigation actions):
   - disabled
 - Selected state must be explicit (accent border + top accent treatment + elevation change) and keyboard-discernible.
 - Visual treatment must follow the canonical featured card structure using design-system tokenized colors, spacing, and typography.
+- In launchpads, featured cards may optionally include an approved product/app icon when icon presence is consistent across the sibling set.
 
 Example:
 
@@ -236,6 +248,70 @@ Example:
   <p class="description">Manage active automation workflows.</p>
 </a>
 ```
+
+## App Iconography
+- Use app/service icons in launchpads, resource directories, and modal action grids when they help users distinguish destinations quickly.
+- Two approved icon container modes:
+  - neutral service icon container for external/vendor destinations
+  - branded/internal product icon container for first-party Elcano products
+- Required structure for icon-bearing tiles:
+  - wrapper tile (`.link-tile`, `.featured-link`, or modal action tile)
+  - icon container (`.link-app-icon`)
+  - icon image (`.link-app-icon__img`)
+  - title/meta text aligned consistently beside or below the icon depending on tile density
+- Recommended layout contract for dense directory tiles:
+  - tile gets `.link-has-app-icon`
+  - title/meta stack remains separate from the icon container
+- Asset rules:
+  - first-party Elcano product destinations use approved assets from `design-system/logos/`
+  - external services use approved product-local service icons/favicons
+  - if no approved service icon exists, fall back to `elcano-mark-primary.svg` until the correct asset is added
+- Theme rules:
+  - if an icon has theme-specific variants, switch source assets by theme
+  - do not recolor icon artwork in CSS
+  - branded/internal icon containers may use a richer gradient/background treatment than neutral service icon containers
+
+## Link Tile
+- Base use cases:
+  - resource directories
+  - launchpad sections
+  - modal action grids
+- Required anatomy:
+  - `.link-title`
+  - `.link-meta`
+- Optional anatomy:
+  - `.link-app-icon`
+  - `.link-app-icon__img`
+  - `.link-has-app-icon`
+- Interaction rules:
+  - full tile remains clickable
+  - title and meta stay aligned regardless of icon presence
+  - icon-bearing and icon-less tiles should not mix within the same tightly grouped directory unless intentionally staged
+
+Example with app icon:
+
+```html
+<a class="link-tile link-has-app-icon" href="#">
+  <span class="link-app-icon" aria-hidden="true">
+    <img class="link-app-icon__img" src="../logos/explorer-favicon.svg" alt="" />
+  </span>
+  <span class="link-title">Explorer</span>
+  <span class="link-meta">View reporting that keeps Victoria optimizations aligned.</span>
+</a>
+```
+
+## Launchpad / Directory Pattern
+- Use for internal home screens, resource hubs, and multi-product launch surfaces.
+- Recommended composition:
+  - shared `.page-header`
+  - optional high-priority featured workflow cards
+  - one or more accordion directory groups
+  - docs/resources group that may include the live design-system link
+  - optional modal action-grid for workflow entry choices
+- Consistency rules:
+  - icon usage should be systematic across sibling entries
+  - first-party product destinations should use shared product marks where available
+  - external vendor destinations should use approved service icons or the documented fallback
 
 ## Tables and List Rows
 - Head row: uppercase optional, but consistent across app.

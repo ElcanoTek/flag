@@ -17,6 +17,7 @@ This directory is the single documented source of truth for shared UI design dec
 - `tokens/design-tokens.css` - canonical runtime token source
 - `tokens/design-tokens.json` - canonical machine-readable token source
 - `fonts/code-fonts.css` + `fonts/*.ttf` - canonical self-hosted MOC code-component fonts
+- `theme/theme-controller.js` - canonical light/dark theme controller for product adoption
 - `logos/` - approved SVG/PNG logo assets
 - `icons/core-icons.svg` - canonical SVG sprite
 
@@ -33,6 +34,7 @@ Preview includes:
 - canonical sun/moon light-dark theme toggle (system-default + persisted user preference)
 - section expand/collapse controls
 - component state strips
+- launchpad/directory link-tile and app-icon usage patterns
 - implementation examples for key patterns
 
 Open locally:
