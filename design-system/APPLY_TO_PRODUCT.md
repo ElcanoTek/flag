@@ -18,10 +18,12 @@ Copy or import these sources before product component work:
 - `tokens/design-tokens.css`
 - `tokens/design-tokens.json`
 - `icons/core-icons.svg`
+- `fonts/dubai-fonts.css` + `fonts/dubai/` (self-hosted Dubai font files)
 
-Import token CSS first:
+Import the Dubai font stylesheet **before** `design-tokens.css` so the font is available when tokens are applied:
 
 ```html
+<link rel="stylesheet" href="/path/to/fonts/dubai-fonts.css" />
 <link rel="stylesheet" href="/path/to/design-tokens.css" />
 ```
 
