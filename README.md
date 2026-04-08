@@ -29,6 +29,7 @@ Then open `http://localhost:8765`.
 - `design-system/tokens/design-tokens.json` - canonical machine-readable token source
 - `design-system/icons/core-icons.svg` - icon sprite
 - `design-system/logos/` - approved logo assets
+- `design-system/email-safe.html` - canonical email-safe HTML reference
 - `design-system/preview/index.html` - live visual reference
 
 ## Source of Truth Order
