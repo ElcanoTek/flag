@@ -89,17 +89,95 @@ Recommended implementation order for new product adoption:
 - Task tracker must use canonical classes: `.task-tracker-container`, `.task-tracker-cmd`, `.task-tracker-list`, `.task-tracker-item`, `.tt-icon`, `.tt-id`, `.tt-title` with `status-done|status-inprogress|status-todo`.
 
 ## Email Rules
+
+### Canonical Reference
 - Use `design-system/email-safe.html` as the canonical base for every generated HTML email.
+- When adapting the reference, preserve the dark header plus light body structure unless there is a documented reason to change it.
+- Use `{{placeholder}}` markers for all dynamic content (dates, names, URLs, metrics). The agent populates these at generation time; the template defines the structure.
+
+### Layout and Structure
 - Keep email layouts table-first for all structural regions; use `role="presentation"` on layout tables.
+- Enforce a strict maximum content width of **600px**. The inner container table must use `max-width:600px` in CSS and be wrapped in MSO conditional ghost tables (`<!--[if mso]><table width="600">...<![endif]-->`) so Outlook desktop also respects the constraint.
+- Keep production email layouts single-column by default and within the canonical centered container pattern from `email-safe.html`.
+- Include the Outlook DPI scaling fix in the `<head>` inside an MSO conditional block:
+  ```html
+  <!--[if mso]>
+  <xml>
+    <o:OfficeDocumentSettings>
+      <o:AllowPNG/>
+      <o:PixelsPerInch>96</o:PixelsPerInch>
+    </o:OfficeDocumentSettings>
+  </xml>
+  <![endif]-->
+  ```
+- Add the XHTML namespaces to the `<html>` tag: `xmlns:v="urn:schemas-microsoft-com:vml"` and `xmlns:o="urn:schemas-microsoft-com:office:office"`.
+- Do not use `<div>` for structural width or height; Outlook ignores div dimensions. Use `<table>` and `<td>` instead.
+
+### Styling
 - Inline every critical visual style on the element that needs it. Do not rely on embedded or external CSS for core rendering.
 - Use explicit text, border, and background colors on every important block so the email survives dark-mode inversion and client overrides.
-- Stay with the email-safe font stack already used in `email-safe.html` (`'Segoe UI', Arial, sans-serif`). Do not use web fonts.
-- Keep production email layouts single-column by default and within the canonical centered container pattern from `email-safe.html`.
+- Avoid pure white (`#FFFFFF`) for large backgrounds; prefer off-whites like `#F4F6FB` or `#FAFAFA`. Avoid pure black (`#000000`) for text; prefer dark greys like `#141824` or `#222222`. This mitigates aggressive dark mode inversion in Gmail iOS and Outlook desktop.
+- Stay with the email-safe font stack (`'Segoe UI', Arial, sans-serif`). Do not use web fonts; they are unsupported in Outlook (falls back to Times New Roman) and Gmail (strips `@font-face`).
+- Use pixel (`px`) values for all padding, margin, and font sizes. Do not use `rem`, `em`, percentages, or CSS variables.
 - Use simple, resilient blocks: table sections, explicit padding, explicit borders, explicit cell backgrounds, and text links or bulletproof CTA buttons.
-- Do not use JavaScript, forms, external CSS, gradients, background-image-dependent content, transparency-dependent text treatments, or complex positioned layouts.
-- Avoid depending on unsupported selectors or modern layout features such as grid, flexbox-only structure, filters, backdrop blur, pseudo-element-critical content, or CSS variables.
-- When adapting the reference, preserve the dark header plus light body structure unless there is a documented reason to change it.
-- Always test generated emails in major clients before shipping, with Outlook and Gmail treated as required checks.
+- Add `-webkit-text-size-adjust:100%` and `-ms-text-size-adjust:100%` to the `<body>` style to prevent mobile clients from auto-scaling text.
+
+### Typography and Sizing
+- Minimum body text size: **14px**. Minimum heading size: **22px**.
+- Minimum tap target size for buttons and links: **44x44 pixels**.
+- CTA button text must not exceed **25 characters**. Use one primary CTA per email.
+- Heading text must not exceed **60 characters**; truncate with ellipsis if exceeded.
+- Use the bulletproof CTA button pattern from `email-safe.html`: a `<table>` with a `<td>` that has explicit `background-color` and `padding`, containing an `<a>` with matching inline styles. Include a VML `<v:roundrect>` fallback inside `<!--[if mso]>` for Outlook.
+
+### Images
+- All images must include explicit `width` and `height` HTML attributes plus `style="max-width:100%; height:auto;"`.
+- All images must include descriptive `alt` text. Style the `alt` text with inline `font-size`, `color`, and `font-family` so the email is readable when images are blocked.
+- Prefer PNG for graphics and JPEG for photographs. WebP is acceptable for non-Outlook audiences but lacks Outlook desktop support.
+- Do not use CSS background images unless a VML fallback is provided for Outlook.
+- Keep total email weight (HTML + all hosted images) under **800KB**.
+
+### Size and Performance
+- Keep the total raw HTML payload under **100KB** to prevent clipping in Gmail (~102KB threshold) and Yahoo Mail.
+- Minify HTML output when the payload approaches the limit.
+- Include a hidden preheader text block immediately after the `<body>` tag for inbox preview optimization. Use `display:none; max-height:0px; overflow:hidden;` and pad with `&zwnj;&nbsp;` entities to push other content out of the preview.
+
+### Prohibited Features
+- Do not use JavaScript, `<form>` elements, external CSS (`<link>` or `@import`), CSS gradients, `background-image`-dependent content, transparency-dependent text treatments, or complex positioned layouts.
+- Avoid depending on unsupported selectors or modern layout features such as `display:grid`, flexbox-only structure, `filter`, `backdrop-filter`, pseudo-element-critical content, CSS variables (`var()`), `calc()`, or `rem`/`em` units.
+- Avoid `<p>` tags for spacing; Outlook adds inconsistent margins. Use `<td>` with explicit padding instead.
+- Do not place `background-image: url(...)` inside `<style>` blocks; Gmail strips the entire style block if any rule contains it.
+- Keep embedded `<style>` blocks under **8,192 characters** (Gmail's limit). One syntax error causes Gmail to strip the entire block.
+
+### Dark Mode Resilience
+- Include `<meta name="color-scheme" content="light dark">` and `<meta name="supported-color-schemes" content="light dark">` in the `<head>`.
+- Use off-white backgrounds (`#F4F6FB`, `#FAFAFA`) and dark grey text (`#141824`, `#222222`) instead of pure white/black. These produce less jarring results when clients like Gmail iOS and Outlook desktop apply automatic color inversion.
+- Do not rely on `@media (prefers-color-scheme: dark)` for critical styling; only Apple Mail, Outlook Mac, and Thunderbird fully support it. Gmail iOS and Outlook desktop apply their own inversion with no developer override.
+- Ensure all foreground-background color pairings maintain at least **4.5:1 contrast** in both their original and inverted states.
+
+### Accessibility
+- Maintain a minimum text-to-background contrast ratio of **4.5:1** (WCAG AA).
+- Use semantic heading structure: one primary heading per email, logical heading order.
+- Use `role="presentation"` on all layout tables.
+- Include a plain-text version of every HTML email when the sending infrastructure supports it.
+- Ensure all links have descriptive text (avoid bare "click here").
+
+### Compliance and Footer
+- Every email must include a locked footer section that the agent cannot modify or remove.
+- The footer must contain: the sender's physical mailing address, a clear unsubscribe link (minimum **14px**, visually distinct with underline), and a brief explanation of why the recipient received the email.
+- The canonical footer pattern is defined in `email-safe.html`.
+
+### Testing Matrix
+- Always test generated emails before shipping. The minimum required testing matrix is:
+
+| Client | Priority | Key Concerns |
+|---|---|---|
+| Gmail (Web) | Required | Strips most CSS; 102KB clipping; no media queries on desktop |
+| Gmail (iOS/Android) | Required | Supports media queries; iOS applies dark mode inversion |
+| Outlook Desktop (Word engine) | Required | Word rendering; no modern CSS; needs ghost tables and VML |
+| Outlook (New/Chromium) | Required | Modern rendering; ignores MSO conditionals |
+| Apple Mail (macOS/iOS) | Recommended | Gold standard; full CSS support |
+| Yahoo Mail | Recommended | `height`-to-`min-height` bug; no dark mode inversion |
+| Samsung Mail | Recommended | Auto-fit content from HTML width attributes |
 
 ## Accessibility Requirements
 - Icon-only controls require `aria-label`.
