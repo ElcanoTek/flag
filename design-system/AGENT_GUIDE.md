@@ -88,6 +88,19 @@ Recommended implementation order for new product adoption:
 - Logs code display must use canonical classes: `.tool-call-item`, `.tool-call-name`, `.tool-call-id`, `.tool-call-code`, `.tool-call-other-args`.
 - Task tracker must use canonical classes: `.task-tracker-container`, `.task-tracker-cmd`, `.task-tracker-list`, `.task-tracker-item`, `.tt-icon`, `.tt-id`, `.tt-title` with `status-done|status-inprogress|status-todo`.
 
+## Email Rules
+- Use `design-system/email-safe.html` as the canonical base for every generated HTML email.
+- Keep email layouts table-first for all structural regions; use `role="presentation"` on layout tables.
+- Inline every critical visual style on the element that needs it. Do not rely on embedded or external CSS for core rendering.
+- Use explicit text, border, and background colors on every important block so the email survives dark-mode inversion and client overrides.
+- Stay with the email-safe font stack already used in `email-safe.html` (`'Segoe UI', Arial, sans-serif`). Do not use web fonts.
+- Keep production email layouts single-column by default and within the canonical centered container pattern from `email-safe.html`.
+- Use simple, resilient blocks: table sections, explicit padding, explicit borders, explicit cell backgrounds, and text links or bulletproof CTA buttons.
+- Do not use JavaScript, forms, external CSS, gradients, background-image-dependent content, transparency-dependent text treatments, or complex positioned layouts.
+- Avoid depending on unsupported selectors or modern layout features such as grid, flexbox-only structure, filters, backdrop blur, pseudo-element-critical content, or CSS variables.
+- When adapting the reference, preserve the dark header plus light body structure unless there is a documented reason to change it.
+- Always test generated emails in major clients before shipping, with Outlook and Gmail treated as required checks.
+
 ## Accessibility Requirements
 - Icon-only controls require `aria-label`.
 - Interactive custom controls require keyboard support:
