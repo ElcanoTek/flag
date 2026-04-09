@@ -37,7 +37,7 @@ Preview includes:
 - section expand/collapse controls
 - component state strips
 - launchpad/directory link-tile and app-icon usage patterns
-- quick access to the canonical email-safe template and email rules guide
+- email template preview with light/dark inbox simulation and responsive viewport sizing
 - implementation examples for key patterns
 
 Open locally:
