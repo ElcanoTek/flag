@@ -347,13 +347,13 @@
             /* Swap backgrounds */
             var bg = norm((computed && computed.backgroundColor) || el.style.backgroundColor);
             if (bg && bgMap[bg]) {
-              el.style.backgroundColor = bgMap[bg];
+              el.style.setProperty('background-color', bgMap[bg], 'important');
             }
 
             /* Swap text colors */
             var col = norm((computed && computed.color) || el.style.color);
             if (col && textMap[col]) {
-              el.style.color = textMap[col];
+              el.style.setProperty('color', textMap[col], 'important');
             }
 
             /* Swap border colors on individual sides */
@@ -361,7 +361,7 @@
             bprops.forEach(function (prop) {
               var val = norm((computed && computed[prop]) || el.style[prop]);
               if (val && borderMap[val]) {
-                el.style[prop] = borderMap[val];
+                el.style.setProperty(prop.replace(/[A-Z]/g, function (match) { return '-' + match.toLowerCase(); }), borderMap[val], 'important');
               }
             });
           });
