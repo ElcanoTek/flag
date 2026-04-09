@@ -276,85 +276,54 @@
       var modeNote = document.getElementById('modeNote');
 
       /*
-       * Dark-mode color map.
+       * Dark-mode color maps.
        *
-       * Real email clients (Outlook dark, Gmail dark, Apple Mail dark) forcibly
-       * invert light backgrounds to dark and dark text to light. They do NOT
-       * touch the branded dark header (it's already dark). This map simulates
-       * that behavior by swapping every inline background-color and color that
-       * a dark-mode client would invert.
+       * Keys are NORMALIZED rgb strings (lowercase, no spaces) because
+       * browsers always return el.style.backgroundColor as rgb(r, g, b)
+       * and our normalizer strips spaces for reliable matching.
        *
-       * Format: { originalColor: darkModeReplacement }
+       * Real email clients (Outlook dark, Gmail dark, Apple Mail dark)
+       * forcibly invert light backgrounds to dark and dark text to light.
+       * The branded dark header (#1A0B1E) is intentionally excluded
+       * because dark-mode clients leave already-dark elements alone.
        */
       var bgMap = {
-        /* Outer wrapper / body bg */
-        '#f4f6fb': '#1e1e2e',
-        'rgb(244, 246, 251)': '#1e1e2e',
-        /* Main email card bg */
-        '#fafafa': '#2a2a3c',
-        'rgb(250, 250, 250)': '#2a2a3c',
-        /* Status bar / metrics card bg */
-        '#eef3ff': '#252538',
-        'rgb(238, 243, 255)': '#252538',
-        /* Risk callout bg */
-        '#fff7e8': '#2e2518',
-        'rgb(255, 247, 232)': '#2e2518',
-        /* Opportunity callout bg */
-        '#effaf3': '#1a2e20',
-        'rgb(239, 250, 243)': '#1a2e20',
-        /* Alternating table row */
-        '#ffffff': '#2a2a3c',
-        'rgb(255, 255, 255)': '#2a2a3c',
+        'rgb(244,246,251)': '#1e1e2e',   /* outer wrapper / body / footer bg #F4F6FB */
+        'rgb(250,250,250)': '#2a2a3c',   /* email card body / table rows #FAFAFA */
+        'rgb(238,243,255)': '#252538',   /* status bar / table headers #EEF3FF */
+        'rgb(255,247,232)': '#2e2518',   /* risk callout bg #FFF7E8 */
+        'rgb(239,250,243)': '#1a2e20',   /* opportunity callout bg #EFFAF3 */
+        'rgb(255,255,255)': '#2a2a3c',   /* pure white fallback #FFFFFF */
       };
 
       var textMap = {
-        /* Primary body text */
-        '#141824': '#e0e0e0',
-        'rgb(20, 24, 36)': '#e0e0e0',
-        /* Secondary text */
-        '#33415f': '#c0c8d8',
-        'rgb(51, 65, 95)': '#c0c8d8',
-        /* Muted / caption text */
-        '#586f7c': '#9aa8b4',
-        'rgb(88, 111, 124)': '#9aa8b4',
-        '#5c6a87': '#9aa8b4',
-        'rgb(92, 106, 135)': '#9aa8b4',
-        /* Risk callout heading */
-        '#8f5a12': '#f0a040',
-        'rgb(143, 90, 18)': '#f0a040',
-        /* Opportunity callout heading */
-        '#1c5a33': '#60d88a',
-        'rgb(28, 90, 51)': '#60d88a',
+        'rgb(20,24,36)':   '#e0e0e0',   /* primary body text #141824 */
+        'rgb(51,65,95)':   '#c0c8d8',   /* secondary text #33415F */
+        'rgb(88,111,124)': '#9aa8b4',   /* muted text #586F7C */
+        'rgb(92,106,135)': '#9aa8b4',   /* caption text #5C6A87 */
+        'rgb(143,90,18)':  '#f0a040',   /* risk heading #8F5A12 */
+        'rgb(28,90,51)':   '#60d88a',   /* opportunity heading #1C5A33 */
       };
 
       var borderMap = {
-        '#d7deee': '#3a3a50',
-        'rgb(215, 222, 238)': '#3a3a50',
-        '#e6ebf5': '#3a3a50',
-        'rgb(230, 235, 245)': '#3a3a50',
-        '#f0d7af': '#5a4520',
-        'rgb(240, 215, 175)': '#5a4520',
-        '#cdedd8': '#2a5035',
-        'rgb(205, 237, 216)': '#2a5035',
+        'rgb(215,222,238)': '#3a3a50',   /* primary borders #D7DEEE */
+        'rgb(230,235,245)': '#3a3a50',   /* table row borders #E6EBF5 */
+        'rgb(240,215,175)': '#5a4520',   /* risk callout border #F0D7AF */
+        'rgb(205,237,216)': '#2a5035',   /* opportunity callout border #CDEDD8 */
       };
 
-      /* Store original inline styles so we can restore on light mode */
+      /* Store original inline styles for restore */
       var originals = [];
-      var darkApplied = false;
 
-      function collectElements(doc) {
-        return doc.querySelectorAll('body, body *');
-      }
-
-      function normalizeColor(c) {
+      function norm(c) {
         if (!c) return '';
-        return c.toLowerCase().replace(/\s/g, '');
+        return c.toLowerCase().replace(/\s+/g, '');
       }
 
       function applyDarkMode() {
         try {
           var doc = frame.contentDocument || frame.contentWindow.document;
-          var els = collectElements(doc);
+          var els = doc.querySelectorAll('body, body *');
           originals = [];
 
           els.forEach(function (el) {
@@ -371,28 +340,26 @@
             originals.push(orig);
 
             /* Swap backgrounds */
-            var bg = normalizeColor(el.style.backgroundColor);
+            var bg = norm(el.style.backgroundColor);
             if (bg && bgMap[bg]) {
               el.style.backgroundColor = bgMap[bg];
             }
 
             /* Swap text colors */
-            var col = normalizeColor(el.style.color);
+            var col = norm(el.style.color);
             if (col && textMap[col]) {
               el.style.color = textMap[col];
             }
 
-            /* Swap borders */
-            var props = ['borderColor', 'borderTopColor', 'borderBottomColor', 'borderLeftColor', 'borderRightColor'];
-            props.forEach(function (prop) {
-              var val = normalizeColor(el.style[prop]);
+            /* Swap border colors on individual sides */
+            var bprops = ['borderColor', 'borderTopColor', 'borderBottomColor', 'borderLeftColor', 'borderRightColor'];
+            bprops.forEach(function (prop) {
+              var val = norm(el.style[prop]);
               if (val && borderMap[val]) {
                 el.style[prop] = borderMap[val];
               }
             });
           });
-
-          darkApplied = true;
         } catch (e) {
           /* cross-origin: can't access iframe */
         }
@@ -410,10 +377,9 @@
           o.el.style.borderRightColor = o.borderRightColor;
         });
         originals = [];
-        darkApplied = false;
       }
 
-      /* ── Background (light / dark) toggle ── */
+      /* ── Inbox mode (light / dark) toggle ── */
       var bgBtns = document.querySelectorAll('.seg-btn[data-bg]');
       bgBtns.forEach(function (btn) {
         btn.addEventListener('click', function () {
@@ -424,20 +390,19 @@
           modeNote.setAttribute('data-mode', mode);
 
           if (mode === 'dark') {
-            modeNote.textContent = 'Dark inbox preview — simulates forced color inversion (Outlook / Gmail dark mode)';
+            modeNote.textContent = 'Dark inbox preview \u2014 simulates forced color inversion (Outlook / Gmail dark mode)';
             applyDarkMode();
           } else {
-            modeNote.textContent = 'Light inbox preview — original email colors';
+            modeNote.textContent = 'Light inbox preview \u2014 original email colors';
             restoreLightMode();
           }
         });
       });
 
-      /* Re-apply dark mode after iframe reloads (e.g. if navigated) */
+      /* Re-apply dark mode after iframe loads (initial load or reload) */
       frame.addEventListener('load', function () {
         if (stage.getAttribute('data-bg') === 'dark') {
-          /* Small delay to ensure DOM is ready */
-          setTimeout(applyDarkMode, 100);
+          setTimeout(applyDarkMode, 150);
         }
       });
 
