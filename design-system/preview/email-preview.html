@@ -82,6 +82,7 @@
     .toolbar__right {
       display: flex;
       align-items: center;
+      flex-wrap: wrap;
       gap: 6px;
     }
 
@@ -257,6 +258,18 @@
           Desktop
         </button>
       </div>
+      <div class="toolbar__group">
+        <span class="toolbar__group-label">Fixture</span>
+        <button class="seg-btn active" data-fixture="default" title="Balanced example content">
+          Default
+        </button>
+        <button class="seg-btn" data-fixture="long" title="Long headings, summaries, and campaign names">
+          Long
+        </button>
+        <button class="seg-btn" data-fixture="dense" title="Denser table with more campaign rows">
+          Dense
+        </button>
+      </div>
       <a class="source-link" href="https://github.com/ElcanoTek/flag/blob/main/design-system/email-safe.html" target="_blank" rel="noreferrer">Source &#8599;</a>
     </div>
   </div>
@@ -274,6 +287,100 @@
       var wrap     = document.getElementById('frameWrap');
       var frame    = document.getElementById('emailFrame');
       var modeNote = document.getElementById('modeNote');
+      var currentFixture = 'default';
+
+      var fixtures = {
+        'default': {
+          date: '{{date}}',
+          subject: '{{email_subject}}',
+          meta: '{{client_name}} | {{date_range}} | Built for Outlook, Gmail, Apple Mail, and mobile clients.',
+          summary1: 'Spend finished at <strong>$589,075.45</strong>, down <strong style="color:#7C1F1F;">12.4%</strong> week over week, driven primarily by Amazon OLV pacing cuts that began on Apr 3.',
+          summary2: 'The biggest production risk is continued weekend underdelivery across the portfolio. The best immediate opportunity is recovering volume in stable Canada inventory where CPMs held while spend softened.',
+          metrics: '<strong>Gross Spend:</strong> $589,075.45<br><strong>Impressions:</strong> 63,400,529<br><strong>Average CPM:</strong> $9.29',
+          risk: 'Amazon US OLV weekend spend fell to roughly $755/day after pacing above $104,000/day earlier in the week.',
+          opportunity: 'Canada display inventory stayed efficient, creating room to shift spend without increasing blended CPM.',
+          cta: '{{cta_text}}',
+          rows: [
+            { campaign: 'Amazon US OLV', current: '$311,402', prior: '$405,928', wow: '-23.3%', wowColor: '#7C1F1F' },
+            { campaign: 'Amazon CA Display', current: '$72,119', prior: '$68,004', wow: '+6.1%', wowColor: '#1C5A33' },
+            { campaign: 'Pepsi Display', current: '$54,882', prior: '$58,131', wow: '-5.6%', wowColor: '#7C1F1F' }
+          ]
+        },
+        'long': {
+          date: 'Apr 9, 2026',
+          subject: 'Q2 performance review: pacing risk, recovery opportunities, and budget reallocation recommendations across North America',
+          meta: 'Acme Consumer Brands | Mar 31-Apr 6 | Built for Outlook, Gmail, Apple Mail, and mobile clients.',
+          summary1: 'Spend finished at <strong>$1,284,921.13</strong>, down <strong style="color:#7C1F1F;">18.7%</strong> week over week after late-week pacing controls slowed the largest upper-funnel campaigns across multiple retail partners.',
+          summary2: 'The biggest production risk is that underdelivery is now affecting several high-visibility placements at once, while the clearest short-term opportunity is to reallocate budget into stable display inventory that is still clearing efficiently and predictably.',
+          metrics: '<strong>Gross Spend:</strong> $1,284,921.13<br><strong>Impressions:</strong> 148,922,440<br><strong>Average CPM:</strong> $8.63',
+          risk: 'Amazon US Online Video - Spring Household Essentials Launch weekend spend dropped sharply after pacing above target for three consecutive days.',
+          opportunity: 'Canada retail display placements maintained efficient CPMs and delivery stability, creating room for controlled budget recovery without raising blended cost.',
+          cta: 'Review Reallocation Plan',
+          rows: [
+            { campaign: 'Amazon US Online Video - Spring Household Essentials Launch', current: '$311,402', prior: '$405,928', wow: '-23.3%', wowColor: '#7C1F1F' },
+            { campaign: 'Amazon Canada Sponsored Display - Pantry Staples Expansion', current: '$72,119', prior: '$68,004', wow: '+6.1%', wowColor: '#1C5A33' },
+            { campaign: 'PepsiCo North America Retail Display - Convenience Stores', current: '$54,882', prior: '$58,131', wow: '-5.6%', wowColor: '#7C1F1F' }
+          ]
+        },
+        'dense': {
+          date: 'Apr 9, 2026',
+          subject: 'Weekly media pacing snapshot',
+          meta: 'Acme Consumer Brands | Mar 31-Apr 6 | Built for Outlook, Gmail, Apple Mail, and mobile clients.',
+          summary1: 'Delivery softened in the largest video placements, but secondary display inventory remained stable enough to offset part of the decline.',
+          summary2: 'Use this fixture to review denser table rhythm, stacked-card border consistency, and long-scroll mobile behavior.',
+          metrics: '<strong>Gross Spend:</strong> $589,075.45<br><strong>Impressions:</strong> 63,400,529<br><strong>Average CPM:</strong> $9.29',
+          risk: 'Several top-spend campaigns are pacing unevenly across weekends.',
+          opportunity: 'Stable display inventory still offers room to recover volume efficiently.',
+          cta: 'Open Full Dashboard',
+          rows: [
+            { campaign: 'Amazon US OLV', current: '$311,402', prior: '$405,928', wow: '-23.3%', wowColor: '#7C1F1F' },
+            { campaign: 'Amazon CA Display', current: '$72,119', prior: '$68,004', wow: '+6.1%', wowColor: '#1C5A33' },
+            { campaign: 'Pepsi Display', current: '$54,882', prior: '$58,131', wow: '-5.6%', wowColor: '#7C1F1F' },
+            { campaign: 'Target CTV', current: '$48,011', prior: '$44,120', wow: '+8.8%', wowColor: '#1C5A33' },
+            { campaign: 'Walmart Display', current: '$39,204', prior: '$42,015', wow: '-6.7%', wowColor: '#7C1F1F' },
+            { campaign: 'Instacart Video', current: '$27,883', prior: '$31,452', wow: '-11.3%', wowColor: '#7C1F1F' }
+          ]
+        }
+      };
+
+      function setHtml(doc, selector, value) {
+        var el = doc.querySelector(selector);
+        if (el) {
+          el.innerHTML = value;
+        }
+      }
+
+      function renderRows(rows) {
+        return rows.map(function (row, index) {
+          var bg = index % 2 === 1 ? '#F4F6FB' : '#FAFAFA';
+          return '<tr>' +
+            '<td class="campaign-name" style="background-color:' + bg + '; color:#141824; font-size:15px; line-height:22px; padding:10px 8px; border-bottom:1px solid #E6EBF5;"><span class="mobile-label" style="display:none;">Campaign</span>' + row.campaign + '</td>' +
+            '<td align="right" style="background-color:' + bg + '; color:#141824; font-size:15px; line-height:22px; padding:10px 8px; border-bottom:1px solid #E6EBF5;"><span class="mobile-label" style="display:none;">Current</span>' + row.current + '</td>' +
+            '<td align="right" style="background-color:' + bg + '; color:#141824; font-size:15px; line-height:22px; padding:10px 8px; border-bottom:1px solid #E6EBF5;"><span class="mobile-label" style="display:none;">Prior</span>' + row.prior + '</td>' +
+            '<td align="right" style="background-color:' + bg + '; color:' + row.wowColor + '; font-size:15px; line-height:22px; font-weight:700; padding:10px 8px;' + (index === rows.length - 1 ? '' : ' border-bottom:1px solid #E6EBF5;') + '"><span class="mobile-label" style="display:none; color:#586F7C;">WoW</span>' + row.wow + '</td>' +
+          '</tr>';
+        }).join('');
+      }
+
+      function applyFixture() {
+        try {
+          var doc = frame.contentDocument || frame.contentWindow.document;
+          var fixture = fixtures[currentFixture] || fixtures['default'];
+
+          setHtml(doc, '[data-preview="date"]', fixture.date);
+          setHtml(doc, '[data-preview="subject"]', fixture.subject);
+          setHtml(doc, '[data-preview="meta"]', fixture.meta);
+          setHtml(doc, '[data-preview="summary-1"]', fixture.summary1);
+          setHtml(doc, '[data-preview="summary-2"]', fixture.summary2);
+          setHtml(doc, '[data-preview="metrics"]', fixture.metrics);
+          setHtml(doc, '[data-preview="risk-body"]', fixture.risk);
+          setHtml(doc, '[data-preview="opportunity-body"]', fixture.opportunity);
+          setHtml(doc, '[data-preview="cta"]', fixture.cta);
+          setHtml(doc, '[data-preview="campaign-table-body"]', renderRows(fixture.rows));
+        } catch (e) {
+          /* ignore fixture application failures */
+        }
+      }
 
       /*
        * Dark-mode color maps.
@@ -406,6 +513,7 @@
 
       /* Re-apply dark mode after iframe loads (initial load or reload) */
       frame.addEventListener('load', function () {
+        applyFixture();
         if (stage.getAttribute('data-bg') === 'dark') {
           setTimeout(applyDarkMode, 150);
         }
@@ -418,6 +526,24 @@
           vpBtns.forEach(function (b) { b.classList.remove('active'); });
           btn.classList.add('active');
           wrap.setAttribute('data-vp', btn.getAttribute('data-vp'));
+        });
+      });
+
+      var fixtureBtns = document.querySelectorAll('.seg-btn[data-fixture]');
+      fixtureBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          fixtureBtns.forEach(function (b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          currentFixture = btn.getAttribute('data-fixture');
+
+          if (stage.getAttribute('data-bg') === 'dark') {
+            restoreLightMode();
+            applyFixture();
+            setTimeout(applyDarkMode, 0);
+            return;
+          }
+
+          applyFixture();
         });
       });
     })();

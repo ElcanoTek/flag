@@ -11,7 +11,7 @@ This directory is the single documented source of truth for shared UI design dec
 6. `APPLY_TO_PRODUCT.md` - adoption guide for another product repo
 7. `MIGRATION.md` - rollout strategy and sequencing
 8. `AUDIT.md` - historical audit context and long-lived takeaways
-9. supporting docs: `BACKGROUNDS.md`, `LOGOS.md`, `ICONS.md`, `email-safe.html`
+9. supporting docs: `BACKGROUNDS.md`, `LOGOS.md`, `ICONS.md`, `EMAIL.md`, `email-safe.html`
 
 ## Source Files
 - `tokens/design-tokens.css` - canonical runtime token source
@@ -20,6 +20,7 @@ This directory is the single documented source of truth for shared UI design dec
 - `theme/theme-controller.js` - canonical light/dark theme controller for product adoption
 - `logos/` - approved SVG/PNG logo assets
 - `icons/core-icons.svg` - canonical SVG sprite
+- `EMAIL.md` - approved email modules, plain-text guidance, and email-only color rules
 - `email-safe.html` - canonical email-safe HTML reference aligned to the design system
 
 Source precedence (when docs and examples differ):
@@ -56,11 +57,18 @@ Sync the deployed email preview copy:
 bash design-system/sync-email-preview.sh
 ```
 
+Run email guardrails:
+
+```bash
+bash design-system/check-email-template.sh
+```
+
 Email review checklist:
 - desktop light preview
 - desktop dark preview simulation
 - mobile light preview
 - mobile dark preview simulation
+- default, long-content, and dense-table fixtures
 - long table content and long CTA copy
 - footer compliance content
 

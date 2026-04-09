@@ -77,13 +77,13 @@
                 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%; border-collapse:collapse;">
                   <tr>
                     <td class="header-kicker" style="font-size:12px; line-height:16px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#D2D9DE; padding:0 0 8px 0;">Victoria | Campaign Intelligence</td>
-                    <td class="header-date" align="right" style="font-size:12px; line-height:16px; color:#BEB6CD; padding:0 0 8px 0;">{{date}}</td>
+                    <td class="header-date" data-preview="date" align="right" style="font-size:12px; line-height:16px; color:#BEB6CD; padding:0 0 8px 0;">{{date}}</td>
                   </tr>
                   <tr>
-                    <td colspan="2" style="padding:0 0 8px 0;"><h1 class="header-subject" style="margin:0; font-size:22px; line-height:28px; font-weight:700; color:#FAFAFA;">{{email_subject}}</h1></td>
+                    <td colspan="2" style="padding:0 0 8px 0;"><h1 class="header-subject" data-preview="subject" style="margin:0; font-size:22px; line-height:28px; font-weight:700; color:#FAFAFA;">{{email_subject}}</h1></td>
                   </tr>
                   <tr>
-                    <td class="header-meta" colspan="2" style="font-size:15px; line-height:22px; color:#D2D9DE; padding:0;">{{client_name}} | {{date_range}} | Built for Outlook, Gmail, Apple Mail, and mobile clients.</td>
+                    <td class="header-meta" data-preview="meta" colspan="2" style="font-size:15px; line-height:22px; color:#D2D9DE; padding:0;">{{client_name}} | {{date_range}} | Built for Outlook, Gmail, Apple Mail, and mobile clients.</td>
                   </tr>
                 </table>
               </td>
@@ -113,10 +113,10 @@
                     <td style="padding:0 0 8px 0;"><h2 style="margin:0; font-size:12px; line-height:17px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#586F7C;">Executive Summary</h2></td>
                   </tr>
                   <tr>
-                    <td style="font-size:16px; line-height:24px; color:#141824; padding:0 0 12px 0;">Spend finished at <strong>$589,075.45</strong>, down <strong style="color:#7C1F1F;">12.4%</strong> week over week, driven primarily by Amazon OLV pacing cuts that began on Apr 3.</td>
+                    <td data-preview="summary-1" style="font-size:16px; line-height:24px; color:#141824; padding:0 0 12px 0;">Spend finished at <strong>$589,075.45</strong>, down <strong style="color:#7C1F1F;">12.4%</strong> week over week, driven primarily by Amazon OLV pacing cuts that began on Apr 3.</td>
                   </tr>
                   <tr>
-                    <td style="font-size:16px; line-height:24px; color:#141824; padding:0 0 12px 0;">The biggest production risk is continued weekend underdelivery across the portfolio. The best immediate opportunity is recovering volume in stable Canada inventory where CPMs held while spend softened.</td>
+                    <td data-preview="summary-2" style="font-size:16px; line-height:24px; color:#141824; padding:0 0 12px 0;">The biggest production risk is continued weekend underdelivery across the portfolio. The best immediate opportunity is recovering volume in stable Canada inventory where CPMs held while spend softened.</td>
                   </tr>
                 </table>
               </td>
@@ -132,7 +132,7 @@
                     <td style="padding:16px 18px 6px 18px;"><h2 style="margin:0; font-size:12px; line-height:17px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#586F7C;">Topline Metrics</h2></td>
                   </tr>
                   <tr>
-                    <td style="padding:0 18px 16px 18px; font-size:16px; line-height:24px; color:#141824;">
+                    <td data-preview="metrics" style="padding:0 18px 16px 18px; font-size:16px; line-height:24px; color:#141824;">
                       <strong>Gross Spend:</strong> $589,075.45<br>
                       <strong>Impressions:</strong> 63,400,529<br>
                       <strong>Average CPM:</strong> $9.29
@@ -152,7 +152,7 @@
                     <td style="padding:14px 16px 6px 16px;"><h2 style="margin:0; font-size:16px; line-height:24px; font-weight:700; color:#8F5A12;">Risk</h2></td>
                   </tr>
                   <tr>
-                    <td style="padding:0 16px 14px 16px; font-size:16px; line-height:24px; color:#141824;">Amazon US OLV weekend spend fell to roughly $755/day after pacing above $104,000/day earlier in the week.</td>
+                    <td data-preview="risk-body" style="padding:0 16px 14px 16px; font-size:16px; line-height:24px; color:#141824;">Amazon US OLV weekend spend fell to roughly $755/day after pacing above $104,000/day earlier in the week.</td>
                   </tr>
                 </table>
               </td>
@@ -168,7 +168,7 @@
                     <td style="padding:14px 16px 6px 16px;"><h2 style="margin:0; font-size:16px; line-height:24px; font-weight:700; color:#1C5A33;">Opportunity</h2></td>
                   </tr>
                   <tr>
-                    <td style="padding:0 16px 14px 16px; font-size:16px; line-height:24px; color:#141824;">Canada display inventory stayed efficient, creating room to shift spend without increasing blended CPM.</td>
+                    <td data-preview="opportunity-body" style="padding:0 16px 14px 16px; font-size:16px; line-height:24px; color:#141824;">Canada display inventory stayed efficient, creating room to shift spend without increasing blended CPM.</td>
                   </tr>
                 </table>
               </td>
@@ -191,7 +191,7 @@
                       <th scope="col" align="right" style="background-color:#EEF3FF; color:#33415F; font-size:13px; line-height:18px; font-weight:700; padding:10px 8px; border-bottom:1px solid #D7DEEE;">WoW</th>
                     </tr>
                   </thead>
-                  <tbody>
+                  <tbody data-preview="campaign-table-body">
                     <tr>
                       <td class="campaign-name" style="background-color:#FAFAFA; color:#141824; font-size:15px; line-height:22px; padding:10px 8px; border-bottom:1px solid #E6EBF5;"><span class="mobile-label" style="display:none;">Campaign</span>Amazon US OLV</td>
                       <td align="right" style="background-color:#FAFAFA; color:#141824; font-size:15px; line-height:22px; padding:10px 8px; border-bottom:1px solid #E6EBF5;"><span class="mobile-label" style="display:none;">Current</span>$311,402</td>
@@ -231,7 +231,7 @@
                 <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">
                   <tr>
                     <td align="center" style="background-color:#6262A0; padding:12px 32px; border:1px solid #6262A0;">
-                      <a href="{{cta_url}}" target="_blank" style="font-family:'Segoe UI', Arial, sans-serif; font-size:16px; line-height:20px; font-weight:700; color:#FAFAFA; text-decoration:none; display:inline-block;">{{cta_text}}</a>
+                      <a data-preview="cta" href="{{cta_url}}" target="_blank" style="font-family:'Segoe UI', Arial, sans-serif; font-size:16px; line-height:20px; font-weight:700; color:#FAFAFA; text-decoration:none; display:inline-block;">{{cta_text}}</a>
                     </td>
                   </tr>
                 </table>

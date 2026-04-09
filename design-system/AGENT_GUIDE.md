@@ -95,6 +95,8 @@ Recommended implementation order for new product adoption:
 - When adapting the reference, preserve the dark header plus light body structure unless there is a documented reason to change it.
 - Use `{{placeholder}}` markers for all dynamic content (dates, names, URLs, metrics). The agent populates these at generation time; the template defines the structure.
 - Treat `design-system/preview/email-safe.html` as a deployed preview artifact, not an authored source file. Sync it from the canonical template with `bash design-system/sync-email-preview.sh` after canonical email changes.
+- Read `design-system/EMAIL.md` when making email-specific design or content-pattern changes.
+- Run `bash design-system/check-email-template.sh` before shipping email-template changes.
 
 ### Layout and Structure
 - Keep email layouts table-first for all structural regions; use `role="presentation"` on layout tables.
