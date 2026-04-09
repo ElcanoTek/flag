@@ -1,0 +1,552 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Email Template Preview — Elcano Design System</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --toolbar-bg: #241B31;
+      --toolbar-border: #3a2f4d;
+      --toolbar-text: #FAFAFA;
+      --toolbar-muted: #BEB6CD;
+      --accent: #9DA7EF;
+      --accent-hover: rgba(157, 167, 239, 0.1);
+      --accent-border: rgba(157, 167, 239, 0.25);
+      --btn-border: #3a2f4d;
+      --btn-active-bg: #7272AB;
+      --stage-bg-light: #F4F6FB;
+      --stage-bg-dark: #121212;
+    }
+
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #1A0B1E;
+      color: #D2D9DE;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ── Toolbar ── */
+    .toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+      padding: 12px 24px;
+      background: var(--toolbar-bg);
+      border-bottom: 1px solid var(--toolbar-border);
+    }
+
+    .toolbar__left {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .toolbar__back {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--accent);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 6px;
+      border: 1px solid transparent;
+      transition: background 0.15s, border-color 0.15s;
+    }
+
+    .toolbar__back:hover {
+      background: var(--accent-hover);
+      border-color: var(--accent-border);
+    }
+
+    .toolbar__title {
+      font-size: 14px;
+      font-weight: 700;
+      color: var(--toolbar-text);
+    }
+
+    .toolbar__subtitle {
+      font-size: 12px;
+      color: var(--toolbar-muted);
+      margin-top: 1px;
+    }
+
+    .toolbar__right {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px;
+    }
+
+    .toolbar__group {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 3px;
+      background: rgba(255,255,255,0.04);
+      border-radius: 8px;
+      border: 1px solid var(--btn-border);
+    }
+
+    .toolbar__group-label {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--toolbar-muted);
+      padding: 0 8px 0 6px;
+    }
+
+    .seg-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      padding: 5px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--toolbar-muted);
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .seg-btn:hover {
+      background: rgba(157, 167, 239, 0.08);
+      color: #D2D9DE;
+    }
+
+    .seg-btn.active {
+      background: var(--btn-active-bg);
+      color: #FAFAFA;
+      border-color: var(--btn-active-bg);
+    }
+
+    .seg-btn svg {
+      width: 14px;
+      height: 14px;
+      fill: currentColor;
+    }
+
+    .source-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      padding: 5px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--toolbar-muted);
+      background: transparent;
+      border: 1px solid var(--btn-border);
+      border-radius: 6px;
+      text-decoration: none;
+      transition: all 0.15s;
+      margin-left: 4px;
+    }
+
+    .source-link:hover {
+      background: rgba(157, 167, 239, 0.08);
+      color: #D2D9DE;
+    }
+
+    /* ── Mode indicator ── */
+    .mode-note {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      padding: 6px 0 0 0;
+      transition: color 0.3s;
+    }
+
+    .mode-note[data-mode="light"] { color: #586F7C; }
+    .mode-note[data-mode="dark"]  { color: #BEB6CD; }
+
+    /* ── Stage ── */
+    .stage {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 24px 28px;
+      transition: background 0.3s ease;
+    }
+
+    .stage[data-bg="light"] {
+      background: var(--stage-bg-light);
+    }
+
+    .stage[data-bg="dark"] {
+      background: var(--stage-bg-dark);
+    }
+
+    .frame-wrap {
+      width: 100%;
+      max-width: 700px;
+      transition: max-width 0.3s ease;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+      margin-top: 8px;
+    }
+
+    .frame-wrap[data-vp="mobile"]  { max-width: 375px; }
+    .frame-wrap[data-vp="email"]   { max-width: 700px; }
+    .frame-wrap[data-vp="desktop"] { max-width: 100%; }
+
+    .frame {
+      width: 100%;
+      height: calc(100vh - 100px);
+      border: none;
+      background: #FFFFFF;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 640px) {
+      .toolbar { padding: 10px 14px; gap: 8px; }
+      .toolbar__group-label { display: none; }
+      .stage { padding: 16px 10px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="toolbar">
+    <div class="toolbar__left">
+      <a class="toolbar__back" href="./index.html">&#8592; Design System</a>
+      <div>
+        <div class="toolbar__title">Email Template Preview</div>
+        <div class="toolbar__subtitle">Rendered view of the canonical email-safe template</div>
+      </div>
+    </div>
+    <div class="toolbar__right">
+      <!-- Theme toggle -->
+      <div class="toolbar__group">
+        <span class="toolbar__group-label">Inbox</span>
+        <button class="seg-btn active" data-bg="light" title="Light inbox — how the email renders in a light-mode email client">
+          <svg viewBox="0 0 16 16"><circle cx="8" cy="8" r="3.5" fill="none" stroke="currentColor" stroke-width="1.5"/><path d="M8 1v2M8 13v2M1 8h2M13 8h2M3.05 3.05l1.41 1.41M11.54 11.54l1.41 1.41M3.05 12.95l1.41-1.41M11.54 4.46l1.41-1.41" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/></svg>
+          Light Inbox
+        </button>
+        <button class="seg-btn" data-bg="dark" title="Dark inbox — simulates how Outlook/Gmail dark mode forcibly inverts email backgrounds">
+          <svg viewBox="0 0 16 16"><path d="M13.36 10.06A5.5 5.5 0 015.94 2.64a6.5 6.5 0 107.42 7.42z" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"/></svg>
+          Dark Inbox
+        </button>
+      </div>
+      <!-- Viewport toggle -->
+      <div class="toolbar__group">
+        <span class="toolbar__group-label">Size</span>
+        <button class="seg-btn" data-vp="mobile" title="Mobile 375px">
+          <svg viewBox="0 0 16 16"><rect x="4" y="1" width="8" height="14" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.3"/><line x1="6.5" y1="12.5" x2="9.5" y2="12.5" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/></svg>
+          Mobile
+        </button>
+        <button class="seg-btn active" data-vp="email" title="Email 700px">
+          <svg viewBox="0 0 16 16"><rect x="1" y="3" width="14" height="10" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.3"/><path d="M1 4.5l7 4.5 7-4.5" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round"/></svg>
+          Email
+        </button>
+        <button class="seg-btn" data-vp="desktop" title="Full width">
+          <svg viewBox="0 0 16 16"><rect x="1" y="2" width="14" height="10" rx="1.5" fill="none" stroke="currentColor" stroke-width="1.3"/><line x1="6" y1="14" x2="10" y2="14" stroke="currentColor" stroke-width="1.3" stroke-linecap="round"/><line x1="8" y1="12" x2="8" y2="14" stroke="currentColor" stroke-width="1.3"/></svg>
+          Desktop
+        </button>
+      </div>
+      <div class="toolbar__group">
+        <span class="toolbar__group-label">Fixture</span>
+        <button class="seg-btn active" data-fixture="default" title="Balanced example content">
+          Default
+        </button>
+        <button class="seg-btn" data-fixture="long" title="Long headings, summaries, and campaign names">
+          Long
+        </button>
+        <button class="seg-btn" data-fixture="dense" title="Denser table with more campaign rows">
+          Dense
+        </button>
+      </div>
+      <a class="source-link" href="https://github.com/ElcanoTek/flag/blob/main/design-system/email-safe.html" target="_blank" rel="noreferrer">Source &#8599;</a>
+    </div>
+  </div>
+
+  <div class="stage" id="stage" data-bg="light">
+    <div class="mode-note" id="modeNote" data-mode="light">Light inbox preview — original email colors</div>
+    <div class="frame-wrap" id="frameWrap" data-vp="email">
+      <iframe class="frame" id="emailFrame" src="./email-safe.html" title="Email template rendered preview"></iframe>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var stage    = document.getElementById('stage');
+      var wrap     = document.getElementById('frameWrap');
+      var frame    = document.getElementById('emailFrame');
+      var modeNote = document.getElementById('modeNote');
+      var currentFixture = 'default';
+
+      var fixtures = {
+        'default': {
+          date: '{{date}}',
+          subject: '{{email_subject}}',
+          meta: '{{client_name}} | {{date_range}} | Built for Outlook, Gmail, Apple Mail, and mobile clients.',
+          summary1: 'Spend finished at <strong>$589,075.45</strong>, down <strong style="color:#7C1F1F;">12.4%</strong> week over week, driven primarily by Amazon OLV pacing cuts that began on Apr 3.',
+          summary2: 'The biggest production risk is continued weekend underdelivery across the portfolio. The best immediate opportunity is recovering volume in stable Canada inventory where CPMs held while spend softened.',
+          metrics: '<strong>Gross Spend:</strong> $589,075.45<br><strong>Impressions:</strong> 63,400,529<br><strong>Average CPM:</strong> $9.29',
+          risk: 'Amazon US OLV weekend spend fell to roughly $755/day after pacing above $104,000/day earlier in the week.',
+          opportunity: 'Canada display inventory stayed efficient, creating room to shift spend without increasing blended CPM.',
+          cta: '{{cta_text}}',
+          rows: [
+            { campaign: 'Amazon US OLV', current: '$311,402', prior: '$405,928', wow: '-23.3%', wowColor: '#7C1F1F' },
+            { campaign: 'Amazon CA Display', current: '$72,119', prior: '$68,004', wow: '+6.1%', wowColor: '#1C5A33' },
+            { campaign: 'Pepsi Display', current: '$54,882', prior: '$58,131', wow: '-5.6%', wowColor: '#7C1F1F' }
+          ]
+        },
+        'long': {
+          date: 'Apr 9, 2026',
+          subject: 'Q2 performance review: pacing risk, recovery opportunities, and budget reallocation recommendations across North America',
+          meta: 'Acme Consumer Brands | Mar 31-Apr 6 | Built for Outlook, Gmail, Apple Mail, and mobile clients.',
+          summary1: 'Spend finished at <strong>$1,284,921.13</strong>, down <strong style="color:#7C1F1F;">18.7%</strong> week over week after late-week pacing controls slowed the largest upper-funnel campaigns across multiple retail partners.',
+          summary2: 'The biggest production risk is that underdelivery is now affecting several high-visibility placements at once, while the clearest short-term opportunity is to reallocate budget into stable display inventory that is still clearing efficiently and predictably.',
+          metrics: '<strong>Gross Spend:</strong> $1,284,921.13<br><strong>Impressions:</strong> 148,922,440<br><strong>Average CPM:</strong> $8.63',
+          risk: 'Amazon US Online Video - Spring Household Essentials Launch weekend spend dropped sharply after pacing above target for three consecutive days.',
+          opportunity: 'Canada retail display placements maintained efficient CPMs and delivery stability, creating room for controlled budget recovery without raising blended cost.',
+          cta: 'Review Reallocation Plan',
+          rows: [
+            { campaign: 'Amazon US Online Video - Spring Household Essentials Launch', current: '$311,402', prior: '$405,928', wow: '-23.3%', wowColor: '#7C1F1F' },
+            { campaign: 'Amazon Canada Sponsored Display - Pantry Staples Expansion', current: '$72,119', prior: '$68,004', wow: '+6.1%', wowColor: '#1C5A33' },
+            { campaign: 'PepsiCo North America Retail Display - Convenience Stores', current: '$54,882', prior: '$58,131', wow: '-5.6%', wowColor: '#7C1F1F' }
+          ]
+        },
+        'dense': {
+          date: 'Apr 9, 2026',
+          subject: 'Weekly media pacing snapshot',
+          meta: 'Acme Consumer Brands | Mar 31-Apr 6 | Built for Outlook, Gmail, Apple Mail, and mobile clients.',
+          summary1: 'Delivery softened in the largest video placements, but secondary display inventory remained stable enough to offset part of the decline.',
+          summary2: 'Use this fixture to review denser table rhythm, stacked-card border consistency, and long-scroll mobile behavior.',
+          metrics: '<strong>Gross Spend:</strong> $589,075.45<br><strong>Impressions:</strong> 63,400,529<br><strong>Average CPM:</strong> $9.29',
+          risk: 'Several top-spend campaigns are pacing unevenly across weekends.',
+          opportunity: 'Stable display inventory still offers room to recover volume efficiently.',
+          cta: 'Open Full Dashboard',
+          rows: [
+            { campaign: 'Amazon US OLV', current: '$311,402', prior: '$405,928', wow: '-23.3%', wowColor: '#7C1F1F' },
+            { campaign: 'Amazon CA Display', current: '$72,119', prior: '$68,004', wow: '+6.1%', wowColor: '#1C5A33' },
+            { campaign: 'Pepsi Display', current: '$54,882', prior: '$58,131', wow: '-5.6%', wowColor: '#7C1F1F' },
+            { campaign: 'Target CTV', current: '$48,011', prior: '$44,120', wow: '+8.8%', wowColor: '#1C5A33' },
+            { campaign: 'Walmart Display', current: '$39,204', prior: '$42,015', wow: '-6.7%', wowColor: '#7C1F1F' },
+            { campaign: 'Instacart Video', current: '$27,883', prior: '$31,452', wow: '-11.3%', wowColor: '#7C1F1F' }
+          ]
+        }
+      };
+
+      function setHtml(doc, selector, value) {
+        var el = doc.querySelector(selector);
+        if (el) {
+          el.innerHTML = value;
+        }
+      }
+
+      function renderRows(rows) {
+        return rows.map(function (row, index) {
+          var bg = index % 2 === 1 ? '#F4F6FB' : '#FAFAFA';
+          return '<tr>' +
+            '<td class="campaign-name" style="background-color:' + bg + '; color:#141824; font-size:15px; line-height:22px; padding:10px 8px; border-bottom:1px solid #E6EBF5;"><span class="mobile-label" style="display:none;">Campaign</span>' + row.campaign + '</td>' +
+            '<td align="right" style="background-color:' + bg + '; color:#141824; font-size:15px; line-height:22px; padding:10px 8px; border-bottom:1px solid #E6EBF5;"><span class="mobile-label" style="display:none;">Current</span>' + row.current + '</td>' +
+            '<td align="right" style="background-color:' + bg + '; color:#141824; font-size:15px; line-height:22px; padding:10px 8px; border-bottom:1px solid #E6EBF5;"><span class="mobile-label" style="display:none;">Prior</span>' + row.prior + '</td>' +
+            '<td align="right" style="background-color:' + bg + '; color:' + row.wowColor + '; font-size:15px; line-height:22px; font-weight:700; padding:10px 8px;' + (index === rows.length - 1 ? '' : ' border-bottom:1px solid #E6EBF5;') + '"><span class="mobile-label" style="display:none; color:#586F7C;">WoW</span>' + row.wow + '</td>' +
+          '</tr>';
+        }).join('');
+      }
+
+      function applyFixture() {
+        try {
+          var doc = frame.contentDocument || frame.contentWindow.document;
+          var fixture = fixtures[currentFixture] || fixtures['default'];
+
+          setHtml(doc, '[data-preview="date"]', fixture.date);
+          setHtml(doc, '[data-preview="subject"]', fixture.subject);
+          setHtml(doc, '[data-preview="meta"]', fixture.meta);
+          setHtml(doc, '[data-preview="summary-1"]', fixture.summary1);
+          setHtml(doc, '[data-preview="summary-2"]', fixture.summary2);
+          setHtml(doc, '[data-preview="metrics"]', fixture.metrics);
+          setHtml(doc, '[data-preview="risk-body"]', fixture.risk);
+          setHtml(doc, '[data-preview="opportunity-body"]', fixture.opportunity);
+          setHtml(doc, '[data-preview="cta"]', fixture.cta);
+          setHtml(doc, '[data-preview="campaign-table-body"]', renderRows(fixture.rows));
+        } catch (e) {
+          /* ignore fixture application failures */
+        }
+      }
+
+      /*
+       * Dark-mode color maps.
+       *
+       * Keys are NORMALIZED rgb strings (lowercase, no spaces) because
+       * browsers always return el.style.backgroundColor as rgb(r, g, b)
+       * and our normalizer strips spaces for reliable matching.
+       *
+       * Real email clients (Outlook dark, Gmail dark, Apple Mail dark)
+       * forcibly invert light backgrounds to dark and dark text to light.
+       * The branded dark header (#1A0B1E) is intentionally excluded
+       * because dark-mode clients leave already-dark elements alone.
+       */
+      var bgMap = {
+        'rgb(244,246,251)': '#1e1e2e',   /* outer wrapper / body / footer bg #F4F6FB */
+        'rgb(250,250,250)': '#2a2a3c',   /* email card body / table rows #FAFAFA */
+        'rgb(238,243,255)': '#252538',   /* status bar / table headers #EEF3FF */
+        'rgb(255,247,232)': '#2e2518',   /* risk callout bg #FFF7E8 */
+        'rgb(239,250,243)': '#1a2e20',   /* opportunity callout bg #EFFAF3 */
+        'rgb(255,255,255)': '#2a2a3c',   /* pure white fallback #FFFFFF */
+        'rgb(98,98,160)':   '#5A5494',   /* badge/CTA bg #6262A0 -> 6.43:1 with #FAFAFA in dark */
+      };
+
+      var textMap = {
+        'rgb(20,24,36)':   '#e0e0e0',   /* primary body text #141824 */
+        'rgb(51,65,95)':   '#c0c8d8',   /* secondary text #33415F */
+        'rgb(88,111,124)': '#9aa8b4',   /* muted text #586F7C */
+        'rgb(92,106,135)': '#9aa8b4',   /* caption text #5C6A87 */
+        'rgb(143,90,18)':  '#f0a040',   /* risk heading #8F5A12 -> 7.04:1 on #2e2518 */
+        'rgb(28,90,51)':   '#4ADE80',   /* green text (opp heading + positive %) #1C5A33 -> 8.06:1 on #2a2a3c */
+        'rgb(124,31,31)':  '#FF6B6B',   /* red negative % #7C1F1F -> 5.06:1 on #2a2a3c */
+      };
+
+      var borderMap = {
+        'rgb(215,222,238)': '#3a3a50',   /* primary borders #D7DEEE */
+        'rgb(230,235,245)': '#3a3a50',   /* table row borders #E6EBF5 */
+        'rgb(240,215,175)': '#5a4520',   /* risk callout border #F0D7AF */
+        'rgb(205,237,216)': '#2a5035',   /* opportunity callout border #CDEDD8 */
+      };
+
+      /* Store original inline styles for restore */
+      var originals = [];
+
+      function norm(c) {
+        if (!c) return '';
+        return c.toLowerCase().replace(/\s+/g, '');
+      }
+
+      function applyDarkMode() {
+        try {
+          var doc = frame.contentDocument || frame.contentWindow.document;
+          var els = doc.querySelectorAll('body, body *');
+          originals = [];
+
+          els.forEach(function (el) {
+            var computed = doc.defaultView && typeof doc.defaultView.getComputedStyle === 'function'
+              ? doc.defaultView.getComputedStyle(el)
+              : null;
+            var orig = {
+              el: el,
+              backgroundColor: el.style.backgroundColor || '',
+              color: el.style.color || '',
+              borderColor: el.style.borderColor || '',
+              borderTopColor: el.style.borderTopColor || '',
+              borderBottomColor: el.style.borderBottomColor || '',
+              borderLeftColor: el.style.borderLeftColor || '',
+              borderRightColor: el.style.borderRightColor || '',
+            };
+            originals.push(orig);
+
+            /* Swap backgrounds */
+            var bg = norm((computed && computed.backgroundColor) || el.style.backgroundColor);
+            if (bg && bgMap[bg]) {
+              el.style.setProperty('background-color', bgMap[bg], 'important');
+            }
+
+            /* Swap text colors */
+            var col = norm((computed && computed.color) || el.style.color);
+            if (col && textMap[col]) {
+              el.style.setProperty('color', textMap[col], 'important');
+            }
+
+            /* Swap border colors on individual sides */
+            var bprops = ['borderColor', 'borderTopColor', 'borderBottomColor', 'borderLeftColor', 'borderRightColor'];
+            bprops.forEach(function (prop) {
+              var val = norm((computed && computed[prop]) || el.style[prop]);
+              if (val && borderMap[val]) {
+                el.style.setProperty(prop.replace(/[A-Z]/g, function (match) { return '-' + match.toLowerCase(); }), borderMap[val], 'important');
+              }
+            });
+          });
+        } catch (e) {
+          /* cross-origin: can't access iframe */
+        }
+      }
+
+      function restoreLightMode() {
+        if (!originals.length) return;
+        originals.forEach(function (o) {
+          o.el.style.backgroundColor = o.backgroundColor;
+          o.el.style.color = o.color;
+          o.el.style.borderColor = o.borderColor;
+          o.el.style.borderTopColor = o.borderTopColor;
+          o.el.style.borderBottomColor = o.borderBottomColor;
+          o.el.style.borderLeftColor = o.borderLeftColor;
+          o.el.style.borderRightColor = o.borderRightColor;
+        });
+        originals = [];
+      }
+
+      /* ── Inbox mode (light / dark) toggle ── */
+      var bgBtns = document.querySelectorAll('.seg-btn[data-bg]');
+      bgBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          bgBtns.forEach(function (b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          var mode = btn.getAttribute('data-bg');
+          stage.setAttribute('data-bg', mode);
+          modeNote.setAttribute('data-mode', mode);
+
+          if (mode === 'dark') {
+            modeNote.textContent = 'Dark inbox preview \u2014 simulates forced color inversion (Outlook / Gmail dark mode)';
+            applyDarkMode();
+          } else {
+            modeNote.textContent = 'Light inbox preview \u2014 original email colors';
+            restoreLightMode();
+          }
+        });
+      });
+
+      /* Re-apply dark mode after iframe loads (initial load or reload) */
+      frame.addEventListener('load', function () {
+        applyFixture();
+        if (stage.getAttribute('data-bg') === 'dark') {
+          setTimeout(applyDarkMode, 150);
+        }
+      });
+
+      /* ── Viewport size toggle ── */
+      var vpBtns = document.querySelectorAll('.seg-btn[data-vp]');
+      vpBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          vpBtns.forEach(function (b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          wrap.setAttribute('data-vp', btn.getAttribute('data-vp'));
+        });
+      });
+
+      var fixtureBtns = document.querySelectorAll('.seg-btn[data-fixture]');
+      fixtureBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          fixtureBtns.forEach(function (b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          currentFixture = btn.getAttribute('data-fixture');
+
+          if (stage.getAttribute('data-bg') === 'dark') {
+            restoreLightMode();
+            applyFixture();
+            setTimeout(applyDarkMode, 0);
+            return;
+          }
+
+          applyFixture();
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

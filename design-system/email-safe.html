@@ -14,6 +14,29 @@
       </o:OfficeDocumentSettings>
     </xml>
     <![endif]-->
+    <style>
+      /* Mobile-responsive overrides — email clients that support <style> */
+      @media only screen and (max-width: 480px) {
+        .email-container { width: 100% !important; }
+        .header-pad, .body-pad, .footer-pad { padding-left: 16px !important; padding-right: 16px !important; }
+        .status-pad { padding-left: 16px !important; padding-right: 16px !important; }
+        .table-pad { padding-left: 12px !important; padding-right: 12px !important; }
+        .header-kicker, .header-date { font-size: 11px !important; }
+        .header-subject { font-size: 18px !important; line-height: 24px !important; }
+        .header-meta { font-size: 13px !important; line-height: 19px !important; }
+        .data-table { width: 100% !important; max-width: 100% !important; border: 0 !important; border-collapse: separate !important; border-spacing: 0 !important; table-layout: fixed !important; }
+        .data-table thead { display: none !important; }
+        .data-table tbody, .data-table tr, .data-table td { display: block !important; width: 100% !important; }
+        .data-table tr { width: 100% !important; margin-bottom: 12px !important; }
+        .data-table tr:last-child { margin-bottom: 0 !important; }
+        .data-table td { box-sizing: border-box !important; background-color: #FAFAFA !important; font-size: 15px !important; line-height: 20px !important; padding: 8px 10px !important; text-align: left !important; border-left: 1px solid #D7DEEE !important; border-right: 1px solid #D7DEEE !important; border-bottom: 1px solid #E6EBF5 !important; }
+        .data-table td:first-child { border-top: 1px solid #D7DEEE !important; }
+        .data-table td:last-child { border-bottom: 0 !important; }
+        .data-table tr td:last-child { border-bottom: 1px solid #D7DEEE !important; }
+        .data-table .campaign-name { background-color: #EEF3FF !important; font-weight: 700 !important; }
+        .mobile-label { display: inline-block !important; min-width: 78px !important; font-size: 13px !important; line-height: 18px !important; font-weight: 700 !important; color: #586F7C !important; }
+      }
+    </style>
   </head>
   <body style="margin:0; padding:0; background-color:#F4F6FB; color:#141824; font-family:'Segoe UI', Arial, sans-serif; -webkit-text-size-adjust:100%; -ms-text-size-adjust:100%;">
     <!--
@@ -30,10 +53,11 @@
       - bulletproof CTA button pattern using table-based layout
       - off-white backgrounds (#F4F6FB) and dark grey text (#141824) for dark mode resilience
       - placeholder markers ({{variable}}) for agent-populated dynamic content
+      - @media responsive overrides for mobile viewports (480px and below)
     -->
 
     <!-- Preheader: hidden text shown in inbox preview after subject line -->
-    <div style="display:none; font-size:1px; color:#F4F6FB; line-height:1px; max-height:0px; max-width:0px; opacity:0; overflow:hidden;">
+    <div style="display:none; mso-hide:all; visibility:hidden; font-size:1px; color:#F4F6FB; line-height:1px; max-height:0px; max-width:0px; opacity:0; overflow:hidden;">
       {{preheader_text}} &zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;&zwnj;&nbsp;
     </div>
 
@@ -43,23 +67,23 @@
           <!--[if mso]>
           <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" align="center"><tr><td>
           <![endif]-->
-          <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%; max-width:600px; border-collapse:collapse; background-color:#FAFAFA; border:1px solid #D7DEEE;">
+          <table class="email-container" role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%; max-width:600px; border-collapse:collapse; background-color:#FAFAFA; border:1px solid #D7DEEE;">
 
             <!-- ============================================
                  HEADER: Dark branded header block
                  ============================================ -->
             <tr>
-              <td style="background-color:#1A0B1E; border-top:4px solid #7272AB; padding:24px 28px;">
+              <td class="header-pad" style="background-color:#1A0B1E; border-top:4px solid #7272AB; padding:24px 28px;">
                 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%; border-collapse:collapse;">
                   <tr>
-                    <td style="font-size:12px; line-height:16px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#D2D9DE; padding:0 0 8px 0;">Victoria | Campaign Intelligence</td>
-                    <td align="right" style="font-size:12px; line-height:16px; color:#BEB6CD; padding:0 0 8px 0;">{{date}}</td>
+                    <td class="header-kicker" style="font-size:12px; line-height:16px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#D2D9DE; padding:0 0 8px 0;">Victoria | Campaign Intelligence</td>
+                    <td class="header-date" data-preview="date" align="right" style="font-size:12px; line-height:16px; color:#BEB6CD; padding:0 0 8px 0;">{{date}}</td>
                   </tr>
                   <tr>
-                    <td colspan="2" style="font-size:22px; line-height:28px; font-weight:700; color:#FAFAFA; padding:0 0 8px 0;">{{email_subject}}</td>
+                    <td colspan="2" style="padding:0 0 8px 0;"><h1 class="header-subject" data-preview="subject" style="margin:0; font-size:22px; line-height:28px; font-weight:700; color:#FAFAFA;">{{email_subject}}</h1></td>
                   </tr>
                   <tr>
-                    <td colspan="2" style="font-size:15px; line-height:22px; color:#D2D9DE; padding:0;">{{client_name}} | {{date_range}} | Built for Outlook, Gmail, Apple Mail, and mobile clients.</td>
+                    <td class="header-meta" data-preview="meta" colspan="2" style="font-size:15px; line-height:22px; color:#D2D9DE; padding:0;">{{client_name}} | {{date_range}} | Built for Outlook, Gmail, Apple Mail, and mobile clients.</td>
                   </tr>
                 </table>
               </td>
@@ -69,9 +93,13 @@
                  STATUS BAR: Badge + inline status
                  ============================================ -->
             <tr>
-              <td style="background-color:#EEF3FF; border-top:1px solid #D7DEEE; border-bottom:1px solid #D7DEEE; padding:12px 28px;">
-                <span style="display:inline-block; background-color:#7272AB; color:#FAFAFA; font-size:12px; line-height:16px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; padding:4px 10px; border:1px solid #7272AB;">{{badge_label}}</span>
-                <span style="display:inline-block; padding-left:8px; font-size:13px; line-height:18px; color:#33415F;">Status: {{status}}</span>
+              <td class="status-pad" style="background-color:#EEF3FF; border-top:1px solid #D7DEEE; border-bottom:1px solid #D7DEEE; padding:12px 28px;">
+                <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">
+                  <tr>
+                    <td style="background-color:#6262A0; color:#FAFAFA; font-size:12px; line-height:16px; font-weight:700; letter-spacing:0.04em; text-transform:uppercase; padding:4px 10px; border:1px solid #6262A0;">{{badge_label}}</td>
+                    <td style="padding-left:8px; font-size:13px; line-height:18px; color:#33415F;">Status: {{status}}</td>
+                  </tr>
+                </table>
               </td>
             </tr>
 
@@ -79,16 +107,16 @@
                  BODY: Executive summary content
                  ============================================ -->
             <tr>
-              <td style="padding:28px 28px 0 28px;">
+              <td class="body-pad" style="padding:28px 28px 0 28px;">
                 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%; border-collapse:collapse;">
                   <tr>
-                    <td style="font-size:12px; line-height:17px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#586F7C; padding:0 0 8px 0;">Executive Summary</td>
+                    <td style="padding:0 0 8px 0;"><h2 style="margin:0; font-size:12px; line-height:17px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#586F7C;">Executive Summary</h2></td>
                   </tr>
                   <tr>
-                    <td style="font-size:16px; line-height:24px; color:#141824; padding:0 0 12px 0;">Spend finished at <strong>$589,075.45</strong>, down <strong style="color:#7C1F1F;">12.4%</strong> week over week, driven primarily by Amazon OLV pacing cuts that began on Apr 3.</td>
+                    <td data-preview="summary-1" style="font-size:16px; line-height:24px; color:#141824; padding:0 0 12px 0;">Spend finished at <strong>$589,075.45</strong>, down <strong style="color:#7C1F1F;">12.4%</strong> week over week, driven primarily by Amazon OLV pacing cuts that began on Apr 3.</td>
                   </tr>
                   <tr>
-                    <td style="font-size:16px; line-height:24px; color:#141824; padding:0 0 12px 0;">The biggest production risk is continued weekend underdelivery across the portfolio. The best immediate opportunity is recovering volume in stable Canada inventory where CPMs held while spend softened.</td>
+                    <td data-preview="summary-2" style="font-size:16px; line-height:24px; color:#141824; padding:0 0 12px 0;">The biggest production risk is continued weekend underdelivery across the portfolio. The best immediate opportunity is recovering volume in stable Canada inventory where CPMs held while spend softened.</td>
                   </tr>
                 </table>
               </td>
@@ -98,13 +126,13 @@
                  METRICS CARD: Key figures block
                  ============================================ -->
             <tr>
-              <td style="padding:20px 28px 0 28px;">
+              <td class="body-pad" style="padding:20px 28px 0 28px;">
                 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%; border-collapse:collapse; background-color:#F4F6FB; border:1px solid #D7DEEE;">
                   <tr>
-                    <td style="padding:16px 18px 6px 18px; font-size:12px; line-height:17px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#586F7C;">Topline Metrics</td>
+                    <td style="padding:16px 18px 6px 18px;"><h2 style="margin:0; font-size:12px; line-height:17px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#586F7C;">Topline Metrics</h2></td>
                   </tr>
                   <tr>
-                    <td style="padding:0 18px 16px 18px; font-size:16px; line-height:24px; color:#141824;">
+                    <td data-preview="metrics" style="padding:0 18px 16px 18px; font-size:16px; line-height:24px; color:#141824;">
                       <strong>Gross Spend:</strong> $589,075.45<br>
                       <strong>Impressions:</strong> 63,400,529<br>
                       <strong>Average CPM:</strong> $9.29
@@ -118,13 +146,13 @@
                  CALLOUT: Risk (warning pattern)
                  ============================================ -->
             <tr>
-              <td style="padding:20px 28px 0 28px;">
+              <td class="body-pad" style="padding:20px 28px 0 28px;">
                 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%; border-collapse:collapse; background-color:#FFF7E8; border-left:4px solid #FF8847; border-top:1px solid #F0D7AF; border-right:1px solid #F0D7AF; border-bottom:1px solid #F0D7AF;">
                   <tr>
-                    <td style="padding:14px 16px 6px 16px; font-size:16px; line-height:24px; font-weight:700; color:#8F5A12;">Risk</td>
+                    <td style="padding:14px 16px 6px 16px;"><h2 style="margin:0; font-size:16px; line-height:24px; font-weight:700; color:#8F5A12;">Risk</h2></td>
                   </tr>
                   <tr>
-                    <td style="padding:0 16px 14px 16px; font-size:16px; line-height:24px; color:#141824;">Amazon US OLV weekend spend fell to roughly $755/day after pacing above $104,000/day earlier in the week.</td>
+                    <td data-preview="risk-body" style="padding:0 16px 14px 16px; font-size:16px; line-height:24px; color:#141824;">Amazon US OLV weekend spend fell to roughly $755/day after pacing above $104,000/day earlier in the week.</td>
                   </tr>
                 </table>
               </td>
@@ -134,13 +162,13 @@
                  CALLOUT: Opportunity (success pattern)
                  ============================================ -->
             <tr>
-              <td style="padding:16px 28px 0 28px;">
+              <td class="body-pad" style="padding:16px 28px 0 28px;">
                 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%; border-collapse:collapse; background-color:#EFFAF3; border-left:4px solid #50FA7B; border-top:1px solid #CDEDD8; border-right:1px solid #CDEDD8; border-bottom:1px solid #CDEDD8;">
                   <tr>
-                    <td style="padding:14px 16px 6px 16px; font-size:16px; line-height:24px; font-weight:700; color:#1C5A33;">Opportunity</td>
+                    <td style="padding:14px 16px 6px 16px;"><h2 style="margin:0; font-size:16px; line-height:24px; font-weight:700; color:#1C5A33;">Opportunity</h2></td>
                   </tr>
                   <tr>
-                    <td style="padding:0 16px 14px 16px; font-size:16px; line-height:24px; color:#141824;">Canada display inventory stayed efficient, creating room to shift spend without increasing blended CPM.</td>
+                    <td data-preview="opportunity-body" style="padding:0 16px 14px 16px; font-size:16px; line-height:24px; color:#141824;">Canada display inventory stayed efficient, creating room to shift spend without increasing blended CPM.</td>
                   </tr>
                 </table>
               </td>
@@ -150,35 +178,39 @@
                  DATA TABLE: Campaign comparison
                  ============================================ -->
             <tr>
-              <td style="padding:20px 28px 0 28px; font-size:12px; line-height:17px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#586F7C;">Campaign Table</td>
+              <td class="body-pad" style="padding:20px 28px 0 28px;"><h2 style="margin:0; font-size:12px; line-height:17px; font-weight:700; letter-spacing:0.08em; text-transform:uppercase; color:#586F7C;">Campaign Table</h2></td>
             </tr>
             <tr>
-              <td style="padding:8px 28px 0 28px;">
-                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%; border-collapse:collapse; border:1px solid #D7DEEE;">
-                  <tr>
-                    <th align="left" style="background-color:#EEF3FF; color:#33415F; font-size:13px; line-height:18px; font-weight:700; padding:10px 12px; border-bottom:1px solid #D7DEEE;">Campaign</th>
-                    <th align="right" style="background-color:#EEF3FF; color:#33415F; font-size:13px; line-height:18px; font-weight:700; padding:10px 12px; border-bottom:1px solid #D7DEEE;">Current</th>
-                    <th align="right" style="background-color:#EEF3FF; color:#33415F; font-size:13px; line-height:18px; font-weight:700; padding:10px 12px; border-bottom:1px solid #D7DEEE;">Prior</th>
-                    <th align="right" style="background-color:#EEF3FF; color:#33415F; font-size:13px; line-height:18px; font-weight:700; padding:10px 12px; border-bottom:1px solid #D7DEEE;">WoW</th>
-                  </tr>
-                  <tr>
-                    <td style="background-color:#FAFAFA; color:#141824; font-size:15px; line-height:21px; padding:10px 12px; border-bottom:1px solid #E6EBF5;">Amazon US OLV</td>
-                    <td align="right" style="background-color:#FAFAFA; color:#141824; font-size:15px; line-height:21px; padding:10px 12px; border-bottom:1px solid #E6EBF5;">$311,402.17</td>
-                    <td align="right" style="background-color:#FAFAFA; color:#141824; font-size:15px; line-height:21px; padding:10px 12px; border-bottom:1px solid #E6EBF5;">$405,928.44</td>
-                    <td align="right" style="background-color:#FAFAFA; color:#7C1F1F; font-size:15px; line-height:21px; font-weight:700; padding:10px 12px; border-bottom:1px solid #E6EBF5;">-23.3%</td>
-                  </tr>
-                  <tr>
-                    <td style="background-color:#F4F6FB; color:#141824; font-size:15px; line-height:21px; padding:10px 12px; border-bottom:1px solid #E6EBF5;">Amazon Canada Display</td>
-                    <td align="right" style="background-color:#F4F6FB; color:#141824; font-size:15px; line-height:21px; padding:10px 12px; border-bottom:1px solid #E6EBF5;">$72,118.92</td>
-                    <td align="right" style="background-color:#F4F6FB; color:#141824; font-size:15px; line-height:21px; padding:10px 12px; border-bottom:1px solid #E6EBF5;">$68,004.15</td>
-                    <td align="right" style="background-color:#F4F6FB; color:#1C5A33; font-size:15px; line-height:21px; font-weight:700; padding:10px 12px; border-bottom:1px solid #E6EBF5;">+6.1%</td>
-                  </tr>
-                  <tr>
-                    <td style="background-color:#FAFAFA; color:#141824; font-size:15px; line-height:21px; padding:10px 12px;">Pepsi Display</td>
-                    <td align="right" style="background-color:#FAFAFA; color:#141824; font-size:15px; line-height:21px; padding:10px 12px;">$54,882.31</td>
-                    <td align="right" style="background-color:#FAFAFA; color:#141824; font-size:15px; line-height:21px; padding:10px 12px;">$58,112.07</td>
-                    <td align="right" style="background-color:#FAFAFA; color:#7C1F1F; font-size:15px; line-height:21px; font-weight:700; padding:10px 12px;">-5.6%</td>
-                  </tr>
+              <td class="table-pad" style="padding:8px 28px 0 28px;">
+                <table class="data-table" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%; border-collapse:collapse; border:1px solid #D7DEEE;">
+                  <thead>
+                    <tr>
+                      <th scope="col" align="left" style="background-color:#EEF3FF; color:#33415F; font-size:13px; line-height:18px; font-weight:700; padding:10px 8px; border-bottom:1px solid #D7DEEE;">Campaign</th>
+                      <th scope="col" align="right" style="background-color:#EEF3FF; color:#33415F; font-size:13px; line-height:18px; font-weight:700; padding:10px 8px; border-bottom:1px solid #D7DEEE;">Current</th>
+                      <th scope="col" align="right" style="background-color:#EEF3FF; color:#33415F; font-size:13px; line-height:18px; font-weight:700; padding:10px 8px; border-bottom:1px solid #D7DEEE;">Prior</th>
+                      <th scope="col" align="right" style="background-color:#EEF3FF; color:#33415F; font-size:13px; line-height:18px; font-weight:700; padding:10px 8px; border-bottom:1px solid #D7DEEE;">WoW</th>
+                    </tr>
+                  </thead>
+                  <tbody data-preview="campaign-table-body">
+                    <tr>
+                      <td class="campaign-name" style="background-color:#FAFAFA; color:#141824; font-size:15px; line-height:22px; padding:10px 8px; border-bottom:1px solid #E6EBF5;"><span class="mobile-label" style="display:none;">Campaign</span>Amazon US OLV</td>
+                      <td align="right" style="background-color:#FAFAFA; color:#141824; font-size:15px; line-height:22px; padding:10px 8px; border-bottom:1px solid #E6EBF5;"><span class="mobile-label" style="display:none;">Current</span>$311,402</td>
+                      <td align="right" style="background-color:#FAFAFA; color:#141824; font-size:15px; line-height:22px; padding:10px 8px; border-bottom:1px solid #E6EBF5;"><span class="mobile-label" style="display:none;">Prior</span>$405,928</td>
+                      <td align="right" style="background-color:#FAFAFA; color:#7C1F1F; font-size:15px; line-height:22px; font-weight:700; padding:10px 8px; border-bottom:1px solid #E6EBF5;"><span class="mobile-label" style="display:none; color:#586F7C;">WoW</span>-23.3%</td>
+                    </tr>
+                    <tr>
+                      <td class="campaign-name" style="background-color:#F4F6FB; color:#141824; font-size:15px; line-height:22px; padding:10px 8px; border-bottom:1px solid #E6EBF5;"><span class="mobile-label" style="display:none;">Campaign</span>Amazon CA Display</td>
+                      <td align="right" style="background-color:#F4F6FB; color:#141824; font-size:15px; line-height:22px; padding:10px 8px; border-bottom:1px solid #E6EBF5;"><span class="mobile-label" style="display:none;">Current</span>$72,119</td>
+                      <td align="right" style="background-color:#F4F6FB; color:#141824; font-size:15px; line-height:22px; padding:10px 8px; border-bottom:1px solid #E6EBF5;"><span class="mobile-label" style="display:none;">Prior</span>$68,004</td>
+                      <td align="right" style="background-color:#F4F6FB; color:#1C5A33; font-size:15px; line-height:22px; font-weight:700; padding:10px 8px; border-bottom:1px solid #E6EBF5;"><span class="mobile-label" style="display:none; color:#586F7C;">WoW</span>+6.1%</td>
+                    </tr>
+                    <tr>
+                      <td class="campaign-name" style="background-color:#FAFAFA; color:#141824; font-size:15px; line-height:22px; padding:10px 8px;"><span class="mobile-label" style="display:none;">Campaign</span>Pepsi Display</td>
+                      <td align="right" style="background-color:#FAFAFA; color:#141824; font-size:15px; line-height:22px; padding:10px 8px;"><span class="mobile-label" style="display:none;">Current</span>$54,882</td>
+                      <td align="right" style="background-color:#FAFAFA; color:#141824; font-size:15px; line-height:22px; padding:10px 8px;"><span class="mobile-label" style="display:none;">Prior</span>$58,131</td>
+                      <td align="right" style="background-color:#FAFAFA; color:#7C1F1F; font-size:15px; line-height:22px; font-weight:700; padding:10px 8px;"><span class="mobile-label" style="display:none; color:#586F7C;">WoW</span>-5.6%</td>
+                    </tr>
+                  </tbody>
                 </table>
               </td>
             </tr>
@@ -189,7 +221,7 @@
             <tr>
               <td style="padding:24px 28px 0 28px;" align="center">
                 <!--[if mso]>
-                <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" href="{{cta_url}}" style="height:44px; v-text-anchor:middle; width:220px;" arcsize="0%" fillcolor="#7272AB" stroke="f">
+                <v:roundrect xmlns:v="urn:schemas-microsoft-com:vml" href="{{cta_url}}" style="height:44px; v-text-anchor:middle; width:220px;" arcsize="0%" fillcolor="#6262A0" stroke="f">
                   <v:textbox inset="0,0,0,0">
                     <center style="font-family:'Segoe UI', Arial, sans-serif; font-size:14px; font-weight:700; color:#FAFAFA;">{{cta_text}}</center>
                   </v:textbox>
@@ -198,8 +230,8 @@
                 <!--[if !mso]><!-->
                 <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:collapse;">
                   <tr>
-                    <td align="center" style="background-color:#7272AB; padding:12px 32px; border:1px solid #7272AB;">
-                      <a href="{{cta_url}}" target="_blank" style="font-family:'Segoe UI', Arial, sans-serif; font-size:16px; line-height:20px; font-weight:700; color:#FAFAFA; text-decoration:none; display:inline-block;">{{cta_text}}</a>
+                    <td align="center" style="background-color:#6262A0; padding:12px 32px; border:1px solid #6262A0;">
+                      <a data-preview="cta" href="{{cta_url}}" target="_blank" style="font-family:'Segoe UI', Arial, sans-serif; font-size:16px; line-height:20px; font-weight:700; color:#FAFAFA; text-decoration:none; display:inline-block;">{{cta_text}}</a>
                     </td>
                   </tr>
                 </table>
@@ -211,10 +243,10 @@
                  CLOSING: Next steps / outlook
                  ============================================ -->
             <tr>
-              <td style="padding:24px 28px 28px 28px;">
+              <td class="body-pad" style="padding:24px 28px 28px 28px;">
                 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%; border-collapse:collapse;">
                   <tr>
-                    <td style="font-size:16px; line-height:24px; color:#33415F;"><strong>Outlook &amp; Next Steps:</strong> Hold the dark header plus white-body structure, keep all critical colors explicit inline, and use only table-safe blocks when this reference is adapted for production emails.</td>
+                    <td style="font-size:16px; line-height:24px; color:#33415F;"><h2 style="margin:0 0 8px 0; font-size:16px; line-height:24px; font-weight:700; color:#33415F;">Outlook &amp; Next Steps</h2>Hold the dark header plus white-body structure, keep all critical colors explicit inline, and use only table-safe blocks when this reference is adapted for production emails.</td>
                   </tr>
                 </table>
               </td>
@@ -224,7 +256,7 @@
                  FOOTER: Locked section — agent must not modify
                  ============================================ -->
             <tr>
-              <td style="background-color:#F4F6FB; border-top:1px solid #D7DEEE; padding:16px 28px;">
+              <td class="footer-pad" style="background-color:#F4F6FB; border-top:1px solid #D7DEEE; padding:16px 28px;">
                 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%; border-collapse:collapse;">
                   <tr>
                     <td style="font-size:13px; line-height:18px; color:#5C6A87; text-align:center;">Generated by Victoria | Email-safe Elcano theme aligned to the Flag design system</td>

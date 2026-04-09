@@ -11,7 +11,7 @@ This directory is the single documented source of truth for shared UI design dec
 6. `APPLY_TO_PRODUCT.md` - adoption guide for another product repo
 7. `MIGRATION.md` - rollout strategy and sequencing
 8. `AUDIT.md` - historical audit context and long-lived takeaways
-9. supporting docs: `BACKGROUNDS.md`, `LOGOS.md`, `ICONS.md`, `email-safe.html`
+9. supporting docs: `BACKGROUNDS.md`, `LOGOS.md`, `ICONS.md`, `EMAIL.md`, `email-safe.html`
 
 ## Source Files
 - `tokens/design-tokens.css` - canonical runtime token source
@@ -20,6 +20,7 @@ This directory is the single documented source of truth for shared UI design dec
 - `theme/theme-controller.js` - canonical light/dark theme controller for product adoption
 - `logos/` - approved SVG/PNG logo assets
 - `icons/core-icons.svg` - canonical SVG sprite
+- `EMAIL.md` - approved email modules, plain-text guidance, and email-only color rules
 - `email-safe.html` - canonical email-safe HTML reference aligned to the design system
 
 Source precedence (when docs and examples differ):
@@ -32,12 +33,13 @@ Source precedence (when docs and examples differ):
 - `preview/index.html` - browsable style guide and component showcase
 - Live preview: `https://flag-71q.pages.dev/`
 - Cloudflare Pages is connected to GitHub; changes go live automatically when they are pushed to `main`.
+- `preview/email-safe.html` is a deployed preview copy of the canonical `email-safe.html`. After editing the canonical template, run `bash design-system/sync-email-preview.sh` before pushing so the Pages preview stays in sync.
 Preview includes:
 - canonical sun/moon light-dark theme toggle (system-default + persisted user preference)
 - section expand/collapse controls
 - component state strips
 - launchpad/directory link-tile and app-icon usage patterns
-- quick access to the canonical email-safe template and email rules guide
+- email template preview with light/dark inbox simulation and responsive viewport sizing
 - implementation examples for key patterns
 
 Open locally:
@@ -48,6 +50,27 @@ python3 -m http.server 8765
 ```
 
 Then visit `http://localhost:8765`.
+
+Sync the deployed email preview copy:
+
+```bash
+bash design-system/sync-email-preview.sh
+```
+
+Run email guardrails:
+
+```bash
+bash design-system/check-email-template.sh
+```
+
+Email review checklist:
+- desktop light preview
+- desktop dark preview simulation
+- mobile light preview
+- mobile dark preview simulation
+- default, long-content, and dense-table fixtures
+- long table content and long CTA copy
+- footer compliance content
 
 ## Example Implementation Prompt
 
