@@ -421,6 +421,16 @@
         'rgb(205,237,216)': '#2a5035',   /* opportunity callout border #CDEDD8 */
       };
 
+      var styleProps = [
+        { key: 'backgroundColor', css: 'background-color' },
+        { key: 'color', css: 'color' },
+        { key: 'borderColor', css: 'border-color' },
+        { key: 'borderTopColor', css: 'border-top-color' },
+        { key: 'borderBottomColor', css: 'border-bottom-color' },
+        { key: 'borderLeftColor', css: 'border-left-color' },
+        { key: 'borderRightColor', css: 'border-right-color' }
+      ];
+
       /* Store original inline styles for restore */
       var originals = [];
 
@@ -432,6 +442,7 @@
       function applyDarkMode() {
         try {
           var doc = frame.contentDocument || frame.contentWindow.document;
+          restoreLightMode();
           var els = doc.querySelectorAll('body, body *');
           originals = [];
 
@@ -439,16 +450,13 @@
             var computed = doc.defaultView && typeof doc.defaultView.getComputedStyle === 'function'
               ? doc.defaultView.getComputedStyle(el)
               : null;
-            var orig = {
-              el: el,
-              backgroundColor: el.style.backgroundColor || '',
-              color: el.style.color || '',
-              borderColor: el.style.borderColor || '',
-              borderTopColor: el.style.borderTopColor || '',
-              borderBottomColor: el.style.borderBottomColor || '',
-              borderLeftColor: el.style.borderLeftColor || '',
-              borderRightColor: el.style.borderRightColor || '',
-            };
+            var orig = { el: el, props: {} };
+            styleProps.forEach(function (prop) {
+              orig.props[prop.css] = {
+                value: el.style.getPropertyValue(prop.css),
+                priority: el.style.getPropertyPriority(prop.css)
+              };
+            });
             originals.push(orig);
 
             /* Swap backgrounds */
@@ -480,13 +488,19 @@
       function restoreLightMode() {
         if (!originals.length) return;
         originals.forEach(function (o) {
-          o.el.style.backgroundColor = o.backgroundColor;
-          o.el.style.color = o.color;
-          o.el.style.borderColor = o.borderColor;
-          o.el.style.borderTopColor = o.borderTopColor;
-          o.el.style.borderBottomColor = o.borderBottomColor;
-          o.el.style.borderLeftColor = o.borderLeftColor;
-          o.el.style.borderRightColor = o.borderRightColor;
+          styleProps.forEach(function (prop) {
+            var original = o.props[prop.css];
+            if (!original) {
+              return;
+            }
+
+            if (original.value) {
+              o.el.style.setProperty(prop.css, original.value, original.priority || '');
+              return;
+            }
+
+            o.el.style.removeProperty(prop.css);
+          });
         });
         originals = [];
       }
