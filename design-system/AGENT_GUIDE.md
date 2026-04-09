@@ -94,6 +94,7 @@ Recommended implementation order for new product adoption:
 - Use `design-system/email-safe.html` as the canonical base for every generated HTML email.
 - When adapting the reference, preserve the dark header plus light body structure unless there is a documented reason to change it.
 - Use `{{placeholder}}` markers for all dynamic content (dates, names, URLs, metrics). The agent populates these at generation time; the template defines the structure.
+- Treat `design-system/preview/email-safe.html` as a deployed preview artifact, not an authored source file. Sync it from the canonical template with `bash design-system/sync-email-preview.sh` after canonical email changes.
 
 ### Layout and Structure
 - Keep email layouts table-first for all structural regions; use `role="presentation"` on layout tables.
@@ -121,6 +122,16 @@ Recommended implementation order for new product adoption:
 - Use pixel (`px`) values for all padding, margin, and font sizes. Do not use `rem`, `em`, percentages, or CSS variables.
 - Use simple, resilient blocks: table sections, explicit padding, explicit borders, explicit cell backgrounds, and text links or bulletproof CTA buttons.
 - Add `-webkit-text-size-adjust:100%` and `-ms-text-size-adjust:100%` to the `<body>` style to prevent mobile clients from auto-scaling text.
+
+### Data Table Pattern
+- Data tables in email must remain semantic tables on desktop: use `<table>`, `<thead>`, `<tbody>`, and `scope="col"` on header cells.
+- Zebra striping is allowed on desktop tables, but the stripe must cover the full row, not just the first column.
+- On mobile, convert data tables into stacked card rows rather than relying on horizontal scrolling.
+- In stacked mobile mode, the first cell becomes the card header and should use the highlighted header background (`#EEF3FF`) with stronger weight.
+- In stacked mobile mode, metric cells should share one neutral body background (`#FAFAFA`) so the row reads as a single card.
+- In stacked mobile mode, borders must be applied to cells, not `tr` wrappers, to avoid right-edge bleed in clients that blockify table rows.
+- Mobile stacked rows should preserve label/value clarity by surfacing compact inline labels such as `Campaign`, `Current`, `Prior`, and `WoW`.
+- Dark-mode preview behavior for stacked tables must remap both backgrounds and border colors to the same dark palette used by larger-screen preview modes.
 
 ### Typography and Sizing
 - Minimum body text size: **16px**. Minimum heading size: **22px**. Minimum overline/label size: **12px**.
@@ -154,6 +165,7 @@ Recommended implementation order for new product adoption:
 - Use off-white backgrounds (`#F4F6FB`, `#FAFAFA`) and dark grey text (`#141824`, `#222222`) instead of pure white/black. These produce less jarring results when clients like Gmail iOS and Outlook desktop apply automatic color inversion.
 - Do not rely on `@media (prefers-color-scheme: dark)` for critical styling; only Apple Mail, Outlook Mac, and Thunderbird fully support it. Gmail iOS and Outlook desktop apply their own inversion with no developer override.
 - Ensure all foreground-background color pairings maintain at least **4.5:1 contrast** in both their original and inverted states.
+- The preview page's dark-mode simulation is a review aid only. Keep preview-specific color remapping logic in `design-system/preview/email-preview.html`, and do not treat that simulation code as the production email contract.
 
 ### Accessibility
 - Maintain a minimum text-to-background contrast ratio of **4.5:1** (WCAG AA).
@@ -179,6 +191,19 @@ Recommended implementation order for new product adoption:
 | Apple Mail (macOS/iOS) | Recommended | Gold standard; full CSS support |
 | Yahoo Mail | Recommended | `height`-to-`min-height` bug; no dark mode inversion |
 | Samsung Mail | Recommended | Auto-fit content from HTML width attributes |
+
+### QA Checklist
+- Verify subject and preheader lengths are sane and preview cleanly in inbox snippets.
+- Verify desktop light preview.
+- Verify desktop dark preview simulation.
+- Verify mobile light preview.
+- Verify mobile dark preview simulation.
+- Verify long campaign names do not break stacked mobile cards.
+- Verify the data table still reads clearly when there is only one row.
+- Verify the data table still reads clearly when there are many rows.
+- Verify CTA copy stays within the 25-character limit and remains tappable.
+- Verify footer address, unsubscribe link, and recipient-reason text are present.
+- Verify the plain-text companion version is updated when the sending system supports it.
 
 ## Accessibility Requirements
 - Icon-only controls require `aria-label`.
