@@ -123,10 +123,11 @@ Recommended implementation order for new product adoption:
 - Add `-webkit-text-size-adjust:100%` and `-ms-text-size-adjust:100%` to the `<body>` style to prevent mobile clients from auto-scaling text.
 
 ### Typography and Sizing
-- Minimum body text size: **14px**. Minimum heading size: **22px**.
+- Minimum body text size: **16px**. Minimum heading size: **22px**. Minimum overline/label size: **12px**.
 - Minimum tap target size for buttons and links: **44x44 pixels**.
 - CTA button text must not exceed **25 characters**. Use one primary CTA per email.
 - Heading text must not exceed **60 characters**; truncate with ellipsis if exceeded.
+- Data-dense contexts (tables, dashboards) may use **15px** for cell text and **13px** for table headers, but never below these floors.
 - Use the bulletproof CTA button pattern from `email-safe.html`: a `<table>` with a `<td>` that has explicit `background-color` and `padding`, containing an `<a>` with matching inline styles. Include a VML `<v:roundrect>` fallback inside `<!--[if mso]>` for Outlook.
 
 ### Images

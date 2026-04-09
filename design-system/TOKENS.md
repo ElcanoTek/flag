@@ -84,23 +84,32 @@ Core scale:
 | Role | Token | Size | Line Height | Weight | Approx px at 16px root |
 |---|---|---|---|---|---|
 | Display | `font.size.display` | `clamp(2rem, 1.75rem + 0.8vw, 2.5rem)` | `1.15` | `700` | `32-40px` |
-| Title | `font.size.title` | `1.75rem` | `1.2143` | `700` | `28px` |
-| Subtitle | `font.size.subtitle` | `1.125rem` | `1.3334` | `700` | `18px` |
-| Body Large | `font.size.bodyLarge` | `0.875rem` | `1.4286` | `400` | `14px` |
-| Body Base | `font.size.body` | `0.8125rem` | `1.3847` | `400` | `13px` |
-| Caption | `font.size.caption` | `0.75rem` | `1.3334` | `400` | `12px` |
-| Overline | `font.size.overline` | `0.6875rem` | `1.2728` | `700` | `11px` |
+| Title | `font.size.title` | `1.75rem` | `1.2` | `700` | `28px` |
+| Subtitle | `font.size.subtitle` | `1.125rem` | `1.3` | `700` | `18px` |
+| Body Large | `font.size.bodyLarge` | `1.0625rem` | `1.5` | `400` | `17px` |
+| Body Base | `font.size.body` | `1rem` | `1.5` | `400` | `16px` |
+| Caption | `font.size.caption` | `0.8125rem` | `1.4` | `400` | `13px` |
+| Overline | `font.size.overline` | `0.75rem` | `1.4` | `700` | `12px` |
 
 PowerPoint baseline mapping (for compatibility with existing slide conventions):
 - `Title 28px` -> `1.75rem`
 - `Subtitle 18px` -> `1.125rem`
-- `Body 12-14px` -> `0.75rem` to `0.875rem`
+- `Body 16-17px` -> `1rem` to `1.0625rem`
+- `Caption 13px` -> `0.8125rem`
 
 Hierarchy usage:
 - One Title per page region.
 - Subtitles for section starts and modal titles.
-- Body Base (`0.8125rem`) default for controls, tables, and cards.
-- Caption (`0.75rem`) only for helper, caption, and metadata.
+- Body Base (`1rem` / 16px) default for controls, tables, and cards. This size prevents iOS Safari auto-zoom on form inputs and aligns with Material 3 and Apple HIG body text norms.
+- Body Large (`1.0625rem` / 17px) for emphasized body copy or long-form reading contexts.
+- Caption (`0.8125rem` / 13px) only for helper, caption, and metadata.
+- Overline (`0.75rem` / 12px) for uppercase labels and kickers. 12px is the conventional minimum for legibility.
+
+Line height rationale:
+- Headings (display, title): `1.15`-`1.2` for tight, compact headings.
+- Subtitles: `1.3` for a moderate reading rhythm.
+- Body and body-lg: `1.5` for comfortable paragraph reading and accessibility.
+- Caption and overline: `1.4` for compact but legible secondary text.
 
 ## 3) Spacing, Radius, Borders, Shadows
 
