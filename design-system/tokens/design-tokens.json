@@ -34,6 +34,11 @@
     "accent": "#9DA7EF",
     "white": "#FFFFFF",
     "black": "#000000",
+    "success": "#50FA7B",
+    "warning": "#FF8847",
+    "danger": "#FF5555",
+    "info": "#8A8BC0",
+    "onSuccess": "#000000",
     "background": "#1A0B1E",
     "surface": {
       "default": "#241B31",
@@ -55,10 +60,6 @@
       "strong": "rgba(0, 0, 0, 0.4)"
     },
     "status": {
-      "success": "#50FA7B",
-      "warning": "#FF8847",
-      "danger": "#FF5555",
-      "info": "#8A8BC0",
       "pending": {
         "fg": "#D3DDE6",
         "bg": "rgba(124, 140, 152, 0.2)",
@@ -186,6 +187,11 @@
       "color": {
         "background": "#F4F6FB",
         "primaryHover": "#5F5F97",
+        "success": "#1E7A3F",
+        "warning": "#8F3E10",
+        "danger": "#B3261E",
+        "info": "#4F5496",
+        "onSuccess": "#FFFFFF",
         "surface": {
           "default": "#FFFFFF",
           "elevated": "#E9EEFC"

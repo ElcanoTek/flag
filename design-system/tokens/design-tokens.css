@@ -52,6 +52,8 @@
   --color-warning: #ff8847;
   --color-danger: #ff5555;
   --color-info: #8a8bc0;
+  /* Text color used on top of --color-success fills (e.g. success buttons). */
+  --color-on-success: var(--color-black);
 
   --color-status-pending-fg: #d3dde6;
   --color-status-pending-bg: rgba(124, 140, 152, 0.2);
@@ -193,6 +195,15 @@ body.theme-light {
   --color-text-disabled: rgba(92, 106, 135, 0.6);
   --color-overlay-soft: rgba(114, 114, 171, 0.08);
   --color-overlay-strong: rgba(20, 24, 36, 0.16);
+
+  /* Light-mode accent overrides: the dark-theme accents are tuned for dark
+   * surfaces and fail WCAG AA as text on white (#ff5555 ≈ 2.9:1). These darker
+   * equivalents all reach ≥ 4.5:1 on --color-bg / --color-surface-1/2. */
+  --color-success: #1e7a3f;
+  --color-warning: #8f3e10;
+  --color-danger: #b3261e;
+  --color-info: #4f5496;
+  --color-on-success: var(--color-white);
 
   --color-status-pending-fg: #33415f;
   --color-status-pending-bg: rgba(124, 140, 152, 0.18);
