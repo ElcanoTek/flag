@@ -147,11 +147,28 @@ Verify by measuring, not by eye — render two equal-length strings of `1`s and
 
 ```js
 const w = s => { const e = document.createElement('span');
-  e.style.cssText = getComputedStyle(el).cssText; e.textContent = s;
+  const cs = getComputedStyle(el);
+  e.style.font = cs.font; e.style.fontVariantNumeric = cs.fontVariantNumeric;
+  e.style.whiteSpace = 'pre'; e.textContent = s;
   document.body.append(e); const r = e.getBoundingClientRect().width;
   e.remove(); return r; };
-console.log(w('111111'), w('888888'));   // must match once tnum is applied
+console.log(w('111111'), w('888888'));   // near-equal once tnum is applied
 ```
+
+**Assert near-equality, not equality.** Nebula Sans's tabular figures are *not*
+one uniform width — the `.tf` glyphs measure 600–607 units, with `5` the outlier
+at 600 and `4`/`8` at 607:
+
+| digit | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| `tnum` advance | 605 | 606 | 606 | 605 | 607 | **600** | 605 | 606 | 607 | 606 |
+
+That is a 1.17% spread — max deviation 0.007em, about **0.11px at 16px**, against
+0.218em before. Invisible in practice and a ~31× improvement, but real: it is
+bit-identical at 13/26/52/104px, so it is the font's own metrics and not
+rasterizer rounding. A test asserting exact equality will fail. Allow a
+sub-pixel tolerance (0.5px is comfortable) and describe the result as near-exact
+rather than claiming the columns match perfectly.
 
 ### Weights
 
