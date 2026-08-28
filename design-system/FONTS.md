@@ -38,10 +38,22 @@ requirement is that the licence text travels with the files:
 [`fonts/ibm-plex-sans/OFL.txt`](fonts/ibm-plex-sans/OFL.txt) must be copied
 wherever the `.woff2` files are copied.
 
-**The code faces** (`--font-code` Share Tech Mono, `--font-code-ui` VT323) are both
-SIL OFL 1.1 and carry no tier restriction — any product may use them. Their notices
-are `fonts/OFL-ShareTechMono.txt` and `fonts/OFL-VT323.txt`, and the same
-travel-with-the-files rule applies.
+**The code faces** are all SIL OFL 1.1 and carry no tier restriction — any product
+may use any of them. Their notices are `fonts/OFL-ShareTechMono.txt`,
+`fonts/OFL-VT323.txt` and `fonts/ibm-plex-mono/OFL.txt`, and the same
+travel-with-the-files rule applies. There are two sanctioned options:
+
+| Code language | Faces | Sheet | Used by |
+|---|---|---|---|
+| MOC retro baseline (default) | Share Tech Mono + VT323 | `fonts/code-fonts.css` | MOC-heritage log/task-tracker components |
+| Neutral mono | IBM Plex Mono | `fonts/ibm-plex-mono-fonts.css` | fleet — developer-facing output, pairs with IBM Plex Sans |
+
+The retro language is deliberate, not accidental, but it is not universal. A product
+whose primary surface is dense developer output may load
+`ibm-plex-mono-fonts.css`, which sets `--font-code-brand` /
+`--font-code-ui-brand`. Loading a design-system sheet is the sanctioned way to make
+that swap — self-hosting a repo-local copy is how explorer's IBM Plex ended up a
+stale Latin-1 subset.
 
 ## How selection works
 
@@ -81,8 +93,26 @@ references a family name directly.
 <link rel="stylesheet" href="/path/to/tokens/design-tokens.css" />
 ```
 
-Copy the whole face directory, licence file included:
-`fonts/ibm-plex-sans/` carries `OFL.txt`; do not copy the `.woff2` files without it.
+Copy the whole face directory, licence file included: `fonts/ibm-plex-sans/` and
+`fonts/ibm-plex-mono/` each carry `OFL.txt`; do not copy the `.woff2` files
+without it.
+
+### Font files must be complete, not subset
+
+The `.woff2` files here are IBM's **complete** builds — 895 codepoints for Sans,
+983 for Mono, covering Latin-1, Latin Extended-A/B, Greek and Cyrillic. Do not
+replace them with a narrower subset to save bytes.
+
+A subset that covers only Latin-1 fails silently: the glyph is missing, the browser
+substitutes a system font for that character alone, and a name renders in two
+typefaces mid-word. `Łódź`, `Erdős`, `Škoda`, and Turkish/Romanian/Czech brand and
+publisher names all land in Latin Extended-A. Explorer shipped exactly this subset
+and nobody noticed. If you regenerate these files, verify coverage:
+
+```sh
+python3 -c "from fontTools.ttLib import TTFont; \
+  print(len(set(TTFont('IBMPlexSans-400.woff2').getBestCmap())))"   # expect ~895
+```
 
 ## Rules
 
@@ -92,6 +122,7 @@ Copy the whole face directory, licence file included:
 - **Never** copy `fonts/dubai/*` into fleet, explorer, or any other public or
   source-available repository.
 - **Never** copy an OFL `.woff2`/`.ttf` without its `OFL.txt` / `OFL-*.txt`.
+- **Never** swap in a Latin-1 subset of a brand face — see the coverage note above.
 - A new product defaults to IBM Plex Sans. Dubai requires confirming the product
   is internal-only and never published.
 - Note that this repo itself is internal and proprietary — see the root
