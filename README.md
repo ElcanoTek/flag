@@ -40,17 +40,20 @@ It carries no outbound licence, so its tokens, icons, and logo marks are not
 licensed for redistribution inside products published under MIT, BSL 1.1, or any
 similar licence.
 
-Flag ships two brand faces, and the choice between them is a licensing decision:
+Flag ships two typefaces, and every product uses both — there is no tier to choose
+between:
 
-| Product tier | Brand face | Font sheet |
-|---|---|---|
-| Open source / source-available (fleet, explorer) | **IBM Plex Sans** (SIL OFL 1.1) | `design-system/fonts/ibm-plex-fonts.css` |
-| Internal only (Manifest, this repo's preview) | **Dubai** (proprietary, all rights reserved) | `design-system/fonts/dubai-fonts.css` |
+| Role | Face | Licence | Font sheet |
+|---|---|---|---|
+| Text — headings, body, UI | **Nebula Sans** | SIL OFL 1.1 | `design-system/fonts/fonts.css` |
+| Code — logs, tabular output | **Hack** | MIT (+ Bitstream Vera) | `design-system/fonts/fonts.css` |
 
-Dubai must never be shipped in a public or source-available repository — Elcano
-holds a use right, not a right to sublicense. `design-tokens.css` names no face
-directly; it resolves `--font-brand` and falls back to IBM Plex Sans, so a product
-that forgets to load a font sheet still renders something licence-clean.
+One sheet declares both. Both faces are freely redistributable, so the same sheet
+is correct for MIT, BSL 1.1, and internal-only products alike — which is why the
+old two-tier split (Dubai for internal tools, IBM Plex for public repos) is gone.
+`design-tokens.css` names no face directly; it resolves `--font-brand` and the two
+code variables, falling back to a system stack so a product that forgets the sheet
+looks visibly wrong rather than quietly rendering in a different brand face.
 
 Read [`design-system/FONTS.md`](design-system/FONTS.md) before adding or changing a
 typeface in any product.
@@ -63,7 +66,7 @@ Use this precedence when there is ambiguity:
 4. component and pattern docs (`COMPONENTS.md`, `SYSTEM.md`, `INTERACTION_ACCESSIBILITY.md`)
 
 ## Implementation Workflow
-1. Import the font sheet for your product's licence tier (`design-system/fonts/ibm-plex-fonts.css`, or `dubai-fonts.css` for internal-only tools), then `design-system/tokens/design-tokens.css`.
+1. Import `design-system/fonts/fonts.css`, then `design-system/tokens/design-tokens.css`.
 2. Implement UI using semantic tokens only (`var(--color-primary)`, `var(--radius-md)`, etc.).
 3. Apply canonical component structure/classes from `COMPONENTS.md`.
 4. Implement required states (`hover`, `focus-visible`, `active`, `disabled`).

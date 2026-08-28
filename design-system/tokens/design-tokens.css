@@ -2,21 +2,24 @@
   color-scheme: dark;
   --theme-selector-attribute: data-theme;
   --theme-preference-storage-key: flag-theme-preference;
-  /* Brand face is selected by the font sheet a product loads, via --font-brand:
-   * fonts/ibm-plex-fonts.css sets "IBM Plex Sans" (open source, SIL OFL 1.1);
-   * fonts/dubai-fonts.css sets "Dubai" (proprietary, INTERNAL-ONLY tools).
-   * The fallback below is deliberately the OFL face, so a product that loads no
-   * brand sheet still resolves to something Elcano may lawfully ship anywhere.
-   * Never hardcode "Dubai" here — see ../FONTS.md. */
-  --font-heading: var(--font-brand, "IBM Plex Sans"), "Segoe UI", system-ui, -apple-system, sans-serif;
-  --font-body: var(--font-brand, "IBM Plex Sans"), "Segoe UI", system-ui, -apple-system, sans-serif;
-  /* Code faces default to the MOC retro baseline. A product that does not adopt
-   * that language loads fonts/ibm-plex-mono-fonts.css, which sets the two
-   * *-brand variables below to IBM Plex Mono. Both defaults are SIL OFL 1.1. */
-  --font-code: var(--font-code-brand, "Share Tech Mono"), "SF Mono", "Consolas", monospace;
-  --font-code-ui: var(--font-code-ui-brand, "VT323"), "Share Tech Mono", monospace;
+  /* Brand faces come from fonts/fonts.css, which sets --font-brand to
+   * "Nebula Sans" and both code variables to "Hack". There is exactly one font
+   * sheet and one pair of faces across every Elcano product — see ../FONTS.md.
+   * The fallbacks below name the same two faces, so a product that forgets the
+   * sheet degrades to a system stack rather than to a different brand face.
+   * Never name a family in product CSS; always use these tokens. */
+  --font-heading: var(--font-brand, "Nebula Sans"), "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-body: var(--font-brand, "Nebula Sans"), "Segoe UI", system-ui, -apple-system, sans-serif;
+  /* One mono serves both code and code-chrome. The variables stay distinct so
+   * product CSS reading --font-code-ui keeps working, but they resolve alike. */
+  --font-code: var(--font-code-brand, "Hack"), ui-monospace, "SF Mono", "Consolas", monospace;
+  --font-code-ui: var(--font-code-ui-brand, "Hack"), ui-monospace, "SF Mono", "Consolas", monospace;
 
+  /* Only these four weights are shipped as real faces. Anything else is a
+   * synthetic smear — see ../FONTS.md before adding a fifth. */
   --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
   --font-weight-bold: 700;
 
   --font-size-display: clamp(2rem, 1.75rem + 0.8vw, 2.5rem);

@@ -19,20 +19,22 @@ Copy or import these sources before product component work:
 - `tokens/design-tokens.json`
 - `icons/core-icons.svg`
 - `theme/theme-controller.js`
-- exactly one brand font sheet, chosen by the product's licence tier (see [`FONTS.md`](FONTS.md)):
-  - **open source / source-available** (fleet, explorer): `fonts/ibm-plex-fonts.css` + `fonts/ibm-plex-sans/` — copy `OFL.txt` with the `.woff2` files, the licence requires it.
-  - **internal only** (Manifest): `fonts/dubai-fonts.css` + `fonts/dubai/`. Dubai is proprietary; never copy it into a public repo.
+- the font sheet and both face directories (see [`FONTS.md`](FONTS.md)):
+  `fonts/fonts.css` + `fonts/nebula-sans/` + `fonts/hack/`. Copy `nebula-sans/OFL.txt`
+  and `hack/LICENSE.md` along with the font binaries — both licences require it.
+  The same sheet is correct for every product; there is no licence tier to pick.
 
 Import the font stylesheet alongside `design-tokens.css`:
 
 ```html
-<link rel="stylesheet" href="/path/to/fonts/ibm-plex-fonts.css" />
+<link rel="stylesheet" href="/path/to/fonts/fonts.css" />
 <link rel="stylesheet" href="/path/to/design-tokens.css" />
 ```
 
-Order between the two does not matter — the font sheet sets `--font-brand`, which
-the token sheet only reads. A product that loads neither falls back to IBM Plex
-Sans, which is safe in any tier.
+Order between the two does not matter — the font sheet sets `--font-brand` and the
+two code variables, which the token sheet only reads. A product that loads neither
+falls back to a system stack, which looks visibly wrong rather than quietly
+substituting some other brand face.
 
 > This repository is proprietary and internal (see the root `LICENSE`). Copying
 > tokens, icons, or logo marks out of it into a repo that ships an outbound
