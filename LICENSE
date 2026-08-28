@@ -14,53 +14,46 @@ part of the Work, or to incorporate any part of the Work into a product that is
 distributed under an open-source or source-available licence.
 
 The Work carries no outbound licence. Incorporating any part of it — including
-design tokens, icon sprites, logo marks, stylesheets, and font files — into a
-repository published under MIT, the Business Source License, or any similar
-licence would purport to grant recipients rights that ElcanoTek has not granted
-and, for third-party components, does not hold.
+design tokens, icon sprites, logo marks, and stylesheets — into a repository
+published under MIT, the Business Source License, or any similar licence would
+purport to grant recipients rights that ElcanoTek has not granted.
+
+The third-party components listed below are the exception: each is redistributable
+under its own licence, on that licence's own terms.
 
 THIRD-PARTY COMPONENTS
 
 Some files in this repository are governed by their own licences, which take
 precedence over this notice for those files:
 
-  design-system/fonts/dubai/
-      Dubai (Dubai W23). Copyright (c) 2017 Dubai Executive Council.
-      All rights reserved. Proprietary; distributed by Monotype under an
-      end-user licence. ElcanoTek holds a use right only and may not
-      sublicense. INTERNAL USE ONLY — see
-      design-system/fonts/dubai/LICENSE-NOTICE.md.
-
-  design-system/fonts/ibm-plex-sans/
-      IBM Plex Sans. Copyright (c) 2017 IBM Corp. with Reserved Font Name
-      "Plex". SIL Open Font License 1.1 — see
-      design-system/fonts/ibm-plex-sans/OFL.txt.
-
-  design-system/fonts/ibm-plex-mono/
-      IBM Plex Mono. Copyright (c) 2017 IBM Corp. with Reserved Font Name
-      "Plex". SIL Open Font License 1.1 — see
-      design-system/fonts/ibm-plex-mono/OFL.txt.
-
-  design-system/fonts/ShareTechMono.ttf
-      Share Tech Mono. Copyright (c) 2012, Carrois Type Design,
-      Ralph du Carrois, with Reserved Font Name "Share".
+  design-system/fonts/nebula-sans/
+      Nebula Sans. Copyright (c) 2024 Nebula Entertainment & Broadcasting
+      LLC, with Reserved Font Name "Nebula". Based on Source Sans,
+      copyright 2010-2024 Adobe, with Reserved Font Name "Source".
       SIL Open Font License 1.1 — see
-      design-system/fonts/OFL-ShareTechMono.txt.
+      design-system/fonts/nebula-sans/OFL.txt.
 
-  design-system/fonts/VT323.ttf
-      VT323. Copyright (c) 2011, The VT323 Project Authors.
-      SIL Open Font License 1.1 — see design-system/fonts/OFL-VT323.txt.
+  design-system/fonts/hack/
+      Hack. Copyright (c) 2018 Source Foundry Authors. MIT License.
+      Includes Bitstream Vera Sans Mono, copyright 2003 Bitstream Inc.,
+      Bitstream Vera License, with Reserved Font Names "Bitstream" and
+      "Vera"; and public-domain work from the DejaVu project. See
+      design-system/fonts/hack/LICENSE.md.
 
   design-system/preview/vendor/flatpickr/
       flatpickr v4.6.13. Copyright (c) 2017 Gregory Petrosyan.
       MIT License — https://github.com/flatpickr/flatpickr/blob/master/LICENSE.md
 
-The SIL Open Font License permits redistribution of the fonts it covers,
-including inside products under other licences, provided the licence text
-travels with the font files. That permission applies to those font files only.
-It does not extend to any other part of the Work.
+Both shipped typefaces may be redistributed, including inside products under
+other licences: the SIL Open Font License 1.1 permits it for Nebula Sans, and
+the MIT and Bitstream Vera licences permit it for Hack. All three require that
+the licence text travel with the font files, so design-system/fonts/nebula-sans/
+OFL.txt and design-system/fonts/hack/LICENSE.md must be copied wherever the font
+binaries are copied. That permission applies to those font files only. It does
+not extend to any other part of the Work.
 
 ElcanoTek trademarks, logo marks, and brand assets are not licensed by this
 notice or by any third-party licence referenced in it.
 
-See design-system/FONTS.md for which typeface each ElcanoTek product may ship.
+See design-system/FONTS.md for the typography policy. Every ElcanoTek product
+ships the same two faces; there is no longer a per-product licence tier.
