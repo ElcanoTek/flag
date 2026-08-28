@@ -36,6 +36,11 @@ precedence over this notice for those files:
       "Plex". SIL Open Font License 1.1 — see
       design-system/fonts/ibm-plex-sans/OFL.txt.
 
+  design-system/fonts/ibm-plex-mono/
+      IBM Plex Mono. Copyright (c) 2017 IBM Corp. with Reserved Font Name
+      "Plex". SIL Open Font License 1.1 — see
+      design-system/fonts/ibm-plex-mono/OFL.txt.
+
   design-system/fonts/ShareTechMono.ttf
       Share Tech Mono. Copyright (c) 2012, Carrois Type Design,
       Ralph du Carrois, with Reserved Font Name "Share".

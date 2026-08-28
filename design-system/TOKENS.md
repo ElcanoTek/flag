@@ -92,6 +92,8 @@ Code-component typography (logs code display + task tracker only):
 - `font.codeUi` / `--font-code-ui`: `VT323`
 - Font files are provided in `design-system/fonts/` and loaded via `design-system/fonts/code-fonts.css`.
 - Both are SIL OFL 1.1 and safe in any tier; keep `OFL-ShareTechMono.txt` / `OFL-VT323.txt` with them.
+- Products that do not adopt the MOC retro language load `fonts/ibm-plex-mono-fonts.css` instead, which points
+  `--font-code`/`--font-code-ui` at IBM Plex Mono via `--font-code-brand`/`--font-code-ui-brand`. See [`FONTS.md`](FONTS.md).
 
 Use `rem` as the canonical unit (not hard-coded `px`) for type sizing.
 

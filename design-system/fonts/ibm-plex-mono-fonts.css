@@ -1,0 +1,44 @@
+/* Self-hosted IBM Plex Mono — code face for products that do NOT adopt the MOC
+ * retro code language.
+ *
+ * Source:    https://github.com/IBM/plex
+ * Copyright: (c) 2017 IBM Corp. with Reserved Font Name "Plex".
+ * License:   SIL Open Font License 1.1 — see ./ibm-plex-mono/OFL.txt, which
+ *            MUST travel with these files in any redistribution.
+ *
+ * Flag's canonical code faces are Share Tech Mono / VT323 (./code-fonts.css),
+ * inherited from the MOC console baseline. That retro language is deliberate but
+ * it is not universal: fleet is a developer-facing agent platform whose logs and
+ * tool-call output read better in a neutral mono, and it pairs with IBM Plex Sans.
+ * Loading this sheet is the sanctioned way to make that swap — it keeps the
+ * product on a design-system face instead of a repo-local copy that drifts.
+ *
+ * Files: ibm-plex-mono/IBMPlexMono-400.woff2, ibm-plex-mono/IBMPlexMono-700.woff2
+ *
+ * See ../FONTS.md for which product tier may use which face.
+ */
+
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./ibm-plex-mono/IBMPlexMono-400.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "IBM Plex Mono";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("./ibm-plex-mono/IBMPlexMono-700.woff2") format("woff2");
+}
+
+/* Code-face selection. design-tokens.css reads these; setting them here rather
+ * than overriding --font-code/--font-code-ui directly keeps the choice
+ * independent of stylesheet import order.
+ */
+:root {
+  --font-code-brand: "IBM Plex Mono";
+  --font-code-ui-brand: "IBM Plex Mono";
+}

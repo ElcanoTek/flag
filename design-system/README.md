@@ -21,6 +21,7 @@ This directory is the single documented source of truth for shared UI design dec
 - `fonts/ibm-plex-fonts.css` + `fonts/ibm-plex-sans/` - IBM Plex Sans, the default brand face (SIL OFL 1.1; open-source and source-available products)
 - `fonts/dubai-fonts.css` + `fonts/dubai/` - Dubai brand face (proprietary, **internal-only products**; never ship in a public repo)
 - `fonts/code-fonts.css` + `fonts/*.ttf` - canonical self-hosted MOC code-component fonts (SIL OFL 1.1; notices in `fonts/OFL-*.txt`)
+- `fonts/ibm-plex-mono-fonts.css` + `fonts/ibm-plex-mono/` - neutral code face for products that do not adopt the MOC retro language (SIL OFL 1.1)
 - `theme/theme-controller.js` - canonical light/dark theme controller for product adoption
 - `logos/` - approved SVG/PNG logo assets
 - `icons/core-icons.svg` - canonical SVG sprite

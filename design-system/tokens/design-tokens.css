@@ -10,8 +10,11 @@
    * Never hardcode "Dubai" here — see ../FONTS.md. */
   --font-heading: var(--font-brand, "IBM Plex Sans"), "Segoe UI", system-ui, -apple-system, sans-serif;
   --font-body: var(--font-brand, "IBM Plex Sans"), "Segoe UI", system-ui, -apple-system, sans-serif;
-  --font-code: "Share Tech Mono", "SF Mono", "Consolas", monospace;
-  --font-code-ui: "VT323", "Share Tech Mono", monospace;
+  /* Code faces default to the MOC retro baseline. A product that does not adopt
+   * that language loads fonts/ibm-plex-mono-fonts.css, which sets the two
+   * *-brand variables below to IBM Plex Mono. Both defaults are SIL OFL 1.1. */
+  --font-code: var(--font-code-brand, "Share Tech Mono"), "SF Mono", "Consolas", monospace;
+  --font-code-ui: var(--font-code-ui-brand, "VT323"), "Share Tech Mono", monospace;
 
   --font-weight-regular: 400;
   --font-weight-bold: 700;
