@@ -18,10 +18,9 @@ This directory is the single documented source of truth for shared UI design dec
 - `tokens/design-tokens.css` - canonical runtime token source
 - `tokens/design-tokens.json` - canonical machine-readable token source
 - `FONTS.md` - typography + font licensing policy (read before adding a face to a product)
-- `fonts/ibm-plex-fonts.css` + `fonts/ibm-plex-sans/` - IBM Plex Sans, the default brand face (SIL OFL 1.1; open-source and source-available products)
-- `fonts/dubai-fonts.css` + `fonts/dubai/` - Dubai brand face (proprietary, **internal-only products**; never ship in a public repo)
-- `fonts/code-fonts.css` + `fonts/*.ttf` - canonical self-hosted MOC code-component fonts (SIL OFL 1.1; notices in `fonts/OFL-*.txt`)
-- `fonts/ibm-plex-mono-fonts.css` + `fonts/ibm-plex-mono/` - neutral code face for products that do not adopt the MOC retro language (SIL OFL 1.1)
+- `fonts/fonts.css` - the ONE font sheet, loaded by every product. Declares both faces and sets `--font-brand` / `--font-code-brand` / `--font-code-ui-brand`.
+- `fonts/nebula-sans/` - Nebula Sans, the text face (SIL OFL 1.1; notice in `OFL.txt`, which must travel with the binaries)
+- `fonts/hack/` - Hack, the code face (MIT + Bitstream Vera; notice in `LICENSE.md`, which must travel with the binaries)
 - `theme/theme-controller.js` - canonical light/dark theme controller for product adoption
 - `logos/` - approved SVG/PNG logo assets
 - `icons/core-icons.svg` - canonical SVG sprite

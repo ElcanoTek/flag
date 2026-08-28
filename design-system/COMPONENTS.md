@@ -321,10 +321,13 @@ Example with app icon:
 ## Logs Code Display and Task Tracker (MOC Baseline)
 - This component set is canonical for logs UIs that render agent tool calls.
 - Preserve MOC class contracts and structure for cross-product reuse.
-- Typography exception: these components use MOC code fonts instead of the brand face (`--font-heading`/`--font-body`):
-  - code/content: `font.code` (`--font-code`, Share Tech Mono stack)
-  - command/terminal labels: `font.codeUi` (`--font-code-ui`, VT323 stack)
-- Font sourcing requirement: self-host fonts and load `design-system/fonts/code-fonts.css` before component styles.
+- Typography: these components use the code face instead of the text face (`--font-heading`/`--font-body`):
+  - code/content: `font.code` (`--font-code`, Hack stack)
+  - command/terminal labels: `font.codeUi` (`--font-code-ui`, Hack stack)
+  - Both tokens now resolve to Hack. They remain distinct so existing markup keeps
+    working, but the two-face retro pairing (Share Tech Mono + VT323) is retired —
+    see [`FONTS.md`](FONTS.md).
+- Font sourcing requirement: self-host fonts and load `design-system/fonts/fonts.css` before component styles.
 
 ### Code Display Block
 - Use this for code execution payloads (for example, `run_python` tool calls).

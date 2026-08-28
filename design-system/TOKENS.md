@@ -65,35 +65,42 @@ Required roles:
 - Headlines/Subheadlines: `--font-heading`, weight `700`
 - Body/UI: `--font-body`, weight `400`
 
-Both resolve through `--font-brand`, which the product's font sheet sets. **Which
-face a product may ship is a licensing decision** — see
+Both resolve through `--font-brand`, which `fonts/fonts.css` sets. There is
+exactly one sheet and one pair of faces across every Elcano product — see
 [`FONTS.md`](FONTS.md) for the full policy. Summary:
 
-| Tier | Face | Sheet | Licence |
-|---|---|---|---|
-| Open source / source-available (fleet, explorer) | IBM Plex Sans | `fonts/ibm-plex-fonts.css` | SIL OFL 1.1 |
-| Internal only (Manifest, this repo's preview) | Dubai | `fonts/dubai-fonts.css` | Proprietary — **never** ship in a public repo |
+| Role | Face | Licence |
+|---|---|---|
+| Text — headings, body, UI | **Nebula Sans** | SIL OFL 1.1 |
+| Code — logs, tabular output | **Hack** | MIT (+ Bitstream Vera) |
 
-`design-tokens.css` names no face of its own; it falls back to IBM Plex Sans when
-no font sheet is loaded, so an omission fails licence-clean. Import order between
-the font sheet and `design-tokens.css` does not matter.
+Both are freely redistributable, so the same sheet is correct for every product
+regardless of its outbound licence. There is no tier to look up.
+
+`design-tokens.css` names no face of its own. Its fallbacks name these same two
+faces, so a product that forgets the sheet degrades to a system stack rather than
+silently rendering in some other brand face. Import order between the font sheet
+and `design-tokens.css` does not matter.
 
 ```html
-<link rel="stylesheet" href="/path/to/design-system/fonts/ibm-plex-fonts.css" />
+<link rel="stylesheet" href="/path/to/design-system/fonts/fonts.css" />
 <link rel="stylesheet" href="/path/to/design-system/tokens/design-tokens.css" />
 ```
 
-Font files provided:
-- IBM Plex Sans — `fonts/ibm-plex-sans/IBMPlexSans-400.woff2`, `IBMPlexSans-700.woff2` (+ `OFL.txt`, which must travel with them).
-- Dubai — `fonts/dubai/DubaiW23-{Regular,Bold}.{woff2,ttf}` (+ `LICENSE-NOTICE.md`). Internal-only.
+Font files provided (copy the licence files with them — both licences require it):
+- Nebula Sans — `fonts/nebula-sans/NebulaSans-{400,500,600,700}.woff2` plus true
+  italics at `NebulaSans-{400,700}-italic.woff2` (+ `OFL.txt`).
+- Hack — `fonts/hack/hack-{regular,bold,italic,bolditalic}.{woff2,woff}` (+ `LICENSE.md`).
 
-Code-component typography (logs code display + task tracker only):
-- `font.code` / `--font-code`: `Share Tech Mono`
-- `font.codeUi` / `--font-code-ui`: `VT323`
-- Font files are provided in `design-system/fonts/` and loaded via `design-system/fonts/code-fonts.css`.
-- Both are SIL OFL 1.1 and safe in any tier; keep `OFL-ShareTechMono.txt` / `OFL-VT323.txt` with them.
-- Products that do not adopt the MOC retro language load `fonts/ibm-plex-mono-fonts.css` instead, which points
-  `--font-code`/`--font-code-ui` at IBM Plex Mono via `--font-code-brand`/`--font-code-ui-brand`. See [`FONTS.md`](FONTS.md).
+Weights with a real face: `400` regular, `500` medium, `600` semibold, `700` bold.
+Anything else is a synthetic smear — see [`FONTS.md`](FONTS.md) before asking for one.
+
+Code typography:
+- `font.code` / `--font-code`: `Hack`
+- `font.codeUi` / `--font-code-ui`: `Hack`
+- Both resolve to the same face. They stay distinct as tokens so product CSS reading
+  `--font-code-ui` keeps working; the old two-face MOC retro language (Share Tech
+  Mono for code, VT323 for task-tracker chrome) is retired.
 
 Use `rem` as the canonical unit (not hard-coded `px`) for type sizing.
 

@@ -18,14 +18,22 @@ Scope audited:
 
 ## Major Inconsistencies
 
-## 1) Typography is fragmented
+## 1) Typography is fragmented — **RESOLVED**
+
+The finding as originally recorded:
+
 - `lens` uses IBM Plex Sans (`/root/lens/templates/index.html`).
 - `home` uses Avenir Next (`/root/home/public/styles.css`).
 - `moc` uses Share Tech Mono + VT323 (`/root/moc/cmd/moc/assets/css/dashboard.css`).
 - `victoria-phone` uses Sora/Manrope (`/root/victoria-phone/app/dashboard.py`).
-- `explorer` partially aligned with Dubai (`/root/explorer/app/static/styles.css`) at the time of this audit.
-  **No longer current:** explorer is source-available under BSL 1.1 and now self-hosts IBM Plex Sans;
-  Dubai is restricted to internal-only products. See [`FONTS.md`](FONTS.md).
+- `explorer` partially aligned with Dubai (`/root/explorer/app/static/styles.css`).
+
+**Resolved by the org-wide font standardization.** Every Elcano product now loads the
+single sheet `fonts/fonts.css` and renders in **Nebula Sans** (text) + **Hack** (code).
+Dubai, IBM Plex Sans, IBM Plex Mono, Share Tech Mono, and VT323 are all retired, along
+with the two-tier licensing split that had replaced this finding's first fix — both
+current faces are freely redistributable, so no tier is needed. See
+[`FONTS.md`](FONTS.md) for the policy and the do-not-reintroduce list.
 
 ## 2) Color system is close but not standardized
 - Most products use deep purple/glaucous/payne's gray roots.

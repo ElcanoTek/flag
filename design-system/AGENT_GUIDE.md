@@ -18,16 +18,23 @@ Use this precedence when implementing:
 ## Hard Rules
 - Use token variables from `tokens/design-tokens.css` / `tokens/design-tokens.json`; do not invent one-off values.
 - Do not hardcode visual values where semantic/scale tokens exist (color, spacing, radius, shadow, transition, opacity).
-- Typography is fixed at the token level; the brand *face* depends on the product's licence tier:
+- Typography is fixed at the token level, and so is the brand face — there are exactly two, everywhere:
   - Headlines/subheadlines: `var(--font-heading)`, weight `700`
   - Body/UI text: `var(--font-body)`, weight `400`
-  - Never write a family name (`Dubai`, `IBM Plex Sans`) into product CSS — always go through the token.
-- Brand face selection is a licensing decision, not a design choice. Load exactly one font sheet:
-  - Open-source / source-available products (fleet, explorer): `fonts/ibm-plex-fonts.css` (IBM Plex Sans, SIL OFL 1.1).
-  - Internal-only tools (Manifest): `fonts/dubai-fonts.css` (Dubai, proprietary — never ship it in a public repo).
-  - Load nothing and the tokens fall back to IBM Plex Sans, which is safe everywhere.
+  - Code, logs, tabular output: `var(--font-code)` / `var(--font-code-ui)`
+  - Never write a family name (`Nebula Sans`, `Hack`) into product CSS — always go through the token.
+- Every product loads the same single sheet: `fonts/fonts.css`. It declares **Nebula Sans**
+  (SIL OFL 1.1) for text and **Hack** (MIT) for code, and sets the `*-brand` variables the
+  token sheet reads. There is no tier to look up and no second sheet to choose between.
+  - Both faces are freely redistributable, so the same sheet is correct for MIT, BSL 1.1,
+    and internal-only products alike.
+  - Load nothing and the tokens fall back to a system stack — visibly wrong, not silently
+    a different brand face.
   - Full policy and rationale: `FONTS.md`. Read it before adding a face to any product.
-- Exception: logs code display and task tracker components use code fonts (`--font-code`, `--font-code-ui`) to match canonical MOC baseline. Both code faces are SIL OFL 1.1 and carry no tier restriction.
+  - Do not reintroduce Dubai, IBM Plex, Share Tech Mono, or VT323.
+- `--font-code` and `--font-code-ui` both resolve to Hack. They stay distinct as tokens so
+  existing product CSS keeps working; the two-face MOC retro language (Share Tech Mono +
+  VT323) is retired.
 - Type scale is tokenized in `rem` (Title `1.75rem`, Subtitle `1.125rem`, Body `0.75rem-0.875rem`).
 - Do not introduce arbitrary values like `0.8125rem` radius or `0.98rem` body text outside token scale.
 - Keep border/radius/shadow values on token scale only.
