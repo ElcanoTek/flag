@@ -1,9 +1,23 @@
-/* Self-hosted Dubai font — matches the Google Fonts "Dubai" family.
- * Source: Dubai Executive Council / Monotype (© 2017 Dubai Executive Council).
+/* Self-hosted Dubai font — INTERNAL-USE ONLY brand face.
+ *
+ * Source:    Dubai Executive Council / Monotype.
+ * Copyright: © 2017 Dubai Executive Council. All rights reserved.
+ * License:   PROPRIETARY. Not open source, not OFL. See ./dubai/LICENSE-NOTICE.md
+ *            before using or copying these files ANYWHERE.
+ *
+ * DO NOT load this sheet, and DO NOT copy the files under ./dubai/, into any
+ * open-source or source-available product. Redistributing them under MIT, BSL,
+ * or any other outbound licence would purport to grant rights Elcano does not
+ * hold. Those products use ./ibm-plex-fonts.css instead.
+ *
+ * Approved consumers: internal-only tools (Manifest) and this repo's own preview.
+ *
  * Files: DubaiW23-Regular.{woff2,ttf}, DubaiW23-Bold.{woff2,ttf}
  * Weights used by the Flag design system:
  *   400 — body / UI text  (--font-body)
  *   700 — headlines / subheadlines  (--font-heading)
+ *
+ * See ../FONTS.md for which product tier may use which face.
  */
 
 @font-face {
@@ -24,4 +38,13 @@
   src:
     url("./dubai/DubaiW23-Bold.woff2") format("woff2"),
     url("./dubai/DubaiW23-Bold.ttf")   format("truetype");
+}
+
+/* Brand-face selection. design-tokens.css reads `--font-brand`; setting it here
+ * (rather than overriding --font-heading/--font-body directly) makes the choice
+ * independent of stylesheet import order, so a product that loads this sheet
+ * gets Dubai whether it imports before or after the token sheet.
+ */
+:root {
+  --font-brand: "Dubai";
 }

@@ -1,13 +1,18 @@
 # Migration Guidance
 
 > **Note:** This is a historical document from the initial creation of the design system. It is preserved for context only. Do not use this file as a reference for current component patterns. The single source of truth is COMPONENTS.md.
+>
+> **Typography guidance here is superseded.** The brand face now depends on the product's licence tier — see [`FONTS.md`](FONTS.md).
 
 ## Adoption Strategy
 
 ### Phase 1 - Foundations First
 - Import `tokens/design-tokens.css` into each microservice UI.
 - Replace local color variables with canonical semantic tokens.
-- Switch typography to Dubai Bold/Regular and tokenized scale.
+- Switch typography to the tokenized scale and the brand face for the product's
+  licence tier (`--font-heading`/`--font-body`; see `FONTS.md`).
+  **Superseded:** this originally read "switch to Dubai". Dubai is now internal-only;
+  open-source and source-available products use IBM Plex Sans.
 - Add theme toggle support using the canonical root selector contract (`html[data-theme="light|dark"]`) and shared persistence/system-default behavior.
 
 ### Phase 2 - Shared Primitives
@@ -32,7 +37,9 @@
 - Replace remaining ad hoc sizes with tokenized spacing/radius.
 
 ## Lens
-- Migrate typography from IBM Plex to Dubai.
+- ~~Migrate typography from IBM Plex to Dubai.~~ **Reversed.** Dubai is restricted to
+  internal-only products; any published or source-available surface stays on
+  IBM Plex Sans. See `FONTS.md`.
 - Keep existing component structure; mostly token refactor.
 
 ## Home

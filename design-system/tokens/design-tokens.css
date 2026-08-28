@@ -2,8 +2,14 @@
   color-scheme: dark;
   --theme-selector-attribute: data-theme;
   --theme-preference-storage-key: flag-theme-preference;
-  --font-heading: "Dubai", "Segoe UI", sans-serif;
-  --font-body: "Dubai", "Segoe UI", sans-serif;
+  /* Brand face is selected by the font sheet a product loads, via --font-brand:
+   * fonts/ibm-plex-fonts.css sets "IBM Plex Sans" (open source, SIL OFL 1.1);
+   * fonts/dubai-fonts.css sets "Dubai" (proprietary, INTERNAL-ONLY tools).
+   * The fallback below is deliberately the OFL face, so a product that loads no
+   * brand sheet still resolves to something Elcano may lawfully ship anywhere.
+   * Never hardcode "Dubai" here — see ../FONTS.md. */
+  --font-heading: var(--font-brand, "IBM Plex Sans"), "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-body: var(--font-brand, "IBM Plex Sans"), "Segoe UI", system-ui, -apple-system, sans-serif;
   --font-code: "Share Tech Mono", "SF Mono", "Consolas", monospace;
   --font-code-ui: "VT323", "Share Tech Mono", monospace;
 

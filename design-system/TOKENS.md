@@ -61,21 +61,37 @@ Status mapping for task/node badges:
 
 ## 2) Typography
 
-Required family:
-- Headlines/Subheadlines: `Dubai Bold`, weight `700`
-- Body/UI: `Dubai Regular`, weight `400`
+Required roles:
+- Headlines/Subheadlines: `--font-heading`, weight `700`
+- Body/UI: `--font-body`, weight `400`
 
-Dubai font files are self-hosted in `design-system/fonts/dubai/` and loaded via `design-system/fonts/dubai-fonts.css`.
-Include this stylesheet before `design-tokens.css` in any product that needs to load Dubai locally:
+Both resolve through `--font-brand`, which the product's font sheet sets. **Which
+face a product may ship is a licensing decision** — see
+[`FONTS.md`](FONTS.md) for the full policy. Summary:
+
+| Tier | Face | Sheet | Licence |
+|---|---|---|---|
+| Open source / source-available (fleet, explorer) | IBM Plex Sans | `fonts/ibm-plex-fonts.css` | SIL OFL 1.1 |
+| Internal only (Manifest, this repo's preview) | Dubai | `fonts/dubai-fonts.css` | Proprietary — **never** ship in a public repo |
+
+`design-tokens.css` names no face of its own; it falls back to IBM Plex Sans when
+no font sheet is loaded, so an omission fails licence-clean. Import order between
+the font sheet and `design-tokens.css` does not matter.
+
 ```html
-<link rel="stylesheet" href="/path/to/design-system/fonts/dubai-fonts.css" />
+<link rel="stylesheet" href="/path/to/design-system/fonts/ibm-plex-fonts.css" />
+<link rel="stylesheet" href="/path/to/design-system/tokens/design-tokens.css" />
 ```
-Font files provided: `DubaiW23-Regular.woff2`, `DubaiW23-Regular.ttf`, `DubaiW23-Bold.woff2`, `DubaiW23-Bold.ttf`.
+
+Font files provided:
+- IBM Plex Sans — `fonts/ibm-plex-sans/IBMPlexSans-400.woff2`, `IBMPlexSans-700.woff2` (+ `OFL.txt`, which must travel with them).
+- Dubai — `fonts/dubai/DubaiW23-{Regular,Bold}.{woff2,ttf}` (+ `LICENSE-NOTICE.md`). Internal-only.
 
 Code-component typography (logs code display + task tracker only):
 - `font.code` / `--font-code`: `Share Tech Mono`
 - `font.codeUi` / `--font-code-ui`: `VT323`
 - Font files are provided in `design-system/fonts/` and loaded via `design-system/fonts/code-fonts.css`.
+- Both are SIL OFL 1.1 and safe in any tier; keep `OFL-ShareTechMono.txt` / `OFL-VT323.txt` with them.
 
 Use `rem` as the canonical unit (not hard-coded `px`) for type sizing.
 

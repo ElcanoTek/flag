@@ -5,18 +5,22 @@ This directory is the single documented source of truth for shared UI design dec
 ## Read Order
 1. `AGENT_GUIDE.md` - strict implementation contract (human + agent)
 2. `TOKENS.md` - canonical foundations and token usage
-3. `COMPONENTS.md` - component structures, states, and class mappings
-4. `INTERACTION_ACCESSIBILITY.md` - required interaction and accessibility behavior
-5. `SYSTEM.md` - system principles and architecture
-6. `APPLY_TO_PRODUCT.md` - adoption guide for another product repo
-7. `MIGRATION.md` - rollout strategy and sequencing
-8. `AUDIT.md` - historical audit context and long-lived takeaways
-9. supporting docs: `BACKGROUNDS.md`, `LOGOS.md`, `ICONS.md`, `EMAIL.md`, `email-safe.html`
+3. `FONTS.md` - **typography and font licensing: which brand face each product tier may ship**
+4. `COMPONENTS.md` - component structures, states, and class mappings
+5. `INTERACTION_ACCESSIBILITY.md` - required interaction and accessibility behavior
+6. `SYSTEM.md` - system principles and architecture
+7. `APPLY_TO_PRODUCT.md` - adoption guide for another product repo
+8. `MIGRATION.md` - rollout strategy and sequencing (historical; typography superseded by `FONTS.md`)
+9. `AUDIT.md` - historical audit context and long-lived takeaways (typography superseded by `FONTS.md`)
+10. supporting docs: `BACKGROUNDS.md`, `LOGOS.md`, `ICONS.md`, `EMAIL.md`, `email-safe.html`
 
 ## Source Files
 - `tokens/design-tokens.css` - canonical runtime token source
 - `tokens/design-tokens.json` - canonical machine-readable token source
-- `fonts/code-fonts.css` + `fonts/*.ttf` - canonical self-hosted MOC code-component fonts
+- `FONTS.md` - typography + font licensing policy (read before adding a face to a product)
+- `fonts/ibm-plex-fonts.css` + `fonts/ibm-plex-sans/` - IBM Plex Sans, the default brand face (SIL OFL 1.1; open-source and source-available products)
+- `fonts/dubai-fonts.css` + `fonts/dubai/` - Dubai brand face (proprietary, **internal-only products**; never ship in a public repo)
+- `fonts/code-fonts.css` + `fonts/*.ttf` - canonical self-hosted MOC code-component fonts (SIL OFL 1.1; notices in `fonts/OFL-*.txt`)
 - `theme/theme-controller.js` - canonical light/dark theme controller for product adoption
 - `logos/` - approved SVG/PNG logo assets
 - `icons/core-icons.svg` - canonical SVG sprite

@@ -321,7 +321,7 @@ Example with app icon:
 ## Logs Code Display and Task Tracker (MOC Baseline)
 - This component set is canonical for logs UIs that render agent tool calls.
 - Preserve MOC class contracts and structure for cross-product reuse.
-- Typography exception: these components use MOC code fonts instead of Dubai:
+- Typography exception: these components use MOC code fonts instead of the brand face (`--font-heading`/`--font-body`):
   - code/content: `font.code` (`--font-code`, Share Tech Mono stack)
   - command/terminal labels: `font.codeUi` (`--font-code-ui`, VT323 stack)
 - Font sourcing requirement: self-host fonts and load `design-system/fonts/code-fonts.css` before component styles.
