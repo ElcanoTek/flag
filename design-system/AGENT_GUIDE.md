@@ -32,6 +32,12 @@ Use this precedence when implementing:
     a different brand face.
   - Full policy and rationale: `FONTS.md`. Read it before adding a face to any product.
   - Do not reintroduce Dubai, IBM Plex, Share Tech Mono, or VT323.
+- **Numbers read down a column need `font-variant-numeric: tabular-nums`.** Nebula
+  Sans has proportional figures by default — digit `1` is 407 units against `8` at
+  625, a 53% spread — so table cells, KPI values, totals, durations, timestamps and
+  phone numbers wander without it. Set it on the base `table` rule plus any numeric
+  readout outside a table. Never set it on `body`: proportional figures are correct
+  in prose. Hack is monospaced and needs none of this. See `FONTS.md`.
 - `--font-code` and `--font-code-ui` both resolve to Hack. They stay distinct as tokens so
   existing product CSS keeps working; the two-face MOC retro language (Share Tech Mono +
   VT323) is retired.

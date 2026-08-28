@@ -1977,6 +1977,11 @@ table {
   width: 100%;
   border-collapse: collapse;
   min-width: 32.5rem;
+  /* Nebula Sans has proportional figures by default (digit `1` is 407 units
+   * against `8` at 625), so a column of numbers wanders without this. Set on
+   * the base rule rather than per-column so a new numeric column cannot land
+   * ragged by omission. See ../FONTS.md. */
+  font-variant-numeric: tabular-nums;
 }
 
 th,

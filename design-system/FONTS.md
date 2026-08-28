@@ -102,6 +102,57 @@ Copy the whole face directories, licence files included — `fonts/nebula-sans/`
 carries `OFL.txt` and `fonts/hack/` carries `LICENSE.md`. Do not copy the
 `.woff2` files without them; both licences require it.
 
+### Numbers in columns need `tabular-nums`
+
+**Nebula Sans has proportional figures by default.** This is the single most
+likely way a product regresses after adopting it, so it is a rule, not a tip:
+
+> Any number that is read down a column — a table cell, a KPI value, a
+> right-aligned total, a duration, a timestamp, a phone number, a price — must
+> set `font-variant-numeric: tabular-nums`.
+
+The digit advances are not close to uniform. Measured from
+`nebula-sans/NebulaSans-400.woff2` at `unitsPerEm` 1000:
+
+| digit | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 |
+|---|---|---|---|---|---|---|---|---|---|---|
+| advance | 610 | **407** | 611 | 605 | 608 | 600 | 621 | 600 | **625** | 619 |
+
+`1` is 407 units against `8` at 625 — a **53% spread**. A column of figures
+without `tnum` visibly wanders. IBM Plex Sans, which most products replaced, had
+uniform digit widths by default, so **this is a regression introduced by the
+swap, not a pre-existing condition** — the alignment worked before and stops
+working after, which is exactly the kind of change that ships unnoticed.
+
+Nebula Sans does ship the feature (`tnum`, alongside `pnum`, `lnum`, `onum` and
+`frac`), so the fix is CSS only:
+
+```css
+/* Base layer: a new numeric column can never land ragged by omission. */
+table { font-variant-numeric: tabular-nums; }
+
+/* Plus every numeric readout that is not in a table. */
+.kpi-value, .stat-number { font-variant-numeric: tabular-nums; }
+```
+
+Do **not** set it globally on `body`. Proportional figures are correct in running
+prose — that is what they are for — and tabular figures there leave gappy holes
+around `1`. Apply it where numbers are columnar and nowhere else.
+
+Hack needs none of this: it is monospaced, every glyph at a uniform 0.602em, so
+anything already rendering through `--font-code` is aligned by construction.
+
+Verify by measuring, not by eye — render two equal-length strings of `1`s and
+`8`s in the same element and compare their widths:
+
+```js
+const w = s => { const e = document.createElement('span');
+  e.style.cssText = getComputedStyle(el).cssText; e.textContent = s;
+  document.body.append(e); const r = e.getBoundingClientRect().width;
+  e.remove(); return r; };
+console.log(w('111111'), w('888888'));   // must match once tnum is applied
+```
+
 ### Weights
 
 Flag ships the four weights that have real faces, plus true italics at 400 and
