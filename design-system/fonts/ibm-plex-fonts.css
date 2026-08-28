@@ -1,0 +1,42 @@
+/* Self-hosted IBM Plex Sans — the DEFAULT Flag brand face.
+ *
+ * Source:    https://github.com/IBM/plex
+ * Copyright: (c) 2017 IBM Corp. with Reserved Font Name "Plex".
+ * License:   SIL Open Font License 1.1 — see ./ibm-plex-sans/OFL.txt, which
+ *            MUST travel with these files in any redistribution.
+ *
+ * Use this sheet in open-source and source-available products (fleet, explorer).
+ * It is also the safe fallback for any product that loads no brand face at all,
+ * because design-tokens.css resolves `--font-brand` to IBM Plex Sans by default.
+ *
+ * Files: ibm-plex-sans/IBMPlexSans-400.woff2, ibm-plex-sans/IBMPlexSans-700.woff2
+ * Weights used by the Flag design system:
+ *   400 — body / UI text  (--font-body)
+ *   700 — headlines / subheadlines  (--font-heading)
+ *
+ * See ../FONTS.md for which product tier may use which face.
+ */
+
+@font-face {
+  font-family: "IBM Plex Sans";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("./ibm-plex-sans/IBMPlexSans-400.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "IBM Plex Sans";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("./ibm-plex-sans/IBMPlexSans-700.woff2") format("woff2");
+}
+
+/* Brand-face selection. design-tokens.css reads `--font-brand`; setting it here
+ * (rather than overriding --font-heading/--font-body directly) makes the choice
+ * independent of stylesheet import order.
+ */
+:root {
+  --font-brand: "IBM Plex Sans";
+}

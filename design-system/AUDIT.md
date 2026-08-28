@@ -1,6 +1,8 @@
 # Cross-Repo Audit Summary
 
 > **Note:** This is a historical document from the initial creation of the design system. It is preserved for context only. Do not use this file as a reference for current component patterns. The single source of truth is COMPONENTS.md.
+>
+> **Typography findings here are superseded.** The brand face now depends on the product's licence tier — see [`FONTS.md`](FONTS.md).
 
 > Historical context: This audit is a point-in-time snapshot taken during initial system consolidation.
 > It is useful for understanding origin decisions and debt categories, but it is not the day-to-day implementation guide.
@@ -21,7 +23,9 @@ Scope audited:
 - `home` uses Avenir Next (`/root/home/public/styles.css`).
 - `moc` uses Share Tech Mono + VT323 (`/root/moc/cmd/moc/assets/css/dashboard.css`).
 - `victoria-phone` uses Sora/Manrope (`/root/victoria-phone/app/dashboard.py`).
-- `explorer` partially aligns with Dubai (`/root/explorer/app/static/styles.css`) but still deviates in scale.
+- `explorer` partially aligned with Dubai (`/root/explorer/app/static/styles.css`) at the time of this audit.
+  **No longer current:** explorer is source-available under BSL 1.1 and now self-hosts IBM Plex Sans;
+  Dubai is restricted to internal-only products. See [`FONTS.md`](FONTS.md).
 
 ## 2) Color system is close but not standardized
 - Most products use deep purple/glaucous/payne's gray roots.
@@ -70,7 +74,8 @@ Scope audited:
 - Toast and process feedback: `lens` (less visual noise than `moc`).
 
 ## Deprecation Targets
-- Deprecate repo-specific ad hoc fonts across all services.
+- Deprecate repo-specific ad hoc fonts across all services (converge on the two
+  Flag brand faces, selected by licence tier per `FONTS.md` — not on one face for all).
 - Deprecate un-tokenized hardcoded status colors.
 - Deprecate retro-only visual language in `moc` as shared default.
 - Deprecate inline-only stylesheet approach for Victoria Voice dashboard.

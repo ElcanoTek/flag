@@ -25,12 +25,35 @@ Then open `http://localhost:8765`.
 - `design-system/COMPONENTS.md` - component specs and class/state contracts
 - `design-system/INTERACTION_ACCESSIBILITY.md` - required interaction and a11y behavior
 - `design-system/APPLY_TO_PRODUCT.md` - how to adopt this system in another repo
+- `design-system/FONTS.md` - typography and font licensing policy (which face each product may ship)
 - `design-system/tokens/design-tokens.css` - canonical runtime token source
 - `design-system/tokens/design-tokens.json` - canonical machine-readable token source
 - `design-system/icons/core-icons.svg` - icon sprite
 - `design-system/logos/` - approved logo assets
 - `design-system/email-safe.html` - canonical email-safe HTML reference
 - `design-system/preview/index.html` - live visual reference
+
+## Licensing and Fonts
+
+This repository is **proprietary and internal to ElcanoTek** — see [`LICENSE`](LICENSE).
+It carries no outbound licence, so its tokens, icons, and logo marks are not
+licensed for redistribution inside products published under MIT, BSL 1.1, or any
+similar licence.
+
+Flag ships two brand faces, and the choice between them is a licensing decision:
+
+| Product tier | Brand face | Font sheet |
+|---|---|---|
+| Open source / source-available (fleet, explorer) | **IBM Plex Sans** (SIL OFL 1.1) | `design-system/fonts/ibm-plex-fonts.css` |
+| Internal only (Manifest, this repo's preview) | **Dubai** (proprietary, all rights reserved) | `design-system/fonts/dubai-fonts.css` |
+
+Dubai must never be shipped in a public or source-available repository — Elcano
+holds a use right, not a right to sublicense. `design-tokens.css` names no face
+directly; it resolves `--font-brand` and falls back to IBM Plex Sans, so a product
+that forgets to load a font sheet still renders something licence-clean.
+
+Read [`design-system/FONTS.md`](design-system/FONTS.md) before adding or changing a
+typeface in any product.
 
 ## Source of Truth Order
 Use this precedence when there is ambiguity:
@@ -40,7 +63,7 @@ Use this precedence when there is ambiguity:
 4. component and pattern docs (`COMPONENTS.md`, `SYSTEM.md`, `INTERACTION_ACCESSIBILITY.md`)
 
 ## Implementation Workflow
-1. Import `design-system/tokens/design-tokens.css` first.
+1. Import the font sheet for your product's licence tier (`design-system/fonts/ibm-plex-fonts.css`, or `dubai-fonts.css` for internal-only tools), then `design-system/tokens/design-tokens.css`.
 2. Implement UI using semantic tokens only (`var(--color-primary)`, `var(--radius-md)`, etc.).
 3. Apply canonical component structure/classes from `COMPONENTS.md`.
 4. Implement required states (`hover`, `focus-visible`, `active`, `disabled`).

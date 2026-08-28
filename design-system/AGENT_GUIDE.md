@@ -18,10 +18,16 @@ Use this precedence when implementing:
 ## Hard Rules
 - Use token variables from `tokens/design-tokens.css` / `tokens/design-tokens.json`; do not invent one-off values.
 - Do not hardcode visual values where semantic/scale tokens exist (color, spacing, radius, shadow, transition, opacity).
-- Typography is fixed:
-  - Headlines/subheadlines: `Dubai Bold`
-  - Body/UI text: `Dubai Regular`
-- Exception: logs code display and task tracker components use code fonts (`--font-code`, `--font-code-ui`) to match canonical MOC baseline.
+- Typography is fixed at the token level; the brand *face* depends on the product's licence tier:
+  - Headlines/subheadlines: `var(--font-heading)`, weight `700`
+  - Body/UI text: `var(--font-body)`, weight `400`
+  - Never write a family name (`Dubai`, `IBM Plex Sans`) into product CSS — always go through the token.
+- Brand face selection is a licensing decision, not a design choice. Load exactly one font sheet:
+  - Open-source / source-available products (fleet, explorer): `fonts/ibm-plex-fonts.css` (IBM Plex Sans, SIL OFL 1.1).
+  - Internal-only tools (Manifest): `fonts/dubai-fonts.css` (Dubai, proprietary — never ship it in a public repo).
+  - Load nothing and the tokens fall back to IBM Plex Sans, which is safe everywhere.
+  - Full policy and rationale: `FONTS.md`. Read it before adding a face to any product.
+- Exception: logs code display and task tracker components use code fonts (`--font-code`, `--font-code-ui`) to match canonical MOC baseline. Both code faces are SIL OFL 1.1 and carry no tier restriction.
 - Type scale is tokenized in `rem` (Title `1.75rem`, Subtitle `1.125rem`, Body `0.75rem-0.875rem`).
 - Do not introduce arbitrary values like `0.8125rem` radius or `0.98rem` body text outside token scale.
 - Keep border/radius/shadow values on token scale only.

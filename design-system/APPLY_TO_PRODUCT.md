@@ -19,14 +19,25 @@ Copy or import these sources before product component work:
 - `tokens/design-tokens.json`
 - `icons/core-icons.svg`
 - `theme/theme-controller.js`
-- `fonts/dubai-fonts.css` + `fonts/dubai/` (self-hosted Dubai font files)
+- exactly one brand font sheet, chosen by the product's licence tier (see [`FONTS.md`](FONTS.md)):
+  - **open source / source-available** (fleet, explorer): `fonts/ibm-plex-fonts.css` + `fonts/ibm-plex-sans/` — copy `OFL.txt` with the `.woff2` files, the licence requires it.
+  - **internal only** (Manifest): `fonts/dubai-fonts.css` + `fonts/dubai/`. Dubai is proprietary; never copy it into a public repo.
 
-Import the Dubai font stylesheet **before** `design-tokens.css` so the font is available when tokens are applied:
+Import the font stylesheet alongside `design-tokens.css`:
 
 ```html
-<link rel="stylesheet" href="/path/to/fonts/dubai-fonts.css" />
+<link rel="stylesheet" href="/path/to/fonts/ibm-plex-fonts.css" />
 <link rel="stylesheet" href="/path/to/design-tokens.css" />
 ```
+
+Order between the two does not matter — the font sheet sets `--font-brand`, which
+the token sheet only reads. A product that loads neither falls back to IBM Plex
+Sans, which is safe in any tier.
+
+> This repository is proprietary and internal (see the root `LICENSE`). Copying
+> tokens, icons, or logo marks out of it into a repo that ships an outbound
+> licence is not covered by that licence — confirm the arrangement before
+> vendoring flag assets into a public product.
 
 ## 2) Wire Theme in App Shell
 
