@@ -170,6 +170,22 @@ rasterizer rounding. A test asserting exact equality will fail. Allow a
 sub-pixel tolerance (0.5px is comfortable) and describe the result as near-exact
 rather than claiming the columns match perfectly.
 
+**And the residual grows with weight**, so a bold numeric readout is the worst
+case, not the 400-weight figure above:
+
+| weight | narrowest | widest | spread | at 16px |
+|---|---|---|---|---|
+| 400 | 600 (`5`) | 607 (`4`) | 7 units | ~0.11px |
+| 500 | 606 (`5`) | 615 (`4`) | 9 units | ~0.14px |
+| 600 | 616 (`5`) | 629 (`4`) | 13 units | ~0.21px |
+| 700 | 626 (`5`) | 643 (`0`) | 17 units | ~0.27px |
+
+`five.tf` is the narrowest glyph at every weight. So a bold KPI value drifts about
+2.4× as much as body-weight text — still sub-pixel at ordinary sizes, but it is
+why a bold readout measures ~13× better than proportional where a regular one
+measures ~32×. If a display-size bold figure ever needs to align exactly, the fix
+is re-spacing the binary upstream, not more CSS.
+
 ### Weights
 
 Flag ships the four weights that have real faces, plus true italics at 400 and
