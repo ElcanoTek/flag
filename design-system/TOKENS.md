@@ -113,6 +113,7 @@ Core scale:
 | Subtitle | `font.size.subtitle` | `1.125rem` | `1.3` | `700` | `18px` |
 | Body Large | `font.size.bodyLarge` | `1.0625rem` | `1.5` | `400` | `17px` |
 | Body Base | `font.size.body` | `1rem` | `1.5` | `400` | `16px` |
+| Body Medium | `font.size.bodyMedium` | `0.9375rem` | `1.5` | `400` | `15px` |
 | Caption | `font.size.caption` | `0.8125rem` | `1.4` | `400` | `13px` |
 | Overline | `font.size.overline` | `0.75rem` | `1.4` | `700` | `12px` |
 

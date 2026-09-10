@@ -17,6 +17,7 @@
       "title": "1.75rem",
       "subtitle": "1.125rem",
       "bodyLarge": "1.0625rem",
+      "bodyMedium": "0.9375rem",
       "body": "1rem",
       "caption": "0.8125rem",
       "overline": "0.75rem"
