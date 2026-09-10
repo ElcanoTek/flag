@@ -18,6 +18,9 @@
   --line-height-subtitle: 1.3;
   --font-size-body-lg: 1.0625rem;
   --line-height-body-lg: 1.5;
+  /* body-md: dense product UI (toolbars, data-table controls) — a step
+     between body and caption so those surfaces never reach for a literal. */
+  --font-size-body-md: 0.9375rem;
   --font-size-body: 1rem;
   --line-height-body: 1.5;
   --font-size-caption: 0.8125rem;
