@@ -2143,7 +2143,7 @@ mark.match { background: var(--color-match-bg); color: var(--color-text-primary)
 .state-panel--ok { background: var(--color-panel-ok-bg); border-color: var(--color-panel-ok-border); }
 .state-panel--warn { background: var(--color-panel-warn-bg); border-color: var(--color-panel-warn-border); }
 .state-panel--deny { background: var(--color-panel-deny-bg); border-color: var(--color-panel-deny-border); }
-.picker-specimens { display: flex; flex-direction: column; gap: var(--space-3); min-width: 18rem; max-width: 26rem; }
+.picker-specimens { display: flex; flex-direction: column; gap: var(--space-3); flex: 1 1 18rem; min-width: 0; max-width: 26rem; }
 .picker-icon-tile { width: 32px; height: 32px; border-radius: var(--radius-sm); background: var(--color-icon-tile); color: var(--color-accent); display: grid; place-items: center; }
 .picker-badge-demo { position: relative; width: 36px; height: 36px; display: grid; place-items: center; color: var(--color-text-secondary); }
 .picker-badge { position: absolute; top: -4px; right: -4px; min-width: 15px; height: 15px; padding: 0 3px; box-sizing: border-box; border-radius: var(--radius-pill); background: var(--color-accent-strong); color: var(--color-on-accent-strong); font-size: 0.6rem; font-weight: 600; display: grid; place-items: center; }
