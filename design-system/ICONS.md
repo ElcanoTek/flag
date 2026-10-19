@@ -27,6 +27,13 @@ This is the shared icon vocabulary for all Elcano microservices.
 - `info` - helper and tooltip affordance
 - `sun` - light mode indicator and theme toggle
 - `moon` - dark mode indicator and theme toggle
+- `tools` - tools/connections trigger (the chat composer wrench) and its library header
+- `lock` - locked, always-on state (no switch)
+- `maximize` - open the full view of a popover (e.g. the tool library)
+- `alert-circle` - needs-setup state
+- `alert-triangle` - unavailable state
+- `external-link` - link that leaves the current surface (Settings, a vendor console)
+- `chevron-right` - inline "go on" affordance ("Set up ›") and disclosure
 
 ## Accessibility Rules
 - Decorative icons: `aria-hidden="true"`.

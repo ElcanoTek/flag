@@ -464,6 +464,73 @@ Node status badge set (recommended):
 - `offline`
 - `error`
 
+## Connection Picker
+
+The pieces of the chat Tools picker (the composer wrench popover and the tool
+library modal). Each is general enough for any searchable, toggleable list.
+Every color is a token from `tokens/design-tokens.css` ("Connection picker
+components" block); light-mode values live there too.
+
+### Switch
+- `button.switch[role="switch"][aria-checked]`, 30x18 (`.switch--lg` 38x22).
+- Track: `--color-switch-track-on` when checked, else `--color-switch-track-off`.
+- Knob: `--color-switch-knob`, 14px (16px large), 2px inset (3px large),
+  slides 12px (16px large) with `--transition-base`.
+- Accessible name is the thing it switches (`aria-label="Index Exchange"`).
+- A row that cannot be switched shows a status icon instead (`lock`,
+  `alert-circle`, `alert-triangle`), never a disabled switch.
+
+### Compact Search Field
+- Wrapper `.search-compact` with a leading `search` icon (15px,
+  `--color-text-subtle`) and an optional clear button (`close`, 12px).
+- Field 34px (36px in a rail), `--color-bg` fill, 1px
+  `--color-selected-border`, `--radius-sm`, 0.875rem text; focus border
+  `--color-accent`.
+- The popover's field is focused on open; Escape clears it first, then closes.
+
+### Small Pill Button
+- `.pill-btn`, 22-24px high, `--radius-pill`, 1px `--color-pill-border`,
+  transparent fill, 0.75rem `--color-text-secondary`.
+- Hover: `--color-pill-hover-bg` fill, `--color-text-primary`.
+- A pill whose action would change nothing is `aria-disabled="true"` at 40%
+  opacity, not natively disabled, so focus does not drop.
+
+### Status Kicker
+- `.kicker` + `.kicker--ok|--warn|--deny`: `--font-code`, 0.625rem, weight
+  700, letter-spacing 0.08em, uppercase.
+- Colors `--color-state-ok|warn|deny`. Labels: ALWAYS ON, NEEDS SETUP,
+  UNAVAILABLE. Status dots (7px circles) use the same three tokens, plus
+  `--color-accent` (on) and `--color-text-subtle` (off).
+
+### Group Header
+- `.group-header`: `--font-code`, 0.6875rem, letter-spacing 0.12em,
+  uppercase, `--color-text-subtle`; an optional right-aligned count at 0.75rem.
+- Static: no collapse affordance.
+
+### Match Highlight
+- `mark.match`: `--color-match-bg` fill, `--color-text-primary`, 3px radius,
+  no padding, so highlighted text does not shift.
+
+### State Panels
+- `.state-panel--ok|--warn|--deny`: 1px border and fill from
+  `--color-panel-<state>-border` / `--color-panel-<state>-bg`,
+  `--radius-md`, 0.625rem 0.875rem padding, 0.8125rem body text.
+- One short sentence; at most one link (`external-link` icon).
+
+### Popover and Modal Surfaces
+- Popover: `--color-surface-2`, 1px `--color-selected-border`,
+  `--radius-lg`, `--shadow-popover`. Rows 64px with 2-line descriptions
+  (`--color-text-subtle`); the active row is `--color-selected-bg` with an
+  inset 1px `--color-selected-border` ring.
+- Modal: `--color-surface-1`, 1px `--color-selected-border`, `--radius-xl`,
+  `--shadow-popover`, header icon in a `--color-icon-tile` square
+  (`--color-accent` glyph). Filter rail on `--color-rail-bg`; the selected
+  filter uses the active-row treatment.
+- Scrim: `.scrim`, `--color-scrim` with a 3px backdrop blur.
+- Divider lines inside both: `--color-divider`.
+- Count badge on the trigger: `--color-accent-strong` fill,
+  `--color-on-accent-strong` digits, pill, 0.6rem.
+
 ## Do / Don't
 - Do use one canonical component variant per intent.
 - Do use status badges consistently across tables.

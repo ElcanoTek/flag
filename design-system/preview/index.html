@@ -235,6 +235,13 @@
         <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#close"></use></svg><span>close</span></div>
         <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#sun"></use></svg><span>sun</span></div>
         <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#moon"></use></svg><span>moon</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#tools"></use></svg><span>tools</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#lock"></use></svg><span>lock</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#maximize"></use></svg><span>maximize</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#alert-circle"></use></svg><span>alert-circle</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#alert-triangle"></use></svg><span>alert-triangle</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#external-link"></use></svg><span>external-link</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#chevron-right"></use></svg><span>chevron-right</span></div>
       </div>
       <div class="demo-row">
         <button class="btn btn-primary"><svg class="icon-inline" aria-hidden="true"><use href="../icons/core-icons.svg#download"></use></svg> Download</button>
@@ -681,6 +688,52 @@ print(f"Mean latency: {average:.2f} ms")</code></pre>
             <tr><td>T-1027</td><td>Archive Cleanup</td><td><span class="badge badge-cancelled">cancelled</span></td></tr>
           </tbody>
         </table>
+      </div>
+        </div>
+      </details>
+    </section>
+
+    <section class="section">
+      <details class="section-accordion" open>
+        <summary>
+          <h2>Connection Picker</h2>
+        </summary>
+        <div class="section-body">
+<div class="picker-demo">
+        <div class="picker-popover" role="group" aria-label="Tools popover example">
+          <div class="picker-popover__search">
+            <label class="search-compact"><svg class="search-compact__icon" aria-hidden="true"><use href="../icons/core-icons.svg#search"></use></svg><input type="text" placeholder="Search tools…" aria-label="Search tools" value="ix"></label>
+            <button type="button" class="picker-icon-btn" aria-label="Open tool library"><svg class="icon-inline" aria-hidden="true"><use href="../icons/core-icons.svg#maximize"></use></svg></button>
+          </div>
+          <div class="picker-popover__meta"><span>3 results · 4 on</span><button type="button" class="pill-btn" title="Applies to 2 connections shown">All 2 on</button><button type="button" class="pill-btn" aria-disabled="true">All 2 off</button></div>
+          <div class="group-header"><span>SSPs</span><span class="group-header__count">2 matches</span></div>
+          <div class="picker-row picker-row--active">
+            <div class="picker-row__body"><div class="picker-row__name"><span><mark class="match">I</mark>nde<mark class="match">x</mark> Exchange</span></div><div class="picker-row__desc">Create, edit and pause private marketplace deals on Index Exchange.</div><div class="picker-row__meta">14 tools</div></div>
+            <button type="button" class="switch" role="switch" aria-checked="true" aria-label="Index Exchange"><span class="switch__knob"></span></button>
+          </div>
+          <div class="picker-row">
+            <div class="picker-row__body"><div class="picker-row__name">Magnite</div><div class="picker-row__desc">Manage Magnite Streaming and DV+ deals.</div><div class="picker-row__meta">11 tools · ↳ m<mark class="match">x</mark>_clone_deal</div></div>
+            <button type="button" class="switch" role="switch" aria-checked="false" aria-label="Magnite"><span class="switch__knob"></span></button>
+          </div>
+          <div class="group-header"><span>Deal Management</span><span class="group-header__count">1 match</span></div>
+          <div class="picker-row">
+            <div class="picker-row__body"><div class="picker-row__name">Deal Sheet <span class="kicker kicker--ok">Always on</span></div><div class="picker-row__desc">Build a branded XLSX deal sheet from a batch of created deals.</div><div class="picker-row__meta">12 tools</div></div>
+            <span class="picker-row__status" title="Always on in every chat."><svg class="icon-inline" aria-hidden="true"><use href="../icons/core-icons.svg#lock"></use></svg></span>
+          </div>
+          <div class="picker-row picker-row--dimmed">
+            <div class="picker-row__body"><div class="picker-row__name">BigQuery Reporting</div><div class="picker-row__desc">Query the reporting warehouse.</div><div class="picker-row__meta">6 tools</div></div>
+            <a href="#" class="picker-row__link">Set up<svg class="icon-inline" aria-hidden="true"><use href="../icons/core-icons.svg#chevron-right"></use></svg></a>
+          </div>
+          <div class="picker-popover__foot"><a href="#">Open library <svg class="icon-inline" aria-hidden="true"><use href="../icons/core-icons.svg#maximize"></use></svg></a></div>
+        </div>
+        <div class="picker-specimens">
+          <div class="demo-row"><button type="button" class="switch switch--lg" role="switch" aria-checked="true" aria-label="Large switch on"><span class="switch__knob"></span></button><button type="button" class="switch switch--lg" role="switch" aria-checked="false" aria-label="Large switch off"><span class="switch__knob"></span></button><span class="picker-badge-demo"><svg class="icon-inline" aria-hidden="true"><use href="../icons/core-icons.svg#tools"></use></svg><span class="picker-badge">4</span></span></div>
+          <div class="demo-row"><span class="kicker kicker--ok">Always on</span><span class="kicker kicker--warn">Needs setup</span><span class="kicker kicker--deny">Unavailable</span></div>
+          <div class="demo-row"><span class="picker-row__status picker-row__status--warn"><svg class="icon-inline" aria-hidden="true"><use href="../icons/core-icons.svg#alert-circle"></use></svg></span><span class="picker-row__status picker-row__status--deny"><svg class="icon-inline" aria-hidden="true"><use href="../icons/core-icons.svg#alert-triangle"></use></svg></span><span class="picker-icon-tile"><svg class="icon-inline" aria-hidden="true"><use href="../icons/core-icons.svg#tools"></use></svg></span></div>
+          <div class="state-panel state-panel--ok">Always on in every chat.</div>
+          <div class="state-panel state-panel--warn">Needs setup before it can be used. <a href="#">Set up in Settings <svg class="icon-inline" aria-hidden="true"><use href="../icons/core-icons.svg#external-link"></use></svg></a></div>
+          <div class="state-panel state-panel--deny">Unavailable right now. Try again later.</div>
+        </div>
       </div>
         </div>
       </details>
