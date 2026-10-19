@@ -487,7 +487,7 @@ components" block); light-mode values live there too.
   `--color-text-subtle`) and an optional clear button (`close`, 12px).
 - Field 34px (36px in a rail), `--color-bg` fill, 1px
   `--color-selected-border`, `--radius-sm`, 0.875rem text; focus border
-  `--color-accent`.
+  `--color-accent`, plus `--focus-ring` on `:focus-visible`.
 - The popover's field is focused on open; Escape clears it first, then closes.
 
 ### Small Pill Button
@@ -495,12 +495,16 @@ components" block); light-mode values live there too.
   transparent fill, 0.75rem `--color-text-secondary`.
 - Hover: `--color-pill-hover-bg` fill, `--color-text-primary`.
 - A pill whose action would change nothing is `aria-disabled="true"` at 40%
-  opacity, not natively disabled, so focus does not drop.
+  opacity, not natively disabled, so focus does not drop. `aria-disabled`
+  does not stop a click or Enter/Space on a native button: the handler must
+  return early while it is set.
 
 ### Status Kicker
 - `.kicker` + `.kicker--ok|--warn|--deny`: `--font-code`, 0.625rem, weight
   700, letter-spacing 0.08em, uppercase.
-- Colors `--color-state-ok|warn|deny`. Labels: ALWAYS ON, NEEDS SETUP,
+- Colors `--color-state-ok|warn|deny` (at least 4.5:1 on every picker
+  surface in both themes; the light values are darker than the design's for
+  that reason). Labels: ALWAYS ON, NEEDS SETUP,
   UNAVAILABLE. Status dots (7px circles) use the same three tokens, plus
   `--color-accent` (on) and `--color-text-subtle` (off).
 
@@ -517,10 +521,12 @@ components" block); light-mode values live there too.
 - `.state-panel--ok|--warn|--deny`: 1px border and fill from
   `--color-panel-<state>-border` / `--color-panel-<state>-bg`,
   `--radius-md`, 0.625rem 0.875rem padding, 0.8125rem body text.
-- One short sentence; at most one link (`external-link` icon).
+- One short sentence; at most one link (`external-link` icon). Links in the
+  picker (Set up, Open library, panel links) use `--color-link`.
 
 ### Popover and Modal Surfaces
-- Popover: `--color-surface-2`, 1px `--color-selected-border`,
+- Popover: 21.75rem wide, `max-width: 100%` on narrow screens;
+  `--color-surface-2`, 1px `--color-selected-border`,
   `--radius-lg`, `--shadow-popover`. Rows 64px with 2-line descriptions
   (`--color-text-subtle`); the active row is `--color-selected-bg` with an
   inset 1px `--color-selected-border` ring.

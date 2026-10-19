@@ -113,7 +113,7 @@
     },
     "picker": {
       "accentStrong": "#5956d5",
-      "onAccentStrong": "#b9c0f2",
+      "onAccentStrong": "#eef0ff",
       "textSubtle": "#9c96ae",
       "divider": "#3a3147",
       "selectedBg": "rgba(89, 86, 213, 0.2)",
@@ -135,7 +135,8 @@
       "panelDenyBorder": "rgba(224, 138, 163, 0.32)",
       "iconTile": "rgba(157, 167, 239, 0.14)",
       "railBg": "rgba(0, 0, 0, 0.16)",
-      "scrim": "rgba(26, 11, 30, 0.55)"
+      "scrim": "rgba(26, 11, 30, 0.55)",
+      "link": "#9da7ef"
     }
   },
   "gradient": {
@@ -312,9 +313,9 @@
           "switchTrackOff": "#e4e5ee",
           "switchKnob": "#ffffff",
           "matchBg": "#9da7ef",
-          "stateOk": "#1f8a5b",
-          "stateWarn": "#c98a2b",
-          "stateDeny": "#b26079",
+          "stateOk": "#1b7950",
+          "stateWarn": "#8e611e",
+          "stateDeny": "#9c546a",
           "panelOkBg": "#f0f9f4",
           "panelOkBorder": "#cfe8da",
           "panelWarnBg": "#fcf5e8",
@@ -323,7 +324,8 @@
           "panelDenyBorder": "rgba(178, 96, 121, 0.32)",
           "iconTile": "#eef0fb",
           "railBg": "#fafafd",
-          "scrim": "rgba(252, 252, 253, 0.55)"
+          "scrim": "rgba(252, 252, 253, 0.55)",
+          "link": "#5f5f97"
         }
       },
       "gradient": {

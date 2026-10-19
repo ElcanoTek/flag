@@ -2076,7 +2076,7 @@ th {
 /* ── Connection picker (COMPONENTS.md "Connection Picker") ────────────── */
 .picker-demo { display: flex; flex-wrap: wrap; gap: var(--space-6); align-items: flex-start; }
 .picker-popover {
-  width: 21.75rem; display: flex; flex-direction: column;
+  width: 21.75rem; max-width: 100%; display: flex; flex-direction: column;
   background: var(--color-surface-2); border: 1px solid var(--color-selected-border);
   border-radius: var(--radius-lg); box-shadow: var(--shadow-popover); overflow: hidden;
 }
@@ -2087,7 +2087,7 @@ th {
 }
 .picker-popover__meta span { flex: 1; }
 .picker-popover__foot { display: flex; justify-content: flex-end; padding: 6px 12px; border-top: 1px solid var(--color-divider); font-size: 0.75rem; }
-.picker-popover__foot a { color: var(--color-accent); text-decoration: none; display: inline-flex; gap: 5px; align-items: center; }
+.picker-popover__foot a { color: var(--color-link); text-decoration: none; display: inline-flex; gap: 5px; align-items: center; }
 .search-compact { position: relative; flex: 1; display: flex; align-items: center; }
 .search-compact__icon { position: absolute; left: 10px; width: 15px; height: 15px; color: var(--color-text-subtle); pointer-events: none; }
 .search-compact input {
@@ -2096,6 +2096,7 @@ th {
   color: var(--color-text-primary); font: inherit; font-size: 0.875rem; outline: none;
 }
 .search-compact input:focus { border-color: var(--color-accent); }
+.search-compact input:focus-visible { box-shadow: var(--focus-ring); }
 .picker-icon-btn {
   width: 34px; height: 34px; flex: none; display: grid; place-items: center; padding: 0;
   border: 1px solid var(--color-pill-border); background: transparent; color: var(--color-text-subtle);
@@ -2124,7 +2125,7 @@ th {
 .picker-row__status { width: 30px; height: 18px; display: grid; place-items: center; color: var(--color-text-subtle); }
 .picker-row__status--warn { color: var(--color-state-warn); }
 .picker-row__status--deny { color: var(--color-state-deny); }
-.picker-row__link { display: inline-flex; align-items: center; gap: 2px; font-size: 0.75rem; color: var(--color-accent); text-decoration: none; white-space: nowrap; }
+.picker-row__link { display: inline-flex; align-items: center; gap: 2px; font-size: 0.75rem; color: var(--color-link); text-decoration: none; white-space: nowrap; }
 .switch { position: relative; flex: none; width: 30px; height: 18px; padding: 0; border: none; border-radius: var(--radius-pill); background: var(--color-switch-track-off); cursor: pointer; transition: background var(--transition-fast); }
 .switch[aria-checked="true"] { background: var(--color-switch-track-on); }
 .switch__knob { position: absolute; top: 2px; left: 2px; width: 14px; height: 14px; border-radius: 50%; background: var(--color-switch-knob); box-shadow: var(--shadow-switch-knob); transition: transform var(--transition-base); }
@@ -2138,7 +2139,7 @@ th {
 .kicker--deny { color: var(--color-state-deny); }
 mark.match { background: var(--color-match-bg); color: var(--color-text-primary); border-radius: 3px; padding: 0; }
 .state-panel { border: 1px solid; border-radius: var(--radius-md); padding: 0.625rem 0.875rem; font-size: 0.8125rem; line-height: 1.5; color: var(--color-text-secondary); }
-.state-panel a { color: var(--color-accent); text-decoration: none; display: inline-flex; gap: 4px; align-items: center; }
+.state-panel a { color: var(--color-link); text-decoration: none; display: inline-flex; gap: 4px; align-items: center; }
 .state-panel--ok { background: var(--color-panel-ok-bg); border-color: var(--color-panel-ok-border); }
 .state-panel--warn { background: var(--color-panel-warn-bg); border-color: var(--color-panel-warn-border); }
 .state-panel--deny { background: var(--color-panel-deny-bg); border-color: var(--color-panel-deny-border); }
