@@ -203,6 +203,7 @@
   --color-switch-track-on: var(--color-accent-strong);
   --color-switch-track-off: rgba(255, 255, 255, 0.14);
   --color-switch-knob: #f4f5f9;
+  --shadow-switch-knob: none;
   --color-match-bg: rgba(157, 167, 239, 0.22);
   --color-state-ok: #4ecb8f;
   --color-state-warn: #e0a94a;
@@ -321,6 +322,7 @@ body.theme-light {
   --color-pill-hover-bg: #f1f2f8;
   --color-switch-track-off: #e4e5ee;
   --color-switch-knob: #ffffff;
+  --shadow-switch-knob: 0 1px 2px rgba(26, 11, 30, 0.28);
   --color-match-bg: #9da7ef;
   --color-state-ok: #1f8a5b;
   --color-state-warn: #c98a2b;

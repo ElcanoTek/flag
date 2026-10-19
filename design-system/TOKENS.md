@@ -55,6 +55,7 @@ headers, match highlight, state panels, scrim; see COMPONENTS.md
 | `color.picker.iconTile` | `rgba(157,167,239,0.14)` | Modal header icon square |
 | `color.picker.railBg` | `rgba(0,0,0,0.16)` | Modal filter rail |
 | `color.picker.scrim` | `rgba(26,11,30,0.55)` | Modal backdrop (with a 3px blur) |
+| `shadow.switchKnob` | `none` (light: `0 1px 2px rgba(26,11,30,0.28)`) | Switch knob lift in light mode |
 | `shadow.popover` | `0 24px 60px -22px rgba(0,0,0,0.55)` | Popover and modal elevation |
 
 Neutral utility tokens:

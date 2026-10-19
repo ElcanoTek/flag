@@ -474,7 +474,9 @@ components" block); light-mode values live there too.
 ### Switch
 - `button.switch[role="switch"][aria-checked]`, 30x18 (`.switch--lg` 38x22).
 - Track: `--color-switch-track-on` when checked, else `--color-switch-track-off`.
-- Knob: `--color-switch-knob`, 14px (16px large), 2px inset (3px large),
+- Knob: `--color-switch-knob` with `--shadow-switch-knob` (none in dark; a
+  soft drop in light so the white knob reads on the pale off track), 14px
+  (16px large), 2px inset (3px large),
   slides 12px (16px large) with `--transition-base`.
 - Accessible name is the thing it switches (`aria-label="Index Exchange"`).
 - A row that cannot be switched shows a status icon instead (`lock`,
