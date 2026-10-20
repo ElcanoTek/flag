@@ -499,8 +499,9 @@ components" block); light-mode values live there too.
 - Hover (enabled pills only): `--color-pill-hover-bg` fill, `--color-text-primary`.
 - Pressed: `--color-selected-bg` fill and `--color-selected-border` (the icon
   button too).
-- A pill whose action would change nothing is `aria-disabled="true"` at 40%
-  opacity, not natively disabled, so focus does not drop. `aria-disabled`
+- A pill whose action would change nothing is `aria-disabled="true"` with its
+  text and border at 40% (color-mix, not `opacity`, so a focus ring on it
+  stays full strength), not natively disabled, so focus does not drop. `aria-disabled`
   does not stop a click or Enter/Space on a native button: the handler must
   return early while it is set.
 

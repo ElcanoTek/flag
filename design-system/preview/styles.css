@@ -2112,7 +2112,12 @@ th {
 .switch:hover:not(:focus-visible) { box-shadow: 0 0 0 3px var(--color-pill-hover-bg); }
 .switch:active { filter: brightness(0.92); }
 .pill-btn:focus-visible, .switch:focus-visible, .picker-icon-btn:focus-visible { outline: none; box-shadow: var(--focus-ring-picker); }
-.pill-btn[aria-disabled="true"] { opacity: 0.4; cursor: not-allowed; }
+/* Dim the colors, not the element: opacity would fade the focus ring too. */
+.pill-btn[aria-disabled="true"] {
+  cursor: not-allowed;
+  color: color-mix(in srgb, var(--color-text-secondary) 40%, transparent);
+  border-color: color-mix(in srgb, var(--color-pill-border) 40%, transparent);
+}
 .group-header {
   display: flex; align-items: center; gap: 6px; padding: 8px 12px 4px; min-height: 24px;
   font-family: var(--font-code); font-size: 0.6875rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--color-text-subtle);
