@@ -487,7 +487,7 @@ components" block); light-mode values live there too.
   `--color-text-subtle`) and an optional clear button (`close`, 12px).
 - Field 34px (36px in a rail), `--color-bg` fill, 1px
   `--color-selected-border`, `--radius-sm`, 0.875rem text; focus border
-  `--color-accent`, plus `--focus-ring` on `:focus-visible`.
+  `--color-accent`, plus `--focus-ring-picker` on `:focus-visible`.
 - The popover's field is focused on open; Escape clears it first, then closes.
 
 ### Small Pill Button
@@ -522,7 +522,8 @@ components" block); light-mode values live there too.
   `--color-panel-<state>-border` / `--color-panel-<state>-bg`,
   `--radius-md`, 0.625rem 0.875rem padding, 0.8125rem body text.
 - One short sentence; at most one link (`external-link` icon). Links in the
-  picker (Set up, Open library, panel links) use `--color-link`.
+  picker (Set up, Open library, panel links) use `--color-link`, and keep it
+  on hover and focus (underline instead of a color change).
 
 ### Popover and Modal Surfaces
 - Popover: 21.75rem wide, `max-width: 100%` on narrow screens;

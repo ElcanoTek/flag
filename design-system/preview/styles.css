@@ -2096,7 +2096,7 @@ th {
   color: var(--color-text-primary); font: inherit; font-size: 0.875rem; outline: none;
 }
 .search-compact input:focus { border-color: var(--color-accent); }
-.search-compact input:focus-visible { box-shadow: var(--focus-ring); }
+.search-compact input:focus-visible { box-shadow: var(--focus-ring-picker); }
 .picker-icon-btn {
   width: 34px; height: 34px; flex: none; display: grid; place-items: center; padding: 0;
   border: 1px solid var(--color-pill-border); background: transparent; color: var(--color-text-subtle);
@@ -2108,7 +2108,7 @@ th {
   background: transparent; color: var(--color-text-secondary); font: inherit; font-size: 0.75rem; cursor: pointer; white-space: nowrap;
 }
 .pill-btn:hover { background: var(--color-pill-hover-bg); color: var(--color-text-primary); }
-.pill-btn:focus-visible, .switch:focus-visible, .picker-icon-btn:focus-visible { outline: none; box-shadow: var(--focus-ring); }
+.pill-btn:focus-visible, .switch:focus-visible, .picker-icon-btn:focus-visible { outline: none; box-shadow: var(--focus-ring-picker); }
 .pill-btn[aria-disabled="true"] { opacity: 0.4; cursor: not-allowed; }
 .group-header {
   display: flex; align-items: center; gap: 6px; padding: 8px 12px 4px; min-height: 24px;
@@ -2140,6 +2140,9 @@ th {
 mark.match { background: var(--color-match-bg); color: var(--color-text-primary); border-radius: 3px; padding: 0; }
 .state-panel { border: 1px solid; border-radius: var(--radius-md); padding: 0.625rem 0.875rem; font-size: 0.8125rem; line-height: 1.5; color: var(--color-text-secondary); }
 .state-panel a { color: var(--color-link); text-decoration: none; display: inline-flex; gap: 4px; align-items: center; }
+/* Keep the link color on hover/focus; the light theme's global a:hover swaps
+   in --color-primary, which is under 4.5:1 on picker surfaces. */
+:is(.picker-popover__foot a, .picker-row__link, .state-panel a):is(:hover, :focus-visible) { color: var(--color-link); text-decoration: underline; }
 .state-panel--ok { background: var(--color-panel-ok-bg); border-color: var(--color-panel-ok-border); }
 .state-panel--warn { background: var(--color-panel-warn-bg); border-color: var(--color-panel-warn-border); }
 .state-panel--deny { background: var(--color-panel-deny-bg); border-color: var(--color-panel-deny-border); }

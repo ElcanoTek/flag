@@ -190,7 +190,8 @@
     "section": "0 6px 16px rgba(0, 0, 0, 0.22)",
     "controlSelected": "0 0 0 2px var(--color-status-running-border)",
     "popover": "0 24px 60px -22px rgba(0, 0, 0, 0.55)",
-    "switchKnob": "none"
+    "switchKnob": "none",
+    "focusRingPicker": "0 0 0 2px var(--color-bg), 0 0 0 4px var(--color-accent)"
   },
   "layout": {
     "container": {
@@ -350,7 +351,8 @@
         "lg": "0 16px 34px rgba(38, 55, 92, 0.2)",
         "section": "0 4px 10px rgba(40, 52, 86, 0.08)",
         "popover": "0 24px 60px -22px rgba(36, 27, 49, 0.2)",
-        "switchKnob": "0 1px 2px rgba(26, 11, 30, 0.28)"
+        "switchKnob": "0 1px 2px rgba(26, 11, 30, 0.28)",
+        "focusRingPicker": "0 0 0 2px var(--color-white), 0 0 0 4px var(--color-accent-strong)"
       },
       "focusRing": "0 0 0 2px var(--color-white), 0 0 0 4px var(--color-accent)"
     }
