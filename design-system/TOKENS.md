@@ -36,6 +36,31 @@ Canonical semantic tokens:
 | `color.danger` | `#FF5555` | Error/destructive | Error and destructive actions only |
 | `color.info` | `#8A8BC0` | Informational state | Neutral/informational badges |
 
+Connection picker tokens (switch, compact search, pills, kickers, group
+headers, match highlight, state panels, scrim; see COMPONENTS.md
+"Connection Picker"). Dark values shown; light values in the token files.
+
+| Token | Dark | Purpose |
+|---|---|---|
+| `color.picker.accentStrong` | `#5956D5` | Switch track (on), count badge fill |
+| `color.picker.onAccentStrong` | `#EEF0FF` | Count badge digits (4.99:1 on the fill; the design's `#B9C0F2` is 3.2:1) |
+| `color.picker.link` | `#9DA7EF` (light `#5F5F97`) | Links inside the picker |
+| `color.picker.textSubtle` | `#9C96AE` | Row descriptions, group headers, counts (below `text.muted`) |
+| `color.picker.divider` | `#3A3147` | Lines inside popovers and modals |
+| `color.picker.selectedBg` / `selectedBorder` | `rgba(89,86,213,0.2)` / `rgba(157,167,239,0.4)` | Active row and selected filter fill; popover/modal border |
+| `color.picker.rowActiveBorder` | `#9DA7EF` (light `#6262A0`) | Active row and selected filter ring (6.2:1 / 4.8:1 on the popover) |
+| `color.picker.pillBorder` / `pillHoverBg` | `rgba(255,255,255,0.14)` / `rgba(255,255,255,0.06)` | Small pill button |
+| `color.picker.switchTrackOff` / `switchKnob` | `#7A7392` / `#F4F5F9` (light `#80829E` / `#FFFFFF`); each off track is at least 3:1 on the popover and under the knob | Switch |
+| `color.picker.matchBg` | `rgba(157,167,239,0.22)` | Search match highlight |
+| `color.picker.stateOk` / `stateWarn` / `stateDeny` | `#4ECB8F` / `#E0A94A` / `#E08AA3` (light `#1B7950` / `#8E611E` / `#9C546A`, each ≥ 4.5:1) | Status kickers, dots and icons |
+| `color.picker.panel{Ok,Warn,Deny}{Bg,Border}` | 12% fill / 30-32% border of the state color | State panels |
+| `color.picker.iconTile` | `rgba(157,167,239,0.14)` | Modal header icon square |
+| `color.picker.railBg` | `rgba(0,0,0,0.16)` | Modal filter rail |
+| `color.picker.scrim` | `rgba(26,11,30,0.55)` | Modal backdrop (with a 3px blur) |
+| `shadow.switchKnob` | `none` (light: `0 1px 2px rgba(26,11,30,0.28)`) | Switch knob lift in light mode |
+| `shadow.focusRingPicker` | `--focus-ring` (light: 2px white + 2px `#6262A0`, 5.6:1 on white) | Focus ring on picker fields, pills, switches and icon buttons |
+| `shadow.popover` | `0 24px 60px -22px rgba(0,0,0,0.55)` | Popover and modal elevation |
+
 Neutral utility tokens:
 - `color.white` = `#FFFFFF`
 - `color.black` = `#000000`
