@@ -474,8 +474,10 @@ components" block); light-mode values live there too.
 ### Switch
 - `button.switch[role="switch"][aria-checked]`, 30x18 (`.switch--lg` 38x22).
 - Track: `--color-switch-track-on` when checked, else `--color-switch-track-off`.
+  The off track must reach 3:1 against the surface and under the knob; light
+  mode uses a mid gray, not the design's pale #e4e5ee (1.08:1).
 - Knob: `--color-switch-knob` with `--shadow-switch-knob` (none in dark; a
-  soft drop in light so the white knob reads on the pale off track), 14px
+  soft drop in light), 14px
   (16px large), 2px inset (3px large),
   slides 12px (16px large) with `--transition-base`.
 - Accessible name is the thing it switches (`aria-label="Index Exchange"`).
@@ -493,7 +495,7 @@ components" block); light-mode values live there too.
 ### Small Pill Button
 - `.pill-btn`, 22-24px high, `--radius-pill`, 1px `--color-pill-border`,
   transparent fill, 0.75rem `--color-text-secondary`.
-- Hover: `--color-pill-hover-bg` fill, `--color-text-primary`.
+- Hover (enabled pills only): `--color-pill-hover-bg` fill, `--color-text-primary`.
 - A pill whose action would change nothing is `aria-disabled="true"` at 40%
   opacity, not natively disabled, so focus does not drop. `aria-disabled`
   does not stop a click or Enter/Space on a native button: the handler must

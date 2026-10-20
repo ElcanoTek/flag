@@ -49,7 +49,7 @@ headers, match highlight, state panels, scrim; see COMPONENTS.md
 | `color.picker.divider` | `#3A3147` | Lines inside popovers and modals |
 | `color.picker.selectedBg` / `selectedBorder` | `rgba(89,86,213,0.2)` / `rgba(157,167,239,0.4)` | Active row and selected filter; popover/modal border |
 | `color.picker.pillBorder` / `pillHoverBg` | `rgba(255,255,255,0.14)` / `rgba(255,255,255,0.06)` | Small pill button |
-| `color.picker.switchTrackOff` / `switchKnob` | `rgba(255,255,255,0.14)` / `#F4F5F9` | Switch |
+| `color.picker.switchTrackOff` / `switchKnob` | `rgba(255,255,255,0.14)` / `#F4F5F9` (light `#80829E` / `#FFFFFF`: 3.2:1 on the popover, 3.75:1 under the knob) | Switch |
 | `color.picker.matchBg` | `rgba(157,167,239,0.22)` | Search match highlight |
 | `color.picker.stateOk` / `stateWarn` / `stateDeny` | `#4ECB8F` / `#E0A94A` / `#E08AA3` (light `#1B7950` / `#8E611E` / `#9C546A`, each ≥ 4.5:1) | Status kickers, dots and icons |
 | `color.picker.panel{Ok,Warn,Deny}{Bg,Border}` | 12% fill / 30-32% border of the state color | State panels |
