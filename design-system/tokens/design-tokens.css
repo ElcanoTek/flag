@@ -199,10 +199,14 @@
   --color-divider: #3a3147;
   --color-selected-bg: rgba(89, 86, 213, 0.2);
   --color-selected-border: rgba(157, 167, 239, 0.4);
+  /* The active row's ring: the 40% border alone was 2.19:1 on the popover. */
+  --color-row-active-border: #9da7ef;
   --color-pill-border: rgba(255, 255, 255, 0.14);
   --color-pill-hover-bg: rgba(255, 255, 255, 0.06);
   --color-switch-track-on: var(--color-accent-strong);
-  --color-switch-track-off: rgba(255, 255, 255, 0.14);
+  /* 3.16:1 on the popover and 4.1:1 under the knob (the design's 14% white
+     was 1.56:1). */
+  --color-switch-track-off: #7a7392;
   --color-switch-knob: #f4f5f9;
   --shadow-switch-knob: none;
   --focus-ring-picker: var(--focus-ring);
@@ -321,6 +325,7 @@ body.theme-light {
   --color-divider: #d9deec;
   --color-selected-bg: #eaedf5;
   --color-selected-border: #c7cbec;
+  --color-row-active-border: #6262a0;
   --color-pill-border: #d7d5e6;
   --color-pill-hover-bg: #f1f2f8;
   /* The design's #e4e5ee read 1.08:1 on the popover; this is 3.2:1 there and

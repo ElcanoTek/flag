@@ -474,8 +474,9 @@ components" block); light-mode values live there too.
 ### Switch
 - `button.switch[role="switch"][aria-checked]`, 30x18 (`.switch--lg` 38x22).
 - Track: `--color-switch-track-on` when checked, else `--color-switch-track-off`.
-  The off track must reach 3:1 against the surface and under the knob; light
-  mode uses a mid gray, not the design's pale #e4e5ee (1.08:1).
+  The off track must reach 3:1 against the surface and under the knob, so
+  both themes use a mid gray rather than the design's faint track.
+- Hover: a 3px `--color-pill-hover-bg` halo. Pressed: the track dims (92%).
 - Knob: `--color-switch-knob` with `--shadow-switch-knob` (none in dark; a
   soft drop in light), 14px
   (16px large), 2px inset (3px large),
@@ -496,6 +497,8 @@ components" block); light-mode values live there too.
 - `.pill-btn`, 22-24px high, `--radius-pill`, 1px `--color-pill-border`,
   transparent fill, 0.75rem `--color-text-secondary`.
 - Hover (enabled pills only): `--color-pill-hover-bg` fill, `--color-text-primary`.
+- Pressed: `--color-selected-bg` fill and `--color-selected-border` (the icon
+  button too).
 - A pill whose action would change nothing is `aria-disabled="true"` at 40%
   opacity, not natively disabled, so focus does not drop. `aria-disabled`
   does not stop a click or Enter/Space on a native button: the handler must
@@ -532,7 +535,7 @@ components" block); light-mode values live there too.
   `--color-surface-2`, 1px `--color-selected-border`,
   `--radius-lg`, `--shadow-popover`. Rows 64px with 2-line descriptions
   (`--color-text-subtle`); the active row is `--color-selected-bg` with an
-  inset 1px `--color-selected-border` ring.
+  inset 1px `--color-row-active-border` ring (at least 3:1 on the popover).
 - Modal: `--color-surface-1`, 1px `--color-selected-border`, `--radius-xl`,
   `--shadow-popover`, header icon in a `--color-icon-tile` square
   (`--color-accent` glyph). Filter rail on `--color-rail-bg`; the selected
