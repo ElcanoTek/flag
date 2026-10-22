@@ -21,12 +21,22 @@ for f in flag-sync.sh stack-check.sh; do
   [ -z "$mode" ] || [ "$mode" = 100755 ] || err "tools/product/$f is committed as $mode, not 100755 (git update-index --chmod=+x)"
 done
 
-# Lint: shellcheck is required in CI (the GitHub runner has it); skipped with a note
-# locally when it is not installed.
+# Lint: one pinned shellcheck release, at every severity (-S style, the
+# default, spelled out), so a local run and CI report the same findings.
+# Releases disagree (0.9, the runner's packaged one, reports SC2015 where 0.11
+# does not), so CI installs exactly this version (.github/workflows/ci.yml)
+# and fails on any other; locally another version runs with a warning, and a
+# missing shellcheck skips the lint with a note.
+SHELLCHECK_PIN=0.11.0
 if command -v shellcheck >/dev/null 2>&1; then
-  shellcheck "$T/flag-sync.sh" "$T/stack-check.sh" || err "shellcheck reports problems in tools/product/*.sh"
+  scv=$(shellcheck --version | sed -n 's/^version: //p')
+  if [ "$scv" != "$SHELLCHECK_PIN" ]; then
+    if [ -n "${CI:-}" ]; then err "shellcheck $scv in CI; the pinned release is $SHELLCHECK_PIN"
+    else echo "check-product-tools: warning: shellcheck $scv here, CI runs $SHELLCHECK_PIN; findings may differ"; fi
+  fi
+  shellcheck -S style "$T/flag-sync.sh" "$T/stack-check.sh" || err "shellcheck reports problems in tools/product/*.sh"
   # Flag's own shell scripts are held to the same bar.
-  shellcheck "$ROOT"/scripts/*.sh "$ROOT"/design-system/*.sh || err "shellcheck reports problems in Flag's own scripts"
+  shellcheck -S style "$ROOT"/scripts/*.sh "$ROOT"/design-system/*.sh || err "shellcheck reports problems in Flag's own scripts"
 elif [ -n "${CI:-}" ]; then
   err "shellcheck is not installed (it is required in CI)"
 else

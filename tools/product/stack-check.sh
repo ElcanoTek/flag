@@ -20,7 +20,7 @@ set -f # stack.conf values are words, never globs
 unset CDPATH
 export LC_ALL=C
 
-STACK_CHECK_VERSION=18
+STACK_CHECK_VERSION=19
 STANDARD_SHA=5b3a1c9dab098277570a37d58366b0802d4378370f9717d48743c386b194bdbb
 ROOT="$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)"
 CONF="$ROOT/stack.conf"
@@ -223,7 +223,7 @@ for (@ARGV) {
 '
 for d in "${web[@]+"${web[@]}"}"; do
   repo_dir "$d" || { err "stack.conf: web dir $d must be a path inside the repo"; continue; }
-  [ -d "$ROOT/$d" ] && [ ! -L "$ROOT/$d" ] || { err "stack.conf: web dir $d does not exist (or is a symlink)"; continue; }
+  if [ ! -d "$ROOT/$d" ] || [ -L "$ROOT/$d" ]; then err "stack.conf: web dir $d does not exist (or is a symlink)"; continue; fi
   list="$(mktemp)"; scan="$(mktemp)"
   if git -C "$ROOT" rev-parse --is-inside-work-tree >/dev/null 2>&1; then
     lister=(git -C "$ROOT" -c core.quotePath=false --literal-pathspecs ls-files -z --cached --others --exclude-standard -- "$d")

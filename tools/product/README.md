@@ -7,8 +7,8 @@ byte-identical afterwards.
 
 | File | Version | Goes to (in the product) | What it does |
 | --- | --- | --- | --- |
-| [`flag-sync.sh`](flag-sync.sh) | `FLAG_SYNC_VERSION=10` | `scripts/flag-sync.sh` | Vendors Flag files and records them in `flag.lock`; `check` is the offline drift gate |
-| [`stack-check.sh`](stack-check.sh) | `STACK_CHECK_VERSION=18` | `scripts/stack-check.sh` | The PR gate for the Elcano frontend standard (reads `stack.conf`; runs `flag-sync.sh check`) |
+| [`flag-sync.sh`](flag-sync.sh) | `FLAG_SYNC_VERSION=11` | `scripts/flag-sync.sh` | Vendors Flag files and records them in `flag.lock`; `check` is the offline drift gate |
+| [`stack-check.sh`](stack-check.sh) | `STACK_CHECK_VERSION=19` | `scripts/stack-check.sh` | The PR gate for the Elcano frontend standard (reads `stack.conf`; runs `flag-sync.sh check`) |
 | [`flag-drift.yml`](flag-drift.yml) | | `.github/workflows/flag-drift.yml` | Weekly job: runs `flag-sync.sh status` against Flag's `main` |
 | [`agents-standard-block.md`](agents-standard-block.md) | block v2 | pasted into `AGENTS.md` | The shared standard; `stack-check.sh` pins its sha256 |
 

@@ -43,7 +43,7 @@ set -f # lock paths may contain glob characters ([ ] * ?); never expand them
 unset CDPATH GIT_DIR GIT_WORK_TREE GIT_INDEX_FILE GIT_OBJECT_DIRECTORY GIT_ALTERNATE_OBJECT_DIRECTORIES GIT_NAMESPACE
 export LC_ALL=C GIT_LITERAL_PATHSPECS=1
 
-FLAG_SYNC_VERSION=10
+FLAG_SYNC_VERSION=11
 ROOT="$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)"
 LOCK="$ROOT/flag.lock"
 
@@ -115,18 +115,18 @@ validate_lock() {
   local raw kind a b c extra rc=0 flags=0 d e
   newtmp ENTRIES
   [ -e "$LOCK" ] || [ -L "$LOCK" ] || return 0
-  [ ! -L "$LOCK" ] && [ -f "$LOCK" ] || die "flag.lock must be a regular file (not a symlink)"
+  if [ -L "$LOCK" ] || [ ! -f "$LOCK" ]; then die "flag.lock must be a regular file (not a symlink)"; fi
   [ "$(tr -d '\000' < "$LOCK" | wc -c)" -eq "$(wc -c < "$LOCK")" ] || die "flag.lock contains NUL bytes"
   newtmp raw
   grep -a -v -e '^[[:space:]]*#' -e '^[[:space:]]*$' "$LOCK" > "$raw" || rc=$?
   [ "$rc" -le 1 ] || die "cannot read flag.lock"
   while read -r kind a b c extra; do
     case "$kind" in
-      flag) [[ "$a" =~ ^[0-9a-f]{40}$ ]] && [ -z "$b" ] || die "flag.lock: bad flag line '$kind $a $b'"
+      flag) if ! [[ "$a" =~ ^[0-9a-f]{40}$ ]] || [ -n "$b" ]; then die "flag.lock: bad flag line '$kind $a $b'"; fi
             flags=$((flags + 1)); echo "flag $a" >> "$ENTRIES" ;;
-      dir) [ -n "$a" ] && [ -z "$b" ] || die "flag.lock: bad dir line '$kind $a $b'"
+      dir) if [ -z "$a" ] || [ -n "$b" ]; then die "flag.lock: bad dir line '$kind $a $b'"; fi
            safe_path "$a"; echo "dir $a" >> "$ENTRIES" ;;
-      file) [[ "$a" =~ ^[0-9a-f]{64}$ ]] && [ -n "$c" ] && [ -z "$extra" ] || die "flag.lock: bad file line '$kind $a $b $c'"
+      file) if ! [[ "$a" =~ ^[0-9a-f]{64}$ ]] || [ -z "$c" ] || [ -n "$extra" ]; then die "flag.lock: bad file line '$kind $a $b $c'"; fi
             safe_path "$b"; safe_path "$c"; echo "file $a $b $c" >> "$ENTRIES" ;;
       *) die "flag.lock: unknown entry '$kind'" ;;
     esac
