@@ -25,7 +25,7 @@ set -f # stack.conf values are words, never globs
 unset CDPATH
 export LC_ALL=C
 
-STACK_CHECK_VERSION=22
+STACK_CHECK_VERSION=23
 STANDARD_SHA=5b3a1c9dab098277570a37d58366b0802d4378370f9717d48743c386b194bdbb
 ROOT="$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)"
 CONF="$ROOT/stack.conf"
@@ -202,21 +202,24 @@ sub tags { my ($t, $html) = @_;
 sub patterns { my ($t, $pre) = @_;
   my $r = qr{["`$Q(]?$sp$pre(?!$lb)$host+};
   my $q = qr{["`$Q]};
+  # A URL object stringifies to its href, so new URL("https://…") (also as
+  # window./globalThis./self.URL) loads the same remote file as the bare string.
+  my $nu = qr{(?:\bnew$sp+(?:(?:window|globalThis|self)$sp\.$sp)?URL$sp\($sp)?};
   my @re = (
-    qr{(?:\.(?:src|poster)|(?<!\blocation)\.href|\[$sp$q(?:src|href|srcset|poster)$q$sp\])$sp=(?!=)$sp$r},
+    qr{(?:\.(?:src|poster)|(?<!\blocation)\.href|\[$sp$q(?:src|href|srcset|poster)$q$sp\])$sp=(?!=)$sp$nu$r},
     qr{\.srcset$sp=(?!=)$sp$q(?:[^"`$Q]*,)?\s*$pre(?!$lb)$host+},
-    qr{\bsetAttribute$sp\($sp$q(?:src|href|xlink:href|srcset|poster|data)$q$sp,$sp$r}i,
-    qr{\bsetAttributeNS$sp\(${sp}[^,()]*,$sp$q(?:xlink:)?(?:src|href)$q$sp,$sp$r}i,
-    qr{(?<![\w\$.\-])$q?src$q?$sp:$sp$r},
-    qr{\bnew(?=[\s/])$sp(?:Shared)?Worker$sp\($sp(?:new$sp+URL$sp\($sp)?$r},
-    qr{\bimportScripts$sp\($sp$r},
+    qr{\bsetAttribute$sp\($sp$q(?:src|href|xlink:href|srcset|poster|data)$q$sp,$sp$nu$r}i,
+    qr{\bsetAttributeNS$sp\(${sp}[^,()]*,$sp$q(?:xlink:)?(?:src|href)$q$sp,$sp$nu$r}i,
+    qr{(?<![\w\$.\-])$q?src$q?$sp:$sp$nu$r},
+    qr{\bnew(?=[\s/])$sp(?:Shared)?Worker$sp\($sp$nu$r},
+    qr{\bimportScripts$sp\($sp$nu$r},
     # Constructors and loaders that fetch media or code as soon as they run.
-    qr{\bnew(?=[\s/])${sp}Audio$sp\($sp$r},
-    qr{\.addModule$sp\($sp(?:new$sp+URL$sp\($sp)?$r},
+    qr{\bnew(?=[\s/])${sp}Audio$sp\($sp$nu$r},
+    qr{\.addModule$sp\($sp$nu$r},
     qr{\@import$sp(?:url$sp\()?$sp$r}i,
     qr{(?<![\w.\$])url\($sp$r}i,
     qr{\bimage-set$sp\((?:[^;{}()]|\([^()]*\))*?$q$sp$pre(?!$lb)$host+}i,
-    qr{(?<![\w.\$])import$sp\(?$sp(?:new$sp+URL$sp\($sp)?$r},
+    qr{(?<![\w.\$])import$sp\(?$sp$nu$r},
     qr{(?<![\w.\$])from$sp$r},
   );
   for my $re (@re) { while ($t =~ /$re/g) { hit($&); } }

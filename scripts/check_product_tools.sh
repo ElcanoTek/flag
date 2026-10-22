@@ -22,25 +22,32 @@ for f in flag-sync.sh stack-check.sh; do
 done
 
 # Lint: one pinned shellcheck release, at every severity (-S style, the
-# default, spelled out), so a local run and CI report the same findings.
-# Releases disagree (0.9, the runner's packaged one, reports SC2015 where 0.11
-# does not), so CI installs exactly this version (.github/workflows/ci.yml)
-# and fails on any other; locally another version runs with a warning, and a
-# missing shellcheck skips the lint with a note.
+# default, spelled out). Releases disagree (0.9, the runner's packaged one,
+# reports SC2015 where 0.11 does not), so only the pinned release's findings
+# count:
+#   - CI (GitHub Actions sets CI=true) installs exactly this release first on
+#     PATH (.github/workflows/ci.yml, sha256-verified) and fails if shellcheck
+#     is missing, is any other version, or reports anything;
+#   - locally the pinned release lints the same way; any other version, or
+#     none, skips the lint with a note instead of failing on findings that
+#     version would make.
 SHELLCHECK_PIN=0.11.0
+scv=""
 if command -v shellcheck >/dev/null 2>&1; then
   scv=$(shellcheck --version | sed -n 's/^version: //p')
-  if [ "$scv" != "$SHELLCHECK_PIN" ]; then
-    if [ -n "${CI:-}" ]; then err "shellcheck $scv in CI; the pinned release is $SHELLCHECK_PIN"
-    else echo "check-product-tools: warning: shellcheck $scv here, CI runs $SHELLCHECK_PIN; findings may differ"; fi
-  fi
+fi
+lint="lint skipped"
+if [ "$scv" = "$SHELLCHECK_PIN" ]; then
+  lint="shellcheck $scv"
   shellcheck -S style "$T/flag-sync.sh" "$T/stack-check.sh" || err "shellcheck reports problems in tools/product/*.sh"
   # Flag's own shell scripts are held to the same bar.
   shellcheck -S style "$ROOT"/scripts/*.sh "$ROOT"/design-system/*.sh || err "shellcheck reports problems in Flag's own scripts"
 elif [ -n "${CI:-}" ]; then
-  err "shellcheck is not installed (it is required in CI)"
+  err "shellcheck ${scv:-is not installed}${scv:+ in CI}; CI must run the pinned release $SHELLCHECK_PIN"
+elif [ -n "$scv" ]; then
+  echo "check-product-tools: lint skipped: shellcheck $scv != pinned $SHELLCHECK_PIN; CI runs the pinned release"
 else
-  echo "check-product-tools: shellcheck not installed; skipping lint (CI runs it)"
+  echo "check-product-tools: lint skipped: shellcheck not installed; CI runs the pinned release $SHELLCHECK_PIN"
 fi
 
 # Versions named in the docs match the scripts.
@@ -66,5 +73,5 @@ got=$(awk '/^<!-- BEGIN:elcano-frontend-standard/{f=1;next}/^<!-- END:elcano-fro
 # The drift template runs the shared script from the product's scripts/.
 grep -q 'scripts/flag-sync.sh status' "$T/flag-drift.yml" || err "tools/product/flag-drift.yml does not run scripts/flag-sync.sh status"
 
-[ "$fail" = 0 ] && echo "check-product-tools: ok (shellcheck, versions FLAG_SYNC=$(sed -n 's/^FLAG_SYNC_VERSION=//p' "$T/flag-sync.sh") STACK_CHECK=$(sed -n 's/^STACK_CHECK_VERSION=//p' "$T/stack-check.sh"), standard block hash)"
+[ "$fail" = 0 ] && echo "check-product-tools: ok ($lint, versions FLAG_SYNC=$(sed -n 's/^FLAG_SYNC_VERSION=//p' "$T/flag-sync.sh") STACK_CHECK=$(sed -n 's/^STACK_CHECK_VERSION=//p' "$T/stack-check.sh"), standard block hash)"
 exit "$fail"

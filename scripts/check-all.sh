@@ -1,7 +1,8 @@
 #!/bin/sh
 # check-all.sh — every check CI runs, in one command (also `make check`).
 # Needs only sh, perl and python3 (standard library), plus shellcheck for the
-# tools lint (pinned release; skipped with a note when absent); no npm.
+# tools lint (pinned 0.11.0; skipped with a note when absent or another
+# version, required in CI); no npm.
 set -u
 ROOT=$(CDPATH='' cd -- "$(dirname -- "$0")/.." && pwd)
 cd "$ROOT" || exit 2
