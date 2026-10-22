@@ -8,12 +8,25 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   check:
+    name: Checks (make check)
     runs-on: ubuntu-latest
+    timeout-minutes: 5
     steps:
-      - uses: actions/checkout@v4
-      - name: Vendorable files are safe to copy verbatim
-        run: design-system/check-vendorable.sh
-      - name: Email template stays within client limits
-        run: design-system/check-email-template.sh
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+      # One entry point, the same one contributors run locally. sh, perl and
+      # python3 come with the runner; there is nothing to install.
+      #   vendorable  tokens/fonts/theme/icons/logos are safe to copy verbatim
+      #   email       email-safe.html size limits; preview copy in sync
+      #   tokens      design-tokens.json == design-tokens.css; contrast pairs
+      #   refs        Markdown links, preview refs, sprite/logo/font coverage
+      #   license     design-system/LICENSE matches the root MIT text
+      - name: make check
+        run: make check

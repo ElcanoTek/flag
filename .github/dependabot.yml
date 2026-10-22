@@ -1,0 +1,26 @@
+# Dependabot proposes updates for the only dependency surface Flag has: the
+# GitHub Actions its workflows use (pinned by commit SHA with the version in a
+# comment). The checks are standard-library Python and POSIX sh; the one
+# vendored library (preview/vendor/flatpickr) is updated by hand.
+#
+# Weekly polling with a supply-chain cooldown: a freshly published release is
+# not proposed until it is a week old (security updates are never delayed).
+# Minor and patch bumps are grouped into one PR; majors stay separate.
+# `labels: []` keeps Dependabot from applying labels this repo does not have.
+version: 2
+updates:
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    cooldown:
+      default-days: 7
+    labels: []
+    commit-message:
+      prefix: "deps(actions)"
+    groups:
+      actions-minor-patch:
+        update-types:
+          - minor
+          - patch
