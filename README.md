@@ -21,7 +21,7 @@ products copy its files verbatim and never patch their copies.
   every text, badge, fill and focus-ring pair against WCAG AA in both themes.
 - **Two typefaces**, self-hosted: Nebula Sans for text and Hack for code, in
   one font sheet.
-- **71 stroke icons** in one SVG sprite, and the Elcano and product **logos**.
+- **72 stroke icons** in one SVG sprite, and the Elcano and product **logos**.
 - **A theme contract**: `html[data-theme="light|dark"]`, system default,
   explicit choice stored under `flag-theme-preference`, and a small
   dependency-free controller.

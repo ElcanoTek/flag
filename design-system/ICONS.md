@@ -3,7 +3,7 @@
 This is the shared icon vocabulary for all Elcano microservices.
 
 ## Source
-- Sprite file: `icons/core-icons.svg` (71 symbols; every one is shown in the
+- Sprite file: `icons/core-icons.svg` (72 symbols; every one is shown in the
   preview's Core Icons section).
 - Style: stroke-based on a 24px grid, `currentColor`, rounded caps and joins.
 - Stroke width: `1.75` to `2` (new glyphs use `1.9`). Two glyphs are filled
@@ -102,6 +102,7 @@ This is the shared icon vocabulary for all Elcano microservices.
 - `target` - goals and targeting
 - `zap` - automation, triggers and quick actions
 - `selector` - up/down caret on a picker or select trigger (smaller than `expand`)
+- `archive` - archive an item (move out of the active list without deleting)
 
 ## Accessibility Rules
 - Decorative icons: `aria-hidden="true"`.
