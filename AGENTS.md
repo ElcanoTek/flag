@@ -18,7 +18,7 @@ package manager.
 ```bash
 make check     # everything CI runs; must pass before you push
 make preview   # serve design-system/ at http://localhost:8765/preview/
-make sync-email  # after editing design-system/email-safe.html
+make sync      # after editing components/components.css or email-safe.html
 ```
 
 ## Rules
@@ -27,6 +27,11 @@ make sync-email  # after editing design-system/email-safe.html
   or changing an existing value, changes every product. Only do it as a
   deliberate fix, and say so in the PR (see `CONTRIBUTING.md` "Breaking
   changes").
+- **Components live in `design-system/components/components.css`** (vendored
+  by Tier A products); the preview loads a synced copy, so run `make sync`
+  after editing it. `preview/styles.css` is preview page layout only.
+- **Tokens are static values** (no `color-mix()`; precompute), and a newer
+  color function in `components.css` needs a static fallback right before it.
 - **CSS and JSON tokens move together.** Every token in
   `design-tokens.css` exists in `design-tokens.json` with the same value, dark
   and light; `scripts/check_tokens.py` enforces it and measures contrast.

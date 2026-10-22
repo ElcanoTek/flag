@@ -27,7 +27,9 @@ products copy its files verbatim and never patch their copies.
   dependency-free controller.
 - **Component specs** (buttons, inputs, date picker, upload, chips, segmented
   control, tables, connection picker, logs/code display, email) with
-  required states and accessibility behavior, all rendered in the preview.
+  required states and accessibility behavior, and **`components.css`**, the
+  plain-CSS implementation of them that server-rendered (Tier A) products
+  vendor and the preview itself loads.
 - **An email-safe HTML template** for generated reports, with its own limits
   and dark-mode guidance.
 
@@ -52,6 +54,7 @@ Use it in a page:
 ```html
 <link rel="stylesheet" href="/static/flag/fonts/fonts.css" />
 <link rel="stylesheet" href="/static/flag/tokens/design-tokens.css" />
+<link rel="stylesheet" href="/static/flag/components/components.css" />
 <script src="/static/flag/theme/theme-controller.js"></script>
 
 <button class="btn btn-primary" type="button">Save</button>
@@ -67,8 +70,11 @@ Use it in a page:
 }
 ```
 
-Product CSS reads tokens and never hardcodes a color, radius, spacing value or
-font family. Start with [`design-system/AGENT_GUIDE.md`](design-system/AGENT_GUIDE.md).
+`components.css` is the vendorable component layer: the `.btn`, form,
+chip, card, badge, table, icon, segmented-control and other classes
+`COMPONENTS.md` specifies, in plain CSS that reads tokens (the preview uses
+the same file). Product CSS reads tokens too and never hardcodes a color,
+radius, spacing value or font family. Start with [`design-system/AGENT_GUIDE.md`](design-system/AGENT_GUIDE.md).
 
 ## How products consume Flag
 
@@ -109,6 +115,7 @@ to copy, is in
 | `design-system/fonts/` | `fonts.css` plus Nebula Sans and Hack, each with its licence |
 | `design-system/icons/core-icons.svg` | The icon sprite |
 | `design-system/logos/` | Approved logo files |
+| `design-system/components/components.css` | The vendorable component stylesheet (Tier A); `preview/components.css` is a synced copy |
 | `design-system/theme/theme-controller.js` | The light/dark controller |
 | `design-system/email-safe.html` | Canonical email template (`preview/email-safe.html` is a synced copy) |
 | `design-system/preview/` | The preview site deployed at <https://flag-71q.pages.dev/> |

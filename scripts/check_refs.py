@@ -17,6 +17,14 @@
    preview; every logos/<file> named in a doc exists.
 5. Fonts. fonts/fonts.css declares only Nebula Sans and Hack, every url() in
    it exists, and each face directory keeps its licence file.
+6. Docs do not prescribe pairs the contrast check rejects: no CSS example
+   puts a label on raw --color-primary / --gradient-action-primary or uses
+   --color-secondary as a link color, and no prose asks for white text on the
+   raw primary. (Lines that say "never"/"not"/"decorative" are warnings and
+   are allowed.)
+7. The preview's components.css is a byte copy of
+   design-system/components/components.css (refresh with
+   design-system/sync-preview.sh).
 
 Usage: python3 scripts/check_refs.py
 """
@@ -203,7 +211,44 @@ def check_fonts():
     return len(urls)
 
 
+REJECTED_IN_DOCS = [
+    (re.compile(r"background(-color)?:\s*var\(--gradient-action-primary\)"),
+     "a label on --gradient-action-primary (4.46:1); use --gradient-action-fill + --color-on-primary-fill"),
+    (re.compile(r"background(-color)?:\s*var\(--color-primary\)"),
+     "a fill of raw --color-primary; use --color-primary-fill + --color-on-primary-fill"),
+    (re.compile(r"(?<![-\w])color:\s*var\(--color-secondary\)"),
+     "--color-secondary as a text/link color (2.7-3.6:1 in dark); use --color-link"),
+    (re.compile(r"solid\s+`?(var\()?(--color-primary|color\.primary)\)?`?(?!-)[^\n]{0,40}white", re.I),
+     "white text on raw primary (4.46:1); use --color-primary-fill + --color-on-primary-fill"),
+    (re.compile(r"links?[^\n]{0,40}default to `?(color\.secondary|--color-secondary)", re.I),
+     "--color-secondary as the default link color; use --color-link"),
+]
+WARNING_WORDS = re.compile(r"\b(never|not|no label|decorative|don't|do not|instead of|was|were)\b", re.I)
+
+
+def check_docs_pairs():
+    for md in files({".md"}):
+        for n, line in enumerate(md.read_text().splitlines(), 1):
+            if WARNING_WORDS.search(line):
+                continue
+            for pattern, why in REJECTED_IN_DOCS:
+                if pattern.search(line):
+                    err("%s:%d prescribes %s" % (rel(md), n, why))
+
+
+def check_preview_copy():
+    canon = DS / "components" / "components.css"
+    copy = PREVIEW / "components.css"
+    if not canon.exists():
+        err("design-system/components/components.css is missing")
+    elif not copy.exists() or copy.read_bytes() != canon.read_bytes():
+        err("design-system/preview/components.css differs from design-system/components/components.css; "
+            "run sh design-system/sync-preview.sh")
+
+
 def main():
+    check_docs_pairs()
+    check_preview_copy()
     ids = sprite_ids()
     n_md = check_markdown()
     n_prev = check_preview(ids)

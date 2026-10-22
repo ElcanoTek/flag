@@ -43,8 +43,8 @@ publishes `preview/` with those four directories beside it on every push to
 |---|---|
 | `design-system/check-vendorable.sh` | Vendored files never reference Flag docs by relative path; the token JSON parses; icon ids are unique |
 | `design-system/check-email-template.sh` | `email-safe.html` stays under Gmail's 100 KB and 8,192-character style limits, and the preview copy is in sync |
-| `scripts/check_tokens.py` | `design-tokens.json` and `design-tokens.css` declare the same tokens with the same values, in both themes; every text, badge, fill, gradient, switch and focus-ring pair meets WCAG AA in both themes |
-| `scripts/check_refs.py` | Markdown links and anchors resolve; the preview references only files that exist and that the live site deploys; every icon is in the sprite, `ICONS.md` and the preview; every logo is documented and shown; the font sheet is complete |
+| `scripts/check_tokens.py` | `design-tokens.json` and `design-tokens.css` declare the same tokens with the same values, in both themes; tokens are static values and `components.css` gives every newer color function a static fallback; every text, badge, fill, gradient, switch and focus-ring pair meets WCAG AA in both themes |
+| `scripts/check_refs.py` | Markdown links and anchors resolve; docs never prescribe a token pair the contrast check rejects; the preview references only files that exist and that the live site deploys; `preview/components.css` is in sync; every icon is in the sprite, `ICONS.md` and the preview; every logo is documented and shown; the font sheet is complete |
 | `scripts/check_license.sh` | `design-system/LICENSE` carries the same MIT text as the root `LICENSE` |
 
 All checks are standard-library Python or POSIX sh and run offline.
@@ -89,9 +89,15 @@ reach 3:1 on both themes' surfaces.
 ### A component or pattern
 
 Spec it in `design-system/COMPONENTS.md` (structure, classes, every state,
-keyboard and screen-reader behavior), build it in the preview with tokens
-only, and make it pass the contrast and accessibility rules in
-`INTERACTION_ACCESSIBILITY.md`.
+keyboard and screen-reader behavior) and implement it in
+`design-system/components/components.css` with tokens only: products vendor
+that file. Then run `make sync` (the preview loads a byte copy, because the
+live site only publishes `preview/` plus tokens, fonts, icons and logos), show
+it in the preview, and make it pass the contrast and accessibility rules in
+`INTERACTION_ACCESSIBILITY.md`. Preview-only layout goes in
+`preview/styles.css`. A newer color function (`color-mix()`, `oklch()`, ...)
+needs a static fallback declaration right before it; tokens must be static
+values.
 
 ## Breaking changes
 

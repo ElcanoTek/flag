@@ -22,6 +22,7 @@ This directory is the single documented source of truth for shared UI design dec
 - `fonts/nebula-sans/` - Nebula Sans, the text face (SIL OFL 1.1; notice in `OFL.txt`, which must travel with the binaries)
 - `fonts/hack/` - Hack, the code face (MIT + Bitstream Vera; notice in `LICENSE.md`, which must travel with the binaries)
 - `theme/theme-controller.js` - canonical light/dark theme controller for product adoption
+- `components/components.css` - the vendorable component stylesheet (Tier A); the preview loads a synced copy (`sh design-system/sync-preview.sh`)
 - `logos/` - approved SVG/PNG logo assets
 - `icons/core-icons.svg` - canonical SVG sprite
 - `EMAIL.md` - approved email modules, plain-text guidance, and email-only color rules

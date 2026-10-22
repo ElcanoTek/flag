@@ -3,8 +3,17 @@
 This spec standardizes shared components used across Lens, Explorer, Home, MOC, and Victoria Voice.
 
 Implementation note:
-- Examples in this file are based on real patterns in `preview/index.html` and `preview/styles.css`.
+- `components/components.css` implements the classes in this file, in plain
+  CSS that reads tokens only. It is the vendorable component layer for
+  server-rendered (Tier A) products: vendor it next to the tokens and fonts
+  and use the markup below. The preview loads a byte-identical copy
+  (`preview/components.css`, refreshed by `sync-preview.sh`), so what the
+  preview shows is what products get; `preview/styles.css` holds only the
+  preview page's own layout.
+- Examples in this file are the markup `preview/index.html` uses.
 - Keep class names and state contracts aligned with these examples for deterministic implementation.
+- React (Tier B) products implement the same specs in their own components,
+  reading the same tokens.
 
 ## Logos and Logo Usage
 - Approved logo assets and rules are defined in `LOGOS.md`.
@@ -234,7 +243,7 @@ Example:
   - disabled styling where applicable
 - Keep checkbox checked styling separate from focus styling (focus ring appears on keyboard focus only).
 - Required structure contract:
-  - visually hidden checkbox input immediately before its label
+  - visually hidden checkbox input (`.ds-checkbox-input`) immediately before its label
   - label uses `.ds-checkbox`
   - visual box uses `.ds-checkbox__box`
   - label text uses `.ds-checkbox__label`
