@@ -157,7 +157,7 @@ When implementing an internal home/launchpad screen:
 - Use the shared `.page-header` and standard shell first.
 - Prefer featured cards for top-priority workflows.
 - Use `details/summary` groups with `.link-tile` entries for secondary resource directories.
-- Include the live Flag design-system site (<https://flag-71q.pages.dev/>) in docs/resources sections when the product exposes internal reference links.
+- Include the live Flag design-system site (<https://flag.elcanotek.com/>) in docs/resources sections when the product exposes internal reference links.
 - If directory links need app/service icons, use the shared iconography rules from `COMPONENTS.md` and `LOGOS.md` rather than inventing custom badge treatments.
 
 ## 8) What Not to Change
