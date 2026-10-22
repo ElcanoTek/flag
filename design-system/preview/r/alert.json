@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "alert",
+  "title": "Alert",
+  "description": "Flag banner: neutral, info, success, warning, destructive state panels.",
+  "dependencies": [
+    "class-variance-authority@^0.7.1"
+  ],
+  "registryDependencies": [
+    "@flag/utils"
+  ],
+  "files": [
+    {
+      "path": "registry/flag/ui/alert.tsx",
+      "content": "import * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\n\nimport { cn } from \"@/lib/utils\"\n\n// Flag \"Error States\" banner and the state-panel look: 1px border on a tint,\n// radius-md, caption-to-body text, one short message plus corrective\n// guidance. Tier A: .alert .alert--<variant>.\nconst alertVariants = cva(\n  \"relative grid w-full grid-cols-[0_1fr] items-start gap-y-0.5 rounded-md border px-3.5 py-2.5 text-body-md has-[>svg]:grid-cols-[calc(var(--spacing)*4)_1fr] has-[>svg]:gap-x-3 [&>svg]:size-4 [&>svg]:translate-y-0.5 [&>svg]:text-current\",\n  {\n    variants: {\n      variant: {\n        default: \"border-border bg-card text-card-foreground\",\n        info: \"border-(--color-status-assigned-border) bg-(--color-status-assigned-bg) text-(--color-status-assigned-fg)\",\n        success:\n          \"border-(--color-status-success-border) bg-(--color-status-success-bg) text-(--color-status-success-fg)\",\n        warning:\n          \"border-(--color-status-warning-border) bg-(--color-status-warning-bg) text-(--color-status-warning-fg)\",\n        destructive:\n          \"border-(--color-status-error-border) bg-(--color-status-error-bg) text-(--color-status-error-fg)\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n    },\n  }\n)\n\nfunction Alert({\n  className,\n  variant,\n  ...props\n}: React.ComponentProps<\"div\"> & VariantProps<typeof alertVariants>) {\n  return (\n    <div\n      data-slot=\"alert\"\n      data-variant={variant ?? \"default\"}\n      role=\"alert\"\n      className={cn(alertVariants({ variant }), className)}\n      {...props}\n    />\n  )\n}\n\nfunction AlertTitle({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"alert-title\"\n      className={cn(\n        \"col-start-2 line-clamp-1 min-h-4 font-semibold tracking-tight\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\n// Description inherits the variant's text color: the status fg tokens are\n// the ones measured at 4.5:1 on their own tint.\nfunction AlertDescription({\n  className,\n  ...props\n}: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"alert-description\"\n      className={cn(\n        \"col-start-2 grid justify-items-start gap-1 text-body-md in-data-[variant=default]:text-subtle [&_p]:leading-relaxed\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nexport { Alert, AlertTitle, AlertDescription }\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

@@ -1,0 +1,21 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "badge",
+  "title": "Badge",
+  "description": "Flag pill badge with the task status set (pending ... cancelled).",
+  "dependencies": [
+    "radix-ui@^1.6.7",
+    "class-variance-authority@^0.7.1"
+  ],
+  "registryDependencies": [
+    "@flag/utils"
+  ],
+  "files": [
+    {
+      "path": "registry/flag/ui/badge.tsx",
+      "content": "import * as React from \"react\"\nimport { cva, type VariantProps } from \"class-variance-authority\"\nimport { Slot } from \"radix-ui\"\n\nimport { cn } from \"@/lib/utils\"\n\n// Flag COMPONENTS.md \"Badges/Pills/Chips\": pill radius, caption text, 1px\n// border; status variants use the status fg/bg/border token triplets\n// (spelled out in full so Tailwind's scanner sees every class).\n// Tier A: .badge with .badge-<status>, .badge-default, .badge-secondary,\n// .badge-outline or .badge-accent.\nconst badgeVariants = cva(\n  \"inline-flex w-fit shrink-0 items-center justify-center gap-1 overflow-hidden rounded-full border px-[0.5625rem] py-0.5 text-caption whitespace-nowrap [transition:var(--transition-fast)] focus-visible:shadow-(--focus-ring) focus-visible:outline-none [&>svg]:pointer-events-none [&>svg]:size-3\",\n  {\n    variants: {\n      variant: {\n        default:\n          \"border-transparent bg-primary text-primary-foreground [a&]:hover:bg-(--primary-hover)\",\n        secondary:\n          \"border-border bg-secondary text-secondary-foreground [a&]:hover:border-(--color-accent)\",\n        destructive: \"border-(--color-status-error-border) bg-(--color-status-error-bg) text-(--color-status-error-fg)\",\n        outline:\n          \"border-border text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground\",\n        ghost:\n          \"border-transparent [a&]:hover:bg-accent [a&]:hover:text-accent-foreground\",\n        // Accent fill: label with --accent-solid-foreground (theme.css; 8.3:1\n        // dark, 5.3:1 light).\n        accent:\n          \"border-transparent bg-accent-solid text-accent-solid-foreground underline-offset-2 [a&]:hover:underline\",\n        link: \"border-transparent text-link underline-offset-4 [a&]:hover:underline\",\n        // Task status set (Flag TOKENS.md \"Status mapping\").\n        pending: \"border-(--color-status-pending-border) bg-(--color-status-pending-bg) text-(--color-status-pending-fg)\",\n        scheduled: \"border-(--color-status-scheduled-border) bg-(--color-status-scheduled-bg) text-(--color-status-scheduled-fg)\",\n        assigned: \"border-(--color-status-assigned-border) bg-(--color-status-assigned-bg) text-(--color-status-assigned-fg)\",\n        leased: \"border-(--color-status-leased-border) bg-(--color-status-leased-bg) text-(--color-status-leased-fg)\",\n        running: \"border-(--color-status-running-border) bg-(--color-status-running-bg) text-(--color-status-running-fg)\",\n        analyzing: \"border-(--color-status-analyzing-border) bg-(--color-status-analyzing-bg) text-(--color-status-analyzing-fg)\",\n        success: \"border-(--color-status-success-border) bg-(--color-status-success-bg) text-(--color-status-success-fg)\",\n        warning: \"border-(--color-status-warning-border) bg-(--color-status-warning-bg) text-(--color-status-warning-fg)\",\n        error: \"border-(--color-status-error-border) bg-(--color-status-error-bg) text-(--color-status-error-fg)\",\n        cancelled: \"border-(--color-status-cancelled-border) bg-(--color-status-cancelled-bg) text-(--color-status-cancelled-fg)\",\n      },\n    },\n    defaultVariants: {\n      variant: \"default\",\n    },\n  }\n)\n\nfunction Badge({\n  className,\n  variant = \"default\",\n  asChild = false,\n  ...props\n}: React.ComponentProps<\"span\"> &\n  VariantProps<typeof badgeVariants> & { asChild?: boolean }) {\n  const Comp = asChild ? Slot.Root : \"span\"\n\n  return (\n    <Comp\n      data-slot=\"badge\"\n      data-variant={variant}\n      className={cn(badgeVariants({ variant }), className)}\n      {...props}\n    />\n  )\n}\n\nexport { Badge, badgeVariants }\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

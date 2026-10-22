@@ -1,0 +1,18 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "utils",
+  "title": "cn utility",
+  "description": "clsx + tailwind-merge, taught Flag's type scale.",
+  "dependencies": [
+    "clsx@^2.1.1",
+    "tailwind-merge@^3.7.0"
+  ],
+  "files": [
+    {
+      "path": "registry/flag/lib/utils.ts",
+      "content": "import { clsx, type ClassValue } from \"clsx\"\nimport { extendTailwindMerge } from \"tailwind-merge\"\n\n// Flag's type scale (text-title, text-caption, ...) comes from the flag-theme\n// `@theme inline` block. Tell tailwind-merge they are font sizes, or it reads\n// them as colors and drops one of `text-caption text-subtle`.\nconst twMerge = extendTailwindMerge({\n  extend: {\n    theme: {\n      text: [\"title\", \"subtitle\", \"body\", \"body-md\", \"caption\", \"overline\"],\n    },\n  },\n})\n\nexport function cn(...inputs: ClassValue[]) {\n  return twMerge(clsx(inputs))\n}\n",
+      "type": "registry:lib"
+    }
+  ],
+  "type": "registry:lib"
+}
