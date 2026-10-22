@@ -328,10 +328,19 @@
             <img class="ds-app-header__mark" src="../logos/elcano-mark-primary.svg" alt="Elcano" />
             <div class="ds-app-header__text">
               <p class="ds-app-header__eyebrow">Elcano Internal</p>
-              <h3 class="ds-app-header__title">Home</h3>
+              <h3 class="ds-app-header__title">Campaign delivery overview</h3>
             </div>
           </div>
           <div class="ds-app-header__actions">
+            <button class="icon-action" type="button" aria-label="Settings" title="Settings">
+              <svg aria-hidden="true"><use href="../icons/core-icons.svg#settings"></use></svg>
+            </button>
+            <button class="icon-action theme-toggle" type="button" data-preview-theme-proxy aria-label="Toggle color theme" title="Toggle color theme">
+              <span class="theme-toggle__icon-wrap" aria-hidden="true">
+                <svg class="icon-inline theme-toggle__icon theme-toggle__icon--sun" aria-hidden="true"><use href="../icons/core-icons.svg#sun"></use></svg>
+                <svg class="icon-inline theme-toggle__icon theme-toggle__icon--moon" aria-hidden="true"><use href="../icons/core-icons.svg#moon"></use></svg>
+              </span>
+            </button>
             <button class="icon-action header-logout-btn" type="button" aria-label="Log out" title="Log out">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
@@ -448,6 +457,7 @@
         <div class="field"><label for="f-search">Search</label><input id="f-search" type="search" placeholder="Search" /></div>
         <div class="field"><label for="f-email">Email</label><input id="f-email" type="email" placeholder="team@example.com" /></div>
         <div class="field"><label for="f-password">Password</label><input id="f-password" type="password" placeholder="Enter password" /></div>
+        <div class="field"><label for="f-notes">Textarea</label><textarea id="f-notes" rows="3" placeholder="Notes for the reviewer"></textarea></div>
         <div class="field">
           <label for="f-select">Select</label>
           <div class="select-wrap">

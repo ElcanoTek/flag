@@ -213,7 +213,8 @@ a {
 .ds-accordion .link-tile,
 .btn,
 input,
-select {
+select,
+textarea {
   transition:
     color var(--transition-base),
     background-color var(--transition-base),
@@ -271,15 +272,19 @@ select {
 
 .ds-app-header__actions {
   display: inline-flex;
+  flex: none;
   align-items: center;
   gap: var(--space-2);
-  flex-wrap: wrap;
+  /* One non-wrapping row, top right, at every width (COMPONENTS.md "App
+     Header"): the brand text wraps instead. */
+  flex-wrap: nowrap;
   justify-content: flex-end;
 }
 
 button,
 input,
-select {
+select,
+textarea {
   font: inherit;
 }
 
@@ -297,7 +302,8 @@ select {
 
 .btn:focus-visible,
 input:focus-visible,
-select:focus-visible {
+select:focus-visible,
+textarea:focus-visible {
   outline: none;
   box-shadow: var(--focus-ring);
 }
@@ -373,7 +379,8 @@ label {
 }
 
 input,
-select {
+select,
+textarea {
   display: block;
   width: 100%;
   margin: 0;
@@ -386,6 +393,14 @@ select {
   padding: 0 var(--space-control-inline);
   line-height: normal;
   box-sizing: border-box;
+}
+
+textarea {
+  height: auto;
+  min-height: 5.5rem;
+  padding: var(--space-2) var(--space-control-inline);
+  line-height: var(--line-height-body);
+  resize: vertical;
 }
 
 input[type="text"],
@@ -402,6 +417,7 @@ input {
 }
 
 input::placeholder,
+textarea::placeholder,
 select {
   color: var(--color-text-secondary);
 }
@@ -901,12 +917,25 @@ input[type="file"] {
 
 .chip-toggle:focus-visible {
   outline: none;
+  box-shadow: var(--focus-ring);
 }
 
-.chip:has(.chip-toggle:focus-visible),
 .chip:focus-visible {
   outline: none;
   box-shadow: var(--focus-ring);
+}
+
+/* With :has(), the ring moves from the toggle to the whole pill. A browser
+   without :has() skips this block and keeps the toggle's own ring above. */
+@supports selector(:has(*)) {
+  .chip-toggle:focus-visible {
+    box-shadow: none;
+  }
+
+  .chip:has(.chip-toggle:focus-visible) {
+    outline: none;
+    box-shadow: var(--focus-ring);
+  }
 }
 
 .chip:active {
@@ -1470,10 +1499,10 @@ span.flatpickr-weekday {
   background: var(--color-surface-2);
 }
 
+/* The well keeps var(--color-surface-inset) (set in .tool-call-code code),
+   the background check_tokens.py measures the syntax colors against. */
 [data-theme="light"] .tool-call-code code {
   color: var(--color-text-primary);
-  background: #eef1f2;
-  background: color-mix(in srgb, var(--color-secondary) 10%, var(--color-white) 90%);
 }
 
 [data-theme="light"] .task-tracker-container {
@@ -1602,14 +1631,20 @@ th {
   }
 }
 
+/* Continuous motion stops for prefers-reduced-motion: the spinner stays as a
+   static ring with its colored arc, the in-progress tracker glyph stays as
+   its static mark. scripts/check_refs.py requires an entry here for every
+   infinite animation in this file. */
+@media (prefers-reduced-motion: reduce) {
+  .spinner,
+  .task-tracker-item.status-inprogress .tt-icon {
+    animation: none;
+  }
+}
+
 @media (max-width: 47.9375rem) {
   .ds-app-header {
-    flex-direction: column;
-    align-items: stretch;
-  }
-
-  .ds-app-header__actions {
-    justify-content: flex-start;
+    align-items: flex-start;
   }
 
   .custom-email-row {

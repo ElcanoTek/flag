@@ -265,7 +265,7 @@
         "surface": {
           "default": "#FFFFFF",
           "elevated": "#E9EEFC",
-          "inset": "rgba(38, 55, 92, 0.045)"
+          "inset": "#EEF1F2"
         },
         "border": {
           "default": "rgba(38, 55, 92, 0.2)",

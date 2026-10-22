@@ -22,6 +22,10 @@
    --color-secondary as a link color, and no prose asks for white text on the
    raw primary. (Lines that say "never"/"not"/"decorative" are warnings and
    are allowed.)
+8. components.css: every infinite animation has a prefers-reduced-motion
+   override that stops it, and the code well (.tool-call-code) paints only
+   var(--color-surface-inset), the background the syntax contrast is
+   measured on.
 7. The preview's components.css is a byte copy of
    design-system/components/components.css (refresh with
    design-system/sync-preview.sh).
@@ -246,7 +250,58 @@ def check_preview_copy():
             "run sh design-system/sync-preview.sh")
 
 
+def css_rules(text):
+    """(selector, body, inside_reduced_motion) for every leaf rule."""
+    text = re.sub(r"/\*.*?\*/", "", text, flags=re.S)
+    out = []
+
+    def walk(s, reduced):
+        i = 0
+        while True:
+            j = s.find("{", i)
+            if j < 0:
+                return
+            sel = s[i:j].strip()
+            depth, k = 1, j + 1
+            while depth:
+                depth += {"{": 1, "}": -1}.get(s[k], 0)
+                k += 1
+            body = s[j + 1:k - 1]
+            if sel.startswith("@media") or sel.startswith("@supports"):
+                walk(body, reduced or "prefers-reduced-motion: reduce" in sel)
+            elif not sel.startswith("@keyframes"):
+                out.append((" ".join(sel.split()), body, reduced))
+            i = k
+    walk(text, False)
+    return out
+
+
+def check_components():
+    comp = DS / "components" / "components.css"
+    if not comp.exists():
+        return
+    rules = css_rules(comp.read_text())
+    stopped = set()
+    for sel, body, reduced in rules:
+        if reduced and re.search(r"animation(-name)?\s*:\s*none", body):
+            stopped.update(s.strip() for s in sel.split(","))
+    for sel, body, reduced in rules:
+        if reduced:
+            continue
+        if re.search(r"animation\s*:[^;]*\binfinite\b|animation-iteration-count\s*:\s*infinite", body):
+            for s in sel.split(","):
+                if s.strip() not in stopped:
+                    err("components.css: `%s` animates forever with no prefers-reduced-motion "
+                        "override setting `animation: none`" % s.strip())
+        if ".tool-call-code" in sel:
+            for m in re.finditer(r"background(-color)?\s*:\s*([^;]+)", body):
+                if m.group(2).strip() != "var(--color-surface-inset)":
+                    err("components.css: `%s` paints the code well with %s; use var(--color-surface-inset), "
+                        "the background check_tokens.py measures syntax colors on" % (sel, m.group(2).strip()))
+
+
 def main():
+    check_components()
     check_docs_pairs()
     check_preview_copy()
     ids = sprite_ids()

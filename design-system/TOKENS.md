@@ -101,8 +101,10 @@ newer color functions in the token sheet).
 
 - `--color-surface-inset`: a recessed in-flow surface (code and output wells,
   preview toolbars, tool-result panels). Dark: the same black wash as
-  `--color-overlay-strong`; light: a 4.5% slate tint, so a well inside a card
-  stays near-white. `--color-overlay-strong` is the modal scrim only.
+  `--color-overlay-strong`; light: opaque `#EEF1F2`, so a well stays
+  near-white inside any card. `--color-overlay-strong` is the modal scrim
+  only. Wells paint exactly this token (`check_refs.py` enforces it for the
+  code display), so the syntax contrast measured here is what renders.
 - `--color-syntax-{keyword,string,number,comment,function,builtin,operator,punctuation}`:
   code highlighting. Each holds 4.5:1 in an inset well over `--color-bg`,
   `--color-surface-1` and `--color-surface-2`, in both themes.

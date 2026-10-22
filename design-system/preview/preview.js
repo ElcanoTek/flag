@@ -359,6 +359,16 @@
   refreshSwatches();
   new MutationObserver(refreshSwatches).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
 
+  // The demo header's theme toggle drives the page toggle.
+  Array.prototype.forEach.call(document.querySelectorAll("[data-preview-theme-proxy]"), function (proxy) {
+    proxy.addEventListener("click", function () {
+      var main = document.getElementById("toggleTheme");
+      if (main) {
+        main.click();
+      }
+    });
+  });
+
   // Segmented controls: a button group with one aria-pressed option.
   Array.prototype.forEach.call(document.querySelectorAll('.seg[role="group"]'), function (group) {
     group.addEventListener("click", function (event) {
