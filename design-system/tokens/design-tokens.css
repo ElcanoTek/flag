@@ -87,7 +87,10 @@
    * measured fill pair; see Flag's design-system/TOKENS.md "Filled controls". */
   --color-primary-fill: color-mix(in srgb, var(--color-primary) 99%, #000);
   --color-primary-fill-hover: color-mix(in srgb, var(--color-primary) 89%, #000);
-  --color-on-primary-fill: var(--color-white);
+  /* The label color for primary fills. Pair it with --color-primary-fill
+   * (or --gradient-action-fill), not the raw primary (4.46:1). */
+  --color-on-primary: var(--color-white);
+  --color-on-primary-fill: var(--color-on-primary);
   --color-secondary-fill: var(--color-secondary);
   --color-secondary-fill-hover: color-mix(in srgb, var(--color-secondary) 90%, #000);
 
@@ -287,6 +290,11 @@ body.theme-light {
   --color-text-disabled: rgba(92, 106, 135, 0.6);
   --color-overlay-soft: rgba(114, 114, 171, 0.08);
   --color-overlay-strong: rgba(20, 24, 36, 0.16);
+  /* The dark accent (#9da7ef) is 2.0-2.3:1 on the light surfaces, and accent
+   * marks focus rings, input focus borders and hover borders: state-bearing
+   * non-text that needs 3:1. Same hue, deep enough for 4.6:1+ (auth shipped
+   * this override first). */
+  --color-accent: #5a64b8;
   --color-surface-inset: rgba(38, 55, 92, 0.045);
 
   /* Light-mode accent overrides: the dark-theme accents are tuned for dark
@@ -365,11 +373,7 @@ body.theme-light {
   --shadow-section: 0 4px 10px rgba(40, 52, 86, 0.08);
   --shadow-control-selected: 0 0 0 2px var(--color-status-running-border);
 
-  /* The outer ring was --color-accent (#9da7ef), 2.1:1 against the light
-   * background: a focus indicator needs 3:1 (WCAG 1.4.11). The deeper accent
-   * is 4.8:1 or more on every light surface; it is the ring the connection
-   * picker already used. */
-  --focus-ring: 0 0 0 2px var(--color-white), 0 0 0 4px var(--color-accent-strong);
+  --focus-ring: 0 0 0 2px var(--color-white), 0 0 0 4px var(--color-accent);
 
   --color-syntax-keyword: #7b39eb;
   --color-syntax-string: #0e7539;

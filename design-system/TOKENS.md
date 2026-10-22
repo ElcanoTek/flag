@@ -23,7 +23,7 @@ Canonical semantic tokens:
 |---|---|---|---|---|
 | `--color-primary` | `#7272AB` | `#7272AB` | Primary emphasis, active states | Never put a label on it; filled controls use `--color-primary-fill` |
 | `--color-secondary` | `#586F7C` | `#586F7C` | Secondary controls and supportive accents | Never used as danger/success; light-theme link color |
-| `--color-accent` | `#9DA7EF` | `#9DA7EF` | Highlights, focus, selected states | Use sparingly; not a text color in light (2.1:1) |
+| `--color-accent` | `#9DA7EF` | `#5A64B8` | Highlights, focus, selected states | Use sparingly; light value deepened from `#9DA7EF` (2.1:1) so focus rings and focus/hover borders reach 3:1 |
 | `--color-bg` | `#1A0B1E` | `#F4F6FB` | App background base | Default shell background |
 | `--color-surface-1` | `#241B31` | `#FFFFFF` | Primary panel/card surface | Main content containers |
 | `--color-surface-2` | `#2F2741` | `#E9EEFC` | Elevated/interactive surface | Hovered cards, popovers, modal nesting |
@@ -59,7 +59,7 @@ headers, match highlight, state panels, scrim; see COMPONENTS.md
 | `color.picker.railBg` | `rgba(0,0,0,0.16)` | Modal filter rail |
 | `color.picker.scrim` | `rgba(26,11,30,0.55)` | Modal backdrop (with a 3px blur) |
 | `shadow.switchKnob` | `none` (light: `0 1px 2px rgba(26,11,30,0.28)`) | Switch knob lift in light mode |
-| `shadow.focusRingPicker` | `--focus-ring` in both themes | Focus ring on picker fields, pills, switches and icon buttons. It was the only light ring that reached 3:1 until the base light `--focus-ring` was deepened to match; kept as a token so product CSS reading it still resolves |
+| `shadow.focusRingPicker` | `--focus-ring` in both themes | Focus ring on picker fields, pills, switches and icon buttons. Light used a separate `#6262A0` ring while the base light ring was under 3:1; with the light accent deepened it inherits `--focus-ring`, and stays a token so product CSS keeps resolving |
 | `shadow.popover` | `0 24px 60px -22px rgba(0,0,0,0.55)` | Popover and modal elevation |
 
 Neutral utility tokens:
@@ -85,7 +85,7 @@ filled control therefore paints its label on a measured fill:
 |---|---|---|
 | `--color-primary-fill` | primary mixed 1% toward black (4.53:1 under white) | Filled buttons, selected chips/options, selected calendar day, segmented selection |
 | `--color-primary-fill-hover` | primary mixed 11% toward black (5.4:1) | Hover of the above: hover only ever raises contrast |
-| `--color-on-primary-fill` | `#FFFFFF` | The label on either fill |
+| `--color-on-primary` / `--color-on-primary-fill` | `#FFFFFF` | The label on either fill (`--color-on-primary-fill` reads `--color-on-primary`) |
 | `--color-secondary-fill` / `-hover` | secondary / 10% toward black | Far stop of the action gradient |
 | `--gradient-action-fill` / `-hover` | primary-fill to secondary-fill (light: the hover stops) | Primary buttons in dark; the label holds 4.5:1 at every point of the blend |
 
@@ -103,10 +103,10 @@ pair.
 - `--color-syntax-{keyword,string,number,comment,function,builtin,operator,punctuation}`:
   code highlighting. Each holds 4.5:1 in an inset well over `--color-bg`,
   `--color-surface-1` and `--color-surface-2`, in both themes.
-- `--focus-ring`: 2px of the page color, then 2px of `--color-accent` (dark)
-  or `--color-accent-strong` (light). The outer color reaches 3:1 against
-  every surface (WCAG 1.4.11); the light ring was `--color-accent` (2.1:1)
-  until this was measured.
+- `--focus-ring`: 2px of the page color, then 2px of `--color-accent`. The
+  outer color reaches 3:1 against every surface in both themes (WCAG 1.4.11);
+  in light that needed the deeper light accent (`#5A64B8`; it was `#9DA7EF`,
+  2.1:1).
 
 ### Contrast is measured, not asserted
 

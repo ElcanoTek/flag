@@ -191,6 +191,7 @@ for t in ("--color-text-primary", "--color-text-secondary"):
     pair(t, ["--color-surface-inset"], TEXT, label="%s in a well" % t)
 # Labels on fills (the fill is opaque, so the surface does not matter).
 pair("--color-on-primary-fill", ["--color-primary-fill"], TEXT, on=("--color-bg",))
+pair("--color-on-primary", ["--color-primary-fill"], TEXT, on=("--color-bg",))
 pair("--color-on-primary-fill", ["--color-primary-fill-hover"], TEXT, on=("--color-bg",))
 pair("--color-on-accent-strong", ["--color-accent-strong"], TEXT, on=("--color-bg",))
 pair("--color-on-success", ["--color-success"], TEXT, on=("--color-bg",))
@@ -199,6 +200,8 @@ pair("--color-switch-track-off", [], NON_TEXT, on=("--color-surface-1", "--color
 pair("--color-switch-knob", ["--color-switch-track-off"], NON_TEXT, on=("--color-bg",))
 pair("--color-switch-knob", ["--color-switch-track-on"], NON_TEXT, on=("--color-bg",))
 pair("--color-row-active-border", [], NON_TEXT, on=("--color-surface-2",))
+# Accent marks focus rings, input focus borders and hover borders.
+pair("--color-accent", [], NON_TEXT, label="--color-accent as a state border")
 # The focus ring's outer color against whatever it surrounds (WCAG 1.4.11).
 pair("focus-ring", [], NON_TEXT, label="--focus-ring outer color")
 pair("focus-ring-picker", [], NON_TEXT, label="--focus-ring-picker outer color")

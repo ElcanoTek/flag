@@ -149,8 +149,8 @@ Production baseline requirements:
   with each caller; only the look is shared.
 - `.seg--md` is the form-field size, for a segmented control that is the
   field itself.
-- Focus: a 2px outline outside the option (`--color-accent` in dark,
-  `--color-accent-strong` in light, so it reaches 3:1 against the page).
+- Focus: a 2px `--color-accent` outline outside the option, where it meets
+  the page at 3:1 or more in both themes.
 - Not for underlined page tabs, filter chips with counts, or choice cards.
 
 ```html

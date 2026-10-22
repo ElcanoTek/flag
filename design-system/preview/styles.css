@@ -2263,11 +2263,6 @@ mark.match { background: var(--color-match-bg); color: var(--color-text-primary)
   z-index: 1;
 }
 
-/* Same 3:1 rule as --focus-ring: the light accent is too pale on white. */
-[data-theme="light"] .seg-option:focus-visible {
-  outline-color: var(--color-accent-strong);
-}
-
 .seg-option:disabled {
   cursor: not-allowed;
   opacity: 0.5;
