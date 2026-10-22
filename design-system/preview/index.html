@@ -471,6 +471,13 @@
           </div>
         </div>
       </div>
+      <p class="section-note">Native controls without a Flag class keep the browser's own rendering: components.css only redraws what it ships a visual for, so third-party markup is left alone.</p>
+      <div class="demo-row native-controls" data-native-controls>
+        <label><input type="checkbox" checked /> Native checkbox</label>
+        <label><input type="radio" name="native-radio" checked /> Native radio</label>
+        <label>Native range <input type="range" min="0" max="10" value="4" /></label>
+        <label>Native file <input type="file" /></label>
+      </div>
         </div>
       </details>
     </section>

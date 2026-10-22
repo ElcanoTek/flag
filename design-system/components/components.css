@@ -212,7 +212,7 @@ a {
 .ds-accordion details,
 .link-tile,
 .btn,
-input,
+input:where(:not([type="checkbox"], [type="radio"], [type="range"], [type="color"], [type="file"], [type="submit"], [type="button"], [type="reset"], [type="image"], [type="hidden"])),
 select,
 textarea {
   transition:
@@ -281,6 +281,7 @@ textarea {
   justify-content: flex-end;
 }
 
+/* Form controls take the page font. Safe for any control, Flag's or not. */
 button,
 input,
 select,
@@ -301,7 +302,7 @@ textarea {
 }
 
 .btn:focus-visible,
-input:focus-visible,
+input:where(:not([type="checkbox"], [type="radio"], [type="range"], [type="color"], [type="file"], [type="submit"], [type="button"], [type="reset"], [type="image"], [type="hidden"])):focus-visible,
 select:focus-visible,
 textarea:focus-visible {
   outline: none;
@@ -371,15 +372,24 @@ textarea:focus-visible {
   align-content: start;
 }
 
-label {
+/* Field labels: inside a .field, plus the label-based Flag controls that
+   read this caption size. A third-party label elsewhere is left alone.
+   :where() keeps the specificity of the old bare `label` rule. */
+:where(.field) label,
+:where(.field-label, .ds-checkbox, .input-file-select, .search-compact) {
   display: block;
   color: var(--color-text-secondary);
   font-size: var(--font-size-caption);
   line-height: var(--line-height-caption);
 }
 
-input,
-select,
+/* The text-field shell: text-like inputs, single selects and textareas
+   only. Checkboxes, radios, ranges, colors, files, buttons and hidden inputs
+   keep their native rendering unless a Flag class redraws them
+   (.ds-checkbox-input, .input-file-select input). :where() keeps the
+   specificity of a bare element selector. */
+input:where(:not([type="checkbox"], [type="radio"], [type="range"], [type="color"], [type="file"], [type="submit"], [type="button"], [type="reset"], [type="image"], [type="hidden"])),
+select:where(:not([multiple])),
 textarea {
   display: block;
   width: 100%;
@@ -405,20 +415,20 @@ textarea {
 
 /* Field states: validation (aria-invalid / .is-warning) and disabled. Helper
    and validation text sits below the control. */
-input[aria-invalid="true"],
-select[aria-invalid="true"],
+input:where(:not([type="checkbox"], [type="radio"], [type="range"], [type="color"], [type="file"], [type="submit"], [type="button"], [type="reset"], [type="image"], [type="hidden"]))[aria-invalid="true"],
+select:where(:not([multiple]))[aria-invalid="true"],
 textarea[aria-invalid="true"] {
   border-color: var(--color-danger);
 }
 
-input.is-warning,
-select.is-warning,
+input:where(:not([type="checkbox"], [type="radio"], [type="range"], [type="color"], [type="file"], [type="submit"], [type="button"], [type="reset"], [type="image"], [type="hidden"])).is-warning,
+select:where(:not([multiple])).is-warning,
 textarea.is-warning {
   border-color: var(--color-warning);
 }
 
-input:not([type="checkbox"]):not([type="radio"]):disabled,
-select:disabled,
+input:where(:not([type="checkbox"], [type="radio"], [type="range"], [type="color"], [type="file"], [type="submit"], [type="button"], [type="reset"], [type="image"], [type="hidden"])):disabled,
+select:where(:not([multiple])):disabled,
 textarea:disabled {
   opacity: 0.5;
   cursor: not-allowed;
@@ -441,22 +451,16 @@ textarea:disabled {
   color: var(--color-warning);
 }
 
-input[type="text"],
-input[type="search"],
-input[type="email"],
-input[type="password"] {
-  appearance: none;
-  -webkit-appearance: none;
-}
-
-input {
+/* Native appearance is removed only where Flag draws the field itself:
+   the text-like types below (and its own custom controls, by class). */
+input:where(:not([type]), [type="text"], [type="search"], [type="email"], [type="password"], [type="tel"], [type="url"], [type="number"]) {
   appearance: none;
   -webkit-appearance: none;
 }
 
 input::placeholder,
 textarea::placeholder,
-select {
+select:where(:not([multiple])) {
   color: var(--color-text-secondary);
 }
 
@@ -503,10 +507,6 @@ input[type="search"]::-webkit-search-results-decoration {
   pointer-events: none;
 }
 
-input[type="file"] {
-  padding-top: var(--space-2);
-  padding-bottom: var(--space-2);
-}
 
 .icon {
   width: 1.25rem;
@@ -1913,7 +1913,14 @@ span.flatpickr-weekday {
   border-radius: var(--radius-md);
 }
 
+/* Tabular figures for every table (FONTS.md); the table component's sizing,
+   collapse, padding and borders apply inside .table-wrap only, so a
+   third-party table keeps its own layout. */
 table {
+  font-variant-numeric: tabular-nums;
+}
+
+:where(.table-wrap) table {
   width: 100%;
   border-collapse: collapse;
   min-width: 32.5rem;
@@ -1924,14 +1931,14 @@ table {
   font-variant-numeric: tabular-nums;
 }
 
-th,
-td {
+:where(.table-wrap) th,
+:where(.table-wrap) td {
   padding: 0.625rem;
   border-bottom: 1px solid var(--color-border);
   text-align: left;
 }
 
-th {
+:where(.table-wrap) th {
   font-size: var(--font-size-caption);
   color: var(--color-text-muted);
   text-transform: uppercase;

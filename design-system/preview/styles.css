@@ -557,3 +557,13 @@ p {
 .picker-specimens { display: flex; flex-direction: column; gap: var(--space-3); flex: 1 1 18rem; min-width: 0; max-width: 26rem; }
 
 .picker-badge-demo { position: relative; width: 36px; height: 36px; display: grid; place-items: center; color: var(--color-text-secondary); }
+
+/* Native-control specimen row: layout only, the controls stay native. */
+.native-controls label {
+  display: inline-flex;
+  flex-wrap: wrap;
+  max-width: 100%;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--color-text-secondary);
+}

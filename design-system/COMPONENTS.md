@@ -10,6 +10,15 @@ Implementation note:
   (`preview/components.css`, refreshed by `sync-preview.sh`), so what the
   preview shows is what products get; `preview/styles.css` holds only the
   preview page's own layout.
+- It is safe next to third-party markup. Rules on bare elements are limited
+  to what is harmless for any instance: `box-sizing` on `*`, the link color on
+  `a`, `font: inherit` on form controls, tabular figures on `table`. The
+  text-field shell reaches only text-like inputs (never checkbox, radio,
+  range, color, file, button-type or hidden inputs), single selects and
+  textareas; native appearance is removed only where Flag draws a
+  replacement; labels, tables and cells are styled only inside `.field` and
+  `.table-wrap`. `make check` enforces this, and the preview shows unclassed
+  native controls keeping their browser rendering.
 - Examples in this file are the markup `preview/index.html` uses.
 - Keep class names and state contracts aligned with these examples for deterministic implementation.
 - React (Tier B) products implement the same specs in their own components,
@@ -383,6 +392,9 @@ Example with app icon:
   - external vendor destinations should use approved service icons or the documented fallback
 
 ## Tables and List Rows
+- Wrap a data table in `.table-wrap` (scroll container, border, radius);
+  the table component's width, padding, borders and header style apply
+  inside it. Any table gets tabular figures.
 - Head row: uppercase optional, but consistent across app.
 - Row hover allowed for clickable rows only.
 - Status columns should use standardized status badge tokens.

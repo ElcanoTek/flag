@@ -122,7 +122,7 @@ const CONTRAST_JS = `(() => {
   };
   const fails = [];
   const els = [...document.querySelectorAll("body *")].filter((el) =>
-    ([...el.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim()) || (el.matches("input:not([type=checkbox]):not([type=radio]):not([type=file]), textarea") && el.value)) && !el.closest("svg, style, script, iframe"));
+    ([...el.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim()) || (el.matches("input:not([type]), input[type=text], input[type=search], input[type=email], input[type=password], input[type=tel], input[type=url], input[type=number], input[type=date], input[type=time], input[type=datetime-local], textarea") && el.value)) && !el.closest("svg, style, script, iframe"));
   for (const el of els) {
     if (!visible(el) || disabled(el)) continue;
     const cs = getComputedStyle(el);
@@ -193,7 +193,39 @@ for (const theme of ["light", "dark"]) {
       await page.goto(base + path, { waitUntil: "networkidle" });
       await page.evaluate(() => document.fonts.ready);
       await axe(page, `${theme} ${width} ${path}`);
+      // No horizontal page scroll at any width.
+      const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+      if (overflow > 0) { failures++; console.log(`FAIL ${theme} ${width} ${path}: page scrolls sideways by ${overflow}px`); }
       if (path !== "/preview/index.html") continue;
+
+      // Unclassed native controls keep the browser's rendering: components.css
+      // must not turn third-party checkboxes, radios, ranges or file inputs
+      // into empty text-field shells.
+      // Each is compared with a pristine twin in a shadow root, where page
+      // styles do not reach.
+      const shelled = await page.evaluate(() => {
+        const host = document.createElement("div");
+        document.body.append(host);
+        const root = host.attachShadow({ mode: "open" });
+        const out = [];
+        for (const el of document.querySelectorAll("[data-native-controls] input")) {
+          const twin = document.createElement("input");
+          twin.type = el.type;
+          // font: inherit is Flag's one rule for every control (normalize);
+          // give the twin the same font so only the shell would show.
+          twin.style.font = getComputedStyle(el).font;
+          root.append(twin);
+          const a = getComputedStyle(el), b = getComputedStyle(twin);
+          const bad = ["appearance", "height", "border-top-style", "padding-left", "background-color"]
+            .filter((p) => a.getPropertyValue(p) !== b.getPropertyValue(p))
+            .map((p) => `${p} ${a.getPropertyValue(p)} (native ${b.getPropertyValue(p)})`);
+          if (Math.abs(el.getBoundingClientRect().width - twin.getBoundingClientRect().width) > 1) bad.push("width changed");
+          if (bad.length) out.push(`${el.type}: ${bad.join(", ")}`);
+        }
+        host.remove();
+        return out;
+      });
+      for (const s of shelled) { failures++; console.log(`FAIL ${theme} ${width}: native ${s}`); }
 
       // Every focusable element must show a visible focus indicator.
       const unfocused = await page.evaluate(async () => {

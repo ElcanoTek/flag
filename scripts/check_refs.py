@@ -346,13 +346,18 @@ STATE_PATTERNS = {
     "checked": r":checked",
 }
 
+# The text-field shell's input selector: every input except the native
+# controls Flag does not redraw (zero specificity via :where()).
+TEXT_INPUT = ('input:where(:not([type="checkbox"], [type="radio"], [type="range"], [type="color"], [type="file"], '
+              '[type="submit"], [type="button"], [type="reset"], [type="image"], [type="hidden"]))')
+
 # States COMPONENTS.md lists for a component, with the selector that
 # implements each (the doc names these selectors next to the state).
 DOCUMENTED_STATES = [
     ".file-upload-dropzone:hover", ".file-upload-dropzone.is-dragover", ".file-item.uploading",
     ".file-item.uploaded", ".file-item.error", ".featured-link.is-selected", ".featured-link[aria-current=\"true\"]",
     ".featured-link.is-disabled", ".chip.selected", ".ds-accordion details[open] summary::after",
-    "input[aria-invalid=\"true\"]", "input.is-warning", ".field-error", ".field-warning", ".field-hint",
+    TEXT_INPUT + "[aria-invalid=\"true\"]", TEXT_INPUT + ".is-warning", ".field-error", ".field-warning", ".field-hint",
     ".seg-option[aria-pressed=\"true\"]", ".seg-option[aria-checked=\"true\"]", ".seg-option[aria-selected=\"true\"]",
     ".switch[aria-checked=\"true\"]", ".picker-row--active", ".picker-row--dimmed .picker-row__name",
     ".state-panel--ok", ".state-panel--warn", ".state-panel--deny", ".kicker--ok", ".kicker--warn", ".kicker--deny",
@@ -415,6 +420,67 @@ def check_hover_gates(sels):
                 break
 
 
+# components.css is vendored into products that also render third-party
+# markup, so a rule on a bare element (no Flag class on it or an ancestor)
+# must be safe for ANY instance of that element. Allowed bare rules and the
+# only properties they may set:
+BARE_SAFE = {
+    "*": {"box-sizing"},
+    "a": {"color"},
+    "button": {"font"},
+    "table": {"font-variant-numeric"},
+}
+# Native controls the text-field shell must never reach.
+NON_TEXT_TYPES = ["checkbox", "radio", "range", "color", "file", "submit", "button", "reset", "image", "hidden"]
+TEXT_TYPES = ["text", "search", "email", "password", "tel", "url", "number"]
+
+
+def check_bare_elements(css_text):
+    for sel, body, _r in css_rules(css_text):
+        props = {m.group(1) for m in re.finditer(r"(?:^|;)\s*([\w-]+)\s*:", body)}
+        for s in split_selectors(sel):
+            core = s.replace('[data-theme="light"] ', "")
+            compounds = re.split(r"\s+(?![^()]*\))", core)
+            subject = compounds[-1]
+            if re.match(r"^[.#\[:]", subject) or "." in re.sub(r":where\([^)]*\)|:not\([^)]*\)", "", subject):
+                continue  # Flag class on the subject itself
+            if any("." in c for c in compounds[:-1]):
+                continue  # inside a Flag-classed ancestor
+            tag = re.match(r"^([a-z]+|\*)", subject)
+            if not tag:
+                continue
+            tag = tag.group(1)
+            if "::" in subject and tag in ("input", "textarea"):
+                continue  # ::placeholder and vendor pseudo-elements: text fields only
+            appearance = "appearance" in props or "-webkit-appearance" in props
+            if tag == "input":
+                if appearance:
+                    if not all('[type="%s"]' % ty in subject for ty in TEXT_TYPES) and '[type="' not in subject:
+                        err("components.css: `%s` sets appearance: none on unqualified inputs" % s)
+                    if any('[type="%s"]' % ty in subject and ":not(" not in subject for ty in NON_TEXT_TYPES):
+                        err("components.css: `%s` removes native appearance from a non-text input type" % s)
+                    continue
+                if props <= {"font"}:
+                    continue
+                if not all('[type="%s"]' % ty in subject for ty in NON_TEXT_TYPES):
+                    err("components.css: `%s` reaches non-text inputs (checkbox, radio, range, file, ...); "
+                        "exclude them with :where(:not([type=...]))" % s)
+                continue
+            if tag == "select":
+                if props & {"display", "width", "height", "min-height", "padding", "border", "background"} \
+                        and ":not([multiple])" not in subject:
+                    err("components.css: `%s` gives the field shell to multi-selects; exclude [multiple]" % s)
+                continue
+            if tag == "textarea":
+                continue
+            allowed = BARE_SAFE.get(tag)
+            if allowed is None:
+                err("components.css: bare `%s` rule is not safe for third-party markup; scope it to a Flag class" % s)
+            elif not props <= allowed:
+                err("components.css: bare `%s` sets %s; only %s is safe for any instance of <%s>"
+                    % (s, ", ".join(sorted(props - allowed)), ", ".join(sorted(allowed)), tag))
+
+
 def check_appearance_disabled(css_text, sels):
     """A control that drops its native appearance must draw its own disabled state."""
     for sel, body, _r in css_rules(css_text):
@@ -422,6 +488,9 @@ def check_appearance_disabled(css_text, sels):
             continue
         for s in split_selectors(sel):
             if "::" in s:
+                continue
+            if "." not in s and '[type="' not in s:
+                err("components.css: `%s` removes native appearance without a Flag class or a type qualifier" % s)
                 continue
             last = re.split(r"\s+", s)[-1]
             tag = re.match(r"^[a-z]+", last)
@@ -580,6 +649,7 @@ def check_component_coverage():
 
     check_measured_paint(css)
     check_hover_gates(sels)
+    check_bare_elements(css)
     check_appearance_disabled(css, sels_nogate)
     check_flatpickr_cascade(css)
 
