@@ -25,19 +25,22 @@
   box-sizing: border-box;
 }
 
-[data-theme="light"] .btn-primary {
+[data-theme="light"] .btn-primary,
+body.theme-light .btn-primary {
   background: var(--color-primary-fill);
   border-color: var(--color-primary-fill);
   color: var(--color-on-primary-fill);
 }
 
-[data-theme="light"] .btn-primary:where(:not(:disabled, [aria-disabled="true"], .is-disabled)):hover {
+[data-theme="light"] .btn-primary:where(:not(:disabled, [aria-disabled="true"], .is-disabled)):hover,
+body.theme-light .btn-primary:where(:not(:disabled, [aria-disabled="true"], .is-disabled)):hover {
   background: var(--color-primary-hover);
   border-color: var(--color-primary-hover);
   filter: none;
 }
 
-[data-theme="light"] .btn-primary:disabled {
+[data-theme="light"] .btn-primary:disabled,
+body.theme-light .btn-primary:disabled {
   background: var(--gradient-action-disabled);
   border-color: var(--color-border-strong);
   color: var(--color-text-disabled);
@@ -51,46 +54,60 @@ a {
   color: var(--color-link);
 }
 
-[data-theme="light"] a {
+[data-theme="light"] a,
+body.theme-light a {
   color: var(--color-secondary);
 }
 
 [data-theme="light"] a:where(:not(:disabled, [aria-disabled="true"], .is-disabled)):hover,
-[data-theme="light"] a:focus-visible {
+[data-theme="light"] a:focus-visible,
+body.theme-light a:where(:not(:disabled, [aria-disabled="true"], .is-disabled)):hover,
+body.theme-light a:focus-visible {
   color: var(--color-primary-hover);
 }
 
 [data-theme="light"] .link-title,
-[data-theme="light"] .featured-link h4 {
+[data-theme="light"] .featured-link h4,
+body.theme-light .link-title,
+body.theme-light .featured-link h4 {
   color: var(--color-secondary);
 }
 
 [data-theme="light"] .featured-link:where(:not(:disabled, [aria-disabled="true"], .is-disabled)):hover h4,
-[data-theme="light"] .featured-link:focus-visible h4 {
+[data-theme="light"] .featured-link:focus-visible h4,
+body.theme-light .featured-link:where(:not(:disabled, [aria-disabled="true"], .is-disabled)):hover h4,
+body.theme-light .featured-link:focus-visible h4 {
   color: var(--color-primary-hover);
 }
 
-[data-theme="light"] .featured-link {
+[data-theme="light"] .featured-link,
+body.theme-light .featured-link {
   background: var(--gradient-surface-card);
   border-color: var(--color-border-strong);
   box-shadow: var(--shadow-sm);
 }
 
 [data-theme="light"] .featured-link:where(:not(:disabled, [aria-disabled="true"], .is-disabled)):hover,
-[data-theme="light"] .featured-link:focus-visible {
+[data-theme="light"] .featured-link:focus-visible,
+body.theme-light .featured-link:where(:not(:disabled, [aria-disabled="true"], .is-disabled)):hover,
+body.theme-light .featured-link:focus-visible {
   border-color: var(--color-primary);
   box-shadow: var(--shadow-md);
 }
 
 [data-theme="light"] .featured-link.is-selected,
-[data-theme="light"] .featured-link[aria-current="true"] {
+[data-theme="light"] .featured-link[aria-current="true"],
+body.theme-light .featured-link.is-selected,
+body.theme-light .featured-link[aria-current="true"] {
   border-color: var(--color-primary);
   background: var(--gradient-surface-panel);
   box-shadow: var(--focus-ring), var(--shadow-md);
 }
 
 [data-theme="light"] .featured-link.is-disabled,
-[data-theme="light"] .featured-link[aria-disabled="true"] {
+[data-theme="light"] .featured-link[aria-disabled="true"],
+body.theme-light .featured-link.is-disabled,
+body.theme-light .featured-link[aria-disabled="true"] {
   opacity: 1;
   background: var(--gradient-action-disabled);
   border-color: var(--color-border);
@@ -99,7 +116,9 @@ a {
 }
 
 [data-theme="light"] .featured-link.is-disabled::before,
-[data-theme="light"] .featured-link[aria-disabled="true"]::before {
+[data-theme="light"] .featured-link[aria-disabled="true"]::before,
+body.theme-light .featured-link.is-disabled::before,
+body.theme-light .featured-link[aria-disabled="true"]::before {
   opacity: 0.35;
 }
 
@@ -108,35 +127,47 @@ a {
 [data-theme="light"] .featured-link.is-disabled h4,
 [data-theme="light"] .featured-link[aria-disabled="true"] h4,
 [data-theme="light"] .featured-link.is-disabled .description,
-[data-theme="light"] .featured-link[aria-disabled="true"] .description {
+[data-theme="light"] .featured-link[aria-disabled="true"] .description,
+body.theme-light .featured-link.is-disabled .featured-kicker,
+body.theme-light .featured-link[aria-disabled="true"] .featured-kicker,
+body.theme-light .featured-link.is-disabled h4,
+body.theme-light .featured-link[aria-disabled="true"] h4,
+body.theme-light .featured-link.is-disabled .description,
+body.theme-light .featured-link[aria-disabled="true"] .description {
   color: var(--color-text-muted);
 }
 
-[data-theme="light"] .chip-email {
+[data-theme="light"] .chip-email,
+body.theme-light .chip-email {
   border-color: var(--color-status-assigned-border);
   background: var(--color-status-assigned-bg);
   color: var(--color-status-assigned-fg);
 }
 
-[data-theme="light"] .chip-email:where(:not(:disabled, [aria-disabled="true"], .is-disabled)):hover {
+[data-theme="light"] .chip-email:where(:not(:disabled, [aria-disabled="true"], .is-disabled)):hover,
+body.theme-light .chip-email:where(:not(:disabled, [aria-disabled="true"], .is-disabled)):hover {
   background: var(--color-status-running-bg);
   box-shadow: var(--shadow-sm);
 }
 
-[data-theme="light"] .chip.selected {
+[data-theme="light"] .chip.selected,
+body.theme-light .chip.selected {
   background: var(--color-primary-fill);
   color: var(--color-on-primary-fill);
 }
 
-[data-theme="light"] .chip.selected:where(:not(:disabled, [aria-disabled="true"], .is-disabled)):hover {
+[data-theme="light"] .chip.selected:where(:not(:disabled, [aria-disabled="true"], .is-disabled)):hover,
+body.theme-light .chip.selected:where(:not(:disabled, [aria-disabled="true"], .is-disabled)):hover {
   background: var(--color-secondary);
 }
 
-[data-theme="light"] .chip-delete {
+[data-theme="light"] .chip-delete,
+body.theme-light .chip-delete {
   color: currentColor;
 }
 
-[data-theme="light"] .chip.selected .chip-delete {
+[data-theme="light"] .chip.selected .chip-delete,
+body.theme-light .chip.selected .chip-delete {
   color: var(--color-white);
   background: var(--color-overlay-strong);
 }
@@ -182,12 +213,14 @@ a {
   min-width: 4.5rem;
 }
 
-[data-theme="light"] .theme-toggle__icon--sun {
+[data-theme="light"] .theme-toggle__icon--sun,
+body.theme-light .theme-toggle__icon--sun {
   opacity: 1;
   transform: scale(1) rotate(0deg);
 }
 
-[data-theme="light"] .theme-toggle__icon--moon {
+[data-theme="light"] .theme-toggle__icon--moon,
+body.theme-light .theme-toggle__icon--moon {
   opacity: 0;
   transform: scale(0.86) rotate(12deg);
 }
@@ -1544,7 +1577,16 @@ span.flatpickr-weekday {
 [data-theme="light"] .flatpickr-day.endRange:hover,
 [data-theme="light"] .flatpickr-day.selected:focus,
 [data-theme="light"] .flatpickr-day.startRange:focus,
-[data-theme="light"] .flatpickr-day.endRange:focus {
+[data-theme="light"] .flatpickr-day.endRange:focus,
+body.theme-light .flatpickr-day.selected,
+body.theme-light .flatpickr-day.startRange,
+body.theme-light .flatpickr-day.endRange,
+body.theme-light .flatpickr-day.selected:hover,
+body.theme-light .flatpickr-day.startRange:hover,
+body.theme-light .flatpickr-day.endRange:hover,
+body.theme-light .flatpickr-day.selected:focus,
+body.theme-light .flatpickr-day.startRange:focus,
+body.theme-light .flatpickr-day.endRange:focus {
   background: var(--color-primary-fill) !important;
 }
 
@@ -1834,7 +1876,8 @@ span.flatpickr-weekday {
 /* Mixing toward white lightens the struck-through title in dark, but drops
    it to 4.1:1 in light; the muted text token holds AA there. */
 
-[data-theme="light"] .task-tracker-item.status-done .tt-title {
+[data-theme="light"] .task-tracker-item.status-done .tt-title,
+body.theme-light .task-tracker-item.status-done .tt-title {
   color: var(--color-text-muted);
 }
 
@@ -1843,17 +1886,20 @@ span.flatpickr-weekday {
   color: var(--color-text-muted);
 }
 
-[data-theme="light"] .tool-call-item {
+[data-theme="light"] .tool-call-item,
+body.theme-light .tool-call-item {
   background: var(--color-surface-2);
 }
 
 /* The well keeps var(--color-surface-inset) (set in .tool-call-code code),
    the background check_tokens.py measures the syntax colors against. */
-[data-theme="light"] .tool-call-code code {
+[data-theme="light"] .tool-call-code code,
+body.theme-light .tool-call-code code {
   color: var(--color-text-primary);
 }
 
-[data-theme="light"] .task-tracker-container {
+[data-theme="light"] .task-tracker-container,
+body.theme-light .task-tracker-container {
   background: #f2f3f5;
   background: color-mix(in srgb, var(--color-secondary) 8%, var(--color-white) 92%);
 }

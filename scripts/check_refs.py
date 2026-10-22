@@ -464,7 +464,7 @@ def check_bare_elements(css_text):
     for sel, body, _r in css_rules(css_text):
         props = {m.group(1) for m in re.finditer(r"(?:^|;)\s*([\w-]+)\s*:", body)}
         for s in split_selectors(sel):
-            core = s.replace('[data-theme="light"] ', "")
+            core = s.replace('[data-theme="light"] ', "").replace("body.theme-light ", "")
             compounds = re.split(r"\s+(?![^()]*\))", core)
             subject = compounds[-1]
             if re.match(r"^[.#\[:]", subject) or "." in re.sub(r":where\([^)]*\)|:not\([^)]*\)", "", subject):
@@ -737,7 +737,7 @@ def check_two_part(css_text):
         if not re.search(r"(?:^|;)\s*(background(-color)?|border(-[a-z]+)*|fill|stroke)\s*:", body):
             continue  # size or position only
         for one in split_selectors(sel):
-            if one.startswith('[data-theme="light"] '):
+            if one.startswith(('[data-theme="light"] ', "body.theme-light ")):
                 continue
             subject = re.split(r"\s+", one)[-1]
             if (arc or TWO_PART_CLASS.search(subject)) and re.fullmatch(r"[.\w-]+", subject) \
@@ -810,6 +810,19 @@ def check_component_coverage():
                 if twin not in sels:
                     err("components.css: `%s` paints --gradient-action-fill but has no `%s` rule with the solid "
                         "--color-primary-fill" % (s, twin))
+
+    # Every light-theme rule also answers the legacy body.theme-light class,
+    # which the token sheet honours (`:root[data-theme="light"],
+    # body.theme-light`): otherwise a legacy page gets light tokens but the
+    # dark component overrides (white-on-gradient primary, dark selected days).
+    for s_ in sels:
+        if s_.startswith('[data-theme="light"] '):
+            twin = "body.theme-light " + s_[len('[data-theme="light"] '):]
+            if twin not in sels:
+                err("components.css: `%s` has no legacy twin `%s` in its selector list (the token sheet's light "
+                    "theme also applies under body.theme-light)" % (s_, twin))
+    if "body.theme-light" not in (DS / "tokens" / "design-tokens.css").read_text():
+        err("design-tokens.css no longer honours body.theme-light; drop the legacy twins from components.css too")
 
     # Documented component states.
     for s in DOCUMENTED_STATES:

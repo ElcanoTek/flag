@@ -339,6 +339,12 @@ Usage reference and rationale are in `BACKGROUNDS.md`.
 Theme behavior is canonical and token-based:
 - Dark theme: `:root` values applied via `html[data-theme="dark"]` (or default when no explicit override).
 - Light theme: `:root[data-theme="light"]` overrides in `tokens/design-tokens.css`.
+- Legacy alias: `body.theme-light` selects the light theme too (older product
+  markup). The token sheet applies its light overrides under it, and every
+  `[data-theme="light"]` rule in `components.css` carries a
+  `body.theme-light` twin in the same selector list (`check_refs.py` enforces
+  it), so a legacy page gets light components, not just light tokens. New
+  code sets `html[data-theme]`.
 - Theme preference storage key: `flag-theme-preference`.
 - Default mode: `system` (`prefers-color-scheme`), with explicit user choice taking precedence when stored.
 
