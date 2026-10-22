@@ -263,6 +263,37 @@ pair("focus-ring-picker", [], NON_TEXT, label="--focus-ring-picker outer color")
 pair("--color-secondary", [], TEXT, label="--color-secondary as link text", only="light")
 pair("--color-primary-hover", [], TEXT, label="--color-primary-hover as link hover", only="light")
 
+# The README's shadcn mapping: every Flag token it names must exist, and the
+# pairs shadcn paints with it are measured (a "-foreground" on its base, over
+# each surface where the base is translucent; --destructive as text and
+# --input / --ring as indicators on every surface).
+def shadcn_mapping():
+    from flagtokens import ROOT as REPO
+    readme = (REPO / "README.md").read_text()
+    sec = re.search(r"^## shadcn registry\n(.*?)(?=^## )", readme, re.S | re.M)
+    if not sec:
+        return None, ["README.md has no '## shadcn registry' section"]
+    rows = dict(re.findall(r"^\|\s*`(--[a-z-]+)`\s*\|\s*`(--[a-z0-9-]+)`", sec.group(1), re.M))
+    return rows, []
+
+
+SHADCN, SHADCN_ERRORS = shadcn_mapping()
+if SHADCN:
+    base_of = {"--foreground": "--background", "--primary-foreground": "--primary",
+               "--secondary-foreground": "--secondary", "--muted-foreground": "--muted",
+               "--accent-foreground": "--accent"}
+    for fgv, bgv in base_of.items():
+        if fgv in SHADCN and bgv in SHADCN:
+            pair(SHADCN[fgv], [SHADCN[bgv]], TEXT, label="shadcn %s on %s" % (fgv, bgv))
+    for v in ("--card", "--popover"):
+        if v in SHADCN and "--foreground" in SHADCN:
+            pair(SHADCN["--foreground"], [SHADCN[v]], TEXT, label="shadcn %s-foreground on %s" % (v, v))
+    if "--destructive" in SHADCN:
+        pair(SHADCN["--destructive"], [], TEXT, label="shadcn --destructive as text")
+    for v in ("--input", "--ring"):
+        if v in SHADCN:
+            pair(SHADCN[v], [], NON_TEXT, label="shadcn %s" % v)
+
 # Gradients under a label: every point of the blend is measured.
 GRADIENT_LABELS = [
     ("--color-on-primary-fill", "--gradient-action-fill", TEXT),
@@ -385,6 +416,13 @@ def main():
             fn(errors)
         except (ValueError, json.JSONDecodeError) as e:
             errors.append("%s: %s" % (name, e))
+    errors.extend(SHADCN_ERRORS)
+    dark, light, _ = themes()
+    for var, token in sorted((SHADCN or {}).items()):
+        for tname, theme in (("dark", dark), ("light", light)):
+            if token not in theme:
+                errors.append("README.md shadcn registry: %s maps to %s, which %s does not define (%s)"
+                              % (var, token, TOKENS_CSS.name, tname))
     try:
         check_contrast(errors, report)
     except ValueError as e:

@@ -101,6 +101,52 @@ The full contract, including the rules this repo follows so files stay safe
 to copy, is in
 [`APPLY_TO_PRODUCT.md` "Vendoring and drift"](design-system/APPLY_TO_PRODUCT.md#vendoring-and-drift).
 
+## shadcn registry
+
+Tier B products (React + Vite; see the Elcano frontend standard in
+[`tools/product/agents-standard-block.md`](tools/product/agents-standard-block.md))
+take their base UI from shadcn/ui: `npx shadcn add <component>` from the
+standard shadcn registry copies the component into the app, where it is
+reviewed like the app's own code. The components read shadcn's CSS variables;
+point those at Flag's tokens (vendor `tokens/design-tokens.css` and the fonts
+first) and they follow Flag in both themes:
+
+| shadcn variable | Flag token | Note |
+| --- | --- | --- |
+| `--background` | `--color-bg` | page |
+| `--foreground` | `--color-text-primary` | |
+| `--card` | `--color-surface-1` | `--card-foreground`: `--color-text-primary` |
+| `--popover` | `--color-surface-2` | `--popover-foreground`: `--color-text-primary` |
+| `--primary` | `--color-primary-fill` | solid fill, not the raw `--color-primary` |
+| `--primary-foreground` | `--color-on-primary-fill` | |
+| `--secondary` | `--color-surface-2` | |
+| `--secondary-foreground` | `--color-text-primary` | |
+| `--muted` | `--color-surface-2` | |
+| `--muted-foreground` | `--color-text-muted` | |
+| `--accent` | `--color-selected-bg` | shadcn's hover / selected-row wash, not Flag's `--color-accent` |
+| `--accent-foreground` | `--color-text-primary` | |
+| `--destructive` | `--color-danger` | text, borders and error rings; a filled destructive button uses `.btn-danger`'s `--color-status-error-bg` / `-fg` pair |
+| `--border` | `--color-border` | |
+| `--input` | `--color-control-border` | 3:1 field edge |
+| `--ring` | `--color-accent` | focus ring color |
+| `--radius` | `--radius-md` | |
+
+```css
+:root {
+  --background: var(--color-bg);
+  --foreground: var(--color-text-primary);
+  --primary: var(--color-primary-fill);
+  --primary-foreground: var(--color-on-primary-fill);
+  /* ...one line per row above */
+}
+```
+
+Every token named in the table exists, and each foreground/background pair
+it implies is measured in both themes by `scripts/check_tokens.py` (text
+4.5:1; `--input`, `--ring` and `--destructive` as indicators 3:1 or text
+4.5:1 on every surface). Flag will also publish a registry of pre-themed
+components here; until then, theme stock shadcn components with this mapping.
+
 ## File map
 
 | Path | What it is |

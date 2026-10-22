@@ -20,7 +20,7 @@ set -f # stack.conf values are words, never globs
 unset CDPATH
 export LC_ALL=C
 
-STACK_CHECK_VERSION=19
+STACK_CHECK_VERSION=20
 STANDARD_SHA=5b3a1c9dab098277570a37d58366b0802d4378370f9717d48743c386b194bdbb
 ROOT="$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)"
 CONF="$ROOT/stack.conf"
@@ -48,6 +48,9 @@ read -r -a web <<< "$(conf web)" || true
 read -r -a npm <<< "$(conf npm)" || true
 read -r -a dev_allow <<< "$(conf dev_allow)" || true
 case "$tier" in A|B) ;; *) err "stack.conf: tier must be A or B (got '$tier')";; esac
+# The backend is declared, never assumed: a non-Go product must not pass as Go
+# by leaving the line out.
+[ -n "$backend" ] || err "stack.conf: backend= is required (go, or another backend with an AGENTS.md exception)"
 # An empty scan scope would silently disable the no-CDN gate.
 [ "${#web[@]}" -gt 0 ] || err "stack.conf: web= must list at least one served directory"
 
@@ -58,7 +61,7 @@ else
   [ "$got" = "$STANDARD_SHA" ] || err "AGENTS.md: the elcano-frontend-standard block is missing or edited (sha $got). It is shared verbatim across repos; change it everywhere and bump STANDARD_SHA in every scripts/stack-check.sh."
   # A non-Go backend needs its own AGENTS.md heading naming the exception and
   # the backend (the shared block mentions exceptions, so it does not count).
-  if [ "${backend:-go}" != go ] && ! outside_block | grep -iE '^#{1,6} .*exception' | grep -qiF -- "$backend"; then
+  if [ -n "$backend" ] && [ "$backend" != go ] && ! outside_block | grep -iE '^#{1,6} .*exception' | grep -qiF -- "$backend"; then
     err "stack.conf: backend=$backend needs an AGENTS.md heading like '## Exception: $backend backend' explaining why"
   fi
 fi
@@ -99,7 +102,8 @@ fi
 #     alternate, preconnect, ...); <script type=importmap> entries;
 #   - JS: x.src= / .srcset= / .href= (not location.href), x["src"]=,
 #     setAttribute(NS)("src"|"href"|...), {src: ...}, new Worker(...),
-#     importScripts(...), import(...), import/export ... from "...";
+#     new Audio(...), worklet .addModule(...), importScripts(...),
+#     import(...), import/export ... from "...";
 #   - CSS: @import, url(...), image-set("...").
 # Evasions that are still static are normalized first: HTML entities
 # (&#104;ttps, &colon;, &sol;), JS/CSS escapes (\x2f, /, \/, \2f),
@@ -196,6 +200,9 @@ sub patterns { my ($t, $pre) = @_;
     qr{(?<![\w\$.\-])$q?src$q?$sp:$sp$r},
     qr{\bnew(?=[\s/])$sp(?:Shared)?Worker$sp\($sp(?:new$sp+URL$sp\($sp)?$r},
     qr{\bimportScripts$sp\($sp$r},
+    # Constructors and loaders that fetch media or code as soon as they run.
+    qr{\bnew(?=[\s/])${sp}Audio$sp\($sp$r},
+    qr{\.addModule$sp\($sp(?:new$sp+URL$sp\($sp)?$r},
     qr{\@import$sp(?:url$sp\()?$sp$r}i,
     qr{(?<![\w.\$])url\($sp$r}i,
     qr{\bimage-set$sp\((?:[^;{}()]|\([^()]*\))*?$q$sp$pre(?!$lb)$host+}i,
@@ -365,4 +372,4 @@ for d in "${npm[@]+"${npm[@]}"}"; do
 done
 
 if [ "$fail" -ne 0 ]; then echo "stack-check: FAILED (frontend standard v2, tier $tier)" >&2; exit 1; fi
-echo "stack-check v$STACK_CHECK_VERSION: ok (frontend standard v2, tier $tier, backend ${backend:-go})"
+echo "stack-check v$STACK_CHECK_VERSION: ok (frontend standard v2, tier $tier, backend $backend)"

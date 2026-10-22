@@ -182,7 +182,7 @@ verbatim across the product repos (`scripts/flag-sync.sh` and
 `scripts/stack-check.sh`) and a weekly drift workflow. The canonical copies
 ship in this repo under [`tools/product/`](../tools/product/README.md):
 `flag-sync.sh` (`FLAG_SYNC_VERSION=11`), `stack-check.sh`
-(`STACK_CHECK_VERSION=19`), `flag-drift.yml` and the `AGENTS.md` standard
+(`STACK_CHECK_VERSION=20`), `flag-drift.yml` and the `AGENTS.md` standard
 block that `stack-check.sh` pins. They are identical in every product; change
 them here and in all products at once.
 
