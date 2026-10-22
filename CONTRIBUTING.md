@@ -44,10 +44,18 @@ publishes `preview/` with those four directories beside it on every push to
 | `design-system/check-vendorable.sh` | Vendored files never reference Flag docs by relative path; the token JSON parses; icon ids are unique |
 | `design-system/check-email-template.sh` | `email-safe.html` stays under Gmail's 100 KB and 8,192-character style limits, and the preview copy is in sync |
 | `scripts/check_tokens.py` | `design-tokens.json` and `design-tokens.css` declare the same tokens with the same values, in both themes; tokens are static values and `components.css` gives every newer color function a static fallback; every text, badge, fill, gradient, switch and focus-ring pair meets WCAG AA in both themes |
-| `scripts/check_refs.py` | Markdown links and anchors resolve; docs never prescribe a token pair the contrast check rejects; the preview references only files that exist and that the live site deploys; `preview/components.css` is in sync; every icon is in the sprite, `ICONS.md` and the preview; every logo is documented and shown; the font sheet is complete |
+| `scripts/check_refs.py` | Markdown links and anchors resolve; docs never prescribe a token pair the contrast check rejects; `components.css` has a selector for every class COMPONENTS.md documents, every interaction state (hover, focus-visible, active, disabled) of every control, every documented component state, a reduced-motion override for every infinite animation, and a token override for every vendored flatpickr color; the preview references only files that exist and that the live site deploys; `preview/components.css` is in sync; every icon is in the sprite, `ICONS.md` and the preview; every logo is documented and shown; the font sheet is complete |
 | `scripts/check_license.sh` | `design-system/LICENSE` carries the same MIT text as the root `LICENSE` |
 
 All checks are standard-library Python or POSIX sh and run offline.
+
+`make audit` renders the preview in Chromium (light and dark, 1440 and 390
+wide, with the date and date-time pickers open) and fails on any axe
+WCAG 2 A/AA violation, any text below its contrast floor as actually painted
+(including over gradients, which axe skips), or any focusable control with
+no visible focus. It needs Node and installs Playwright and axe-core into
+`.audit/` on first use, so CI runs only `make check`; run `make audit` before
+a PR that changes `components.css`, the tokens or the preview.
 
 ## Proposing a change
 

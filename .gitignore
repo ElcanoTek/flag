@@ -6,6 +6,9 @@ Thumbs.db
 .idea/
 .vscode/
 
+# make audit's local Playwright + axe-core install
+/.audit/
+
 # Python bytecode from scripts/ (the checks are stdlib-only; nothing to install)
 __pycache__/
 *.pyc

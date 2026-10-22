@@ -26,6 +26,14 @@
    override that stops it, and the code well (.tool-call-code) paints only
    var(--color-surface-inset), the background the syntax contrast is
    measured on.
+9. Component coverage, so components.css implements what COMPONENTS.md
+   documents: every class the doc names (backticked `.class` or a class in
+   an example's markup) has a selector; every interactive control has its
+   hover, focus-visible, active and disabled states (INTERACTION_STATES);
+   every documented component state has its selector (DOCUMENTED_STATES);
+   and every vendored flatpickr rule that hard-codes a color is overridden
+   by a token rule that applies wherever it does, so no vendor color shows
+   through in either theme.
 7. The preview's components.css is a byte copy of
    design-system/components/components.css (refresh with
    design-system/sync-preview.sh).
@@ -300,7 +308,160 @@ def check_components():
                         "the background check_tokens.py measures syntax colors on" % (sel, m.group(2).strip()))
 
 
+# Classes COMPONENTS.md names that are hooks, not styles.
+DOC_CLASS_HOOKS = {"language-python", "featured"}
+
+# Interactive controls and the states INTERACTION_ACCESSIBILITY.md requires
+# ("Every interactive control must define all of hover, focus-visible,
+# active, disabled where applicable"). A state may be met by a selector on a
+# wrapper that styles the control (e.g. .ds-checkbox-input:focus-visible).
+INTERACTION_STATES = {
+    ".btn": ["hover", "focus-visible", "active", "disabled"],
+    ".icon-action": ["hover", "focus-visible", "active", "disabled"],
+    ".number-input__btn": ["hover", "focus-visible", "active", "disabled"],
+    ".dropzone-browse-btn": ["hover", "focus-visible", "active", "disabled"],
+    ".seg-option": ["hover", "focus-visible", "active", "disabled"],
+    ".pill-btn": ["hover", "focus-visible", "active", "aria-disabled"],
+    ".picker-icon-btn": ["hover", "focus-visible", "active"],
+    ".switch": ["hover", "focus-visible", "active"],
+    ".chip": ["hover", "active", "focus-visible"],
+    ".chip-toggle": ["focus-visible"],
+    ".chip-delete": ["hover", "focus-visible", "active"],
+    ".link-tile": ["hover", "focus-visible", "active"],
+    ".featured-link": ["hover", "focus-visible", "active", "disabled"],
+    ".ds-accordion summary": ["hover", "focus-visible", "active"],
+    ".ds-checkbox-input": ["checked", "focus-visible", "disabled"],
+    # .theme-toggle is always also .btn or .icon-action, which carry its states.
+    "input": ["focus-visible", "disabled"],
+    "select": ["focus-visible", "disabled"],
+    "textarea": ["focus-visible", "disabled"],
+}
+STATE_PATTERNS = {
+    "hover": r":hover", "focus-visible": r":focus-visible|:focus-within", "active": r":active",
+    "disabled": r":disabled|\[aria-disabled=\"true\"\]|\.is-disabled", "aria-disabled": r"\[aria-disabled=\"true\"\]",
+    "checked": r":checked",
+}
+
+# States COMPONENTS.md lists for a component, with the selector that
+# implements each (the doc names these selectors next to the state).
+DOCUMENTED_STATES = [
+    ".file-upload-dropzone:hover", ".file-upload-dropzone.is-dragover", ".file-item.uploading",
+    ".file-item.uploaded", ".file-item.error", ".featured-link.is-selected", ".featured-link[aria-current=\"true\"]",
+    ".featured-link.is-disabled", ".chip.selected", ".ds-accordion details[open] summary::after",
+    "input[aria-invalid=\"true\"]", "input.is-warning", ".field-error", ".field-warning", ".field-hint",
+    ".seg-option[aria-pressed=\"true\"]", ".seg-option[aria-checked=\"true\"]", ".seg-option[aria-selected=\"true\"]",
+    ".switch[aria-checked=\"true\"]", ".picker-row--active", ".picker-row--dimmed .picker-row__name",
+    ".state-panel--ok", ".state-panel--warn", ".state-panel--deny", ".kicker--ok", ".kicker--warn", ".kicker--deny",
+    ".task-tracker-item.status-done .tt-title", ".task-tracker-item.status-inprogress .tt-title",
+    ".badge-pending", ".badge-scheduled", ".badge-assigned", ".badge-leased", ".badge-running", ".badge-analyzing",
+    ".badge-success", ".badge-warning", ".badge-danger", ".badge-cancelled",
+    "[data-theme=\"light\"] .theme-toggle__icon--sun", "[data-theme=\"light\"] .theme-toggle__icon--moon",
+]
+
+
+def split_selectors(sel):
+    parts, depth, cur = [], 0, ""
+    for ch in sel:
+        depth += {"(": 1, ")": -1, "[": 1, "]": -1}.get(ch, 0)
+        if ch == "," and depth == 0:
+            parts.append(cur)
+            cur = ""
+        else:
+            cur += ch
+    return [" ".join(p.split()) for p in parts + [cur] if p.strip()]
+
+
+def selector_list(css_text):
+    sels = []
+    for sel, _body, _reduced in css_rules(css_text):
+        sels += split_selectors(sel)
+    return sels
+
+
+def check_component_coverage():
+    comp = DS / "components" / "components.css"
+    if not comp.exists():
+        return
+    css = comp.read_text()
+    sels = selector_list(css)
+    joined = "\n".join(sels)
+    classes = set(re.findall(r"\.([A-Za-z][\w-]*)", joined))
+
+    # Documented classes.
+    md = strip_code((DS / "COMPONENTS.md").read_text())
+    raw_md = (DS / "COMPONENTS.md").read_text()
+    documented = set(re.findall(r"`\.([A-Za-z][\w-]*)", raw_md))
+    for m in re.finditer(r'class="([^"]+)"', raw_md):
+        documented.update(m.group(1).split())
+    for c in sorted(documented - classes - DOC_CLASS_HOOKS):
+        err("COMPONENTS.md documents `.%s`, but components.css has no selector for it" % c)
+
+    # Interaction states.
+    for base, states in INTERACTION_STATES.items():
+        for state in states:
+            pat = re.compile(r"(^|[\s,>+~(])" + re.escape(base) + r"(?![\w-])[^\s,]*?(" + STATE_PATTERNS[state] + ")")
+            if not any(pat.search(re.sub(r":not\((?:[^()]|\([^()]*\))*\)", "", s)) for s in sels):
+                err("components.css: `%s` has no %s state (INTERACTION_ACCESSIBILITY.md)" % (base, state))
+
+    # Documented component states.
+    for s in DOCUMENTED_STATES:
+        if s not in sels:
+            err("components.css: no `%s` rule for a state COMPONENTS.md documents" % s)
+
+    # Vendored flatpickr colors are overridden.
+    vendor = PREVIEW / "vendor" / "flatpickr" / "flatpickr.min.css"
+    if vendor.exists():
+        check_vendor_overrides(vendor.read_text(), css)
+
+
+FAMILY = [("color", r"^color$"), ("background", r"^background(-color|-image)?$"),
+          ("border", r"^border(-(top|right|bottom|left))?(-color)?$"), ("fill", r"^fill$"), ("box-shadow", r"^box-shadow$")]
+
+
+def family(prop):
+    for name, pat in FAMILY:
+        if re.match(pat, prop):
+            return name
+    return None
+
+
+def subject(sel):
+    """(all classes, subject tag, subject pseudo-classes, pseudo-element) of a selector."""
+    plain = re.sub(r":(not|nth-child|nth-of-type|is|where)\([^)]*\)", "", sel)
+    parts = re.split(r"\s*[\s>+~]\s*", plain.strip())
+    last = parts[-1]
+    tag = re.match(r"^([a-z]+)", last)
+    pe = re.search(r"::?(before|after)\b", last)
+    pcs = set(re.findall(r":(hover|focus|active|focus-visible|focus-within)\b", last))
+    return set(re.findall(r"\.([\w-]+)", plain)), tag.group(1) if tag else None, pcs, pe.group(1) if pe else None
+
+
+def check_vendor_overrides(vendor_css, comp_css):
+    vendor_css = re.sub(r"/\*.*?\*/", "", vendor_css, flags=re.S)
+    vendor_css = re.sub(r"@(-webkit-)?keyframes[^{]*\{(?:[^{}]*\{[^{}]*\})*[^{}]*\}", "", vendor_css)
+    ours = []
+    for sel, body, _r in css_rules(comp_css):
+        fams = {family(m.group(1)) for m in re.finditer(r"([\w-]+)\s*:[^;]*!important", body)}
+        for s in split_selectors(sel):
+            ours.append((subject(s), fams))
+    for sel, body in re.findall(r"([^{}@]+)\{([^{}]*)\}", vendor_css):
+        need = set()
+        for m in re.finditer(r"([\w-]+)\s*:\s*([^;]+)", body):
+            if re.search(r"#[0-9a-fA-F]{3,8}\b|rgba?\(", m.group(2)) and family(m.group(1)):
+                need.add(family(m.group(1)))
+        if not need:
+            continue
+        for s in split_selectors(sel):
+            vc, vt, vp, ve = subject(s)
+            for fam in need:
+                covered = any(rc <= vc and (rt is None or rt == vt) and rp <= vp and re_ == ve and fam in fams
+                              for (rc, rt, rp, re_), fams in ours)
+                if not covered:
+                    err("components.css: no !important token override of `%s` for vendored flatpickr `%s`" % (fam, s))
+
+
 def main():
+    check_component_coverage()
     check_components()
     check_docs_pairs()
     check_preview_copy()

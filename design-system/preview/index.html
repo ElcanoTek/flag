@@ -457,7 +457,9 @@
         <div class="field"><label for="f-search">Search</label><input id="f-search" type="search" placeholder="Search" /></div>
         <div class="field"><label for="f-email">Email</label><input id="f-email" type="email" placeholder="team@example.com" /></div>
         <div class="field"><label for="f-password">Password</label><input id="f-password" type="password" placeholder="Enter password" /></div>
-        <div class="field"><label for="f-notes">Textarea</label><textarea id="f-notes" rows="3" placeholder="Notes for the reviewer"></textarea></div>
+        <div class="field"><label for="f-notes">Textarea</label><textarea id="f-notes" rows="3" placeholder="Notes for the reviewer" aria-describedby="f-notes-hint"></textarea><p id="f-notes-hint" class="field-hint">Visible to approvers only.</p></div>
+        <div class="field"><label for="f-budget">Daily budget</label><input id="f-budget" type="text" value="-40" aria-invalid="true" aria-describedby="f-budget-error" /><p id="f-budget-error" class="field-error">Enter an amount of 0 or more.</p></div>
+        <div class="field"><label for="f-locked">Account ID</label><input id="f-locked" type="text" value="acct-0042" disabled /></div>
         <div class="field">
           <label for="f-select">Select</label>
           <div class="select-wrap">
@@ -507,6 +509,22 @@
                   <div class="file-item-progress"><div class="file-item-progress-fill" style="width:68%"></div></div>
                   <span class="file-item-percent">68%</span>
                 </div>
+              </div>
+              <div class="file-item uploaded">
+                <span class="file-item-icon">#</span>
+                <div class="file-item-info">
+                  <span class="file-item-name">q1-publishers.csv</span>
+                  <span class="file-item-size">812 KB</span>
+                </div>
+                <span class="file-item-status">Uploaded</span>
+              </div>
+              <div class="file-item error">
+                <span class="file-item-icon">#</span>
+                <div class="file-item-info">
+                  <span class="file-item-name">full-log-export.csv</span>
+                  <span class="file-item-size">412 MB, over the 250 MB limit</span>
+                </div>
+                <span class="file-item-status">Too large</span>
               </div>
             </div>
           </div>
@@ -640,6 +658,15 @@
             </span>
             <span class="ds-checkbox__label">Archive source files after processing</span>
           </label>
+          <input id="retain-checkbox" class="ds-checkbox-input" type="checkbox" checked disabled />
+          <label class="ds-checkbox" for="retain-checkbox">
+            <span class="ds-checkbox__box" aria-hidden="true">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3.5 8.5l3 3 6-7"></path>
+              </svg>
+            </span>
+            <span class="ds-checkbox__label">Keep audit log (required, disabled)</span>
+          </label>
         </article>
 
         <article class="card">
@@ -721,6 +748,26 @@ average <span class="tok-operator">=</span> statistics<span class="tok-punctuati
         </summary>
         <div class="section-body">
 <div class="card-grid">
+        <article class="card">
+          <h3>Link Tiles</h3>
+          <p class="card-copy">Standalone tiles for launchpads and modal action grids; app icons from the approved logos.</p>
+          <div class="links">
+            <a class="link-tile link-has-app-icon" href="#">
+              <span class="link-app-icon" aria-hidden="true"><img class="link-app-icon__img theme-logo" src="../logos/explorer-favicon.svg" data-logo-dark="../logos/explorer-favicon.svg" data-logo-light="../logos/explorer-favicon-light.svg" alt="" /></span>
+              <span class="link-title">Explorer</span>
+              <span class="link-meta">Reporting and deal analysis.</span>
+            </a>
+            <a class="link-tile link-has-app-icon" href="#">
+              <span class="link-app-icon" aria-hidden="true"><img class="link-app-icon__img theme-logo" src="../logos/lens-favicon.svg" data-logo-dark="../logos/lens-favicon.svg" data-logo-light="../logos/lens-favicon-light.svg" alt="" /></span>
+              <span class="link-title">Lens</span>
+              <span class="link-meta">Inventory classification runs.</span>
+            </a>
+            <a class="link-tile" href="#">
+              <span class="link-title">Flag design system</span>
+              <span class="link-meta">Tokens, icons and components.</span>
+            </a>
+          </div>
+        </article>
         <article class="card">
           <h3>Clickable Action Cards</h3>
           <p class="card-copy">Use this Home-modeled card pattern for primary navigation actions and app launch tiles. Includes default, hover/focus, selected, and disabled states.</p>

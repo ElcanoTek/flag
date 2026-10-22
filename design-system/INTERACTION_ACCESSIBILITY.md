@@ -52,8 +52,16 @@ Every interactive control must define all of:
 - Never reach contrast by eye and never lower it with `opacity` on text
   (dimmed rows, faded hovers). If a state needs to look quieter, step to a
   quieter token that still passes.
-- The token palette is measured by `scripts/check_tokens.py` on every PR; the
-  preview is audited with axe (WCAG 2 A/AA) when it changes.
+- The token palette is measured by `scripts/check_tokens.py` on every PR, and
+  `scripts/check_refs.py` fails when `components.css` lacks a documented
+  class, an interaction state, a reduced-motion override, or a token override
+  for a vendored (flatpickr) color. `make audit` renders the preview and
+  checks what is painted: axe WCAG 2 A/AA, computed text contrast (over
+  gradients too), visible focus on every control, in both themes at 1440 and
+  390, with the pickers open.
+- Third-party widgets (flatpickr) are themed part by part, every sub-part
+  included (range days, time inputs, steppers, week numbers, the pointer
+  triangle): a vendor default color that survives is a bug in dark mode.
 
 ## Accessibility Baseline
 - All icon-only controls require `aria-label`.

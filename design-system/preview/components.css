@@ -60,7 +60,7 @@ a {
   color: var(--color-primary-hover);
 }
 
-[data-theme="light"] .ds-accordion .link-title,
+[data-theme="light"] .link-title,
 [data-theme="light"] .featured-link h4 {
   color: var(--color-secondary);
 }
@@ -210,7 +210,7 @@ a {
 .dropzone-browse-btn,
 .file-upload-dropzone,
 .ds-accordion details,
-.ds-accordion .link-tile,
+.link-tile,
 .btn,
 input,
 select,
@@ -401,6 +401,44 @@ textarea {
   padding: var(--space-2) var(--space-control-inline);
   line-height: var(--line-height-body);
   resize: vertical;
+}
+
+/* Field states: validation (aria-invalid / .is-warning) and disabled. Helper
+   and validation text sits below the control. */
+input[aria-invalid="true"],
+select[aria-invalid="true"],
+textarea[aria-invalid="true"] {
+  border-color: var(--color-danger);
+}
+
+input.is-warning,
+select.is-warning,
+textarea.is-warning {
+  border-color: var(--color-warning);
+}
+
+input:not([type="checkbox"]):not([type="radio"]):disabled,
+select:disabled,
+textarea:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.field-hint,
+.field-error,
+.field-warning {
+  margin: var(--space-1) 0 0;
+  font-size: var(--font-size-caption);
+  line-height: var(--line-height-caption);
+  color: var(--color-text-secondary);
+}
+
+.field-error {
+  color: var(--color-danger);
+}
+
+.field-warning {
+  color: var(--color-warning);
 }
 
 input[type="text"],
@@ -649,13 +687,20 @@ input[type="file"] {
   transform: scale(0.995);
 }
 
+.links {
+  display: grid;
+  gap: 0.625rem;
+}
+
 .ds-accordion .links {
   display: grid;
   gap: 0.625rem;
   padding: 0 0.875rem 0.875rem;
 }
 
-.ds-accordion .link-tile {
+/* Link tiles stand alone (launchpads, modal action grids) or sit inside an
+   accordion's .links grid. */
+.link-tile {
   display: block;
   background: var(--color-surface-1);
   border: 1px solid var(--color-border);
@@ -665,23 +710,69 @@ input[type="file"] {
   transition: border-color var(--transition-base), background-color var(--transition-base), transform var(--transition-fast);
 }
 
-.ds-accordion .link-tile:hover {
+.link-tile:hover {
   border-color: var(--color-accent);
   background: var(--color-surface-2);
   transform: translateY(-1px);
 }
 
-.ds-accordion .link-title {
+.link-tile:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.link-tile:active {
+  transform: translateY(0);
+}
+
+.link-title {
   display: block;
   color: var(--color-text-primary);
   font-weight: 700;
   margin-bottom: 0.25rem;
 }
 
-.ds-accordion .link-meta {
+.link-meta {
   display: block;
   color: var(--color-text-secondary);
   font-size: var(--font-size-caption);
+}
+
+/* Icon-bearing tile: the icon spans the title and meta rows. */
+.link-has-app-icon {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  column-gap: var(--space-3);
+  align-items: center;
+}
+
+.link-has-app-icon .link-app-icon {
+  grid-row: 1 / span 2;
+}
+
+.link-has-app-icon .link-title,
+.link-has-app-icon .link-meta {
+  grid-column: 2;
+}
+
+.link-app-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0.375rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-2);
+  flex: none;
+}
+
+.link-app-icon__img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 
 /* Lens custom file radio select */
@@ -879,6 +970,20 @@ input[type="file"] {
   color: var(--color-text-primary);
 }
 
+/* The input is visually hidden, so the disabled state is drawn on the label. */
+.ds-checkbox-input:disabled + .ds-checkbox {
+  cursor: not-allowed;
+  color: var(--color-text-disabled);
+}
+
+.ds-checkbox-input:disabled + .ds-checkbox .ds-checkbox__box {
+  opacity: 0.5;
+}
+
+.ds-checkbox-input:disabled + .ds-checkbox .ds-checkbox__label {
+  color: var(--color-text-disabled);
+}
+
 /* Email selection pills (MOC baseline) */
 
 .chips-container {
@@ -977,17 +1082,21 @@ input[type="file"] {
   border-radius: 999rem;
   font-size: 0.72rem;
   line-height: 1;
-  opacity: 0.7;
-  transition: opacity var(--transition-base), background-color var(--transition-base), box-shadow var(--transition-fast);
+  /* No opacity fade: the x is text and must stay at 4.5:1. */
+  transition: background-color var(--transition-base), box-shadow var(--transition-fast);
+}
+
+.chip-delete:hover {
+  background: var(--color-overlay-strong);
+}
+
+.chip-delete:active {
+  transform: scale(0.92);
 }
 
 .chip-delete:focus-visible {
   outline: none;
   box-shadow: var(--focus-ring);
-}
-
-.chip:hover .chip-delete {
-  opacity: 1;
 }
 
 .chip.selected .chip-delete {
@@ -1075,6 +1184,16 @@ input[type="file"] {
   cursor: pointer;
 }
 
+.dropzone-browse-btn:hover {
+  border-color: var(--color-accent);
+  background: var(--color-surface-1);
+}
+
+.dropzone-browse-btn:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
 .dropzone-limit {
   margin: 0;
   font-size: 0.75rem;
@@ -1108,6 +1227,30 @@ input[type="file"] {
 
 .file-item.uploading {
   border-color: var(--color-status-running-border);
+}
+
+.file-item.uploaded {
+  border-color: var(--color-status-success-border);
+}
+
+.file-item.error {
+  border-color: var(--color-status-error-border);
+  background: var(--color-status-error-bg);
+}
+
+/* Short status text in the row ("Uploaded", "Too large"). */
+.file-item-status {
+  font-size: var(--font-size-caption);
+  white-space: nowrap;
+}
+
+.file-item.uploaded .file-item-status {
+  color: var(--color-status-success-fg);
+}
+
+.file-item.error .file-item-status,
+.file-item.error .file-item-size {
+  color: var(--color-status-error-fg);
 }
 
 .file-item-icon {
@@ -1292,25 +1435,147 @@ span.flatpickr-weekday {
   border-radius: 0.375rem !important;
 }
 
+/* Today: the vendor border is removed above, so mark it with an inset ring. */
+.flatpickr-day.today {
+  box-shadow: inset 0 0 0 1px var(--color-accent) !important;
+}
+
+/* Days between a range's ends (the vendor paints #e6e6e6 under white text). */
+.flatpickr-day.inRange,
+.flatpickr-day.inRange:hover,
+.flatpickr-day.inRange:focus {
+  background: var(--color-selected-bg) !important;
+  box-shadow: none !important;
+  color: var(--color-text-primary) !important;
+  border-radius: 0 !important;
+}
+
 .flatpickr-day.selected,
 .flatpickr-day.startRange,
 .flatpickr-day.endRange,
 .flatpickr-day.selected:hover,
 .flatpickr-day.startRange:hover,
-.flatpickr-day.endRange:hover {
+.flatpickr-day.endRange:hover,
+.flatpickr-day.selected:focus,
+.flatpickr-day.startRange:focus,
+.flatpickr-day.endRange:focus {
   background: var(--gradient-action-fill) !important;
   color: var(--color-on-primary-fill) !important;
   border: none !important;
   border-radius: 0.375rem !important;
+  box-shadow: none !important;
+}
+
+/* Days of the neighbouring months are selectable, so they stay readable
+   (muted, not the disabled color). */
+.flatpickr-day.prevMonthDay,
+.flatpickr-day.nextMonthDay {
+  color: var(--color-text-muted) !important;
 }
 
 .flatpickr-day.flatpickr-disabled,
-.flatpickr-day.prevMonthDay,
-.flatpickr-day.nextMonthDay,
 .flatpickr-day.notAllowed,
 .flatpickr-day.notAllowed.prevMonthDay,
 .flatpickr-day.notAllowed.nextMonthDay {
   color: var(--color-text-disabled) !important;
+}
+
+.flatpickr-day.flatpickr-disabled:hover,
+.flatpickr-day.notAllowed:hover {
+  background: transparent !important;
+  cursor: not-allowed;
+}
+
+/* Week numbers (weekNumbers: true). */
+.flatpickr-weekwrapper .flatpickr-weeks {
+  box-shadow: 1px 0 0 var(--color-border) !important;
+}
+
+.flatpickr-weekwrapper span.flatpickr-day,
+.flatpickr-weekwrapper span.flatpickr-day:hover {
+  background: transparent !important;
+  color: var(--color-text-muted) !important;
+}
+
+/* Multi-month separator. */
+.dayContainer + .dayContainer {
+  box-shadow: -1px 0 0 var(--color-border) !important;
+}
+
+/* The pointer triangle: border color outside, panel color inside. */
+.flatpickr-calendar.arrowTop:before {
+  border-bottom-color: var(--color-border) !important;
+}
+
+.flatpickr-calendar.arrowTop:after {
+  border-bottom-color: var(--color-surface-1) !important;
+}
+
+.flatpickr-calendar.arrowBottom:before {
+  border-top-color: var(--color-border) !important;
+}
+
+.flatpickr-calendar.arrowBottom:after {
+  border-top-color: var(--color-surface-1) !important;
+}
+
+.flatpickr-current-month span.cur-month:hover {
+  background: var(--color-overlay-soft) !important;
+}
+
+.flatpickr-current-month input.cur-year[disabled],
+.flatpickr-current-month input.cur-year[disabled]:hover {
+  color: var(--color-text-disabled) !important;
+  background: transparent !important;
+}
+
+/* Year and time steppers. */
+.numInputWrapper span {
+  border-color: var(--color-border) !important;
+}
+
+.numInputWrapper span svg path {
+  fill: var(--color-text-secondary) !important;
+}
+
+.numInputWrapper span.arrowUp:after {
+  border-bottom-color: var(--color-text-secondary) !important;
+}
+
+.numInputWrapper span.arrowDown:after {
+  border-top-color: var(--color-text-secondary) !important;
+}
+
+.numInputWrapper:hover,
+.numInputWrapper span:hover {
+  background: var(--color-overlay-soft) !important;
+}
+
+.numInputWrapper span:active {
+  background: var(--color-overlay-strong) !important;
+}
+
+/* Time picker (enableTime): hour, minute, separator and AM/PM. */
+.flatpickr-time {
+  border-top-color: var(--color-border) !important;
+}
+
+.flatpickr-calendar.hasTime .flatpickr-time {
+  border-top: 1px solid var(--color-border) !important;
+}
+
+.flatpickr-time input,
+.flatpickr-time .flatpickr-time-separator,
+.flatpickr-time .flatpickr-am-pm {
+  color: var(--color-text-primary) !important;
+  background: transparent !important;
+}
+
+.flatpickr-time input:hover,
+.flatpickr-time input:focus,
+.flatpickr-time .flatpickr-am-pm:hover,
+.flatpickr-time .flatpickr-am-pm:focus {
+  background: var(--color-overlay-soft) !important;
 }
 
 .flatpickr-months .flatpickr-prev-month svg,
@@ -1623,6 +1888,31 @@ th {
 
 .danger-text {
   color: var(--color-status-error-fg);
+}
+
+/* Pressed and disabled states for controls that had only hover and focus
+   (INTERACTION_ACCESSIBILITY.md: every interactive control defines hover,
+   focus-visible, active and disabled where applicable). */
+.icon-action:active,
+.number-input__btn:active,
+.dropzone-browse-btn:active,
+.seg-option:active:not(:disabled),
+.featured-link:active {
+  transform: translateY(0) scale(0.98);
+}
+
+.icon-action:disabled,
+.icon-action[aria-disabled="true"],
+.number-input__btn:disabled,
+.dropzone-browse-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* The shared page header band that wraps .ds-app-header. */
+.page-header {
+  margin-bottom: var(--space-6);
 }
 
 @keyframes spin {

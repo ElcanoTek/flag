@@ -134,8 +134,12 @@ Example:
   - datetime-local
   - file attachment
 - Height: min `2.5rem`; radius: `radius-md`.
-- Label always visible; helper and validation text below control.
-- Error state uses `color.danger`; warning uses `color.warning`.
+- Label always visible; helper and validation text below control
+  (`.field-hint`, `.field-error`, `.field-warning`; tie them to the control
+  with `aria-describedby`).
+- Error state: `aria-invalid="true"` on the control (danger border) plus a
+  `.field-error` message; warning: `.is-warning` on the control plus
+  `.field-warning`. Disabled fields use the native `disabled` attribute.
 
 Production baseline requirements:
 - Number controls must use the canonical `number-input` stepper pattern (minus button, centered value, plus button, focus-within ring).
@@ -194,10 +198,12 @@ Shared disclosure/search-panel spacing:
 - Required states:
   - default
   - hover
-  - drag-over
-  - uploading
-  - uploaded
-  - error
+  - drag-over (`.file-upload-dropzone.is-dragover`)
+  - uploading (`.file-item.uploading`, with `.file-item-progress` / `.file-item-percent`)
+  - uploaded (`.file-item.uploaded`)
+  - error (`.file-item.error`)
+- Terminal rows say what happened in a `.file-item-status` caption
+  ("Uploaded", "Too large"); color alone never carries the state.
 - Required metadata:
   - file name
   - file size
@@ -240,7 +246,7 @@ Example:
   - visible checkmark on checked state
   - visible focus ring on keyboard focus
   - proper label hit area
-  - disabled styling where applicable
+  - disabled styling where applicable (`.ds-checkbox-input:disabled`: faded box, disabled text color, not-allowed cursor)
 - Keep checkbox checked styling separate from focus styling (focus ring appears on keyboard focus only).
 - Required structure contract:
   - visually hidden checkbox input (`.ds-checkbox-input`) immediately before its label
@@ -411,7 +417,7 @@ Example:
 <div class="tool-call-item">
   <div class="tool-call-name"><strong>run_python</strong></div>
   <div class="tool-call-id">ID: <code>call_9f8a2ce1</code></div>
-  <pre class="tool-call-code"><code class="language-python">print("hello")</code></pre>
+  <pre class="tool-call-code" tabindex="0" aria-label="run_python code"><code class="language-python">print("hello")</code></pre>
   <div class="tool-call-other-args">Other arguments: <code>{"timeout": 45}</code></div>
 </div>
 ```

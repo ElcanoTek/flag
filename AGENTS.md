@@ -17,6 +17,7 @@ package manager.
 
 ```bash
 make check     # everything CI runs; must pass before you push
+make audit     # render + axe + computed contrast (needs Node; run for UI changes)
 make preview   # serve design-system/ at http://localhost:8765/preview/
 make sync      # after editing components/components.css or email-safe.html
 ```
