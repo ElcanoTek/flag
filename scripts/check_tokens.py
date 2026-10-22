@@ -294,6 +294,50 @@ if SHADCN:
         if v in SHADCN:
             pair(SHADCN[v], [], NON_TEXT, label="shadcn %s" % v)
 
+# Foregrounds defined outside the token sheet, in the opt-in shadcn layers
+# (not core tokens, so products that do not use those layers vendor nothing
+# new). Each is read from its own file, where it must be set for both themes,
+# and measured like a token.
+SCOPED = [
+    ("components/shadcn-parity.css", "--flag-on-accent"),
+    ("shadcn/theme.css", "--accent-solid-foreground"),
+]
+pair("--flag-on-accent", ["--color-accent"], TEXT, on=("--color-bg",),
+     label="--flag-on-accent on --color-accent (.badge-accent, shadcn-parity.css)")
+pair("--accent-solid-foreground", ["--color-accent"], TEXT, on=("--color-bg",),
+     label="--accent-solid-foreground on --color-accent (shadcn/theme.css)")
+
+
+def check_shadcn_theme(errors):
+    """shadcn/theme.css sets every variable the README table maps, to that token."""
+    from flagtokens import DS, block
+    if not SHADCN:
+        return
+    theme = block((DS / "shadcn" / "theme.css").read_text(), ":root")
+    for var, token in sorted(SHADCN.items()):
+        got = theme.get(var)
+        if got != "var(%s)" % token:
+            errors.append("design-system/shadcn/theme.css: %s is %s, but README.md's shadcn table maps it to %s"
+                          % (var, got or "unset", token))
+
+
+def scoped_values(errors):
+    from flagtokens import DS, LIGHT_SELECTOR, block
+    dark, light = {}, {}
+    for rel_path, prop in SCOPED:
+        css = (DS / rel_path).read_text()
+        for name, sel, out in (("dark", ":root", dark), ("light", LIGHT_SELECTOR, light)):
+            try:
+                decls = block(css, sel)
+            except ValueError:
+                decls = {}
+            if prop in decls:
+                out[prop] = decls[prop]
+            else:
+                errors.append("design-system/%s: no %s in its %s block (%s theme)" % (rel_path, prop, sel, name))
+    return dark, light
+
+
 # Gradients under a label: every point of the blend is measured.
 GRADIENT_LABELS = [
     ("--color-on-primary-fill", "--gradient-action-fill", TEXT),
@@ -327,6 +371,8 @@ def fg_color(fg, theme):
 
 def check_contrast(errors, report):
     dark, light, _ = themes()
+    sdark, slight = scoped_values(errors)
+    dark, light = {**dark, **sdark}, {**light, **slight}
     for tname, theme in (("dark", dark), ("light", light)):
         for label, fg, layers, floor, on, only in CONTRAST:
             if only and only != tname:
@@ -417,6 +463,7 @@ def main():
         except (ValueError, json.JSONDecodeError) as e:
             errors.append("%s: %s" % (name, e))
     errors.extend(SHADCN_ERRORS)
+    check_shadcn_theme(errors)
     dark, light, _ = themes()
     for var, token in sorted((SHADCN or {}).items()):
         for tname, theme in (("dark", dark), ("light", light)):

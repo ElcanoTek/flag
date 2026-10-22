@@ -685,3 +685,52 @@ components" block); light-mode values live there too.
 - Do reuse the canonical upload dropzone pattern defined in this system.
 - Don't mix wildly different button typography in the same screen.
 - Don't ship un-themed third-party UI defaults.
+
+## shadcn/ui (Tier B) Mapping
+
+Tier B (React) apps install Flag's shadcn/ui registry (see
+[SHADCN.md](SHADCN.md)); Tier A pages use the classes in
+`components/components.css`. Each registry item and its Tier A twin share
+variants, states and tokens, so both tiers look and behave alike. Classes
+marked *parity* live in `components/shadcn-parity.css`, an opt-in layer a
+Tier A product vendors next to `components.css` (load it after); the rest
+are the specs above. Every hover and pressed rule there carries the disabled
+gate, like `components.css`, and `make check` runs the same coverage over
+both files.
+
+One deliberate difference: registry fields (input, textarea, select trigger)
+draw their edge with shadcn's `--input`, mapped to the 3:1
+`--color-control-border`; Tier A fields keep `--color-border` (select:
+`--color-border-strong`), unchanged for the products that already vendor
+`components.css`.
+
+| Registry item (`@flag/…`) | Tier A markup / class | Variants and sizes (Tier B → Tier A) | States and tokens |
+|---|---|---|---|
+| `button` | `button.btn` | `default` → `.btn-primary`, `secondary` → `.btn-secondary`, `outline` → `.btn-outline` *(parity)*, `ghost` → `.btn-ghost`, `destructive` → `.btn-danger`, `link` → `.btn-link` *(parity)*; sizes `sm`, `lg`, `icon` → `.btn-sm`, `.btn-lg`, `.btn-icon` *(parity)*; `icon-sm` → `.btn-icon.btn-sm` or `.icon-action` | 2.5rem, `--radius-md`; primary label `--color-on-primary-fill` on `--gradient-action-fill` (dark) or `--color-primary-fill` (light); hover 1px lift + `--color-accent` border; pressed `scale(0.98)`; `:focus-visible` `--focus-ring`; disabled 50% with no hover or lift; no lift under reduced motion |
+| `input` | `input` in `.field` | `aria-invalid="true"` → `--color-danger` edge; `.is-warning` → `--color-warning` | 2.5rem, `--radius-md`, `--color-overlay-soft` fill; edge `--color-border` in Tier A, `--color-control-border` (`--input`) in the registry; no hover, as for every Flag field; focus `--focus-ring`; disabled 50% |
+| `textarea` | `textarea` | as `input` | as `input`, multi-line |
+| `label` | `label` | — | `--font-size-caption`, `--color-text-secondary` |
+| `select` | `.select-wrap > select` + `.select-icon` | `size="sm"` → `.select-wrap--sm` *(parity)* | trigger as `input` (Tier A edge `--color-border-strong`, registry `--color-control-border`), hover `--color-accent`; the open list is native in Tier A; the registry list uses the popover surface (`--color-surface-2`, `--color-selected-border`, `--radius-lg`, `--shadow-popover`) with the active option on `--color-selected-bg` + inset `--color-row-active-border` |
+| `checkbox` | `.ds-checkbox-input` + `label.ds-checkbox` > `.ds-checkbox__box` | — | 1.5px `--color-control-border` edge; checked: `--color-accent` edge on `--color-status-running-bg`; `--focus-ring` on keyboard focus only; disabled 50% |
+| `radio-group` | `input[type="radio"].ds-radio` *(parity; the file-radio circle)*, or `.input-file-select` rows | — | 1.5px `--color-control-border` on `--color-surface-1`; hover `--color-accent`; checked `--color-secondary` dot + `--shadow-control-selected`; `--focus-ring`; disabled: `--color-border` ring, `--color-text-disabled` dot |
+| `switch` | `button.switch[role="switch"]` > `.switch__knob` | `default` → `.switch`, `lg` → `.switch--lg` | `--color-switch-track-on` / `--color-switch-track-off`, `--color-switch-knob`, `--shadow-switch-knob`; hover halo `--color-pill-hover-bg`; pressed `brightness(0.92)`; `--focus-ring-picker`; disabled 50% |
+| `card` | `.card` | — | the Cards spec: `--color-surface-1`, `--color-border`, `--radius-lg`. The registry card adds `--shadow-section` and `--space-card-padding` (a top-level page card); the Tier A `.card` paints `--color-overlay-soft` because it usually sits inside another surface |
+| `badge` | `span.badge` | `pending`, `scheduled`, `assigned`, `leased`, `running`, `analyzing`, `success`, `warning`, `cancelled` → `.badge-pending` … `.badge-cancelled`; `error` and `destructive` → `.badge-danger`; `default`, `secondary`, `outline`, `accent` → `.badge-default`, `.badge-secondary`, `.badge-outline`, `.badge-accent` *(parity)* | pill, `--font-size-caption`; status variants use the status `-fg` / `-bg` / `-border` triplets; `.badge-default` is `--color-on-primary-fill` on `--color-primary-fill`; `.badge-accent` is `--flag-on-accent` (set in `shadcn-parity.css`, measured) on `--color-accent` |
+| `alert` | `div.alert[role="alert"]` > `.alert__title`, `.alert__description` *(parity)*; add `.has-icon` when it leads with an icon (browsers with `:has()` detect it) | `info`, `success`, `warning`, `destructive` → `.alert--info`, `.alert--success`, `.alert--warning`, `.alert--destructive` *(parity)* | 1px edge on a status tint (`--color-status-assigned-*`, `-success-*`, `-warning-*`, `-error-*`), `--radius-md`; text in the status `-fg`, measured at 4.5:1 on its tint |
+| `separator` | `hr.separator` *(parity)* | `vertical` → `.separator--vertical` | 1px `--color-border` |
+| `tabs` | `default` → `.seg` > `.seg-option[aria-selected]`; `line` → `.tabs` > `.tab[aria-selected]` *(parity)* | — | segmented: selected on `--color-primary-fill`; line: `--color-accent` underline when selected, hover `--color-overlay-soft`, pressed `--color-selected-bg`; both: 2px `--color-accent` outline on focus; disabled 50% (as `.seg-option`) |
+| `dialog`, `alert-dialog` | `dialog.modal` (`showModal()`) > `.modal__header`, `.modal__title`, `.modal__description`, `.modal__footer`; close button `.icon-action.modal__close` *(parity)* | `alert-dialog` adds `role="alertdialog"` and no backdrop dismiss | `--color-surface-1`, `--color-border-strong`, `--radius-xl`, `--shadow-lg`; backdrop `--color-scrim` + 3px blur (as `.scrim`); Escape closes; actions right, stacked under 40rem |
+| `sheet` | `dialog.sheet` with `.sheet--right`, `.sheet--left`, `.sheet--top` or `.sheet--bottom` *(parity)* | sides | the modal surface docked to an edge |
+| `dropdown-menu` | `.menu[role="menu"]` > `.menu-item[role="menuitem"]`, `.menu-label`, `.menu-separator` *(parity)* | `destructive` item → `.menu-item--destructive` | popover surface; hover and focus: `--color-selected-bg` + inset `--color-row-active-border`; pressed: a 2px ring; disabled (`:disabled` / `aria-disabled`) 50%; labels in the group-header type; dividers `--color-divider` |
+| `popover` | `.popover` *(parity)*; the connection picker's `.picker-popover` is a specialised popover | — | `--color-surface-2`, `--color-selected-border`, `--radius-lg`, `--shadow-popover`; give it an accessible name |
+| `tooltip` | `.tooltip[role="tooltip"]` *(parity)* | — | popover surface at `--radius-sm`, `--font-size-caption` |
+| `table` | `.table-wrap > table`; clickable rows `tr.is-interactive` *(parity)* | `TableRow interactive` → `tr.is-interactive`; selected → `.table-wrap tr[aria-selected="true"]` | uppercase caption-size `--color-text-muted` head, tabular figures, `--color-border` rules; hover `--color-overlay-soft` and pressed `--color-selected-bg` only on clickable rows; a focusable row shows an inset `--color-accent` ring |
+| `skeleton` | `.skeleton` *(parity)* | — | `--color-surface-2`; the pulse stops under reduced motion |
+| `avatar` | `.avatar` > `.avatar__img` or `.avatar__fallback` *(parity)* | `sm`, `lg` → `.avatar--sm`, `.avatar--lg` | initials on `--color-surface-2` with a `--color-border` edge |
+| `scroll-area` | `.scroll-area[tabindex="0"]` *(parity)* | — | thin `--color-border-strong` thumb; `--focus-ring` |
+| `sonner` | `.toast-region[aria-live="polite"]` > `.toast` *(parity)*, `.has-icon` as for alerts | `success`, `warning`, `error`, `info` → `.toast--success`, `.toast--warning`, `.toast--error`, `.toast--info` | popover surface at `--radius-lg`; the icon in `--color-success`, `--color-warning`, `--color-danger` or `--color-link` (each 4.5:1 on every surface) |
+| `command` | `.command` > `.command__search`, `.command__list[role="listbox"]`, `.group-header`, `.command__item[aria-selected]` *(parity)* | — | popover surface; the search row gets a 2px `--color-accent` underline while its field has focus; hover `--color-overlay-soft`; the active option is the picker's active row; `aria-disabled` items 50% |
+
+Every Tier A class reads tokens only and supports both themes through
+`html[data-theme]`. Changing either side means changing both: see
+[SHADCN.md](SHADCN.md#propose-a-new-item-or-change-one).
