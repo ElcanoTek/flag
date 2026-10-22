@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 ElcanoTek, Inc. (canonical copy: ElcanoTek/flag tools/product/)
+#
 # stack-check.sh — enforce the Elcano frontend standard (see the
 # "Elcano frontend standard" block in AGENTS.md). Shared verbatim by every
 # Elcano repo; change it in all of them at once (bump STACK_CHECK_VERSION).
@@ -22,7 +25,7 @@ set -f # stack.conf values are words, never globs
 unset CDPATH
 export LC_ALL=C
 
-STACK_CHECK_VERSION=21
+STACK_CHECK_VERSION=22
 STANDARD_SHA=5b3a1c9dab098277570a37d58366b0802d4378370f9717d48743c386b194bdbb
 ROOT="$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)"
 CONF="$ROOT/stack.conf"

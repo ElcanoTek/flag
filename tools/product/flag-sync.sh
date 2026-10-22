@@ -1,4 +1,7 @@
 #!/usr/bin/env bash
+# SPDX-License-Identifier: MIT
+# Copyright (c) 2026 ElcanoTek, Inc. (canonical copy: ElcanoTek/flag tools/product/)
+#
 # flag-sync.sh — vendor files from ElcanoTek/flag (the Flag design system) and
 # prove they have not drifted. This script is shared verbatim by every Elcano
 # repo; change it in all of them at once (bump FLAG_SYNC_VERSION) or not at all.
@@ -43,7 +46,7 @@ set -f # lock paths may contain glob characters ([ ] * ?); never expand them
 unset CDPATH GIT_DIR GIT_WORK_TREE GIT_INDEX_FILE GIT_OBJECT_DIRECTORY GIT_ALTERNATE_OBJECT_DIRECTORIES GIT_NAMESPACE
 export LC_ALL=C GIT_LITERAL_PATHSPECS=1
 
-FLAG_SYNC_VERSION=12
+FLAG_SYNC_VERSION=13
 ROOT="$(cd -P -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd -P)"
 LOCK="$ROOT/flag.lock"
 
