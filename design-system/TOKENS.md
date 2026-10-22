@@ -83,16 +83,19 @@ filled control therefore paints its label on a measured fill:
 
 | Token | Value | Use |
 |---|---|---|
-| `--color-primary-fill` | primary mixed 1% toward black (4.53:1 under white) | Filled buttons, selected chips/options, selected calendar day, segmented selection |
-| `--color-primary-fill-hover` | primary mixed 11% toward black (5.4:1) | Hover of the above: hover only ever raises contrast |
+| `--color-primary-fill` | `#7171A9`: primary 1% toward black (4.53:1 under white) | Filled buttons, selected chips/options, selected calendar day, segmented selection |
+| `--color-primary-fill-hover` | `#656598`: primary 11% toward black (5.43:1) | Hover of the above: hover only ever raises contrast |
 | `--color-on-primary` / `--color-on-primary-fill` | `#FFFFFF` | The label on either fill (`--color-on-primary-fill` reads `--color-on-primary`) |
-| `--color-secondary-fill` / `-hover` | secondary / 10% toward black | Far stop of the action gradient |
+| `--color-secondary-fill` / `-hover` | `#586F7C` / `#4F6470` (10% toward black) | Far stop of the action gradient |
 | `--gradient-action-fill` / `-hover` | primary-fill to secondary-fill (light: the hover stops) | Primary buttons in dark; the label holds 4.5:1 at every point of the blend |
 
 `--color-primary` stays for things with nothing painted on them (an active
 bar, a checkbox accent, tints, borders); `--gradient-action-primary` stays for
 decoration. Neither carries a label. Upstreamed from fleet's measured fill
-pair.
+pair. Every token is a static value: the mixes are precomputed, because a
+browser without `color-mix()` drops a custom property that uses it and would
+paint a transparent button under a white label (`check_tokens.py` rejects
+newer color functions in the token sheet).
 
 ### Wells, syntax and focus
 
@@ -298,7 +301,8 @@ Surface gradients:
 - `gradient.surface.elevated` (`--gradient-surface-elevated`)
 
 Action/state gradients:
-- `gradient.action.primary` (`--gradient-action-primary`)
+- `gradient.action.fill` (`--gradient-action-fill`, hover `--gradient-action-fill-hover`): primary buttons, with `--color-on-primary-fill` labels
+- `gradient.action.primary` (`--gradient-action-primary`): decorative only, never under a label
 - `gradient.action.success` (`--gradient-action-success`)
 - `gradient.action.disabled` (`--gradient-action-disabled`)
 

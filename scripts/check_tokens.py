@@ -275,8 +275,51 @@ def check_contrast(errors, report):
                 errors.append("%s: %s on %s dips to %.2f:1, needs %.1f:1" % (tname, fg, grad, worst, floor))
 
 
+# --- static values -----------------------------------------------------------
+
+MODERN_COLOR = re.compile(r"\b(color-mix|oklch|oklab|lch|lab|color|light-dark|relative)\(", re.I)
+
+
+def check_static(errors):
+    """Newer color functions must never be the only value.
+
+    A browser that does not understand color-mix() (older Safari, some
+    webviews) treats a custom property that uses it as invalid at
+    computed-value time, so every rule reading that token falls back to its
+    initial value: a transparent button under a white label. Tokens must
+    therefore be static values (precompute the mix). In components.css a
+    modern function is allowed only right after a declaration of the same
+    property with a static value, which old browsers keep.
+    """
+    from flagtokens import DS
+    css = re.sub(r"/\*.*?\*/", lambda m: "\n" * m.group(0).count("\n"), TOKENS_CSS.read_text(), flags=re.S)
+    for lineno, code in enumerate(css.splitlines(), 1):
+        if MODERN_COLOR.search(code):
+            errors.append("tokens/design-tokens.css:%d uses %s; precompute it to a static hex/rgba value"
+                          % (lineno, MODERN_COLOR.search(code).group(1)))
+    for path, value in flatten(json.loads(TOKENS_JSON.read_text())).items():
+        if isinstance(value, str) and MODERN_COLOR.search(value):
+            errors.append("design-tokens.json %s uses %s; precompute it" % (path, MODERN_COLOR.search(value).group(1)))
+    comp = DS / "components" / "components.css"
+    if not comp.exists():
+        return
+    text = re.sub(r"/\*.*?\*/", lambda m: "\n" * m.group(0).count("\n"), comp.read_text(), flags=re.S)
+    for m in re.finditer(r"\{([^{}]*)\}", text):
+        decls = [d.strip() for d in m.group(1).split(";") if d.strip()]
+        for i, d in enumerate(decls):
+            if not MODERN_COLOR.search(d):
+                continue
+            prop = d.split(":", 1)[0].strip()
+            prev = decls[i - 1] if i else ""
+            if not (prev.split(":", 1)[0].strip() == prop and not MODERN_COLOR.search(prev)):
+                line = text.count("\n", 0, m.start()) + 1
+                errors.append("components/components.css (rule at line %d): `%s` needs a static `%s:` "
+                              "fallback declared right before it" % (line, d[:70], prop))
+
+
 def main():
     errors, report = [], []
+    check_static(errors)
     for name, fn in (("consistency", check_consistency),):
         try:
             fn(errors)

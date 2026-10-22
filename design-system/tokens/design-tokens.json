@@ -44,12 +44,12 @@
     "danger": "#FF5757",
     "info": "#8E8EC2",
     "onSuccess": "#000000",
-    "primaryFill": "color-mix(in srgb, var(--color-primary) 99%, #000)",
-    "primaryFillHover": "color-mix(in srgb, var(--color-primary) 89%, #000)",
+    "primaryFill": "#7171A9",
+    "primaryFillHover": "#656598",
     "onPrimary": "#FFFFFF",
     "onPrimaryFill": "#FFFFFF",
     "secondaryFill": "#586F7C",
-    "secondaryFillHover": "color-mix(in srgb, var(--color-secondary) 90%, #000)",
+    "secondaryFillHover": "#4F6470",
     "background": "#1A0B1E",
     "surface": {
       "default": "#241B31",
@@ -385,7 +385,7 @@
         },
         "action": {
           "fill": "linear-gradient(140deg, var(--color-primary-fill-hover), var(--color-secondary-fill-hover))",
-          "fillHover": "linear-gradient(140deg, color-mix(in srgb, var(--color-primary-fill-hover) 90%, #000), color-mix(in srgb, var(--color-secondary-fill-hover) 90%, #000))"
+          "fillHover": "linear-gradient(140deg, #5b5b89, #475a64)"
         },
         "featured": {
           "topAccent": "linear-gradient(90deg, rgba(114, 114, 171, 0.42), rgba(88, 111, 124, 0.22))",
