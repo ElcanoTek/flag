@@ -1,0 +1,14 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "use-flag-theme",
+  "title": "useFlagTheme",
+  "description": "The resolved Flag theme from html[data-theme], kept in sync with the theme controller.",
+  "files": [
+    {
+      "path": "registry/flag/hooks/use-flag-theme.ts",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\n\nexport type FlagTheme = \"light\" | \"dark\"\n\nfunction readTheme(): FlagTheme {\n  if (typeof document === \"undefined\") return \"dark\"\n  // Flag's contract: html[data-theme] is set by the theme controller; the\n  // tokens are dark unless the root says light.\n  return document.documentElement.getAttribute(\"data-theme\") === \"light\"\n    ? \"light\"\n    : \"dark\"\n}\n\nfunction subscribe(onChange: () => void) {\n  const observer = new MutationObserver(onChange)\n  observer.observe(document.documentElement, {\n    attributes: true,\n    attributeFilter: [\"data-theme\"],\n  })\n  return () => observer.disconnect()\n}\n\n/** The resolved Flag theme (html[data-theme]), kept in sync with the toggle. */\nexport function useFlagTheme(): FlagTheme {\n  return React.useSyncExternalStore(subscribe, readTheme, () => \"dark\")\n}\n",
+      "type": "registry:hook"
+    }
+  ],
+  "type": "registry:hook"
+}

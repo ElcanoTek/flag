@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "radio-group",
+  "title": "Radio Group",
+  "description": "Flag radio: secondary ring and dot with the selected halo.",
+  "dependencies": [
+    "radix-ui@^1.6.7"
+  ],
+  "registryDependencies": [
+    "@flag/utils"
+  ],
+  "files": [
+    {
+      "path": "registry/flag/ui/radio-group.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { RadioGroup as RadioGroupPrimitive } from \"radix-ui\"\n\nimport { cn } from \"@/lib/utils\"\n\nfunction RadioGroup({\n  className,\n  ...props\n}: React.ComponentProps<typeof RadioGroupPrimitive.Root>) {\n  return (\n    <RadioGroupPrimitive.Root\n      data-slot=\"radio-group\"\n      className={cn(\"grid gap-3\", className)}\n      {...props}\n    />\n  )\n}\n\n// Flag COMPONENTS.md \"Custom File Radio Select\": 1rem circle, 1.5px\n// --color-control-border edge on surface-1, a secondary edge and dot and the\n// selected halo (--shadow-control-selected) when checked; disabled draws a\n// muted ring and dot. Tier A: input[type=radio].ds-radio.\nfunction RadioGroupItem({\n  className,\n  ...props\n}: React.ComponentProps<typeof RadioGroupPrimitive.Item>) {\n  return (\n    <RadioGroupPrimitive.Item\n      data-slot=\"radio-group-item\"\n      className={cn(\n        \"group/radio aspect-square size-4 shrink-0 cursor-pointer rounded-full border-[1.5px] border-(--color-control-border) bg-surface-1 [transition:var(--transition-fast)] outline-none enabled:hover:border-(--color-accent) focus-visible:shadow-(--focus-ring) disabled:cursor-not-allowed disabled:border-border disabled:bg-(--color-overlay-soft) disabled:shadow-none aria-invalid:border-destructive data-[state=checked]:border-(--color-secondary) data-[state=checked]:shadow-(--shadow-control-selected) data-[state=checked]:focus-visible:shadow-(--focus-ring) disabled:data-[state=checked]:shadow-none\",\n        className\n      )}\n      {...props}\n    >\n      <RadioGroupPrimitive.Indicator\n        data-slot=\"radio-group-indicator\"\n        className=\"flex size-full items-center justify-center\"\n      >\n        <span className=\"size-[38%] rounded-full bg-(--color-secondary) group-disabled/radio:bg-(--color-text-disabled)\" />\n      </RadioGroupPrimitive.Indicator>\n    </RadioGroupPrimitive.Item>\n  )\n}\n\nexport { RadioGroup, RadioGroupItem }\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

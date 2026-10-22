@@ -1,5 +1,5 @@
 # Flag's checks and local preview. Nothing to install: sh, perl, python3.
-.PHONY: check audit preview sync help
+.PHONY: check audit preview sync registry registry-check help
 
 help: ## List targets
 	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | sed 's/:.*## /\t/'
@@ -21,3 +21,9 @@ preview: ## Serve the preview at http://localhost:8765/preview/
 
 sync: ## Refresh the preview copies of components.css and email-safe.html
 	@sh design-system/sync-preview.sh
+
+registry: ## Rebuild the shadcn registry into design-system/preview/r/ (needs Node)
+	@cd design-system/shadcn && npm ci --ignore-scripts --no-audit --no-fund && npm run build
+
+registry-check: ## Fail if the committed shadcn registry is stale or invalid (needs Node; CI job shadcn-registry)
+	@cd design-system/shadcn && npm ci --ignore-scripts --no-audit --no-fund && npm run check

@@ -263,14 +263,30 @@ def check_docs_pairs():
                     err("%s:%d prescribes %s" % (rel(md), n, why))
 
 
+# The vendorable component stylesheets: components.css, and the opt-in
+# shadcn/ui parity layer that builds on it. Every components.css check below
+# runs over both, as one stylesheet, and the preview carries a byte copy of
+# each.
+COMPONENT_SHEETS = ("components.css", "shadcn-parity.css")
+
+
+def component_css():
+    """The component stylesheets joined in load order, or None if components.css is missing."""
+    if not (DS / "components" / "components.css").exists():
+        return None
+    return "\n".join((DS / "components" / n).read_text() for n in COMPONENT_SHEETS
+                     if (DS / "components" / n).exists())
+
+
 def check_preview_copy():
-    canon = DS / "components" / "components.css"
-    copy = PREVIEW / "components.css"
-    if not canon.exists():
-        err("design-system/components/components.css is missing")
-    elif not copy.exists() or copy.read_bytes() != canon.read_bytes():
-        err("design-system/preview/components.css differs from design-system/components/components.css; "
-            "run sh design-system/sync-preview.sh")
+    for name in COMPONENT_SHEETS:
+        canon = DS / "components" / name
+        copy = PREVIEW / name
+        if not canon.exists():
+            err("design-system/components/%s is missing" % name)
+        elif not copy.exists() or copy.read_bytes() != canon.read_bytes():
+            err("design-system/preview/%s differs from design-system/components/%s; "
+                "run sh design-system/sync-preview.sh" % (name, name))
 
 
 def css_rules(text):
@@ -300,10 +316,10 @@ def css_rules(text):
 
 
 def check_components():
-    comp = DS / "components" / "components.css"
-    if not comp.exists():
+    css = component_css()
+    if css is None:
         return
-    rules = css_rules(comp.read_text())
+    rules = css_rules(css)
     stopped = set()
     for sel, body, reduced in rules:
         if reduced and re.search(r"animation(-name)?\s*:\s*none", body):
@@ -354,6 +370,13 @@ INTERACTION_STATES = {
     "input": ["focus-visible", "disabled"],
     "select": ["focus-visible", "disabled"],
     "textarea": ["focus-visible", "disabled"],
+    # shadcn/ui parity controls (Tier A twins of the @flag registry items).
+    'input[type="radio"].ds-radio': ["hover", "checked", "focus-visible", "disabled"],
+    ".tab": ["hover", "focus-visible", "active", "disabled"],
+    ".menu-item": ["hover", "focus-visible", "active", "disabled"],
+    ".command__item": ["hover", "aria-disabled"],
+    "tr.is-interactive": ["hover", "focus-visible", "active"],
+    ".scroll-area": ["focus-visible"],
 }
 # A focus-visible rule must paint something a sighted keyboard user can see.
 FOCUS_PAINT = re.compile(r"(?:^|;)\s*(outline(?:-color)?|box-shadow|border(?:-color)?|background(?:-color)?|"
@@ -383,6 +406,14 @@ DOCUMENTED_STATES = [
     ".badge-pending", ".badge-scheduled", ".badge-assigned", ".badge-leased", ".badge-running", ".badge-analyzing",
     ".badge-success", ".badge-warning", ".badge-danger", ".badge-cancelled",
     "[data-theme=\"light\"] .theme-toggle__icon--sun", "[data-theme=\"light\"] .theme-toggle__icon--moon",
+    # shadcn/ui parity (COMPONENTS.md "shadcn/ui (Tier B) Mapping").
+    ".alert--info", ".alert--success", ".alert--warning", ".alert--destructive",
+    ".toast--success > svg", ".toast--warning > svg", ".toast--error > svg", ".toast--info > svg",
+    ".tab[aria-selected=\"true\"]", ".menu-item--destructive", ".command__item[aria-selected=\"true\"]",
+    ".table-wrap tr[aria-selected=\"true\"]", ".sheet--right", ".sheet--left", ".sheet--top", ".sheet--bottom",
+    ".avatar--sm", ".avatar--lg", ".separator--vertical", ".select-wrap--sm select",
+    ".badge-default", ".badge-secondary", ".badge-outline", ".badge-accent",
+    "input[type=\"radio\"].ds-radio:checked", "input[type=\"radio\"].ds-radio:disabled:checked",
 ]
 
 
@@ -422,6 +453,14 @@ MEASURED_PAINT = [
     (".flatpickr-day:focus-visible", "box-shadow", "var(--focus-ring-day) !important"),
     (".flatpickr-day.inRange:focus-visible", "box-shadow", "var(--focus-ring-day-on-range) !important"),
     (".flatpickr-day.selected:focus-visible", "box-shadow", "var(--focus-ring-day-on-fill) !important"),
+    # shadcn/ui parity indicators and fills (components/shadcn-parity.css).
+    ('input[type="radio"].ds-radio', "border", "1.5px solid var(--color-control-border)"),
+    ('.tab[aria-selected="true"]', "border-bottom-color", "var(--color-accent)"),
+    ('.command__item[aria-selected="true"]', "box-shadow", "inset 0 0 0 1px var(--color-row-active-border)"),
+    (".badge-default", "background", "var(--color-primary-fill)"),
+    (".badge-default", "color", "var(--color-on-primary-fill)"),
+    (".badge-accent", "background", "var(--color-accent)"),
+    (".badge-accent", "color", "var(--flag-on-accent)"),
 ]
 
 
@@ -769,10 +808,9 @@ def selector_list(css_text):
 
 
 def check_component_coverage():
-    comp = DS / "components" / "components.css"
-    if not comp.exists():
+    css = component_css()
+    if css is None:
         return
-    css = comp.read_text()
     sels = selector_list(css)
     joined = "\n".join(sels)
     classes = set(re.findall(r"\.([A-Za-z][\w-]*)", joined))

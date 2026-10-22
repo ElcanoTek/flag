@@ -1,0 +1,217 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Flag shadcn/ui registry</title>
+  <script>
+    (function () {
+      var storageKey = "flag-theme-preference";
+      var themes = { light: true, dark: true, system: true };
+      var preferredTheme = null;
+
+      try {
+        preferredTheme = window.localStorage.getItem(storageKey);
+      } catch (error) {
+        preferredTheme = null;
+      }
+
+      var resolvedTheme = "dark";
+      if (preferredTheme === "light" || preferredTheme === "dark") {
+        resolvedTheme = preferredTheme;
+      } else {
+        var isSystemDark = window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+        resolvedTheme = isSystemDark ? "dark" : "light";
+      }
+
+      if (!themes[resolvedTheme]) {
+        resolvedTheme = "dark";
+      }
+
+      document.documentElement.setAttribute("data-theme", resolvedTheme);
+    })();
+  </script>
+  <link rel="stylesheet" href="../fonts/fonts.css" />
+  <link rel="stylesheet" href="../tokens/design-tokens.css" />
+  <link rel="stylesheet" href="./components.css" />
+  <link rel="stylesheet" href="./shadcn-parity.css" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+  <style>
+    .shadcn-shot { display: block; width: 100%; height: auto; border: 1px solid var(--color-border); border-radius: var(--radius-md); }
+    [data-theme="light"] .shadcn-shot--dark, :root:not([data-theme="light"]) .shadcn-shot--light { display: none; }
+    .shadcn-grid { display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fit, minmax(18rem, 1fr)); }
+    .shadcn-items { columns: 14rem; margin: 0; padding-left: var(--space-5); color: var(--color-text-secondary); }
+    .shadcn-items code, .shadcn-code { font-family: var(--font-code); font-size: var(--font-size-caption); }
+    .shadcn-code { display: block; white-space: pre-wrap; overflow-wrap: anywhere; padding: var(--space-3); border-radius: var(--radius-md); background: var(--color-surface-inset); border: 1px solid var(--color-border); color: var(--color-text-primary); }
+    .section-body > * + * { margin-top: var(--space-4); }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="ds-app-header ds-app-header--hero" role="banner">
+      <div class="ds-app-header__brand">
+        <img class="ds-app-header__mark" src="../logos/elcano-mark-primary.svg" alt="Elcano" />
+        <div class="ds-app-header__text">
+          <p class="ds-app-header__eyebrow">Elcano Internal</p>
+          <h1 class="ds-app-header__title">shadcn/ui registry</h1>
+        </div>
+      </div>
+    </header>
+    <main>
+    <p class="hero-intro">Flag's base components for Tier B apps (Vite + React + TypeScript, served by Go). Each item is upstream shadcn/ui restyled to Flag's component specs and themed by Flag tokens. Tier A pages use the matching Flag CSS classes; the mapping is in COMPONENTS.md.</p>
+    <div class="section-review-controls" role="group" aria-label="Page controls">
+      <div class="section-review-controls__group">
+        <a class="btn btn-secondary" href="./">Design system preview</a>
+      </div>
+      <button id="toggleTheme" class="btn btn-secondary theme-toggle" type="button" aria-label="Toggle color theme" aria-pressed="false">
+        <span class="theme-toggle__icon-wrap" aria-hidden="true">
+          <svg class="icon-inline theme-toggle__icon theme-toggle__icon--sun" aria-hidden="true"><use href="../icons/core-icons.svg#sun"></use></svg>
+          <svg class="icon-inline theme-toggle__icon theme-toggle__icon--moon" aria-hidden="true"><use href="../icons/core-icons.svg#moon"></use></svg>
+        </span>
+        <span class="theme-toggle__text" data-theme-toggle-text>Theme</span>
+      </button>
+    </div>
+    <p id="previewAnnouncer" class="sr-only" aria-live="polite"></p>
+
+    <section class="section">
+      <details class="section-accordion" open>
+        <summary><h2>Install</h2></summary>
+        <div class="section-body">
+          <p>Registry: <a href="./r/registry.json">https://flag-71q.pages.dev/r/registry.json</a>. Items resolve at <code>https://flag-71q.pages.dev/r/&#123;name&#125;.json</code>.</p>
+          <code class="shadcn-code">// components.json
+"registries": &#123; "@flag": "https://flag-71q.pages.dev/r/&#123;name&#125;.json" &#125;
+
+npx shadcn@4.21.4 add @flag/flag-theme @flag/button @flag/dialog</code>
+          <p>Vendor <code>fonts/fonts.css</code>, <code>tokens/design-tokens.css</code> and <code>shadcn/theme.css</code> with flag-sync and import them after Tailwind. Full steps, versioning and how to propose items: <code>design-system/SHADCN.md</code> in the Flag repo.</p>
+        </div>
+      </details>
+    </section>
+
+    <section class="section">
+      <details class="section-accordion" open>
+        <summary><h2>Kitchen sink</h2></summary>
+        <div class="section-body">
+          <p>Every registry item installed into a scratch Vite app with <code>shadcn add</code> and rendered by <code>design-system/shadcn/kitchen-sink/verify.sh</code> (which also runs axe). The screenshot follows this page's theme.</p>
+          <img class="shadcn-shot shadcn-shot--dark" src="./shadcn/kitchen-sink-dark.webp" alt="All Flag shadcn components (dark theme)" width="1440" height="3209" loading="lazy" />
+          <img class="shadcn-shot shadcn-shot--light" src="./shadcn/kitchen-sink-light.webp" alt="All Flag shadcn components (light theme)" width="1440" height="3209" loading="lazy" />
+        </div>
+      </details>
+    </section>
+
+    <section class="section">
+      <details class="section-accordion" open>
+        <summary><h2>Overlays</h2></summary>
+        <div class="section-body shadcn-grid">
+          <figure><img class="shadcn-shot shadcn-shot--dark" src="./shadcn/overlay-dialog-dark.webp" alt="Dialog on the Flag scrim (dark theme)" width="1440" height="900" loading="lazy" />
+          <img class="shadcn-shot shadcn-shot--light" src="./shadcn/overlay-dialog-light.webp" alt="Dialog on the Flag scrim (light theme)" width="1440" height="900" loading="lazy" /><figcaption class="section-note">Dialog</figcaption></figure>
+          <figure><img class="shadcn-shot shadcn-shot--dark" src="./shadcn/overlay-dropdown-dark.webp" alt="Dropdown menu on the popover surface (dark theme)" width="1440" height="900" loading="lazy" />
+          <img class="shadcn-shot shadcn-shot--light" src="./shadcn/overlay-dropdown-light.webp" alt="Dropdown menu on the popover surface (light theme)" width="1440" height="900" loading="lazy" /><figcaption class="section-note">Dropdown menu</figcaption></figure>
+          <figure><img class="shadcn-shot shadcn-shot--dark" src="./shadcn/overlay-select-dark.webp" alt="Open select (dark theme)" width="1440" height="900" loading="lazy" />
+          <img class="shadcn-shot shadcn-shot--light" src="./shadcn/overlay-select-light.webp" alt="Open select (light theme)" width="1440" height="900" loading="lazy" /><figcaption class="section-note">Select</figcaption></figure>
+        </div>
+      </details>
+    </section>
+
+    <section class="section">
+      <details class="section-accordion" open>
+        <summary><h2>Tier A twins (shadcn-parity.css)</h2></summary>
+        <div class="section-body">
+          <p>Server-rendered pages get the same components from <code>components/components.css</code> plus the opt-in <code>components/shadcn-parity.css</code>. These are those classes, live.</p>
+          <div class="demo-row">
+            <button class="btn btn-primary" type="button">Primary</button>
+            <button class="btn btn-outline" type="button">Outline</button>
+            <button class="btn btn-link" type="button">Link</button>
+            <button class="btn btn-secondary btn-sm" type="button">Small</button>
+            <button class="btn btn-outline" type="button" disabled>Disabled</button>
+          </div>
+          <div class="demo-row" role="radiogroup" aria-label="Schedule">
+            <input class="ds-radio" type="radio" name="tw-radio" id="tw-r1" /><label for="tw-r1">Daily</label>
+            <input class="ds-radio" type="radio" name="tw-radio" id="tw-r2" checked /><label for="tw-r2">Weekly</label>
+            <input class="ds-radio" type="radio" name="tw-radio" id="tw-r3" disabled /><label for="tw-r3">Monthly (disabled)</label>
+          </div>
+          <div class="demo-row">
+            <span class="badge badge-default">default</span>
+            <span class="badge badge-secondary">secondary</span>
+            <span class="badge badge-outline">outline</span>
+            <span class="badge badge-accent">accent</span>
+            <span class="badge badge-running">running</span>
+          </div>
+          <div class="alert alert--warning" role="alert"><div class="alert__title">Budget at 92%</div><div class="alert__description">Lower bids or extend the cap before Friday.</div></div>
+          <div class="tabs" role="tablist" aria-label="Task sections">
+            <button class="tab" type="button" role="tab" aria-selected="true">Overview</button>
+            <button class="tab" type="button" role="tab" aria-selected="false">Runs</button>
+            <button class="tab" type="button" role="tab" aria-selected="false" disabled>Audit</button>
+          </div>
+          <hr class="separator" />
+          <div class="shadcn-grid">
+            <div class="menu" role="menu" aria-label="Task actions">
+              <div class="menu-label">Task</div>
+              <button class="menu-item" type="button" role="menuitem">Export CSV</button>
+              <button class="menu-item" type="button" role="menuitem" aria-disabled="true">Archive (soon)</button>
+              <hr class="menu-separator" />
+              <button class="menu-item menu-item--destructive" type="button" role="menuitem">Delete</button>
+            </div>
+            <div class="command">
+              <div class="command__search"><input type="text" aria-label="Search tools" placeholder="Search tools…" /></div>
+              <div class="command__list" role="listbox" aria-label="Tools">
+                <div class="group-header">Connectors</div>
+                <div class="command__item" role="option" aria-selected="true">Schedule a report</div>
+                <div class="command__item" role="option" aria-selected="false">Export deals</div>
+                <div class="command__item" role="option" aria-selected="false" aria-disabled="true">Notifications (soon)</div>
+              </div>
+            </div>
+            <div class="demo-row">
+              <span class="avatar avatar--sm"><span class="avatar__fallback">BA</span></span>
+              <span class="avatar"><span class="avatar__fallback">EL</span></span>
+              <span class="avatar avatar--lg"><span class="avatar__fallback">FC</span></span>
+              <span class="tooltip" role="tooltip">Download report</span>
+              <div class="skeleton" style="height:1rem;width:8rem" aria-hidden="true"></div>
+            </div>
+          </div>
+        </div>
+      </details>
+    </section>
+
+    <section class="section">
+      <details class="section-accordion" open>
+        <summary><h2>Items</h2></summary>
+        <div class="section-body">
+          <ul class="shadcn-items">
+            <li><a href="./r/flag-theme.json"><code>@flag/flag-theme</code></a></li>
+            <li><a href="./r/utils.json"><code>@flag/utils</code></a></li>
+            <li><a href="./r/use-flag-theme.json"><code>@flag/use-flag-theme</code></a></li>
+            <li><a href="./r/button.json"><code>@flag/button</code></a></li>
+            <li><a href="./r/input.json"><code>@flag/input</code></a></li>
+            <li><a href="./r/textarea.json"><code>@flag/textarea</code></a></li>
+            <li><a href="./r/label.json"><code>@flag/label</code></a></li>
+            <li><a href="./r/select.json"><code>@flag/select</code></a></li>
+            <li><a href="./r/checkbox.json"><code>@flag/checkbox</code></a></li>
+            <li><a href="./r/radio-group.json"><code>@flag/radio-group</code></a></li>
+            <li><a href="./r/switch.json"><code>@flag/switch</code></a></li>
+            <li><a href="./r/card.json"><code>@flag/card</code></a></li>
+            <li><a href="./r/badge.json"><code>@flag/badge</code></a></li>
+            <li><a href="./r/alert.json"><code>@flag/alert</code></a></li>
+            <li><a href="./r/separator.json"><code>@flag/separator</code></a></li>
+            <li><a href="./r/tabs.json"><code>@flag/tabs</code></a></li>
+            <li><a href="./r/dialog.json"><code>@flag/dialog</code></a></li>
+            <li><a href="./r/alert-dialog.json"><code>@flag/alert-dialog</code></a></li>
+            <li><a href="./r/sheet.json"><code>@flag/sheet</code></a></li>
+            <li><a href="./r/dropdown-menu.json"><code>@flag/dropdown-menu</code></a></li>
+            <li><a href="./r/popover.json"><code>@flag/popover</code></a></li>
+            <li><a href="./r/tooltip.json"><code>@flag/tooltip</code></a></li>
+            <li><a href="./r/table.json"><code>@flag/table</code></a></li>
+            <li><a href="./r/skeleton.json"><code>@flag/skeleton</code></a></li>
+            <li><a href="./r/avatar.json"><code>@flag/avatar</code></a></li>
+            <li><a href="./r/scroll-area.json"><code>@flag/scroll-area</code></a></li>
+            <li><a href="./r/sonner.json"><code>@flag/sonner</code></a></li>
+            <li><a href="./r/command.json"><code>@flag/command</code></a></li>
+          </ul>
+        </div>
+      </details>
+    </section>
+    </main>
+  </div>
+  <script src="./preview.js"></script>
+</body>
+</html>

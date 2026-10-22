@@ -1,0 +1,14 @@
+{
+  "name": "flag-shadcn-registry",
+  "private": true,
+  "description": "Builds Flag's shadcn/ui registry into design-system/preview/r/. Dev tooling only; nothing here ships to products.",
+  "type": "module",
+  "scripts": {
+    "build": "node build.mjs",
+    "check": "node build.mjs --check"
+  },
+  "devDependencies": {
+    "ajv": "8.20.0",
+    "shadcn": "4.21.4"
+  }
+}

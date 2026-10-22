@@ -114,6 +114,20 @@ browser without `color-mix()` drops a custom property that uses it and would
 paint a transparent button under a white label (`check_tokens.py` rejects
 newer color functions in the token sheet).
 
+### Labels on the accent (shadcn layers, not a core token)
+
+`--color-accent` is a state color (focus rings, borders, marks) and the token
+sheet has no label color for it: white on the dark accent is 2.3:1. The two
+shadcn layers, which fill with it, set their own label per theme, and
+`check_tokens.py` reads and measures both at 4.5:1 on the accent:
+
+- `shadcn/theme.css`: `--accent-solid-foreground` on `--accent-solid`
+  (`--color-accent`), for Tier B apps (`bg-accent-solid
+  text-accent-solid-foreground`, the registry badge's `accent` variant).
+- `components/shadcn-parity.css`: `--flag-on-accent`, for `.badge-accent`.
+
+Both are `#1A0B1E` in dark (8.3:1) and `#FFFFFF` in light (5.3:1).
+
 ### Wells, syntax and focus
 
 - `--color-surface-inset`: a recessed in-flow surface (code and output wells,

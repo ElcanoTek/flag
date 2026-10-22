@@ -105,11 +105,29 @@ to copy, is in
 
 Tier B products (React + Vite; see the Elcano frontend standard in
 [`tools/product/agents-standard-block.md`](tools/product/agents-standard-block.md))
-take their base UI from shadcn/ui: `npx shadcn add <component>` from the
-standard shadcn registry copies the component into the app, where it is
-reviewed like the app's own code. The components read shadcn's CSS variables;
-point those at Flag's tokens (vendor `tokens/design-tokens.css` and the fonts
-first) and they follow Flag in both themes:
+take their base UI from Flag's [shadcn/ui](https://ui.shadcn.com) registry:
+upstream shadcn components restyled to Flag's component specs and themed by
+Flag tokens. `npx shadcn add` copies a component into the app, where it is
+reviewed like the app's own code.
+
+- Registry: `https://flag-71q.pages.dev/r/registry.json`; items at
+  `https://flag-71q.pages.dev/r/{name}.json`. Declare it in the app's
+  `components.json` as `"registries": { "@flag": "https://flag-71q.pages.dev/r/{name}.json" }`,
+  then `npx shadcn@4.21.4 add @flag/flag-theme @flag/button` (never
+  `npx shadcn add button`, which installs the unthemed upstream item).
+- Theme: vendor `design-system/shadcn/theme.css` with flag-sync, next to the
+  tokens and fonts, and import it after them. It sets shadcn's variables from
+  Flag's tokens as in the table below, plus the Tailwind v4 `@theme inline`
+  mapping.
+- Kitchen sink in both themes: [`shadcn.html`](https://flag-71q.pages.dev/shadcn.html)
+  on the live preview.
+- Adoption, versioning and how to propose an item:
+  [`design-system/SHADCN.md`](design-system/SHADCN.md). Server-rendered
+  (Tier A) pages use the matching classes in `components.css` and the opt-in
+  `components/shadcn-parity.css`; the mapping is in
+  [`COMPONENTS.md`](design-system/COMPONENTS.md#shadcnui-tier-b-mapping).
+
+The theme's mapping:
 
 | shadcn variable | Flag token | Note |
 | --- | --- | --- |
@@ -131,21 +149,10 @@ first) and they follow Flag in both themes:
 | `--ring` | `--color-accent` | focus ring color |
 | `--radius` | `--radius-md` | |
 
-```css
-:root {
-  --background: var(--color-bg);
-  --foreground: var(--color-text-primary);
-  --primary: var(--color-primary-fill);
-  --primary-foreground: var(--color-on-primary-fill);
-  /* ...one line per row above */
-}
-```
-
 Every token named in the table exists, and each foreground/background pair
 it implies is measured in both themes by `scripts/check_tokens.py` (text
 4.5:1; `--input`, `--ring` and `--destructive` as indicators 3:1 or text
-4.5:1 on every surface). Flag will also publish a registry of pre-themed
-components here; until then, theme stock shadcn components with this mapping.
+4.5:1 on every surface). `shadcn/theme.css` must agree with it.
 
 ## File map
 
@@ -165,7 +172,9 @@ components here; until then, theme stock shadcn components with this mapping.
 | `design-system/icons/core-icons.svg` | The icon sprite |
 | `design-system/logos/` | Approved logo files |
 | `design-system/components/components.css` | The vendorable component stylesheet (Tier A); `preview/components.css` is a synced copy |
+| `design-system/components/shadcn-parity.css` | Opt-in Tier A twins of the shadcn registry items, loaded after `components.css`; `preview/shadcn-parity.css` is a synced copy |
 | `design-system/theme/theme-controller.js` | The light/dark controller |
+| [`design-system/SHADCN.md`](design-system/SHADCN.md), `design-system/shadcn/` | The shadcn/ui registry for Tier B apps: `theme.css` (vendored), item sources and `registry.json`; built to `preview/r/` |
 | `design-system/email-safe.html` | Canonical email template (`preview/email-safe.html` is a synced copy) |
 | `design-system/preview/` | The preview site deployed at <https://flag-71q.pages.dev/> |
 | `design-system/LICENSE` | The MIT notice products vendor with their copies |

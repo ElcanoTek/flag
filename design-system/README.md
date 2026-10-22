@@ -7,6 +7,7 @@ This directory is the single documented source of truth for shared UI design dec
 2. `TOKENS.md` - canonical foundations and token usage
 3. `FONTS.md` - **typography and font licensing: the two faces every product ships**
 4. `COMPONENTS.md` - component structures, states, and class mappings
+   - `SHADCN.md` - the shadcn/ui registry for React (Tier B) apps; source in `shadcn/`, built to `preview/r/`
 5. `INTERACTION_ACCESSIBILITY.md` - required interaction and accessibility behavior
 6. `SYSTEM.md` - system principles and architecture
 7. `APPLY_TO_PRODUCT.md` - adoption guide for another product repo

@@ -39,7 +39,7 @@ const chromium = pw.chromium || pw.default.chromium;
 const AXE = readFileSync(load("axe-core/axe.min.js"), "utf8");
 
 const TYPES = { ".html": "text/html", ".css": "text/css", ".js": "text/javascript", ".svg": "image/svg+xml",
-  ".png": "image/png", ".woff2": "font/woff2", ".woff": "font/woff", ".json": "application/json" };
+  ".png": "image/png", ".webp": "image/webp", ".woff2": "font/woff2", ".woff": "font/woff", ".json": "application/json" };
 const server = createServer(async (req, res) => {
   const path = normalize(decodeURIComponent(new URL(req.url, "http://x").pathname)).replace(/^(\.\.[/\\])+/, "");
   const file = join(ROOT, path);
@@ -50,7 +50,7 @@ const server = createServer(async (req, res) => {
 await new Promise((r) => server.on("listening", r));
 const base = `http://127.0.0.1:${server.address().port}`;
 
-const PAGES = ["/preview/index.html", "/preview/email-preview.html", "/email-safe.html"];
+const PAGES = ["/preview/index.html", "/preview/shadcn.html", "/preview/email-preview.html", "/email-safe.html"];
 const browser = await chromium.launch();
 let failures = 0;
 
@@ -288,7 +288,7 @@ for (const theme of ["light", "dark"]) {
       // No horizontal page scroll at any width.
       const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
       if (overflow > 0) { failures++; console.log(`FAIL ${theme} ${width} ${path}: page scrolls sideways by ${overflow}px`); }
-      if (path !== "/preview/index.html") continue;
+      if (path !== "/preview/index.html" && path !== "/preview/shadcn.html") continue;
 
       // Unclassed native controls keep the browser's rendering: components.css
       // must not turn third-party checkboxes, radios, ranges or file inputs
