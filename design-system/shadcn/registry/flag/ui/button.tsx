@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils"
 // --focus-ring, disabled is 50% with no lift. Tier A: .btn with .btn-primary,
 // -secondary, -outline, -ghost, -danger or -link; sizes .btn-sm, .btn-lg, .btn-icon.
 const buttonVariants = cva(
-  "inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-md border border-border font-body whitespace-nowrap [transition:var(--transition-fast)] outline-none select-none focus-visible:shadow-(--focus-ring) motion-safe:hover:-translate-y-px motion-safe:active:translate-y-0 motion-safe:active:scale-[0.98] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 aria-invalid:border-destructive [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  "inline-flex shrink-0 cursor-pointer items-center justify-center gap-2 rounded-md border border-border font-sans whitespace-nowrap [transition:var(--transition-fast)] outline-none select-none focus-visible:shadow-(--focus-ring) motion-safe:hover:-translate-y-px motion-safe:active:translate-y-0 motion-safe:active:scale-[0.98] disabled:pointer-events-none disabled:cursor-not-allowed disabled:opacity-50 aria-disabled:pointer-events-none aria-disabled:opacity-50 aria-invalid:border-destructive [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
   {
     variants: {
       variant: {

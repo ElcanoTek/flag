@@ -34,7 +34,7 @@ const Toaster = ({ ...props }: ToasterProps) => {
       }}
       toastOptions={{
         classNames: {
-          toast: "font-body shadow-(--shadow-popover)!",
+          toast: "font-sans shadow-(--shadow-popover)!",
           description: "text-subtle!",
           actionButton: "bg-primary! text-primary-foreground!",
           cancelButton: "bg-secondary! text-secondary-foreground!",
