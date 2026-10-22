@@ -142,9 +142,9 @@ Example:
   `.field-warning`. Disabled fields use the native `disabled` attribute.
 
 Production baseline requirements:
-- Number controls must use the canonical `number-input` stepper pattern (minus button, centered value, plus button, focus-within ring).
+- Number controls must use the canonical `number-input` stepper pattern (minus button, centered value, plus button, focus-within ring). A disabled stepper disables its field and buttons and marks the wrapper `.is-disabled`.
 - Date and datetime controls must use the canonical `custom-datepicker` treatment (left-aligned value, right icon affordance, themed popover classes).
-- File attachment controls must use the canonical dropzone pattern with drag-over state, browse action, and file queue list.
+- File attachment controls must use the canonical dropzone pattern with drag-over state, browse action, and file queue list. An upload area that cannot take files is `.file-upload-dropzone.is-disabled` (or `aria-disabled="true"`) with its browse button disabled.
 
 ## Dropdowns
 - Match input styling and radius.
@@ -239,6 +239,8 @@ Example:
   - truncated file name
   - optional action icons (download/delete)
 - Hover and focus-within states must be visible on the row.
+- Disabled: the native `disabled` radio plus `.is-disabled` on the row (muted
+  ring and dot, disabled text, not-allowed cursor, no row hover).
 
 ## Checkbox
 - Use one shared checkbox style across all products.
@@ -555,6 +557,8 @@ Every color is a token from `tokens/design-tokens.css` ("Connection picker
 components" block); light-mode values live there too.
 
 ### Switch
+- Disabled (`:disabled` / `aria-disabled="true"`): 50% and not-allowed,
+  though a row that cannot be switched should show a status icon instead.
 - `button.switch[role="switch"][aria-checked]`, 30x18 (`.switch--lg` 38x22).
 - Track: `--color-switch-track-on` when checked, else `--color-switch-track-off`.
   The off track must reach 3:1 against the surface and under the knob, so

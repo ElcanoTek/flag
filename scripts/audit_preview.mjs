@@ -220,21 +220,31 @@ for (const theme of ["light", "dark"]) {
       });
       for (const u of unfocused) { failures++; console.log(`FAIL ${theme} ${width}: no visible focus on ${u}`); }
 
-      // Date picker in range mode with an in-range span.
-      const opened = await page.evaluate(() => {
-        const date = document.querySelector("#f-date");
-        if (!date || !date._flatpickr) return false;
-        const fp = date._flatpickr;
-        fp.set("mode", "range");
-        const d = new Date(); d.setDate(5);
-        const e = new Date(d); e.setDate(12);
-        fp.setDate([d, e], false);
-        fp.open();
-        return true;
-      });
-      if (opened) {
+      // Date picker in range mode: a range inside the month, ranges that
+      // cross into the previous and the next month (selected and in-range
+      // days that are also prevMonthDay / nextMonthDay), and one around today.
+      const RANGES = {
+        "range in month": "[new Date(y, m, 5), new Date(y, m, 12)]",
+        "range from previous month": "[new Date(y, m - 1, 27), new Date(y, m, 3)]",
+        "range into next month": "[new Date(y, m, 27), new Date(y, m + 1, 3)]",
+        "range around today": "[new Date(y, m, d - 2), new Date(y, m, d + 2)]",
+      };
+      for (const [name, expr] of Object.entries(RANGES)) {
+        const opened = await page.evaluate((expr) => {
+          const date = document.querySelector("#f-date");
+          if (!date || !date._flatpickr) return false;
+          const fp = date._flatpickr;
+          const now = new Date(); const y = now.getFullYear(), m = now.getMonth(), d = now.getDate();
+          const range = eval(expr);
+          fp.set("mode", "range");
+          fp.setDate(range, false);
+          fp.jumpToDate(new Date(y, m, 15));
+          fp.open();
+          return true;
+        }, expr);
+        if (!opened) continue;
         await page.waitForFunction(() => { const c = document.querySelector(".flatpickr-calendar.open"); return c && getComputedStyle(c).opacity === "1" && !c.getAnimations().some((a) => a.playState === "running"); }, null, { timeout: 5000 });
-        await axe(page, `${theme} ${width} date picker (range)`);
+        await axe(page, `${theme} ${width} date picker (${name})`);
         await page.evaluate(() => document.querySelector("#f-date")._flatpickr.close());
       }
       const timed = await page.evaluate(() => {

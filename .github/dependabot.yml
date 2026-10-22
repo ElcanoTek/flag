@@ -17,8 +17,10 @@ updates:
     cooldown:
       default-days: 7
     labels: []
+    # Gitmoji subject, like every commit in this repo (AGENTS.md):
+    # "⬆️ Bump actions/checkout from 7.0.1 to 7.1.0".
     commit-message:
-      prefix: "deps(actions)"
+      prefix: "⬆️"
     groups:
       actions-minor-patch:
         update-types:

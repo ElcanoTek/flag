@@ -323,7 +323,7 @@ INTERACTION_STATES = {
     ".seg-option": ["hover", "focus-visible", "active", "disabled"],
     ".pill-btn": ["hover", "focus-visible", "active", "aria-disabled"],
     ".picker-icon-btn": ["hover", "focus-visible", "active"],
-    ".switch": ["hover", "focus-visible", "active"],
+    ".switch": ["hover", "focus-visible", "active", "disabled"],
     ".chip": ["hover", "active", "focus-visible"],
     ".chip-toggle": ["focus-visible"],
     ".chip-delete": ["hover", "focus-visible", "active"],
@@ -331,6 +331,10 @@ INTERACTION_STATES = {
     ".featured-link": ["hover", "focus-visible", "active", "disabled"],
     ".ds-accordion summary": ["hover", "focus-visible", "active"],
     ".ds-checkbox-input": ["checked", "focus-visible", "disabled"],
+    ".input-file-select input": ["checked", "focus-visible", "disabled"],
+    ".selectable-item": ["hover", "focus-visible", "disabled"],
+    ".number-input": ["focus-visible", "disabled"],
+    ".file-upload-dropzone": ["hover", "disabled"],
     # .theme-toggle is always also .btn or .icon-action, which carry its states.
     "input": ["focus-visible", "disabled"],
     "select": ["focus-visible", "disabled"],
@@ -391,6 +395,125 @@ MEASURED_PAINT = [
 ]
 
 
+# Hover and pressed styles never apply to a disabled control: every :hover /
+# :active in components.css carries this zero-specificity gate (so adding it
+# never changes the cascade). Vendor widget parts (flatpickr) are exempt:
+# their disabled days have explicit reset rules.
+HOVER_GATE = ':where(:not(:disabled, [aria-disabled="true"], .is-disabled))'
+
+
+def check_hover_gates(sels):
+    for s in sels:
+        if not re.search(r":(hover|active)\b", s):
+            continue
+        if "flatpickr" in s or "numInputWrapper" in s or re.search(r":has\([^)]*:disabled", s):
+            continue
+        for compound in re.split(r"\s+(?![^()]*\))", s):
+            m = re.search(r":is\(:hover|:(hover|active)\b", compound)
+            if m and HOVER_GATE not in compound[:m.start()]:
+                err("components.css: `%s` applies :hover/:active without the disabled gate %s" % (s, HOVER_GATE))
+                break
+
+
+def check_appearance_disabled(css_text, sels):
+    """A control that drops its native appearance must draw its own disabled state."""
+    for sel, body, _r in css_rules(css_text):
+        if not re.search(r"appearance\s*:\s*none", body):
+            continue
+        for s in split_selectors(sel):
+            if "::" in s:
+                continue
+            last = re.split(r"\s+", s)[-1]
+            tag = re.match(r"^[a-z]+", last)
+            classes = set(re.findall(r"\.([\w-]+)", s))
+            ok = False
+            for d in sels:
+                if not re.search(r":disabled|\[aria-disabled|\.is-disabled", d):
+                    continue
+                dl = re.split(r"\s+(?![^()]*\))", d)
+                subj = next((c for c in reversed(dl) if re.search(r":disabled|\[aria-disabled|\.is-disabled", c)), dl[-1])
+                dtag = re.match(r"^[a-z]+", subj)
+                dclasses = set(re.findall(r"\.([\w-]+)", re.sub(r":not\([^)]*\)", "", d)))
+                if (tag and dtag and dtag.group(0) == tag.group(0) or not tag) and dclasses <= classes | {"is-disabled"}:
+                    ok = True
+                    break
+            if not ok:
+                err("components.css: `%s` removes native appearance but has no disabled state" % s)
+
+
+def check_flatpickr_cascade(css_text):
+    """Simulate the cascade for every day-state x modifier combination.
+
+    A selected / range-end day must keep --color-on-primary-fill on its fill,
+    an in-range day --color-on-accent-strong on --color-accent-strong,
+    whatever else it is (a neighbouring month's day, today), hovered,
+    focused or not, in both themes.
+    """
+    import itertools
+    rules = []
+    for order, (sel, body, _r) in enumerate(css_rules(css_text)):
+        decls = {}
+        for m in re.finditer(r"([\w-]+)\s*:\s*([^;]+?)\s*!important", body):
+            decls[m.group(1)] = " ".join(m.group(2).split())
+        if not decls:
+            continue
+        for s in split_selectors(sel):
+            if "flatpickr-day" not in s or " " in s.replace('[data-theme="light"] ', "") or "::" in s:
+                continue
+            light = s.startswith('[data-theme="light"] ')
+            core = s.replace('[data-theme="light"] ', "")
+            if re.search(r":(not|nth|is|where)\(", core):
+                continue
+            classes = set(re.findall(r"\.([\w-]+)", core))
+            pseudos = set(re.findall(r":(hover|focus)\b", core))
+            spec = len(classes) + len(pseudos) + (1 if light else 0)
+            rules.append((classes, pseudos, light, spec, order, decls))
+
+    def winner(classes, pseudos, light, prop):
+        best = None
+        for rc, rp, rl, spec, order, decls in rules:
+            if prop not in decls or not rc <= classes or not rp <= pseudos or (rl and not light):
+                continue
+            if best is None or (spec, order) >= (best[0], best[1]):
+                best = (spec, order, decls[prop])
+        return best[2] if best else None
+
+    expect = {
+        "selected": ("var(--color-on-primary-fill)", {False: "var(--gradient-action-fill)", True: "var(--color-primary-fill)"}),
+        "startRange": ("var(--color-on-primary-fill)", {False: "var(--gradient-action-fill)", True: "var(--color-primary-fill)"}),
+        "endRange": ("var(--color-on-primary-fill)", {False: "var(--gradient-action-fill)", True: "var(--color-primary-fill)"}),
+        "inRange": ("var(--color-on-accent-strong)", {False: "var(--color-accent-strong)", True: "var(--color-accent-strong)"}),
+    }
+    mods = ["prevMonthDay", "nextMonthDay", "today"]
+    for state, (color, bgs) in expect.items():
+        for n in range(len(mods) + 1):
+            for combo in itertools.combinations(mods, n):
+                if "prevMonthDay" in combo and "nextMonthDay" in combo:
+                    continue
+                for pseudo in (set(), {"hover"}, {"focus"}):
+                    for light in (False, True):
+                        cls = {"flatpickr-day", state, *combo}
+                        got_c = winner(cls, pseudo, light, "color")
+                        got_b = winner(cls, pseudo, light, "background")
+                        where = "%s.%s%s (%s)" % ("".join("." + c for c in sorted(cls - {state})), state,
+                                                 "".join(":" + p for p in pseudo), "light" if light else "dark")
+                        if got_c != color:
+                            err("components.css: flatpickr day %s ends up color %s, expected %s" % (where, got_c, color))
+                        if got_b != bgs[light]:
+                            err("components.css: flatpickr day %s ends up background %s, expected %s"
+                                % (where, got_b, bgs[light]))
+
+
+def check_dependabot():
+    """Dependabot's commit messages follow the repo's gitmoji convention."""
+    f = ROOT / ".github" / "dependabot.yml"
+    if not f.exists():
+        return
+    for m in re.finditer(r'prefix:\s*"([^"]*)"', f.read_text()):
+        if not m.group(1) or ord(m.group(1)[0]) < 0x2000:
+            err('.github/dependabot.yml: commit-message prefix "%s" is not a gitmoji (AGENTS.md)' % m.group(1))
+
+
 def check_measured_paint(css_text):
     rules = [(split_selectors(sel), body) for sel, body, _r in css_rules(css_text)]
     for sel, prop, value in MEASURED_PAINT:
@@ -431,11 +554,12 @@ def check_component_coverage():
     for c in sorted(documented - classes - DOC_CLASS_HOOKS):
         err("COMPONENTS.md documents `.%s`, but components.css has no selector for it" % c)
 
-    # Interaction states.
+    # Interaction states (the hover gate itself says ":disabled"; ignore it).
+    sels_nogate = [s.replace(HOVER_GATE, "") for s in sels]
     for base, states in INTERACTION_STATES.items():
         for state in states:
             pat = re.compile(r"(^|[\s,>+~(])" + re.escape(base) + r"(?![\w-])[^\s,]*?(" + STATE_PATTERNS[state] + ")")
-            if not any(pat.search(re.sub(r":not\((?:[^()]|\([^()]*\))*\)", "", s)) for s in sels):
+            if not any(pat.search(re.sub(r":not\((?:[^()]|\([^()]*\))*\)", "", s)) for s in sels_nogate):
                 err("components.css: `%s` has no %s state (INTERACTION_ACCESSIBILITY.md)" % (base, state))
 
     # Light theme paints filled selections solid (TOKENS.md "Filled
@@ -451,10 +575,13 @@ def check_component_coverage():
 
     # Documented component states.
     for s in DOCUMENTED_STATES:
-        if s not in sels:
+        if s not in sels_nogate:
             err("components.css: no `%s` rule for a state COMPONENTS.md documents" % s)
 
     check_measured_paint(css)
+    check_hover_gates(sels)
+    check_appearance_disabled(css, sels_nogate)
+    check_flatpickr_cascade(css)
 
     # Vendored flatpickr colors are overridden.
     vendor = PREVIEW / "vendor" / "flatpickr" / "flatpickr.min.css"
@@ -509,6 +636,7 @@ def check_vendor_overrides(vendor_css, comp_css):
 
 
 def main():
+    check_dependabot()
     check_component_coverage()
     check_components()
     check_docs_pairs()

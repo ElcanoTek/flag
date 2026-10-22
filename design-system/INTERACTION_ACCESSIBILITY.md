@@ -10,6 +10,13 @@ Every interactive control must define all of:
 
 ### Hover
 - Interactive controls: subtle visual delta only (slight lift or stronger border/fill).
+- Hover and pressed styles never apply to a disabled control. In
+  `components.css` every `:hover` / `:active` carries the zero-specificity
+  gate `:where(:not(:disabled, [aria-disabled="true"], .is-disabled))`, so
+  the gate never changes the cascade; `make check` fails on an ungated one.
+- A control that drops its native appearance (custom radio, checkbox,
+  switch, select, stepper, upload area) draws its own disabled state;
+  `make check` fails when one has none.
 - Avoid large positional movement in data-heavy interfaces.
 
 ### Focus
