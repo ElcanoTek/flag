@@ -37,7 +37,7 @@ Source precedence (when docs and examples differ):
 
 ## Visual Review
 - `preview/index.html` - browsable style guide and component showcase
-- Live preview: <https://flag-71q.pages.dev/>
+- Live preview: <https://flag.elcanotek.com/>
 - Cloudflare Pages is connected to GitHub; changes go live automatically when they are pushed to `main`. The site is `preview/` with `tokens/`, `fonts/`, `icons/` and `logos/` copied beside it, so the preview may reference only those four directories outside itself (`scripts/check_refs.py` enforces this).
 - `preview/email-safe.html` is a deployed preview copy of the canonical `email-safe.html`. After editing the canonical template, run `bash design-system/sync-email-preview.sh` before pushing so the Pages preview stays in sync.
 Preview includes:

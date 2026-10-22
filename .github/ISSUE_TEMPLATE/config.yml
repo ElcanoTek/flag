@@ -4,5 +4,5 @@ contact_links:
     url: https://github.com/ElcanoTek/flag/blob/main/SECURITY.md
     about: Report a vulnerability privately to security@elcanotek.com (how and what to include are in SECURITY.md). Never in a public issue.
   - name: Live preview
-    url: https://flag-71q.pages.dev/
+    url: https://flag.elcanotek.com/
     about: Every token, icon, logo and component, in light and dark.

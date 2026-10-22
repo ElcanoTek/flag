@@ -6,7 +6,7 @@
 2. The preview. Every href/src/data-logo-*/url() in design-system/preview/
    (vendor/ excepted) resolves to a file. A reference that leaves preview/
    must land in tokens/, fonts/, icons/ or logos/: the live preview
-   (https://flag-71q.pages.dev/) is preview/ with exactly those four
+   (https://flag.elcanotek.com/) is preview/ with exactly those four
    directories copied beside it, so anything else 404s in production while
    working locally. No <link>/<script>/url() may load from another host.
 3. Icons. Every core-icons.svg#id used anywhere exists in the sprite; every

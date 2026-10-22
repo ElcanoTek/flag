@@ -9,7 +9,7 @@ building or changing a product's UI to follow Flag, read
 Flag, the Elcano design system: tokens (`design-system/tokens/`), fonts,
 the icon sprite, logos, the theme controller, component specs (Markdown) and a
 static preview site (`design-system/preview/`, live at
-<https://flag-71q.pages.dev/>). Every Elcano product vendors these files byte
+<https://flag.elcanotek.com/>). Every Elcano product vendors these files byte
 for byte, locked by hash in its `flag.lock`. There is no build step and no
 package manager.
 

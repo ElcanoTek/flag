@@ -7,11 +7,11 @@ TypeScript, built to a static bundle that the Go server embeds). Tier A
 registry item has a Tier A equivalent with the same name, variants and states.
 The mapping is in [COMPONENTS.md](COMPONENTS.md#shadcnui-tier-b-mapping).
 
-- Registry index: `https://flag-71q.pages.dev/r/registry.json`
-- Item URLs: `https://flag-71q.pages.dev/r/{name}.json` (for example
-  `https://flag-71q.pages.dev/r/button.json`)
+- Registry index: `https://flag.elcanotek.com/r/registry.json`
+- Item URLs: `https://flag.elcanotek.com/r/{name}.json` (for example
+  `https://flag.elcanotek.com/r/button.json`)
 - Namespace used below: `@flag`
-- Preview: `https://flag-71q.pages.dev/shadcn.html` (kitchen sink in both themes)
+- Preview: `https://flag.elcanotek.com/shadcn.html` (kitchen sink in both themes)
 
 The items are upstream shadcn/ui components (Radix via the `radix-ui`
 package, `class-variance-authority`, `lucide-react`) restyled to Flag's
@@ -78,7 +78,7 @@ alias in `tsconfig.json` and `vite.config.ts`.
        "lib": "@/lib",
        "hooks": "@/hooks"
      },
-     "registries": { "@flag": "https://flag-71q.pages.dev/r/{name}.json" }
+     "registries": { "@flag": "https://flag.elcanotek.com/r/{name}.json" }
    }
    ```
 

@@ -4,7 +4,7 @@
 //   node build.mjs          validate registry.json against the vendored shadcn
 //                           schemas (schema/, from ui.shadcn.com), format it,
 //                           and run `shadcn build` into ../preview/r/ (served
-//                           at https://flag-71q.pages.dev/r/)
+//                           at https://flag.elcanotek.com/r/)
 //   node build.mjs --check  the same into a temp dir; fail if registry.json is
 //                           unformatted or ../preview/r/ differs from what is
 //                           committed

@@ -31,7 +31,7 @@ make check        # everything CI runs
 
 `make preview` serves `design-system/`, not `design-system/preview/`: the
 preview reads `../tokens/`, `../fonts/`, `../icons/` and `../logos/`, exactly
-like the live site at <https://flag-71q.pages.dev/> (Cloudflare Pages, which
+like the live site at <https://flag.elcanotek.com/> (Cloudflare Pages, which
 publishes `preview/` with those four directories beside it on every push to
 `main`).
 
