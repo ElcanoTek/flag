@@ -371,6 +371,41 @@ def split_selectors(sel):
     return [" ".join(p.split()) for p in parts + [cur] if p.strip()]
 
 
+# Non-text indicators: the rule that paints each one must use exactly the
+# token check_tokens.py measures for it (WCAG 1.4.11, 3:1), so measured and
+# rendered cannot drift apart. (selector, property, required value)
+MEASURED_PAINT = [
+    (".spinner", "border-top-color", "var(--color-primary)"),
+    (".btn-primary .spinner", "border-top-color", "var(--color-on-primary-fill)"),
+    (".file-item-progress-fill", "background", "var(--color-link)"),
+    (".ds-checkbox__box", "border", "1.5px solid var(--color-control-border)"),
+    (".ds-checkbox-input:checked + .ds-checkbox .ds-checkbox__box", "border-color", "var(--color-accent)"),
+    (".input-file-select input", "border", "1.5px solid var(--color-control-border)"),
+    (".switch", "background", "var(--color-switch-track-off)"),
+    ('.switch[aria-checked="true"]', "background", "var(--color-switch-track-on)"),
+    ('.seg-option[aria-pressed="true"]', "background", "var(--color-primary-fill)"),
+    (".flatpickr-day.inRange", "background", "var(--color-accent-strong) !important"),
+    (".flatpickr-day.today", "box-shadow", "inset 0 0 0 1px var(--color-accent) !important"),
+    ('[data-theme="light"] .flatpickr-day.selected', "background", "var(--color-primary-fill) !important"),
+    (".flatpickr-day.selected", "background", "var(--gradient-action-fill) !important"),
+]
+
+
+def check_measured_paint(css_text):
+    rules = [(split_selectors(sel), body) for sel, body, _r in css_rules(css_text)]
+    for sel, prop, value in MEASURED_PAINT:
+        found = False
+        for sels, body in rules:
+            if sel in sels:
+                for m in re.finditer(r"(?:^|;)\s*" + re.escape(prop) + r"\s*:\s*([^;]+)", body):
+                    found = True
+                    if " ".join(m.group(1).split()) != value:
+                        err("components.css: `%s { %s: %s }` but check_tokens.py measures %s"
+                            % (sel, prop, " ".join(m.group(1).split()), value))
+        if not found:
+            err("components.css: no `%s { %s }` rule (expected %s)" % (sel, prop, value))
+
+
 def selector_list(css_text):
     sels = []
     for sel, _body, _reduced in css_rules(css_text):
@@ -403,10 +438,23 @@ def check_component_coverage():
             if not any(pat.search(re.sub(r":not\((?:[^()]|\([^()]*\))*\)", "", s)) for s in sels):
                 err("components.css: `%s` has no %s state (INTERACTION_ACCESSIBILITY.md)" % (base, state))
 
+    # Light theme paints filled selections solid (TOKENS.md "Filled
+    # controls"): every rule that paints --gradient-action-fill needs a
+    # [data-theme="light"] twin painting --color-primary-fill.
+    for sel, body, _r in css_rules(css):
+        if re.search(r"background(-image)?\s*:\s*var\(--gradient-action-fill\)", body):
+            for s in split_selectors(sel):
+                twin = '[data-theme="light"] ' + s
+                if twin not in sels:
+                    err("components.css: `%s` paints --gradient-action-fill but has no `%s` rule with the solid "
+                        "--color-primary-fill" % (s, twin))
+
     # Documented component states.
     for s in DOCUMENTED_STATES:
         if s not in sels:
             err("components.css: no `%s` rule for a state COMPONENTS.md documents" % s)
+
+    check_measured_paint(css)
 
     # Vendored flatpickr colors are overridden.
     vendor = PREVIEW / "vendor" / "flatpickr" / "flatpickr.min.css"

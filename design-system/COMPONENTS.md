@@ -469,6 +469,12 @@ Example:
 
 ## Loaders
 - Spinner size: `12px` inline, `32px` panel-level.
+- `.spinner` draws its arc in `--color-primary` on surfaces; inside a primary
+  button (`.btn-primary .spinner`) the arc takes `--color-on-primary-fill` and
+  the track `--color-primary-fill-hover`, since a primary arc on the primary
+  fill is invisible (1.01:1). Under `prefers-reduced-motion` it stays a static
+  ring.
+- Upload progress fills use `--color-link` (3:1+ on the track in both themes).
 - Use semantic loading text for long operations.
 
 ## Error States

@@ -171,19 +171,22 @@
   }
 
   function updateThemeToggleUi(activeTheme) {
-    if (!toggleThemeBtn) {
-      return;
-    }
-
     var isDarkTheme = activeTheme === THEME_DARK;
-    toggleThemeBtn.setAttribute("aria-pressed", isDarkTheme ? "true" : "false");
-    toggleThemeBtn.setAttribute("aria-label", isDarkTheme ? "Switch to light mode" : "Switch to dark mode");
-    toggleThemeBtn.setAttribute("title", isDarkTheme ? "Dark mode" : "Light mode");
+    var nextAction = isDarkTheme ? "Switch to light mode" : "Switch to dark mode";
+    // The page toggle and every proxy (the header demo's) share one state,
+    // as theme/theme-controller.js does for every [data-flag-theme-toggle].
+    var toggles = document.querySelectorAll("#toggleTheme, [data-preview-theme-proxy]");
+    Array.prototype.forEach.call(toggles, function (toggle) {
+      toggle.setAttribute("aria-pressed", isDarkTheme ? "true" : "false");
+      toggle.setAttribute("aria-label", nextAction);
+      toggle.setAttribute("title", toggle === toggleThemeBtn ? (isDarkTheme ? "Dark mode" : "Light mode") : nextAction);
+    });
 
     if (toggleThemeBtnText) {
       toggleThemeBtnText.textContent = isDarkTheme ? "Dark mode" : "Light mode";
     }
   }
+
 
   function updateThemeLogos(activeTheme) {
     var useLightAsset = activeTheme === THEME_LIGHT;

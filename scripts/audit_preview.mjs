@@ -80,15 +80,12 @@ const CONTRAST_JS = `(() => {
     const label = el.closest("label");
     return !!(label && label.control && label.control.disabled);
   };
-  const fails = [];
-  const els = [...document.querySelectorAll("body *")].filter((el) =>
-    ([...el.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim()) || (el.matches("input:not([type=checkbox]):not([type=radio]):not([type=file]), textarea") && el.value)) && !el.closest("svg, style, script, iframe"));
-  for (const el of els) {
-    if (!visible(el) || disabled(el)) continue;
-    const cs = getComputedStyle(el);
-    let fg = parse(cs.color)[0]; if (!fg) continue;
+  // Every color the element's backdrop can be (gradient stops are each a
+  // candidate), compositing translucent layers from node upward until an
+  // opaque one, and the product of opacities on the way.
+  const backdrop = (node) => {
     let opacity = 1; const layers = [];
-    for (let n = el; n; n = n.parentElement) {
+    for (let n = node; n; n = n.parentElement) {
       const c = getComputedStyle(n); opacity *= parseFloat(c.opacity);
       // background-image layers, top first; each gradient layer's stops are candidates.
       let img = null;
@@ -111,11 +108,55 @@ const CONTRAST_JS = `(() => {
         backs = [...new Map(nb.map((c) => [c.map(Math.round).join(), c])).values()].slice(0, 96);
       }
     }
+    return { backs, opacity };
+  };
+  // Pull the paint of a non-text indicator: a property's color, or every stop
+  // of a background gradient.
+  const paints = (el, prop) => {
+    const cs = getComputedStyle(el);
+    if (prop === "background") {
+      const img = cs.backgroundImage.includes("gradient") ? parse(cs.backgroundImage) : [];
+      return img.length ? img.filter((c) => c[3] > 0) : parse(cs.backgroundColor);
+    }
+    return parse(cs[prop]);
+  };
+  const fails = [];
+  const els = [...document.querySelectorAll("body *")].filter((el) =>
+    ([...el.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim()) || (el.matches("input:not([type=checkbox]):not([type=radio]):not([type=file]), textarea") && el.value)) && !el.closest("svg, style, script, iframe"));
+  for (const el of els) {
+    if (!visible(el) || disabled(el)) continue;
+    const cs = getComputedStyle(el);
+    let fg = parse(cs.color)[0]; if (!fg) continue;
+    const { backs, opacity } = backdrop(el);
     fg = [fg[0], fg[1], fg[2], fg[3] * opacity];
     const size = parseFloat(cs.fontSize); const bold = parseInt(cs.fontWeight, 10) >= 700;
     const floor = size >= 24 || (bold && size >= 18.66) ? 3 : 4.5;
     let worst = 99, at = null; for (const b of backs) { const r = ratio(over(fg, b), b); if (r < worst) { worst = r; at = b; } }
     if (worst < floor - 0.005) fails.push(\`\${worst.toFixed(2)}:1 < \${floor} (over rgb(\${at.slice(0, 3).map(Math.round).join(",")})) on \${el.tagName.toLowerCase()}.\${String(el.className).trim().replace(/\\s+/g, ".")} "\${(el.value || el.textContent).trim().slice(0, 30)}"\`);
+  }
+  // Non-text, state-bearing indicators (WCAG 1.4.11): each painted color
+  // against what the indicator sits on, 3:1.
+  const NONTEXT = [
+    [".spinner", "borderTopColor"],
+    [".file-item-progress-fill", "background"],
+    [".ds-checkbox__box", "borderTopColor"],
+    [".ds-checkbox-input:checked + .ds-checkbox .ds-checkbox__box", "borderTopColor"],
+    [".input-file-select input", "borderTopColor"],
+    [".switch", "background"],
+    [".switch__knob", "background"],
+    [".seg-option[aria-pressed='true']", "background"],
+    [".flatpickr-calendar.open .flatpickr-day.inRange", "background"],
+    [".flatpickr-calendar.open .flatpickr-day.selected", "background"],
+  ];
+  for (const [sel, prop] of NONTEXT) {
+    for (const el of document.querySelectorAll(sel)) {
+      if (!visible(el) || disabled(el)) continue;
+      const { backs } = backdrop(el.parentElement);
+      for (const c of paints(el, prop)) {
+        let worst = 99; for (const b of backs) worst = Math.min(worst, ratio(over(c, b), b));
+        if (worst < 3 - 0.005) fails.push(\`\${worst.toFixed(2)}:1 < 3 (non-text \${prop}) on \${sel}\`);
+      }
+    }
   }
   return fails;
 })()`;
@@ -217,4 +258,4 @@ if (failures) {
   console.log(`audit-preview: ${failures} problem(s)`);
   process.exit(1);
 }
-console.log("audit-preview: ok (axe WCAG 2 A/AA + visible focus, light and dark, 1440 and 390, pickers open)");
+console.log("audit-preview: ok (axe WCAG 2 A/AA, text and non-text contrast as painted, visible focus, light and dark, 1440 and 390, pickers open)");

@@ -35,6 +35,7 @@ ALIASES = {
     "font.lineHeight.bodyLarge": "--line-height-body-lg",
     "shadow.focusRingPicker": "--focus-ring-picker",
     "themes.contract.storageKey": "--theme-preference-storage-key",
+    "color.border.control": "--color-control-border",
 }
 PREFIXES = [  # (json prefix, css prefix); longest first
     ("font.lineHeight.", "--line-height-"),
@@ -202,6 +203,33 @@ pair("--color-switch-knob", ["--color-switch-track-on"], NON_TEXT, on=("--color-
 pair("--color-row-active-border", [], NON_TEXT, on=("--color-surface-2",))
 # Accent marks focus rings, input focus borders and hover borders.
 pair("--color-accent", [], NON_TEXT, label="--color-accent as a state border")
+
+# Every state-bearing, non-text indicator against what it is painted on
+# (WCAG 1.4.11, 3:1), overlays composited. A layer named --gradient-* is
+# measured at each of its stops.
+POPOVER = ("--color-surface-1", "--color-surface-2")
+CALENDAR = ["--gradient-surface-elevated"]
+pair("--color-primary", [], NON_TEXT, label="spinner arc (.spinner)")
+pair("--color-on-primary-fill", ["--color-primary-fill"], NON_TEXT, on=("--color-bg",),
+     label="spinner arc on a primary button (.btn-primary .spinner)")
+pair("--color-on-primary-fill", ["--gradient-action-fill"], NON_TEXT, on=("--color-bg",),
+     label="spinner arc on the primary gradient")
+pair("--color-link", ["--color-overlay-strong"], NON_TEXT, label="upload progress fill on its track")
+pair("--color-control-border", [], NON_TEXT, label="checkbox/radio edge on the surface")
+pair("--color-control-border", ["--color-overlay-soft"], NON_TEXT, label="checkbox edge on its box")
+pair("--color-accent", ["--color-status-running-bg"], NON_TEXT, label="checked checkbox edge on its box")
+pair("--color-text-secondary", ["--color-status-running-bg"], NON_TEXT, label="checkbox checkmark")
+pair("--color-secondary", [], NON_TEXT, on=("--color-surface-1",), label="radio dot on the radio (surface-1)")
+pair("--color-switch-track-on", [], NON_TEXT, on=POPOVER, label="switch track (on)")
+pair("--color-switch-track-on", ["--color-selected-bg"], NON_TEXT, on=("--color-surface-2",),
+     label="switch track (on) on the popover's active row")
+pair("--color-switch-track-off", ["--color-selected-bg"], NON_TEXT, on=("--color-surface-2",),
+     label="switch track (off) on the popover's active row")
+pair("--color-primary-fill", [], NON_TEXT, label="selected segmented option / filled selection")
+pair("--color-accent-strong", CALENDAR, NON_TEXT, on=("--color-bg",), label="date-range fill on the calendar")
+pair("--color-on-accent-strong", ["--color-accent-strong"], TEXT, on=("--color-bg",), label="date-range day label")
+pair("--color-primary-fill", CALENDAR, NON_TEXT, on=("--color-bg",), label="selected day on the calendar")
+pair("--color-accent", CALENDAR, NON_TEXT, on=("--color-bg",), label="today ring on the calendar")
 # The focus ring's outer color against whatever it surrounds (WCAG 1.4.11).
 pair("focus-ring", [], NON_TEXT, label="--focus-ring outer color")
 pair("focus-ring-picker", [], NON_TEXT, label="--focus-ring-picker outer color")
@@ -247,10 +275,15 @@ def check_contrast(errors, report):
                 continue
             for surface in on:
                 try:
-                    bg = resolve("var(%s)" % surface, theme)
+                    backs = [resolve("var(%s)" % surface, theme)]
                     for layer in layers:
-                        bg = over(resolve("var(%s)" % layer, theme), bg)
-                    ratio = contrast(fg_color(fg, theme), bg)
+                        if layer.startswith("--gradient"):
+                            stops = [resolve(s, theme) for s in gradient_stops(theme[layer], theme)]
+                            backs = [over(s, b) for b in backs for s in stops]
+                        else:
+                            backs = [over(resolve("var(%s)" % layer, theme), b) for b in backs]
+                    color = fg_color(fg, theme)
+                    ratio = min(contrast(color, b) for b in backs)
                 except ColorError as e:
                     errors.append("%s %s on %s: %s" % (tname, label, surface, e))
                     continue

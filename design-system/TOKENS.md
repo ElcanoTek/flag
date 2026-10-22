@@ -51,7 +51,7 @@ headers, match highlight, state panels, scrim; see COMPONENTS.md
 | `color.picker.selectedBg` / `selectedBorder` | `rgba(89,86,213,0.2)` / `rgba(157,167,239,0.4)` | Active row and selected filter fill; popover/modal border |
 | `color.picker.rowActiveBorder` | `#9DA7EF` (light `#6262A0`) | Active row and selected filter ring (6.2:1 / 4.8:1 on the popover) |
 | `color.picker.pillBorder` / `pillHoverBg` | `rgba(255,255,255,0.14)` / `rgba(255,255,255,0.06)` | Small pill button |
-| `color.picker.switchTrackOff` / `switchKnob` | `#7A7392` / `#F4F5F9` (light `#80829E` / `#FFFFFF`); each off track is at least 3:1 on the popover and under the knob | Switch |
+| `color.picker.switchTrackOn` / `switchTrackOff` / `switchKnob` | `#7976DD` / `#837D9A` / `#F4F5F9` (light `#6262A0` / `#80829E` / `#FFFFFF`); each track is at least 3:1 on the popover and its active row, and the knob at least 3:1 on each track | Switch |
 | `color.picker.matchBg` | `rgba(157,167,239,0.22)` | Search match highlight |
 | `color.picker.stateOk` / `stateWarn` / `stateDeny` | `#4ECB8F` / `#E0A94A` / `#E08AA3` (light `#1B7950` / `#8E611E` / `#9C546A`, each ≥ 4.5:1) | Status kickers, dots and icons |
 | `color.picker.panel{Ok,Warn,Deny}{Bg,Border}` | 12% fill / 30-32% border of the state color | State panels |
@@ -61,6 +61,18 @@ headers, match highlight, state panels, scrim; see COMPONENTS.md
 | `shadow.switchKnob` | `none` (light: `0 1px 2px rgba(26,11,30,0.28)`) | Switch knob lift in light mode |
 | `shadow.focusRingPicker` | `--focus-ring` in both themes | Focus ring on picker fields, pills, switches and icon buttons. Light used a separate `#6262A0` ring while the base light ring was under 3:1; with the light accent deepened it inherits `--focus-ring`, and stays a token so product CSS keeps resolving |
 | `shadow.popover` | `0 24px 60px -22px rgba(0,0,0,0.55)` | Popover and modal elevation |
+
+Control edge: `--color-control-border` (`#7A7392` dark, `#586F7C` light) draws
+the edge of a small control with no other boundary (checkbox box, radio
+ring); it is at least 3:1 on every surface. Checked checkboxes switch the edge
+to `--color-accent`.
+
+Non-text indicators (spinner arcs, the upload progress fill, checkbox and
+radio edges and marks, switch tracks and knob, selected fills, the date-range
+fill, the today ring, focus rings) are each measured at 3:1 against what they
+are painted on, overlays composited, in both themes: `check_tokens.py` holds
+the pairs and `check_refs.py` checks that each component rule paints the
+token that was measured.
 
 Neutral utility tokens:
 - `color.white` = `#FFFFFF`
