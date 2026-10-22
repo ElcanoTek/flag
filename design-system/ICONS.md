@@ -3,9 +3,27 @@
 This is the shared icon vocabulary for all Elcano microservices.
 
 ## Source
-- Sprite file: `icons/core-icons.svg`
-- Style: stroke-based, rounded caps and joins.
-- Stroke width: `1.75` to `2`.
+- Sprite file: `icons/core-icons.svg` (70 symbols; every one is shown in the
+  preview's Core Icons section).
+- Style: stroke-based on a 24px grid, `currentColor`, rounded caps and joins.
+- Stroke width: `1.75` to `2` (new glyphs use `1.9`). Two glyphs are filled
+  on purpose because a stroke reads poorly at their size: `dots` (overflow
+  menu) and `stop` (stop a running operation).
+- Some glyphs are drawn after [Lucide](https://lucide.dev) (ISC); the notice
+  lives in a comment at the top of the sprite, so it travels with every copy.
+
+## Adding, renaming or removing an icon
+- Adding a glyph is safe: add the `<symbol>` to the sprite, list it below with
+  what it means, and add it to the preview's Core Icons grid.
+  `scripts/check_refs.py` (run by `make check` and CI) fails when any of the
+  three is missing, and when anything references an id the sprite lacks:
+  `<use>` with a missing id renders an empty box and logs nothing.
+- Pick a name for what the glyph *depicts or does* (`plug`, `refresh`), not
+  for one product's screen.
+- Do not add a second glyph for a meaning an existing one covers (there is one
+  warning triangle, `alert-triangle`, and one wrench, `tools`).
+- Renaming, removing or redrawing an existing id is a breaking change for
+  every product that vendors the sprite: see `CONTRIBUTING.md`.
 
 ## Sizing
 - Inline in controls: `1rem`.
@@ -34,6 +52,55 @@ This is the shared icon vocabulary for all Elcano microservices.
 - `alert-triangle` - unavailable state
 - `external-link` - link that leaves the current surface (Settings, a vendor console)
 - `chevron-right` - inline "go on" affordance ("Set up ›") and disclosure
+- `file` - generic file or document
+- `folder` - folders, collections and file groups
+- `book` - documentation, guides and help
+- `menu` - open a navigation menu (hamburger)
+- `copy` - copy to clipboard
+- `activity` - activity feed, health and monitoring
+- `arrow-right` - go forward, next step, continue
+- `arrow-up` - send, submit or move up (e.g. a composer send button)
+- `bar-chart` - reports, analytics and metrics
+- `brain` - memory and learned knowledge
+- `briefcase` - projects and bodies of work
+- `bug` - bugs, issues and debugging
+- `check` - done, confirmed or a selected option
+- `check-square` - tasks and checklists
+- `cloud` - cloud services and sync
+- `compress` - collapse to a compact view (pairs with `expand`)
+- `database` - data stores and datasets
+- `dollar-sign` - cost, spend and billing
+- `dots` - more actions (overflow menu); filled glyph
+- `edit` - edit or rewrite
+- `expand` - expand to a full view (pairs with `compress`)
+- `file-text` - text documents and summaries of a document
+- `globe` - web, sites and public reach
+- `grid` - dashboards and grid views
+- `headphones` - audio, calls and voice
+- `image` - images and media
+- `keyboard` - keyboard shortcuts
+- `layers` - stacks, layers and grouped items
+- `mail` - email and mailboxes
+- `map-pin` - locations
+- `megaphone` - announcements and campaigns
+- `message` - messages and conversations
+- `model` - an AI model or compute (chip)
+- `panel-left` - toggle a side panel
+- `persona` - a person, agent or persona
+- `pin` - pin or keep in place
+- `plug` - connections and integrations
+- `puzzle` - skills, plug-ins and modular capabilities
+- `refresh` - reload, retry or regenerate
+- `return-key` - press Enter / submit hint
+- `settings` - settings and preferences
+- `shield` - admin, security and protected areas
+- `shopping-cart` - commerce, purchases and orders
+- `sparkles` - generated or polished output
+- `stop` - stop a running operation; filled glyph
+- `summarize` - summarize or fold ranges into a summary
+- `tag` - tags and labels
+- `target` - goals and targeting
+- `zap` - automation, triggers and quick actions
 
 ## Accessibility Rules
 - Decorative icons: `aria-hidden="true"`.

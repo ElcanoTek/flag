@@ -19,22 +19,23 @@ Palette roots observed across products:
 
 Canonical semantic tokens:
 
-| Token | Value | Purpose | Rules |
-|---|---|---|---|
-| `color.primary` | `#7272AB` | Primary CTA and key emphasis | Use only for primary actions and active states |
-| `color.secondary` | `#586F7C` | Secondary controls and supportive accents | Never used as danger/success |
-| `color.accent` | `#9DA7EF` | Highlights, focus, selected states | Use sparingly for emphasis |
-| `color.bg` | `#1A0B1E` | App background base | Default shell background |
-| `color.surface.1` | `#241B31` | Primary panel/card surface | Main content containers |
-| `color.surface.2` | `#2F2741` | Elevated/interactive surface | Hovered cards, modal nesting |
-| `color.border` | `rgba(114, 114, 171, 0.35)` | Standard border | Default border token |
-| `color.text.primary` | `#FFFFFF` | High-emphasis text | Headings, key labels |
-| `color.text.secondary` | `#D2D9DE` | Secondary text | Metadata, support copy |
-| `color.text.muted` | `#BEB6CD` | Tertiary text | Placeholders and low-emphasis labels |
-| `color.success` | `#50FA7B` | Positive state | Status/success messages only |
-| `color.warning` | `#FFB86C` | Warning state | Caution messages only |
-| `color.danger` | `#FF5555` | Error/destructive | Error and destructive actions only |
-| `color.info` | `#8A8BC0` | Informational state | Neutral/informational badges |
+| Token | Dark | Light | Purpose | Rules |
+|---|---|---|---|---|
+| `--color-primary` | `#7272AB` | `#7272AB` | Primary emphasis, active states | Never put a label on it; filled controls use `--color-primary-fill` |
+| `--color-secondary` | `#586F7C` | `#586F7C` | Secondary controls and supportive accents | Never used as danger/success; light-theme link color |
+| `--color-accent` | `#9DA7EF` | `#9DA7EF` | Highlights, focus, selected states | Use sparingly; not a text color in light (2.1:1) |
+| `--color-bg` | `#1A0B1E` | `#F4F6FB` | App background base | Default shell background |
+| `--color-surface-1` | `#241B31` | `#FFFFFF` | Primary panel/card surface | Main content containers |
+| `--color-surface-2` | `#2F2741` | `#E9EEFC` | Elevated/interactive surface | Hovered cards, popovers, modal nesting |
+| `--color-border` | `rgba(114, 114, 171, 0.35)` | `rgba(38, 55, 92, 0.2)` | Standard border | Default border token |
+| `--color-text-primary` | `#FFFFFF` | `#141824` | High-emphasis text | Headings, key labels |
+| `--color-text-secondary` | `#D2D9DE` | `#33415F` | Secondary text | Metadata, support copy |
+| `--color-text-muted` | `#BEB6CD` | `#5C6A87` | Tertiary text | Placeholders and low-emphasis labels |
+| `--color-link` | `#9DA7EF` | `#5F5F97` | Link text | Default link color; 4.5:1+ on every surface |
+| `--color-success` | `#50FA7B` | `#1E7A3F` | Positive state | Status/success messages only |
+| `--color-warning` | `#FF8847` | `#8F3E10` | Warning state | Caution messages only |
+| `--color-danger` | `#FF5757` | `#B3261E` | Error/destructive | Error and destructive actions only |
+| `--color-info` | `#8E8EC2` | `#4F5496` | Informational state | Neutral/informational badges |
 
 Connection picker tokens (switch, compact search, pills, kickers, group
 headers, match highlight, state panels, scrim; see COMPONENTS.md
@@ -58,7 +59,7 @@ headers, match highlight, state panels, scrim; see COMPONENTS.md
 | `color.picker.railBg` | `rgba(0,0,0,0.16)` | Modal filter rail |
 | `color.picker.scrim` | `rgba(26,11,30,0.55)` | Modal backdrop (with a 3px blur) |
 | `shadow.switchKnob` | `none` (light: `0 1px 2px rgba(26,11,30,0.28)`) | Switch knob lift in light mode |
-| `shadow.focusRingPicker` | `--focus-ring` (light: 2px white + 2px `#6262A0`, 5.6:1 on white) | Focus ring on picker fields, pills, switches and icon buttons |
+| `shadow.focusRingPicker` | `--focus-ring` in both themes | Focus ring on picker fields, pills, switches and icon buttons. It was the only light ring that reached 3:1 until the base light `--focus-ring` was deepened to match; kept as a token so product CSS reading it still resolves |
 | `shadow.popover` | `0 24px 60px -22px rgba(0,0,0,0.55)` | Popover and modal elevation |
 
 Neutral utility tokens:
@@ -66,23 +67,73 @@ Neutral utility tokens:
 - `color.black` = `#000000`
 
 Default semantic usage clarifications:
-- Links and email-address affordances default to `color.secondary`.
-- Primary buttons in light theme use a solid `color.primary` fill with `color.white` text.
-- Selected calendar days in light theme use a solid `color.primary` fill with `color.white` text.
+- Links and email-address affordances use `--color-link`. Light-theme
+  products may keep the long-standing `--color-secondary` (4.5:1+ there) with
+  `--color-primary-hover` on hover; `--color-secondary` is not a dark-theme
+  link color (2.7-3.6:1). A link inside running text is underlined, not told
+  apart by color alone.
+- Primary buttons and selected calendar days in light theme use a solid
+  `--color-primary-fill` with `--color-on-primary-fill` text (see "Filled
+  controls" below).
+
+### Filled controls
+
+White on `--color-primary` (`#7272AB`) is 4.46:1, just under WCAG AA. Every
+filled control therefore paints its label on a measured fill:
+
+| Token | Value | Use |
+|---|---|---|
+| `--color-primary-fill` | primary mixed 1% toward black (4.53:1 under white) | Filled buttons, selected chips/options, selected calendar day, segmented selection |
+| `--color-primary-fill-hover` | primary mixed 11% toward black (5.4:1) | Hover of the above: hover only ever raises contrast |
+| `--color-on-primary-fill` | `#FFFFFF` | The label on either fill |
+| `--color-secondary-fill` / `-hover` | secondary / 10% toward black | Far stop of the action gradient |
+| `--gradient-action-fill` / `-hover` | primary-fill to secondary-fill (light: the hover stops) | Primary buttons in dark; the label holds 4.5:1 at every point of the blend |
+
+`--color-primary` stays for things with nothing painted on them (an active
+bar, a checkbox accent, tints, borders); `--gradient-action-primary` stays for
+decoration. Neither carries a label. Upstreamed from fleet's measured fill
+pair.
+
+### Wells, syntax and focus
+
+- `--color-surface-inset`: a recessed in-flow surface (code and output wells,
+  preview toolbars, tool-result panels). Dark: the same black wash as
+  `--color-overlay-strong`; light: a 4.5% slate tint, so a well inside a card
+  stays near-white. `--color-overlay-strong` is the modal scrim only.
+- `--color-syntax-{keyword,string,number,comment,function,builtin,operator,punctuation}`:
+  code highlighting. Each holds 4.5:1 in an inset well over `--color-bg`,
+  `--color-surface-1` and `--color-surface-2`, in both themes.
+- `--focus-ring`: 2px of the page color, then 2px of `--color-accent` (dark)
+  or `--color-accent-strong` (light). The outer color reaches 3:1 against
+  every surface (WCAG 1.4.11); the light ring was `--color-accent` (2.1:1)
+  until this was measured.
+
+### Contrast is measured, not asserted
+
+`scripts/check_tokens.py` (run by `make check` and CI) resolves the token
+sheet the way a browser does, including `var()` and `color-mix()`, and
+measures every text, badge, fill, gradient, switch and focus-ring pair above
+in both themes. A token change that drops a pair below 4.5:1 (text) or 3:1
+(non-text) fails the build.
 
 Status mapping for task/node badges:
 
-| Status | Foreground | Background | Border |
+| Status | Foreground (dark / light) | Background (dark / light) | Border (dark / light) |
 |---|---|---|---|
-| `pending` | `color.text.secondary` | `rgba(88,111,124,0.18)` | `rgba(88,111,124,0.55)` |
-| `scheduled` | `#E9DBB8` | `rgba(255,184,108,0.14)` | `rgba(255,184,108,0.55)` |
-| `assigned` | `#D4DEFF` | `rgba(138,139,192,0.18)` | `rgba(138,139,192,0.55)` |
-| `leased` | `#D4DEFF` | `rgba(138,139,192,0.14)` | `rgba(114,114,171,0.55)` |
-| `running` | `#D4DEFF` | `rgba(114,114,171,0.2)` | `rgba(114,114,171,0.6)` |
-| `analyzing` | `#D8E5FF` | `rgba(62,146,196,0.18)` | `rgba(62,146,196,0.52)` |
-| `success` | `#CBFDD8` | `rgba(80,250,123,0.14)` | `rgba(80,250,123,0.6)` |
-| `error` | `#FFD2D2` | `rgba(255,85,85,0.14)` | `rgba(255,85,85,0.6)` |
-| `cancelled` | `#D2D9DE` | `rgba(88,111,124,0.2)` | `rgba(88,111,124,0.52)` |
+| `pending` | `#D3DDE6` / `#33415F` | `rgba(124, 140, 152, 0.2)` / `rgba(124, 140, 152, 0.18)` | `rgba(124, 140, 152, 0.6)` / `rgba(124, 140, 152, 0.42)` |
+| `scheduled` | `#FFE4B8` / `#7A4A12` | `rgba(224, 171, 74, 0.18)` / `rgba(224, 171, 74, 0.24)` | `rgba(224, 171, 74, 0.62)` / `rgba(224, 171, 74, 0.54)` |
+| `assigned` | `#CFE3FF` / `#1F3F87` | `rgba(90, 132, 255, 0.2)` / `rgba(90, 132, 255, 0.2)` | `rgba(90, 132, 255, 0.58)` / `rgba(90, 132, 255, 0.44)` |
+| `leased` | `#E5D6FF` / `#5A2F8F` | `rgba(168, 119, 255, 0.2)` / `rgba(168, 119, 255, 0.18)` | `rgba(168, 119, 255, 0.58)` / `rgba(168, 119, 255, 0.42)` |
+| `running` | `#C9F0FF` / `#0F5E78` | `rgba(47, 183, 220, 0.22)` / `rgba(47, 183, 220, 0.22)` | `rgba(47, 183, 220, 0.62)` / `rgba(47, 183, 220, 0.46)` |
+| `analyzing` | `#D6DDFF` / `#3B3391` | `rgba(124, 107, 255, 0.22)` / `rgba(124, 107, 255, 0.2)` | `rgba(124, 107, 255, 0.62)` / `rgba(124, 107, 255, 0.44)` |
+| `success` | `#CBFDD8` / `#1C5A33` | `rgba(80, 250, 123, 0.14)` / `rgba(80, 250, 123, 0.16)` | `rgba(80, 250, 123, 0.6)` / `rgba(80, 250, 123, 0.42)` |
+| `warning` | `#FFD2A1` / `#8F3E10` | `rgba(255, 136, 71, 0.2)` / `rgba(255, 136, 71, 0.24)` | `rgba(255, 136, 71, 0.62)` / `rgba(255, 136, 71, 0.48)` |
+| `error` | `#FFD2D2` / `#7C1F1F` | `rgba(255, 85, 85, 0.14)` / `rgba(255, 85, 85, 0.18)` | `rgba(255, 85, 85, 0.6)` / `rgba(255, 85, 85, 0.44)` |
+| `cancelled` | `#C7CED4` / `#556074` | `rgba(108, 118, 130, 0.16)` / `rgba(108, 118, 130, 0.16)` | `rgba(108, 118, 130, 0.48)` / `rgba(108, 118, 130, 0.34)` |
+
+Each `--color-status-<state>-{fg,bg,border}` triple is a badge: the
+foreground holds 4.5:1 on its own tint over every surface, in both themes
+(`scripts/check_tokens.py`).
 
 ## 2) Typography
 

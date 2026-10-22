@@ -279,25 +279,12 @@
 
       var chip = event.target.closest(".chip");
       if (chip) {
-        chip.classList.toggle("selected");
-        chip.setAttribute("aria-pressed", chip.classList.contains("selected") ? "true" : "false");
-        announce((chip.classList.contains("selected") ? 'Selected ' : 'Deselected ') + (chip.dataset.email || 'recipient'));
-      }
-    });
-
-    emailChips.addEventListener("keydown", function (event) {
-      if (event.target.closest(".chip-delete")) {
-        return;
-      }
-      var chip = event.target.closest('.chip[role="button"]');
-      if (!chip) {
-        return;
-      }
-      if (event.key === "Enter" || event.key === " ") {
-        event.preventDefault();
-        chip.classList.toggle("selected");
-        chip.setAttribute("aria-pressed", chip.classList.contains("selected") ? "true" : "false");
-        announce((chip.classList.contains("selected") ? 'Selected ' : 'Deselected ') + (chip.dataset.email || 'recipient'));
+        var selected = chip.classList.toggle("selected");
+        var toggle = chip.querySelector(".chip-toggle");
+        if (toggle) {
+          toggle.setAttribute("aria-pressed", selected ? "true" : "false");
+        }
+        announce((selected ? 'Selected ' : 'Deselected ') + (chip.dataset.email || 'recipient'));
       }
     });
   }
@@ -325,11 +312,13 @@
     var chip = document.createElement("span");
     chip.className = "chip chip-email selected";
     chip.dataset.email = email;
-    chip.setAttribute("role", "button");
-    chip.setAttribute("tabindex", "0");
-    chip.setAttribute("aria-pressed", "true");
-    chip.setAttribute("aria-label", "Toggle recipient " + email);
-    chip.appendChild(document.createTextNode(email));
+
+    var toggleBtn = document.createElement("button");
+    toggleBtn.type = "button";
+    toggleBtn.className = "chip-toggle";
+    toggleBtn.setAttribute("aria-pressed", "true");
+    toggleBtn.textContent = email;
+    chip.appendChild(toggleBtn);
 
     var deleteBtn = document.createElement("button");
     deleteBtn.type = "button";
@@ -355,6 +344,19 @@
       }
     });
   }
+
+  // Segmented controls: a button group with one aria-pressed option.
+  Array.prototype.forEach.call(document.querySelectorAll('.seg[role="group"]'), function (group) {
+    group.addEventListener("click", function (event) {
+      var option = event.target.closest(".seg-option");
+      if (!option || option.disabled) {
+        return;
+      }
+      Array.prototype.forEach.call(group.querySelectorAll(".seg-option"), function (other) {
+        other.setAttribute("aria-pressed", other === option ? "true" : "false");
+      });
+    });
+  });
 
   function cssEscape(value) {
     return value.replace(/(["\\])/g, "\\$1");

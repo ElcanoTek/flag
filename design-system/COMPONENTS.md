@@ -54,8 +54,11 @@ Theme behavior:
 
 ### Primary
 - Purpose: strongest positive action (`Submit`, `Start`, `Save`).
-- Fill: `color.primary`; text: `color.text.primary`.
-- Light-theme clarification: primary buttons use a solid `color.primary` fill with `color.white` text.
+- Fill: `--gradient-action-fill` (dark) or a solid `--color-primary-fill`
+  (light); label `--color-on-primary-fill`; hover `--gradient-action-fill-hover`
+  / `--color-primary-hover`. Never a label on the raw `--color-primary` or
+  `--gradient-action-primary`: white on `#7272AB` is 4.46:1, just under AA.
+  See "Foreground on a saturated fill" below.
 
 ### Secondary
 - Purpose: alternative actions.
@@ -71,6 +74,31 @@ Theme behavior:
 
 States for all button variants:
 - Default, hover, focus-visible, active, disabled, loading.
+- Hover never lowers label contrast: no `filter: brightness()` or `opacity`
+  fade on a filled button; move to the `-hover` fill instead.
+
+### Foreground on a saturated fill
+An element filled with a brand or status color needs a foreground chosen for
+that fill, in both themes:
+
+| Fill | Foreground |
+|---|---|
+| `--color-primary-fill` (hover `--color-primary-fill-hover`) | `--color-on-primary-fill` |
+| `--gradient-action-fill` (hover `--gradient-action-fill-hover`) | `--color-on-primary-fill` |
+| `--color-accent-strong` | `--color-on-accent-strong` |
+| `--color-success` | `--color-on-success` |
+
+`--color-text-primary` is the foreground for ordinary surfaces; on a filled
+control it is the common mistake. The raw `--color-primary` is for things
+with nothing painted on them (an active bar, a checkbox accent, tints,
+borders). `scripts/check_tokens.py` measures every pair above, in both themes
+and at every point of the gradients.
+
+### Button and pill shapes
+Shape tells a reader what can be pressed. Every text button uses
+`--radius-md`. Full pills (`--radius-pill`) are for things that are not text
+buttons: status badges, removable chips, segmented tracks, switch tracks,
+avatars, count bubbles, round icon-only buttons and progress bars.
 
 Example:
 
@@ -109,6 +137,30 @@ Production baseline requirements:
 - Match input styling and radius.
 - Selected/active options use `color.accent` tone.
 
+## Segmented Control
+- Use for a choice between 2-4 mutually exclusive options (theme, schedule
+  mode, list/week view). One look everywhere: `.seg` / `.seg-option`, a pill
+  track with the selected option on `--color-primary-fill` /
+  `--color-on-primary-fill`; unselected options are `--color-text-muted` and
+  turn `--color-text-primary` on hover.
+- Selection is read from the ARIA state the control already uses:
+  `aria-pressed` (button group, `role="group"` + `aria-label`),
+  `aria-checked` (radiogroup) or `aria-selected` (tablist). Behavior stays
+  with each caller; only the look is shared.
+- `.seg--md` is the form-field size, for a segmented control that is the
+  field itself.
+- Focus: a 2px outline outside the option (`--color-accent` in dark,
+  `--color-accent-strong` in light, so it reaches 3:1 against the page).
+- Not for underlined page tabs, filter chips with counts, or choice cards.
+
+```html
+<div class="seg" role="group" aria-label="Calendar view">
+  <button class="seg-option" type="button" aria-pressed="true">List</button>
+  <button class="seg-option" type="button" aria-pressed="false">Week</button>
+  <button class="seg-option" type="button" aria-pressed="false">Month</button>
+</div>
+```
+
 ## Date Pickers
 - Tokenized shell, no third-party default styles left un-themed.
 - Trigger/focus states must match input field behavior.
@@ -117,8 +169,8 @@ Production baseline requirements:
 Theme contract:
 - Input uses `.custom-datepicker` spacing and right-side icon affordance.
 - Flatpickr-compatible classes (`.flatpickr-calendar`, `.flatpickr-day`, `.flatpickr-weekday`) must be themed to token colors.
-- Selected date state uses primary gradient and maintains accessible contrast.
-- Light-theme clarification: selected day uses solid `color.primary` with `color.white` text.
+- Selected date state uses `--gradient-action-fill` with `--color-on-primary-fill`.
+- Light-theme clarification: selected day uses solid `--color-primary-fill` with `--color-on-primary-fill` text.
 
 Shared disclosure/search-panel spacing:
 - When date filters and secondary search filters appear in the same disclosure block, keep visible spacing between the date range area, any add/remove controls, and the next filter group.
@@ -331,6 +383,12 @@ Example with app icon:
 
 ### Code Display Block
 - Use this for code execution payloads (for example, `run_python` tool calls).
+- The code well is `--color-surface-inset` (not `--color-overlay-strong`,
+  which is the modal scrim and reads as a muddy band in light).
+- Syntax highlighting uses the `--color-syntax-*` tokens (keyword, string,
+  number, comment, function, builtin, operator, punctuation); each holds
+  4.5:1 in a well on every surface in both themes. A scrollable `<pre>` gets
+  `tabindex="0"` and an `aria-label` so keyboard users can scroll it.
 - Required classes:
   - `.tool-call-item`
   - `.tool-call-name`
@@ -411,11 +469,15 @@ Example:
 Email selection pills:
 - Use this when selecting one or more recipient emails.
 - Container: `chips-container` style region with wrap and spacing.
-- Pill: `chip chip-email` with selectable state (`selected`).
+- Pill: `chip chip-email` with selectable state (`selected`). The pill is a
+  plain container holding two sibling buttons: `chip-toggle`
+  (`aria-pressed`) and `chip-delete`. Do not make the pill itself a
+  `role="button"` around the delete button: a control inside a control is
+  unreachable for assistive technology (axe `nested-interactive`).
 - Remove affordance: small inline `x` control (`chip-delete`) for custom/saved entries.
 - Interaction rules:
   - click pill toggles selection
-  - Enter/Space toggles selection when pill is focused
+  - Enter/Space on the focused `chip-toggle` toggles selection (native button behavior)
   - click delete removes pill
   - delete affordance must be keyboard and screen-reader accessible
   - custom email input can add new pills
@@ -427,8 +489,8 @@ Example:
 
 ```html
 <div class="chips-container" role="group" aria-label="Email recipients">
-  <span class="chip chip-email selected" data-email="ads@example.com" role="button" tabindex="0" aria-pressed="true" aria-label="Toggle recipient ads@example.com">
-    ads@example.com
+  <span class="chip chip-email selected" data-email="ads@example.com">
+    <button class="chip-toggle" type="button" aria-pressed="true">ads@example.com</button>
     <button class="chip-delete" type="button" aria-label="Remove recipient ads@example.com">x</button>
   </span>
 </div>
@@ -529,14 +591,21 @@ components" block); light-mode values live there too.
   `--radius-md`, 0.625rem 0.875rem padding, 0.8125rem body text.
 - One short sentence; at most one link (`external-link` icon). Links in the
   picker (Set up, Open library, panel links) use `--color-link`, and keep it
-  on hover and focus (underline instead of a color change).
+  on hover and focus (underline instead of a color change). A link inside a
+  sentence (the state panel's) is underlined at rest too: color alone does
+  not distinguish it from the surrounding text (WCAG 1.4.1).
 
 ### Popover and Modal Surfaces
 - Popover: 21.75rem wide, `max-width: 100%` on narrow screens;
   `--color-surface-2`, 1px `--color-selected-border`,
   `--radius-lg`, `--shadow-popover`. Rows 64px with 2-line descriptions
   (`--color-text-subtle`); the active row is `--color-selected-bg` with an
-  inset 1px `--color-row-active-border` ring (at least 3:1 on the popover).
+  inset 1px `--color-row-active-border` ring (at least 3:1 on the popover),
+  and its description/meta step up to `--color-text-muted` (text-subtle is
+  4.2:1 on that tint). A dimmed (unavailable) row keeps readable text: its
+  status icon carries the state and its name steps down to
+  `--color-text-secondary` at weight 500. Never fade row text with
+  `opacity`.
 - Modal: `--color-surface-1`, 1px `--color-selected-border`, `--radius-xl`,
   `--shadow-popover`, header icon in a `--color-icon-tile` square
   (`--color-accent` glyph). Filter rail on `--color-rail-bg`; the selected

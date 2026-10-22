@@ -41,6 +41,20 @@ Every interactive control must define all of:
   - modal enter/exit
 - Respect `prefers-reduced-motion: reduce`.
 
+## Contrast
+- Text, including placeholder-free labels, badges and links: at least 4.5:1
+  against what it actually sits on (a tint over a surface, a fill, every point
+  of a gradient), in both themes.
+- Non-text that conveys state (focus rings, switch tracks, the active-row
+  ring, input borders that are the only affordance): at least 3:1.
+- A label on a brand or status fill uses that fill's foreground token, never
+  `--color-text-primary`: see COMPONENTS.md "Foreground on a saturated fill".
+- Never reach contrast by eye and never lower it with `opacity` on text
+  (dimmed rows, faded hovers). If a state needs to look quieter, step to a
+  quieter token that still passes.
+- The token palette is measured by `scripts/check_tokens.py` on every PR; the
+  preview is audited with axe (WCAG 2 A/AA) when it changes.
+
 ## Accessibility Baseline
 - All icon-only controls require `aria-label`.
 - Form controls must have labels and error association.
@@ -49,7 +63,10 @@ Every interactive control must define all of:
   - modals: trap focus and close on escape
   - menus/dropdowns: keyboard navigation
   - custom controls: proper role and state attributes
-  - chip-style controls: Enter/Space support when using `role="button"`
+  - chip-style controls: a real `<button>` for each action (toggle, delete);
+    never an interactive control nested inside another
+  - scrollable regions (wide tables, code blocks): focusable (`tabindex="0"`)
+    with an accessible name
   - delete/remove affordances: keyboard focusable and screen-reader labeled
 
 Dynamic status messaging:
