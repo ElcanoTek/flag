@@ -209,12 +209,27 @@ pair("--color-accent", [], NON_TEXT, label="--color-accent as a state border")
 # measured at each of its stops.
 POPOVER = ("--color-surface-1", "--color-surface-2")
 CALENDAR = ["--gradient-surface-elevated"]
-pair("--color-primary", [], NON_TEXT, label="spinner arc (.spinner)")
+pair("--color-link", [], NON_TEXT, label="spinner arc (.spinner) on the surface")
 pair("--color-on-primary-fill", ["--color-primary-fill"], NON_TEXT, on=("--color-bg",),
      label="spinner arc on a primary button (.btn-primary .spinner)")
 pair("--color-on-primary-fill", ["--gradient-action-fill"], NON_TEXT, on=("--color-bg",),
      label="spinner arc on the primary gradient")
-pair("--color-link", ["--color-overlay-strong"], NON_TEXT, label="upload progress fill on its track")
+
+# Indicators made of two painted parts are measured part against part: the
+# moving or filled part against its own track, the track composited over each
+# surface (or fill) it can sit on, as painted. Each row is (label, part,
+# track layers, surfaces); check_refs.py pins both paints (MEASURED_PAINT).
+# Flag leaves <input type="range"> native, so it has no row here.
+TWO_PART = [
+    ("spinner arc on its track", "--color-link", ["--color-overlay-soft"], SURFACES),
+    ("primary-button spinner arc on its track", "--color-on-primary-fill", ["--color-primary-fill-hover"],
+     ("--color-bg",)),
+    ("upload progress fill on its track", "--color-link", ["--color-overlay-strong"], SURFACES),
+    ("switch knob on its track (off)", "--color-switch-knob", ["--color-switch-track-off"], POPOVER),
+    ("switch knob on its track (on)", "--color-switch-knob", ["--color-switch-track-on"], POPOVER),
+]
+for label, part, track, on in TWO_PART:
+    pair(part, track, NON_TEXT, on=on, label=label)
 pair("--color-control-border", [], NON_TEXT, label="checkbox/radio edge on the surface")
 pair("--color-control-border", ["--color-overlay-soft"], NON_TEXT, label="checkbox edge on its box")
 pair("--color-accent", ["--color-status-running-bg"], NON_TEXT, label="checked checkbox edge on its box")

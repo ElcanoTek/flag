@@ -72,7 +72,12 @@ radio edges and marks, switch tracks and knob, selected fills, the date-range
 fill, the today ring, focus rings) are each measured at 3:1 against what they
 are painted on, overlays composited, in both themes: `check_tokens.py` holds
 the pairs and `check_refs.py` checks that each component rule paints the
-token that was measured.
+token that was measured. An indicator made of two painted parts (the
+spinner's arc and track, the progress fill and track, the switch knob and
+track) is also measured part against part, the track composited over each
+surface it can sit on (`TWO_PART` in `check_tokens.py`); `make audit` repeats
+that measurement on the rendered page. Flag leaves `<input type="range">`
+native, so it adds no pair.
 
 Neutral utility tokens:
 - `color.white` = `#FFFFFF`

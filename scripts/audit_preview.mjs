@@ -154,6 +154,27 @@ ${HELPERS_JS}
     [".flatpickr-calendar.open .flatpickr-day.inRange", "background"],
     [".flatpickr-calendar.open .flatpickr-day.selected", "background"],
   ];
+  // Two-part indicators: the part against its own track, the track
+  // composited over whatever is under it. [part selector, part paint,
+  // track element (from the part), track paint].
+  const TWO_PART = [
+    [".spinner", "borderTopColor", (el) => el, "borderRightColor"],
+    [".file-item-progress-fill", "background", (el) => el.parentElement, "background"],
+    [".switch__knob", "background", (el) => el.closest(".switch"), "background"],
+  ];
+  for (const [sel, prop, trackOf, trackProp] of TWO_PART) {
+    for (const el of document.querySelectorAll(sel)) {
+      const track = trackOf(el);
+      if (!track || !visible(el) || disabled(el)) continue;
+      const under = backdrop(track.parentElement).backs;
+      const tracks = [];
+      for (const t of paints(track, trackProp)) for (const b of under) tracks.push(over(t, b));
+      for (const c of paints(el, prop)) {
+        let worst = 99; for (const t of tracks) worst = Math.min(worst, ratio(over(c, t), t));
+        if (worst < 3 - 0.005) fails.push(\`\${worst.toFixed(2)}:1 < 3 (\${sel} \${prop} against its track) on \${(track.parentElement.className || track.parentElement.tagName).toString().slice(0, 40)}\`);
+      }
+    }
+  }
   for (const [sel, prop] of NONTEXT) {
     for (const el of document.querySelectorAll(sel)) {
       if (!visible(el) || disabled(el)) continue;

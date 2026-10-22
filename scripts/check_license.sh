@@ -2,7 +2,7 @@
 # check_license.sh — design-system/LICENSE (the copy products vendor next to
 # their Flag files) must carry exactly the MIT text of the root LICENSE.
 set -eu
-ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+ROOT=$(CDPATH='' cd -- "$(dirname -- "$0")/.." && pwd)
 root_mit=$(sed '/^THIRD-PARTY COMPONENTS/,$d' "$ROOT/LICENSE")
 ds_mit=$(sed '/^This copy sits in design-system/,$d' "$ROOT/design-system/LICENSE")
 if [ "$root_mit" != "$ds_mit" ]; then

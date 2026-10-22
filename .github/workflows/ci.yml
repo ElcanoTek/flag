@@ -28,5 +28,6 @@ jobs:
       #   tokens      design-tokens.json == design-tokens.css; contrast pairs
       #   refs        Markdown links, preview refs, sprite/logo/font coverage
       #   license     design-system/LICENSE matches the root MIT text
+      #   tools       tools/product scripts: shellcheck, versions, standard-block hash
       - name: make check
         run: make check

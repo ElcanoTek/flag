@@ -508,7 +508,9 @@ Example:
 
 ## Loaders
 - Spinner size: `12px` inline, `32px` panel-level.
-- `.spinner` draws its arc in `--color-primary` on surfaces; inside a primary
+- `.spinner` draws its arc in `--color-link` on a faint `--color-overlay-soft`
+  track (4.6:1 arc against track, 5:1 against the surface; the old
+  `--color-primary` arc on `--color-border-strong` was 1.67:1); inside a primary
   button (`.btn-primary .spinner`) the arc takes `--color-on-primary-fill` and
   the track `--color-primary-fill-hover`, since a primary arc on the primary
   fill is invisible (1.01:1). Under `prefers-reduced-motion` it stays a static

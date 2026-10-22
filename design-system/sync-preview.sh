@@ -6,7 +6,7 @@
 # check-email-template.sh) fails when a copy drifts.
 set -eu
 
-SCRIPT_DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+SCRIPT_DIR=$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd)
 
 cp "$SCRIPT_DIR/components/components.css" "$SCRIPT_DIR/preview/components.css"
 printf 'Synced components/components.css -> preview/components.css\n'

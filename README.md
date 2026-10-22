@@ -93,6 +93,9 @@ serve them from their own binary (no CDN, no runtime dependency on this repo).
   their copies so the MIT notice travels with them.
 - A product that needs a new icon, logo, token or a fix asks for it here and
   re-syncs; it never edits its copy.
+- The canonical `flag-sync.sh`, `stack-check.sh`, `flag-drift.yml` and the
+  shared `AGENTS.md` standard block ship in [`tools/product/`](tools/product/README.md),
+  with the commands to bootstrap a new product.
 
 The full contract, including the rules this repo follows so files stay safe
 to copy, is in

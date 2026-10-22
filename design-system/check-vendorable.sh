@@ -5,7 +5,7 @@
 # "Vendoring and drift".
 set -eu
 
-DIR=$(CDPATH= cd -- "$(dirname -- "$0")" && pwd)
+DIR=$(CDPATH='' cd -- "$(dirname -- "$0")" && pwd)
 cd "$DIR"
 fail=0
 

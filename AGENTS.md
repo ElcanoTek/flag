@@ -51,4 +51,8 @@ make sync      # after editing components/components.css or email-safe.html
   advertisers are fictional, no internal hostnames or real people's data.
 - `design-system/LICENSE` must keep the root `LICENSE`'s MIT text
   (`check_license.sh`).
+- `tools/product/` holds the canonical scripts every product copies. Never
+  edit them here alone: a change bumps the version line, updates
+  `tools/product/README.md` and `APPLY_TO_PRODUCT.md`, and lands in every
+  product at once (`check_product_tools.sh`).
 - Commits start with a gitmoji, as in the history.

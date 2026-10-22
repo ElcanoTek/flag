@@ -1965,12 +1965,16 @@ table {
   text-transform: uppercase;
 }
 
+/* Two painted parts: the arc must hold 3:1 against the track it turns on
+   (and the surface), not just the surface. --color-primary on the
+   --color-border-strong track was 1.67-2.42:1; --color-link on the faint
+   --color-overlay-soft track is 4.6:1+ in both themes (check_tokens.py). */
 .spinner {
   width: 1rem;
   height: 1rem;
   border-radius: 50%;
-  border: 2px solid var(--color-border-strong);
-  border-top-color: var(--color-primary);
+  border: 2px solid var(--color-overlay-soft);
+  border-top-color: var(--color-link);
   animation: spin 0.8s linear infinite;
   display: inline-block;
   vertical-align: middle;

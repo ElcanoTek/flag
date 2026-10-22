@@ -179,8 +179,21 @@ When implementing an internal home/launchpad screen:
 
 Every Elcano product vendors Flag the same way, with two scripts shared
 verbatim across the product repos (`scripts/flag-sync.sh` and
-`scripts/stack-check.sh`; the canonical copies live in each product repo and
-are identical everywhere — change them in all repos at once):
+`scripts/stack-check.sh`) and a weekly drift workflow. The canonical copies
+ship in this repo under [`tools/product/`](../tools/product/README.md):
+`flag-sync.sh` (`FLAG_SYNC_VERSION=10`), `stack-check.sh`
+(`STACK_CHECK_VERSION=18`), `flag-drift.yml` and the `AGENTS.md` standard
+block that `stack-check.sh` pins. They are identical in every product; change
+them here and in all products at once.
+
+- **Bootstrapping a product:** copy `tools/product/flag-sync.sh` and
+  `tools/product/stack-check.sh` into the product's `scripts/` (they find the
+  product root as the parent of their own directory, so they run only from
+  there), `tools/product/flag-drift.yml` into `.github/workflows/`, paste
+  `tools/product/agents-standard-block.md` into `AGENTS.md` unchanged, and
+  write `stack.conf`. Then vendor files with `add` (below) and run
+  `scripts/stack-check.sh`. The [tools/product README](../tools/product/README.md#bootstrapping-a-product)
+  has the commands.
 
 - `flag.lock` at the product repo root records the Flag commit and the sha256
   of every vendored file (`file <sha256> <flag-path> <repo-path>`), plus `dir`

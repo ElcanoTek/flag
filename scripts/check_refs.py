@@ -49,6 +49,9 @@
    indicator, and the flatpickr cascade simulation also proves each day state
    (plain, today, in range, selected, range ends; any month) ends keyboard
    focus in its measured ring, different from the day at rest.
+13. Two-part indicators: every rule that paints part of one (a -fill, a knob
+   or thumb, a spinner's recolored border side) has its paint pinned in
+   MEASURED_PAINT, so check_tokens.py's TWO_PART pairs measure what renders.
 
 Usage: python3 scripts/check_refs.py
 """
@@ -399,9 +402,13 @@ def split_selectors(sel):
 # token check_tokens.py measures for it (WCAG 1.4.11, 3:1), so measured and
 # rendered cannot drift apart. (selector, property, required value)
 MEASURED_PAINT = [
-    (".spinner", "border-top-color", "var(--color-primary)"),
+    (".spinner", "border-top-color", "var(--color-link)"),
+    (".spinner", "border", "2px solid var(--color-overlay-soft)"),
     (".btn-primary .spinner", "border-top-color", "var(--color-on-primary-fill)"),
+    (".btn-primary .spinner", "border-color", "var(--color-primary-fill-hover)"),
     (".file-item-progress-fill", "background", "var(--color-link)"),
+    (".file-item-progress", "background", "var(--color-overlay-strong)"),
+    (".switch__knob", "background", "var(--color-switch-knob)"),
     (".ds-checkbox__box", "border", "1.5px solid var(--color-control-border)"),
     (".ds-checkbox-input:checked + .ds-checkbox .ds-checkbox__box", "border-color", "var(--color-accent)"),
     (".input-file-select input", "border", "1.5px solid var(--color-control-border)"),
@@ -643,7 +650,7 @@ def check_doc_paths():
                 continue
             if token in product_paths:
                 continue
-            if re.match(r"^(design-system|scripts|docs|\.github)/[\w./-]+$", token):
+            if re.match(r"^(design-system|scripts|docs|tools|\.github)/[\w./-]+$", token):
                 if not (ROOT / token).exists():
                     err("%s: `%s` does not exist" % (rel(md), token))
             elif md.parent == DS and re.match(r"^(%s)/[\w./-]+\.\w+$" % "|".join(map(re.escape, subdirs)), token):
@@ -712,6 +719,31 @@ def check_dependabot():
     for m in re.finditer(r'prefix:\s*"([^"]*)"', f.read_text()):
         if not m.group(1) or ord(m.group(1)[0]) < 0x2000:
             err('.github/dependabot.yml: commit-message prefix "%s" is not a gitmoji (AGENTS.md)' % m.group(1))
+
+
+# Parts of two-part indicators (a fill on a track, a knob or thumb on a
+# track, an arc on a ring): their paints must be pinned in MEASURED_PAINT so
+# check_tokens.py measures part against track (TWO_PART), not just against
+# the surface. Recognized by class name, or by the spinner pattern (a border
+# with one side recolored).
+TWO_PART_CLASS = re.compile(r"\.[\w-]*(-fill|__knob|__thumb|__arc|-track|__track)$")
+
+
+def check_two_part(css_text):
+    pinned = {sel for sel, _p, _v in MEASURED_PAINT}
+    for sel, body, _r in css_rules(css_text):
+        arc = re.search(r"(?:^|;)\s*border\s*:[^;]*solid", body) and \
+            re.search(r"(?:^|;)\s*border-(top|right|bottom|left)-color\s*:", body)
+        if not re.search(r"(?:^|;)\s*(background(-color)?|border(-[a-z]+)*|fill|stroke)\s*:", body):
+            continue  # size or position only
+        for one in split_selectors(sel):
+            if one.startswith('[data-theme="light"] '):
+                continue
+            subject = re.split(r"\s+", one)[-1]
+            if (arc or TWO_PART_CLASS.search(subject)) and re.fullmatch(r"[.\w-]+", subject) \
+                    and one not in pinned:
+                err("components.css: `%s` paints part of a two-part indicator; pin its paint in MEASURED_PAINT and "
+                    "measure it against its track in check_tokens.py TWO_PART" % one)
 
 
 def check_measured_paint(css_text):
@@ -785,6 +817,7 @@ def check_component_coverage():
             err("components.css: no `%s` rule for a state COMPONENTS.md documents" % s)
 
     check_measured_paint(css)
+    check_two_part(css)
     check_hover_gates(sels)
     check_bare_elements(css)
     check_appearance_disabled(css, sels_nogate)
