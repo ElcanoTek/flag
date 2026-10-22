@@ -3,8 +3,9 @@
 // actually painted: axe-core (WCAG 2 A/AA, including computed text contrast)
 // in light and dark at 1440 and 390 wide, with the interactive states that
 // only exist after interaction: the date picker open in range mode, the
-// date-time picker open with its time controls, and keyboard focus moved
-// through every focusable element.
+// date-time picker open with its time controls, keyboard focus moved
+// through every focusable element, and the arrow keys moved onto each kind
+// of calendar day to check its focus ring.
 //
 // Needs Node, Playwright with Chromium, and axe-core; nothing else in Flag
 // does, so CI runs the static checks (make check) and this runs locally:
@@ -53,11 +54,8 @@ const PAGES = ["/preview/index.html", "/preview/email-preview.html", "/email-saf
 const browser = await chromium.launch();
 let failures = 0;
 
-// Computed text contrast, including what axe reports as "incomplete": text
-// over gradients is measured against every color stop of every gradient
-// beneath it (the worst stop counts), translucent layers are composited, and
-// ancestor opacity fades the text. Disabled controls are exempt (WCAG 1.4.3).
-const CONTRAST_JS = `(() => {
+// Color helpers shared by the in-page checks below.
+const HELPERS_JS = `
   const parse = (s) => {
     const out = [];
     for (const m of s.matchAll(/rgba?\\(([^)]+)\\)|color\\(srgb ([^)]+)\\)|transparent/g)) {
@@ -120,6 +118,14 @@ const CONTRAST_JS = `(() => {
     }
     return parse(cs[prop]);
   };
+`;
+
+// Computed text contrast, including what axe reports as "incomplete": text
+// over gradients is measured against every color stop of every gradient
+// beneath it (the worst stop counts), translucent layers are composited, and
+// ancestor opacity fades the text. Disabled controls are exempt (WCAG 1.4.3).
+const CONTRAST_JS = `(() => {
+${HELPERS_JS}
   const fails = [];
   const els = [...document.querySelectorAll("body *")].filter((el) =>
     ([...el.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim()) || (el.matches("input:not([type]), input[type=text], input[type=search], input[type=email], input[type=password], input[type=tel], input[type=url], input[type=number], input[type=date], input[type=time], input[type=datetime-local], textarea") && el.value)) && !el.closest("svg, style, script, iframe"));
@@ -161,11 +167,76 @@ const CONTRAST_JS = `(() => {
   return fails;
 })()`;
 
+// Keyboard focus on a calendar day: the focused day (document.activeElement)
+// must match :focus-visible and paint an inset ring, at least 2px, whose
+// color holds 3:1 against every color of the day's own fill (gradient stops
+// each count, translucent fills composited over the calendar).
+const DAY_RING_JS = `(() => {
+${HELPERS_JS}
+  const el = document.activeElement;
+  if (!el || !el.classList.contains("flatpickr-day")) return "focus is not on a day (" + (el ? el.outerHTML.slice(0, 80) : "none") + ")";
+  if (!el.matches(":focus-visible")) return "the day is focused but not :focus-visible";
+  const shadow = getComputedStyle(el).boxShadow;
+  const ring = shadow.split(/,(?![^(]*\\))/).map((l) => l.trim()).find((l) => /\\binset\\b/.test(l));
+  if (!ring) return "no inset ring (box-shadow: " + shadow + ")";
+  const spread = parseFloat((ring.replace(/rgba?\\([^)]*\\)/, "").match(/-?[\\d.]+px/g) || []).pop());
+  if (!(spread >= 2)) return "ring is " + spread + "px, needs 2px";
+  const color = parse(ring)[0];
+  const { backs } = backdrop(el);
+  let worst = 99; for (const b of backs) worst = Math.min(worst, ratio(over(color, b), b));
+  return worst < 3 - 0.005 ? "ring " + worst.toFixed(2) + ":1 against the day's fill, needs 3:1" : null;
+})()`;
+
 async function contrast(page, label) {
   const fails = [...new Set(await page.evaluate(CONTRAST_JS))];
   failures += fails.length;
   for (const f of fails.slice(0, 20)) console.log(`FAIL ${label}: contrast ${f}`);
   if (fails.length > 20) console.log(`     ... ${fails.length - 20} more`);
+}
+
+// Keyboard onto the open calendar, then arrow to each kind of day and check
+// its focus ring. flatpickr moves focus into the grid on ArrowDown from the
+// field only when typing is off (with allowInput, which the preview enables,
+// the field keeps the arrow keys), so typing is switched off for this check:
+// from then on it is real key presses only.
+const DAY_KINDS = {
+  "range start": ".startRange",
+  "range end": ".endRange",
+  "in-range day": ".inRange:not(.startRange):not(.endRange)",
+  "today": ".today:not(.inRange):not(.startRange):not(.endRange):not(.selected)",
+  "plain day": ":not(.inRange):not(.startRange):not(.endRange):not(.selected):not(.today):not(.flatpickr-disabled):not(.notAllowed)",
+};
+async function dayFocus(page, label) {
+  await page.evaluate(() => { const fp = document.querySelector("#f-date")._flatpickr; fp.set("allowInput", false); (fp.altInput || fp.input).focus(); });
+  await page.keyboard.press("ArrowDown");
+  try {
+    await dayFocusSteps(page, label);
+  } finally {
+    await page.evaluate(() => document.querySelector("#f-date")._flatpickr.set("allowInput", true));
+  }
+}
+async function dayFocusSteps(page, label) {
+  for (const [kind, sel] of Object.entries(DAY_KINDS)) {
+    let reached = false;
+    for (let step = 0; step < 50; step++) {
+      const dir = await page.evaluate((sel) => {
+        const cur = document.activeElement;
+        const days = [...document.querySelectorAll(".flatpickr-calendar.open .dayContainer .flatpickr-day")];
+        const i = days.indexOf(cur);
+        if (i < 0) return "lost";
+        if (cur.matches(".flatpickr-day" + sel)) return "here";
+        const t = days.findIndex((d) => d.matches(".flatpickr-day" + sel));
+        return t < 0 ? "none" : t > i ? "ArrowRight" : "ArrowLeft";
+      }, sel);
+      if (dir === "here") { reached = true; break; }
+      if (dir === "none") break;
+      if (dir === "lost") { failures++; console.log(`FAIL ${label}: keyboard focus left the calendar on the way to the ${kind}`); return; }
+      await page.keyboard.press(dir);
+    }
+    if (!reached) continue; // this range has no such day in view
+    const bad = await page.evaluate(DAY_RING_JS);
+    if (bad) { failures++; console.log(`FAIL ${label}: ${kind} with keyboard focus: ${bad}`); }
+  }
 }
 
 async function axe(page, label) {
@@ -277,6 +348,7 @@ for (const theme of ["light", "dark"]) {
         if (!opened) continue;
         await page.waitForFunction(() => { const c = document.querySelector(".flatpickr-calendar.open"); return c && getComputedStyle(c).opacity === "1" && !c.getAnimations().some((a) => a.playState === "running"); }, null, { timeout: 5000 });
         await axe(page, `${theme} ${width} date picker (${name})`);
+        await dayFocus(page, `${theme} ${width} date picker (${name})`);
         await page.evaluate(() => document.querySelector("#f-date")._flatpickr.close());
       }
       const timed = await page.evaluate(() => {
@@ -300,4 +372,4 @@ if (failures) {
   console.log(`audit-preview: ${failures} problem(s)`);
   process.exit(1);
 }
-console.log("audit-preview: ok (axe WCAG 2 A/AA, text and non-text contrast as painted, visible focus, light and dark, 1440 and 390, pickers open)");
+console.log("audit-preview: ok (axe WCAG 2 A/AA, text and non-text contrast as painted, visible focus, calendar-day focus rings by keyboard, light and dark, 1440 and 390, pickers open)");

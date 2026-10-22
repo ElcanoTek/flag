@@ -193,6 +193,7 @@ Theme contract:
 - Flatpickr-compatible classes (`.flatpickr-calendar`, `.flatpickr-day`, `.flatpickr-weekday`) must be themed to token colors.
 - Selected date state uses `--gradient-action-fill` with `--color-on-primary-fill`.
 - Light-theme clarification: selected day uses solid `--color-primary-fill` with `--color-on-primary-fill` text.
+- Keyboard focus (`:focus-visible`) on a day is an inset 2px ring, never just a color change. Days sit edge to edge, so the ring is inset and takes the color that holds 3:1 on that day's fill: `--focus-ring-day` (`--color-accent`) on a plain, hovered or today day, `--focus-ring-day-on-range` (`--color-on-accent-strong`) on an in-range day, and `--focus-ring-day-on-fill` (`--color-on-primary-fill`) on a selected or range-end day. These rules come after every day-state rule so they win at equal specificity.
 
 Shared disclosure/search-panel spacing:
 - When date filters and secondary search filters appear in the same disclosure block, keep visible spacing between the date range area, any add/remove controls, and the next filter group.
@@ -277,6 +278,12 @@ Example:
 ## Modals
 - Surface: `surface.1`; border `strong`; shadow `lg`.
 - Must include: title, close affordance, escape key close, backdrop close policy.
+- Markup: a `<dialog>` opened with `showModal()`, or an element with
+  `role="dialog"`, `aria-modal="true"` and `aria-labelledby` pointing at the
+  title. Move focus into it on open, keep Tab inside it while open, and
+  return focus to the control that opened it on close. The close control is
+  a `<button type="button">` with an `aria-label` ("Close") when it shows
+  only an icon.
 - Actions aligned right on desktop; stacked on narrow screens.
 
 Modal action-grid variant:
@@ -395,6 +402,21 @@ Example with app icon:
 - Wrap a data table in `.table-wrap` (scroll container, border, radius);
   the table component's width, padding, borders and header style apply
   inside it. Any table gets tabular figures.
+- The wrapper scrolls sideways on narrow screens, so keyboard users must be
+  able to reach and scroll it (WCAG 2.1.1): give it `tabindex="0"`,
+  `role="region"` and an `aria-label` that names the table (it is announced
+  when focus lands there). Header cells take `scope="col"`.
+
+```html
+<div class="table-wrap" tabindex="0" role="region" aria-label="Task status table (scrolls horizontally)">
+  <table>
+    <thead><tr><th scope="col">ID</th><th scope="col">Name</th><th scope="col">Status</th></tr></thead>
+    <tbody>
+      <tr><td>T-1023</td><td>Daily Optimization</td><td><span class="badge badge-success">success</span></td></tr>
+    </tbody>
+  </table>
+</div>
+```
 - Head row: uppercase optional, but consistent across app.
 - Row hover allowed for clickable rows only.
 - Status columns should use standardized status badge tokens.
@@ -448,6 +470,9 @@ Example:
   - `.status-done`
   - `.status-inprogress`
   - `.status-todo`
+- The icon and title styling show the state only visually: hide the icon
+  from assistive tech (`aria-hidden="true"`) and say the state in a
+  `.sr-only` span ("Done:", "In progress:", "To do:").
 
 Example:
 
@@ -455,9 +480,9 @@ Example:
 <div class="task-tracker-container" role="group" aria-label="Task tracker">
   <div class="task-tracker-cmd">Command: <strong>RECONCILE DELIVERY REPORT</strong></div>
   <div class="task-tracker-list">
-    <div class="task-tracker-item status-done"><span class="tt-icon">&#10003;</span><span class="tt-id">[1]</span><span class="tt-title">Validate file schema</span></div>
-    <div class="task-tracker-item status-inprogress"><span class="tt-icon">&#8635;</span><span class="tt-id">[2]</span><span class="tt-title">Aggregate publisher metrics</span></div>
-    <div class="task-tracker-item status-todo"><span class="tt-icon">&#9675;</span><span class="tt-id">[3]</span><span class="tt-title">Write QA summary</span></div>
+    <div class="task-tracker-item status-done"><span class="tt-icon" aria-hidden="true">&#10003;</span><span class="sr-only">Done:</span><span class="tt-id">[1]</span><span class="tt-title">Validate file schema</span></div>
+    <div class="task-tracker-item status-inprogress"><span class="tt-icon" aria-hidden="true">&#8635;</span><span class="sr-only">In progress:</span><span class="tt-id">[2]</span><span class="tt-title">Aggregate publisher metrics</span></div>
+    <div class="task-tracker-item status-todo"><span class="tt-icon" aria-hidden="true">&#9675;</span><span class="sr-only">To do:</span><span class="tt-id">[3]</span><span class="tt-title">Write QA summary</span></div>
   </div>
 </div>
 ```

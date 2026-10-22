@@ -37,6 +37,18 @@
 7. The preview's components.css is a byte copy of
    design-system/components/components.css (refresh with
    design-system/sync-preview.sh).
+10. Doc paths: every `flag-sync.sh add <flag> <src> <dest>` example names a
+   <src> that exists under design-system/ (flag-sync's paths are relative to
+   it), and every repo path in inline code exists (product-repo paths such
+   as scripts/flag-sync.sh are listed in check_doc_paths).
+11. Snippet accessibility: every classed element in a doc's ```html snippet
+   has the role, tabindex and aria-* attributes of the preview's live
+   element with the same classes, so copied markup keeps the preview's
+   keyboard and screen-reader behavior.
+12. Focus: every interactive control's focus-visible rules paint a visible
+   indicator, and the flatpickr cascade simulation also proves each day state
+   (plain, today, in range, selected, range ends; any month) ends keyboard
+   focus in its measured ring, different from the day at rest.
 
 Usage: python3 scripts/check_refs.py
 """
@@ -340,6 +352,9 @@ INTERACTION_STATES = {
     "select": ["focus-visible", "disabled"],
     "textarea": ["focus-visible", "disabled"],
 }
+# A focus-visible rule must paint something a sighted keyboard user can see.
+FOCUS_PAINT = re.compile(r"(?:^|;)\s*(outline(?:-color)?|box-shadow|border(?:-color)?|background(?:-color)?|"
+                         r"text-decoration(?:-line)?)\s*:\s*(?!(?:none|0|transparent)\b)[^\s;][^;]*")
 STATE_PATTERNS = {
     "hover": r":hover", "focus-visible": r":focus-visible|:focus-within", "active": r":active",
     "disabled": r":disabled|\[aria-disabled=\"true\"\]|\.is-disabled", "aria-disabled": r"\[aria-disabled=\"true\"\]",
@@ -397,6 +412,9 @@ MEASURED_PAINT = [
     (".flatpickr-day.today", "box-shadow", "inset 0 0 0 1px var(--color-accent) !important"),
     ('[data-theme="light"] .flatpickr-day.selected', "background", "var(--color-primary-fill) !important"),
     (".flatpickr-day.selected", "background", "var(--gradient-action-fill) !important"),
+    (".flatpickr-day:focus-visible", "box-shadow", "var(--focus-ring-day) !important"),
+    (".flatpickr-day.inRange:focus-visible", "box-shadow", "var(--focus-ring-day-on-range) !important"),
+    (".flatpickr-day.selected:focus-visible", "box-shadow", "var(--focus-ring-day-on-fill) !important"),
 ]
 
 
@@ -534,7 +552,7 @@ def check_flatpickr_cascade(css_text):
             if re.search(r":(not|nth|is|where)\(", core):
                 continue
             classes = set(re.findall(r"\.([\w-]+)", core))
-            pseudos = set(re.findall(r":(hover|focus)\b", core))
+            pseudos = set(re.findall(r":(hover|focus-visible|focus)(?![\w-])", core))
             spec = len(classes) + len(pseudos) + (1 if light else 0)
             rules.append((classes, pseudos, light, spec, order, decls))
 
@@ -554,12 +572,34 @@ def check_flatpickr_cascade(css_text):
         "inRange": ("var(--color-on-accent-strong)", {False: "var(--color-accent-strong)", True: "var(--color-accent-strong)"}),
     }
     mods = ["prevMonthDay", "nextMonthDay", "today"]
+    # Keyboard focus matches :focus and :focus-visible together; it must end
+    # in the ring measured for the day's fill, and differ from the day at rest.
+    kbd = {"focus", "focus-visible"}
+    rings = {"selected": "var(--focus-ring-day-on-fill)", "startRange": "var(--focus-ring-day-on-fill)",
+             "endRange": "var(--focus-ring-day-on-fill)", "inRange": "var(--focus-ring-day-on-range)",
+             None: "var(--focus-ring-day)"}
+    for state, ring in rings.items():
+        for n in range(len(mods) + 1):
+            for combo in itertools.combinations(mods, n):
+                if "prevMonthDay" in combo and "nextMonthDay" in combo:
+                    continue
+                for light in (False, True):
+                    cls = {"flatpickr-day", *combo} | ({state} if state else set())
+                    where = "%s (%s)" % ("".join("." + c for c in sorted(cls)), "light" if light else "dark")
+                    rest = winner(cls, set(), light, "box-shadow")
+                    for pseudo in (kbd, kbd | {"hover"}):
+                        got = winner(cls, pseudo, light, "box-shadow")
+                        if got != ring:
+                            err("components.css: flatpickr day %s:%s ends up box-shadow %s, expected the "
+                                "measured focus ring %s" % (where, ":".join(sorted(pseudo)), got, ring))
+                        elif got == rest:
+                            err("components.css: flatpickr day %s looks the same focused and at rest" % where)
     for state, (color, bgs) in expect.items():
         for n in range(len(mods) + 1):
             for combo in itertools.combinations(mods, n):
                 if "prevMonthDay" in combo and "nextMonthDay" in combo:
                     continue
-                for pseudo in (set(), {"hover"}, {"focus"}):
+                for pseudo in (set(), {"hover"}, {"focus"}, kbd, kbd | {"hover"}):
                     for light in (False, True):
                         cls = {"flatpickr-day", state, *combo}
                         got_c = winner(cls, pseudo, light, "color")
@@ -571,6 +611,97 @@ def check_flatpickr_cascade(css_text):
                         if got_b != bgs[light]:
                             err("components.css: flatpickr day %s ends up background %s, expected %s"
                                 % (where, got_b, bgs[light]))
+
+
+def check_doc_paths():
+    """Command and path examples in the docs must point at real files.
+
+    - `flag-sync.sh add <flag-dir> <flag-path> <repo-path>`: flag-sync reads
+      <flag-path> relative to Flag's design-system/, so it must exist there.
+    - Inline-code paths into this repo (design-system/..., scripts/...,
+      docs/..., .github/...) must exist; in design-system/*.md a path that
+      starts with one of its subdirectories (tokens/, fonts/, ...) is
+      relative to design-system/ and must exist there.
+    """
+    subdirs = sorted(p.name for p in DS.iterdir() if p.is_dir())
+    # Paths that live in a *product* repo (flag-sync's installed copy, the
+    # drift workflow, the lock file), not in Flag itself.
+    product_paths = {"scripts/flag-sync.sh", "scripts/stack-check.sh",
+                     ".github/workflows/flag-drift.yml", "flag.lock"}
+    for md in files({".md"}):
+        text = md.read_text()
+        for m in re.finditer(r"flag-sync\.sh\s+add\s+(\S+)\s+(\S+)\s+(\S+)", text):
+            src = m.group(2).strip("`")
+            if src.startswith("<"):
+                continue
+            if not (DS / src).exists():
+                err("%s: `flag-sync.sh add ... %s ...` names design-system/%s, which does not exist "
+                    "(flag-sync paths are relative to design-system/)" % (rel(md), src, src))
+        for m in re.finditer(r"`([^`\s]+)`", text):
+            token = m.group(1).rstrip(".,;:")
+            if "*" in token or "{" in token or "<" in token or token.startswith(("http", "/", "../", "./")):
+                continue
+            if token in product_paths:
+                continue
+            if re.match(r"^(design-system|scripts|docs|\.github)/[\w./-]+$", token):
+                if not (ROOT / token).exists():
+                    err("%s: `%s` does not exist" % (rel(md), token))
+            elif md.parent == DS and re.match(r"^(%s)/[\w./-]+\.\w+$" % "|".join(map(re.escape, subdirs)), token):
+                if not (DS / token).exists():
+                    err("%s: `%s` (relative to design-system/) does not exist" % (rel(md), token))
+
+
+def check_snippet_a11y():
+    """Each HTML snippet in the docs carries the same accessibility
+    attributes as the preview's live element of the same classes.
+
+    For every classed element in a snippet, some preview element with all of
+    those classes must have the same role, the same tabindex and the same set
+    of aria-* attributes (values of state attributes like aria-pressed may
+    differ; their presence may not). A snippet that drops tabindex/role/
+    aria-label from a scroll container, or a toggle's aria-pressed, fails.
+    """
+    from html.parser import HTMLParser
+
+    class Collect(HTMLParser):
+        def __init__(self):
+            super().__init__(convert_charrefs=True)
+            self.els = []
+
+        def handle_starttag(self, tag, attrs):
+            a = {k: (v or "") for k, v in attrs}
+            if a.get("class"):
+                self.els.append((tag, a))
+
+        handle_startendtag = handle_starttag
+
+    def sig(tag, a):
+        return (tag, a.get("role"), a.get("tabindex"), tuple(sorted(k for k in a if k.startswith("aria-"))))
+
+    live = Collect()
+    live.feed((PREVIEW / "index.html").read_text())
+    for path in sorted(set(files({".md"}))):
+        check_snippets_in(path, live, Collect, sig)
+
+
+def check_snippets_in(path, live, Collect, sig):
+    md = path.read_text()
+    for block in re.finditer(r"```html\n(.*?)```", md, re.S):
+        doc = Collect()
+        doc.feed(block.group(1))
+        for tag, a in doc.els:
+            classes = set(a["class"].split())
+            peers = [(t, b) for t, b in live.els if classes <= set(b["class"].split())]
+            label = "<%s class=\"%s\">" % (tag, a["class"])
+            if not peers:
+                err("%s: snippet element %s has no counterpart in preview/index.html" % (rel(path), label))
+                continue
+            if sig(tag, a) not in {sig(t, b) for t, b in peers}:
+                t, b = peers[0]
+                _, role, tabindex, aria = sig(t, b)
+                err("%s: snippet element %s has role=%s tabindex=%s %s, but the preview's has "
+                    "role=%s tabindex=%s %s" % (rel(path), label, a.get("role"), a.get("tabindex"),
+                                                list(sig(tag, a)[3]), role, tabindex, list(aria)))
 
 
 def check_dependabot():
@@ -630,6 +761,12 @@ def check_component_coverage():
             pat = re.compile(r"(^|[\s,>+~(])" + re.escape(base) + r"(?![\w-])[^\s,]*?(" + STATE_PATTERNS[state] + ")")
             if not any(pat.search(re.sub(r":not\((?:[^()]|\([^()]*\))*\)", "", s)) for s in sels_nogate):
                 err("components.css: `%s` has no %s state (INTERACTION_ACCESSIBILITY.md)" % (base, state))
+            elif state == "focus-visible" and not any(
+                    FOCUS_PAINT.search(body) for sel, body, _r in css_rules(css)
+                    for one in split_selectors(sel)
+                    if pat.search(re.sub(r":not\((?:[^()]|\([^()]*\))*\)", "", one.replace(HOVER_GATE, "")))):
+                err("components.css: `%s`'s focus-visible rules paint no visible indicator (outline, box-shadow, "
+                    "border-color, background or text-decoration other than none)" % base)
 
     # Light theme paints filled selections solid (TOKENS.md "Filled
     # controls"): every rule that paints --gradient-action-fill needs a
@@ -707,6 +844,8 @@ def check_vendor_overrides(vendor_css, comp_css):
 
 def main():
     check_dependabot()
+    check_doc_paths()
+    check_snippet_a11y()
     check_component_coverage()
     check_components()
     check_docs_pairs()

@@ -112,8 +112,12 @@ This is the shared icon vocabulary for all Elcano microservices.
 ## Example Usage
 
 ```html
-<button class="btn btn-danger" aria-label="Delete task">
+<button class="btn btn-danger" type="button">
   <svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#trash"></use></svg>
-  Delete
+  Delete task
 </button>
 ```
+
+The icon is decorative (`aria-hidden="true"`), so the visible text names the
+button; an `aria-label` would replace that text for screen readers and is only
+for icon-only buttons (`.icon-action`).

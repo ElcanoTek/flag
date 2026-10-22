@@ -185,13 +185,21 @@ are identical everywhere — change them in all repos at once):
 - `flag.lock` at the product repo root records the Flag commit and the sha256
   of every vendored file (`file <sha256> <flag-path> <repo-path>`), plus `dir`
   lines for directories that must contain only locked Flag files.
+- **Paths:** a `<flag-path>` is always relative to Flag's `design-system/`
+  directory (`tokens/design-tokens.css` is
+  `design-system/tokens/design-tokens.css` in this repo); a `<repo-path>` is
+  relative to the product repo root. flag-sync reads the files from the Flag
+  checkout's committed `HEAD` (never its working tree) and refuses a checkout
+  with uncommitted changes under `design-system/`.
 - `scripts/flag-sync.sh check` runs offline in the product's CI and fails on
   any hand edit, missing file, or unlocked file inside a vendored directory.
   It is the PR gate (run through `scripts/stack-check.sh`).
 - `scripts/flag-sync.sh add ../flag <flag-path> <repo-path>` vendors a new file
-  or directory; `scripts/flag-sync.sh sync ../flag` re-copies everything at a
-  newer Flag commit (since v2 a locked `dir` mirrors its Flag directory: new
-  upstream files are added and removed ones deleted);
+  or directory, for example
+  `scripts/flag-sync.sh add ../flag components/components.css static/flag/components/components.css`;
+  `scripts/flag-sync.sh sync ../flag` re-copies everything at a newer Flag
+  commit (a locked `dir` mirrors its Flag directory: new upstream files are
+  added and removed ones deleted);
   `scripts/flag-sync.sh status ../flag` lists what is stale, including files
   Flag added to a locked `dir` (exit 3 when stale). All three take a local
   checkout of this repo (a sibling `../flag` by default).
@@ -199,11 +207,13 @@ are identical everywhere — change them in all repos at once):
   weekly: it checks out this repo's `main` and runs `flag-sync.sh status`, so
   a product learns that Flag moved on without anyone remembering to look. The
   PR gate catches hand edits; the weekly job reports upstream staleness.
-- Every product vendors `LICENSE` from Flag's `design-system/` (the MIT text,
-  kept identical to the root `LICENSE` by this repo's CI) next to its vendored
-  files, so the notice travels with them: `scripts/flag-sync.sh add ../flag
-  LICENSE <vendored-dir>/LICENSE`. The font licence files travel inside
-  `fonts/`, and the sprite carries its Lucide ISC notice inline.
+- Every product vendors Flag's `design-system/LICENSE` (the MIT text, kept
+  identical to the repo-root `LICENSE` by this repo's CI) next to its vendored
+  files, so the notice travels with them. Because `<flag-path>` is relative to
+  `design-system/`, the command names it as just `LICENSE`:
+  `scripts/flag-sync.sh add ../flag LICENSE static/flag/LICENSE` copies
+  `design-system/LICENSE`, never the repo-root file. The font licence files
+  travel inside `fonts/`, and the sprite carries its Lucide ISC notice inline.
 
 Rules for product repos:
 

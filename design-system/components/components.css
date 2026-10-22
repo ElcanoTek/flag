@@ -1548,6 +1548,27 @@ span.flatpickr-weekday {
   background: var(--color-primary-fill) !important;
 }
 
+/* Keyboard focus: a distinct inset ring on every day state, after all of the
+   state rules above so it wins at equal specificity. Order matters: today,
+   then in-range, then selected / range ends (a day can be several at once,
+   and the ring must suit the fill that day ends up with). check_tokens.py
+   measures each ring against its fill; check_refs.py simulates the cascade. */
+.flatpickr-day:focus-visible,
+.flatpickr-day.today:focus-visible {
+  outline: none !important;
+  box-shadow: var(--focus-ring-day) !important;
+}
+
+.flatpickr-day.inRange:focus-visible {
+  box-shadow: var(--focus-ring-day-on-range) !important;
+}
+
+.flatpickr-day.selected:focus-visible,
+.flatpickr-day.startRange:focus-visible,
+.flatpickr-day.endRange:focus-visible {
+  box-shadow: var(--focus-ring-day-on-fill) !important;
+}
+
 /* Week numbers (weekNumbers: true). */
 .flatpickr-weekwrapper .flatpickr-weeks {
   box-shadow: 1px 0 0 var(--color-border) !important;

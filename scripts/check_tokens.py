@@ -230,6 +230,16 @@ pair("--color-accent-strong", CALENDAR, NON_TEXT, on=("--color-bg",), label="dat
 pair("--color-on-accent-strong", ["--color-accent-strong"], TEXT, on=("--color-bg",), label="date-range day label")
 pair("--color-primary-fill", CALENDAR, NON_TEXT, on=("--color-bg",), label="selected day on the calendar")
 pair("--color-accent", CALENDAR, NON_TEXT, on=("--color-bg",), label="today ring on the calendar")
+# Keyboard focus on a day: an inset ring on the fill that day has.
+pair("focus-ring-day", CALENDAR, NON_TEXT, on=("--color-bg",), label="day focus ring on the calendar")
+pair("focus-ring-day", CALENDAR + ["--color-status-running-bg"], NON_TEXT, on=("--color-bg",),
+     label="day focus ring on a hovered/focused day")
+pair("focus-ring-day-on-range", ["--color-accent-strong"], NON_TEXT, on=("--color-bg",),
+     label="day focus ring on an in-range day")
+pair("focus-ring-day-on-fill", ["--gradient-action-fill"], NON_TEXT, on=("--color-bg",),
+     label="day focus ring on a selected day (gradient)")
+pair("focus-ring-day-on-fill", ["--color-primary-fill"], NON_TEXT, on=("--color-bg",),
+     label="day focus ring on a selected day (solid, light)")
 # The focus ring's outer color against whatever it surrounds (WCAG 1.4.11).
 pair("focus-ring", [], NON_TEXT, label="--focus-ring outer color")
 pair("focus-ring-picker", [], NON_TEXT, label="--focus-ring-picker outer color")
@@ -241,6 +251,7 @@ pair("--color-primary-hover", [], TEXT, label="--color-primary-hover as link hov
 # Gradients under a label: every point of the blend is measured.
 GRADIENT_LABELS = [
     ("--color-on-primary-fill", "--gradient-action-fill", TEXT),
+    ("focus-ring-day-on-fill", "--gradient-action-fill", NON_TEXT),
     ("--color-on-primary-fill", "--gradient-action-fill-hover", TEXT),
 ]
 
@@ -258,12 +269,13 @@ def gradient_stops(value, theme):
 
 
 def fg_color(fg, theme):
-    if fg in ("focus-ring", "focus-ring-picker"):
+    if fg.startswith("focus-ring"):
         # "0 0 0 2px <inner>, 0 0 0 4px <outer>": the outer ring is what
-        # meets the surrounding surface.
+        # meets the surrounding surface. An inset ring ("inset 0 0 0 2px
+        # <color>") has one layer, painted on the element's own fill.
         from flagtokens import _split_top
         layers = _split_top(expand(theme["--" + fg], theme))
-        return resolve(re.sub(r"^(-?[\d.]+(px)?\s+){3,4}", "", layers[-1].strip()), theme)
+        return resolve(re.sub(r"^(inset\s+)?(-?[\d.]+(px)?\s+){3,4}", "", layers[-1].strip()), theme)
     return resolve("var(%s)" % fg, theme)
 
 
@@ -293,7 +305,7 @@ def check_contrast(errors, report):
         for fg, grad, floor in GRADIENT_LABELS:
             try:
                 stops = [resolve(s, theme) for s in gradient_stops(theme[grad], theme)]
-                label = resolve("var(%s)" % fg, theme)
+                label = fg_color(fg, theme)
             except (ColorError, KeyError) as e:
                 errors.append("%s %s: %s" % (tname, grad, e))
                 continue

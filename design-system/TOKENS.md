@@ -124,6 +124,13 @@ newer color functions in the token sheet).
   outer color reaches 3:1 against every surface in both themes (WCAG 1.4.11);
   in light that needed the deeper light accent (`#5A64B8`; it was `#9DA7EF`,
   2.1:1).
+- `--focus-ring-day`, `--focus-ring-day-on-range`, `--focus-ring-day-on-fill`:
+  keyboard focus on a calendar day. Neighbouring days would cover an outer
+  ring, so each is a 2px inset ring in the color that holds 3:1 against the
+  fill it sits on: `--color-accent` on a plain or hovered day,
+  `--color-on-accent-strong` on `--color-accent-strong` (in range), and
+  `--color-on-primary-fill` on the selected fill (every stop of
+  `--gradient-action-fill`, and solid `--color-primary-fill` in light).
 
 ### Contrast is measured, not asserted
 

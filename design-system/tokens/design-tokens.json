@@ -236,6 +236,9 @@
     "base": "200ms ease"
   },
   "focusRing": "0 0 0 2px var(--color-bg), 0 0 0 4px var(--color-accent)",
+  "focusRingDay": "inset 0 0 0 2px var(--color-accent)",
+  "focusRingDayOnFill": "inset 0 0 0 2px var(--color-on-primary-fill)",
+  "focusRingDayOnRange": "inset 0 0 0 2px var(--color-on-accent-strong)",
   "themes": {
     "contract": {
       "rootSelector": "html[data-theme='<mode>']",
