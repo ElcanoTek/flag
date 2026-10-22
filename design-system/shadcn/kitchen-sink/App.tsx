@@ -205,7 +205,7 @@ export function App() {
             <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" placeholder="team@elcanotek.com" />
+                <Input id="email" type="email" placeholder="team@example.com" />
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="search">Search</Label>
@@ -494,7 +494,7 @@ export function App() {
                   </SheetHeader>
                   <div className="grid gap-2 px-6">
                     <Label htmlFor="sheet-owner">Owner</Label>
-                    <Input id="sheet-owner" defaultValue="ads@elcanotek.com" />
+                    <Input id="sheet-owner" defaultValue="ads@example.com" />
                   </div>
                   <SheetFooter>
                     <Button>Save changes</Button>
