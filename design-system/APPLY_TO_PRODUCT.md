@@ -41,10 +41,9 @@ two code variables, which the token sheet only reads. A product that loads neith
 falls back to a system stack, which looks visibly wrong rather than quietly
 substituting some other brand face.
 
-> This repository is proprietary and internal (see the root `LICENSE`). Copying
-> tokens, icons, or logo marks out of it into a repo that ships an outbound
-> licence is not covered by that licence — confirm the arrangement before
-> vendoring flag assets into a public product.
+> Flag is MIT-licensed (see the root `LICENSE`), so any product may vendor it;
+> list Flag (MIT, ElcanoTek) in the product's `NOTICE` or licensing doc, and
+> copy the font licence files with the fonts.
 
 ## 2) Wire Theme in App Shell
 

@@ -36,10 +36,11 @@ Then open `http://localhost:8765`.
 
 ## Licensing and Fonts
 
-This repository is **proprietary and internal to ElcanoTek** — see [`LICENSE`](LICENSE).
-It carries no outbound licence, so its tokens, icons, and logo marks are not
-licensed for redistribution inside products published under MIT, BSL 1.1, or any
-similar licence.
+Flag is released under the **MIT License** — see [`LICENSE`](LICENSE). Products
+under any licence (MIT, BSL 1.1, internal-only) may vendor its tokens, icons,
+logos, theme controller and stylesheets; keep the copyright notice with them
+(each product lists Flag in its `NOTICE` or licensing doc). The bundled fonts
+keep their own licences, listed in `LICENSE`.
 
 Flag ships two typefaces, and every product uses both — there is no tier to choose
 between:

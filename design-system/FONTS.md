@@ -268,7 +268,6 @@ stylesheet, and never from a CDN.
 - **Never** copy a `.woff2`/`.woff`/`.ttf` without its licence file.
 - **Never** swap in a subset build — see the coverage note above.
 - **Never** reintroduce Dubai, IBM Plex, Share Tech Mono, or VT323.
-- Note that this repo itself is internal and proprietary — see the root
-  [`LICENSE`](../LICENSE). Flag's tokens, icons, and logos are **not** licensed for
-  redistribution in fleet or explorer; that is tracked separately from the font
-  question, which is now settled for both faces.
+- Flag itself is MIT-licensed — see the root [`LICENSE`](../LICENSE) — so its
+  tokens, icons, and logos may be vendored into any product, fleet and explorer
+  included. The fonts keep their own licences above.
