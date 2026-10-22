@@ -427,9 +427,9 @@ Example:
 
 ```html
 <div class="chips-container" role="group" aria-label="Email recipients">
-  <span class="chip chip-email selected" data-email="ads@elcanotek.com" role="button" tabindex="0" aria-pressed="true" aria-label="Toggle recipient ads@elcanotek.com">
-    ads@elcanotek.com
-    <button class="chip-delete" type="button" aria-label="Remove recipient ads@elcanotek.com">x</button>
+  <span class="chip chip-email selected" data-email="ads@example.com" role="button" tabindex="0" aria-pressed="true" aria-label="Toggle recipient ads@example.com">
+    ads@example.com
+    <button class="chip-delete" type="button" aria-label="Remove recipient ads@example.com">x</button>
   </span>
 </div>
 ```

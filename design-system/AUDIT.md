@@ -2,7 +2,7 @@
 
 > **Note:** This is a historical document from the initial creation of the design system. It is preserved for context only. Do not use this file as a reference for current component patterns. The single source of truth is COMPONENTS.md.
 >
-> **Typography findings here are superseded.** The brand face now depends on the product's licence tier — see [`FONTS.md`](FONTS.md).
+> **Typography findings here are superseded.** Every product now loads one font sheet and renders in Nebula Sans + Hack — see [`FONTS.md`](FONTS.md).
 
 > Historical context: This audit is a point-in-time snapshot taken during initial system consolidation.
 > It is useful for understanding origin decisions and debt categories, but it is not the day-to-day implementation guide.
@@ -22,11 +22,11 @@ Scope audited:
 
 The finding as originally recorded:
 
-- `lens` uses IBM Plex Sans (`/root/lens/templates/index.html`).
-- `home` uses Avenir Next (`/root/home/public/styles.css`).
-- `moc` uses Share Tech Mono + VT323 (`/root/moc/cmd/moc/assets/css/dashboard.css`).
-- `victoria-phone` uses Sora/Manrope (`/root/victoria-phone/app/dashboard.py`).
-- `explorer` partially aligned with Dubai (`/root/explorer/app/static/styles.css`).
+- `lens` uses IBM Plex Sans (`lens/templates/index.html`).
+- `home` uses Avenir Next (`home/public/styles.css`).
+- `moc` uses Share Tech Mono + VT323 (`moc/cmd/moc/assets/css/dashboard.css`).
+- `victoria-phone` uses Sora/Manrope (`victoria-phone/app/dashboard.py`).
+- `explorer` partially aligned with Dubai (`explorer/app/static/styles.css`).
 
 **Resolved by the org-wide font standardization.** Every Elcano product now loads the
 single sheet `fonts/fonts.css` and renders in **Nebula Sans** (text) + **Hack** (code).
@@ -64,7 +64,7 @@ current faces are freely redistributable, so no tier is needed. See
 - `victoria-phone` is a custom one-page dashboard with inline CSS.
 
 ## 8) Third-party style dependencies are not normalized
-- `explorer` references Flatpickr CDN CSS/JS in templates (`/root/explorer/app/templates/inbox.html`).
+- `explorer` references Flatpickr CDN CSS/JS in templates (`explorer/app/templates/inbox.html`).
 
 ## Reusable Patterns Identified
 - Strongest upload dropzone: `lens` and `moc`.
@@ -83,7 +83,7 @@ current faces are freely redistributable, so no tier is needed. See
 
 ## Deprecation Targets
 - Deprecate repo-specific ad hoc fonts across all services (converge on the two
-  Flag brand faces, selected by licence tier per `FONTS.md` — not on one face for all).
+  Flag faces, Nebula Sans and Hack, per `FONTS.md`).
 - Deprecate un-tokenized hardcoded status colors.
 - Deprecate retro-only visual language in `moc` as shared default.
 - Deprecate inline-only stylesheet approach for Victoria Voice dashboard.
