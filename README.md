@@ -31,6 +31,7 @@ Then open `http://localhost:8765`.
 - `design-system/icons/core-icons.svg` - icon sprite
 - `design-system/logos/` - approved logo assets
 - `design-system/email-safe.html` - canonical email-safe HTML reference
+- `design-system/check-vendorable.sh` - CI check that vendored files stay safe to copy verbatim (see `APPLY_TO_PRODUCT.md` "Vendoring and drift")
 - `design-system/preview/index.html` - live visual reference
 
 ## Licensing and Fonts

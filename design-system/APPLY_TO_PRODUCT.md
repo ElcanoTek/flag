@@ -14,7 +14,12 @@ If a product needs additional behavior, extend this contract. Do not replace it 
 
 ## 1) Copy Foundations First
 
-Copy or import these sources before product component work:
+Products **vendor** Flag files (copy them into the product repo and serve them
+from the product's own binary — no CDN, no runtime dependency on this repo).
+Every copy is recorded in a lock file so it cannot drift silently; see
+[Vendoring and drift](#vendoring-and-drift) below. Never copy by hand.
+
+Copy these sources before product component work:
 - `tokens/design-tokens.css`
 - `tokens/design-tokens.json`
 - `icons/core-icons.svg`
@@ -155,3 +160,42 @@ When implementing an internal home/launchpad screen:
 3. Add shared theme toggle and verify accessibility attributes.
 4. Migrate component styles to semantic tokens only.
 5. Validate visual parity and interaction/accessibility behavior in both themes.
+
+## Vendoring and drift
+
+Every Elcano product vendors Flag the same way, with two scripts shared
+verbatim across the product repos (`scripts/flag-sync.sh` and
+`scripts/stack-check.sh`; the canonical copies live in each product repo and
+are identical everywhere — change them in all repos at once):
+
+- `flag.lock` at the product repo root records the Flag commit and the sha256
+  of every vendored file (`file <sha256> <flag-path> <repo-path>`), plus `dir`
+  lines for directories that must contain only locked Flag files.
+- `scripts/flag-sync.sh check` runs offline in the product's CI and fails on
+  any hand edit, missing file, or unlocked file inside a vendored directory.
+- `scripts/flag-sync.sh add ../flag <flag-path> <repo-path>` vendors a new file
+  or directory; `scripts/flag-sync.sh sync ../flag` re-copies everything at a
+  newer Flag commit; `scripts/flag-sync.sh status ../flag` lists what is stale.
+  All three take a local checkout of this repo (a sibling `../flag` by default).
+
+Rules for product repos:
+
+1. **Vendored files are byte-identical to Flag.** Product styling lives outside
+   the vendored directories and reads tokens. A product that needs a new icon,
+   logo, token or a fix asks for it here (a PR to this repo) and re-syncs; it
+   never patches its copy.
+2. **Vendor only what the product uses.** Lock individual icons/logos rather
+   than whole directories when a product uses a few of them.
+3. **Re-sync deliberately.** After a Flag change lands, each product re-syncs
+   in its own PR, renders its pages in both themes, and fixes anything the
+   change breaks.
+
+Rules for this repo, so that files stay safe to vendor verbatim:
+
+- Files under `tokens/`, `fonts/`, `theme/`, `icons/` and `logos/` must not
+  depend on where they sit relative to this repo's docs: name docs as
+  "Flag's design-system/FONTS.md", never with a relative path like
+  `../FONTS.md` that is wrong once copied. `check-vendorable.sh` enforces this.
+- Renaming or removing an icon id, logo file, or token is a breaking change
+  for every product that vendors it: say so in the PR and list the products.
+

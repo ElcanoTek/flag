@@ -4,7 +4,7 @@
   --theme-preference-storage-key: flag-theme-preference;
   /* Brand faces come from fonts/fonts.css, which sets --font-brand to
    * "Nebula Sans" and both code variables to "Hack". There is exactly one font
-   * sheet and one pair of faces across every Elcano product — see ../FONTS.md.
+   * sheet and one pair of faces across every Elcano product — see Flag's design-system/FONTS.md.
    * The fallbacks below name the same two faces, so a product that forgets the
    * sheet degrades to a system stack rather than to a different brand face.
    * Never name a family in product CSS; always use these tokens. */
@@ -16,7 +16,7 @@
   --font-code-ui: var(--font-code-ui-brand, "Hack"), ui-monospace, "SF Mono", "Consolas", monospace;
 
   /* Only these four weights are shipped as real faces. Anything else is a
-   * synthetic smear — see ../FONTS.md before adding a fifth. */
+   * synthetic smear — see Flag's design-system/FONTS.md before adding a fifth. */
   --font-weight-regular: 400;
   --font-weight-medium: 500;
   --font-weight-semibold: 600;
@@ -191,7 +191,7 @@
 
   /* Connection picker components (switch, compact search, small pill, status
      kicker, group header, match highlight, state panels, scrim). Values from
-     the Tools picker design; see COMPONENTS.md "Connection Picker". */
+     the Tools picker design; see Flag's design-system/COMPONENTS.md "Connection Picker". */
   --color-accent-strong: #5956d5;
   --color-on-accent-strong: #eef0ff;
   --color-link: #9da7ef;
@@ -317,7 +317,7 @@ body.theme-light {
 
   /* Connection picker components (switch, compact search, small pill, status
      kicker, group header, match highlight, state panels, scrim). Values from
-     the Tools picker design; see COMPONENTS.md "Connection Picker". */
+     the Tools picker design; see Flag's design-system/COMPONENTS.md "Connection Picker". */
   --color-accent-strong: #6262a0;
   --color-on-accent-strong: #ffffff;
   --color-link: #5f5f97;

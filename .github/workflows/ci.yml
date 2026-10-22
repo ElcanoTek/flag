@@ -1,0 +1,19 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Vendorable files are safe to copy verbatim
+        run: design-system/check-vendorable.sh
+      - name: Email template stays within client limits
+        run: design-system/check-email-template.sh
