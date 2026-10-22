@@ -1,8 +1,8 @@
 blank_issues_enabled: true
 contact_links:
   - name: Security issue
-    url: mailto:security@elcanotek.com
-    about: Report a vulnerability privately by email — see SECURITY.md. Never in a public issue.
+    url: https://github.com/ElcanoTek/flag/blob/main/SECURITY.md
+    about: Report a vulnerability privately to security@elcanotek.com (how and what to include are in SECURITY.md). Never in a public issue.
   - name: Live preview
     url: https://flag-71q.pages.dev/
     about: Every token, icon, logo and component, in light and dark.

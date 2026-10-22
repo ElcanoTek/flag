@@ -2,8 +2,10 @@
 
 ## Reporting a vulnerability
 
-Email **security@elcanotek.com**. Please do not open a public issue, pull
-request or discussion for a security problem.
+Email **[security@elcanotek.com](mailto:security@elcanotek.com)** with the
+subject "Flag security". That is the only reporting channel; the "Security
+issue" entry in this repo's new-issue chooser links here. Please do not open
+a public issue, pull request or discussion for a security problem.
 
 Helpful to include:
 

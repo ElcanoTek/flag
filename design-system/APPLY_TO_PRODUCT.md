@@ -24,6 +24,11 @@ Copy these sources before product component work:
 - `tokens/design-tokens.json`
 - `icons/core-icons.svg`
 - `theme/theme-controller.js`
+- `components/components.css`: the component layer (buttons, fields, chips,
+  cards, badges, tables, segmented control, ...) for server-rendered (Tier A)
+  products. Load it after the tokens and keep product styling in a separate
+  sheet that loads after it. Tier B (React) products may skip it and build
+  the same specs as components.
 - the font sheet and both face directories (see [`FONTS.md`](FONTS.md)):
   `fonts/fonts.css` + `fonts/nebula-sans/` + `fonts/hack/`. Copy `nebula-sans/OFL.txt`
   and `hack/LICENSE.md` along with the font binaries — both licences require it.
@@ -34,9 +39,10 @@ Import the font stylesheet alongside `design-tokens.css`:
 ```html
 <link rel="stylesheet" href="/path/to/fonts/fonts.css" />
 <link rel="stylesheet" href="/path/to/design-tokens.css" />
+<link rel="stylesheet" href="/path/to/components.css" />
 ```
 
-Order between the two does not matter — the font sheet sets `--font-brand` and the
+Order between the first two does not matter — the font sheet sets `--font-brand` and the
 two code variables, which the token sheet only reads. A product that loads neither
 falls back to a system stack, which looks visibly wrong rather than quietly
 substituting some other brand face.
@@ -112,13 +118,22 @@ Do not write product-local theme color values.
 }
 
 a {
-  color: var(--color-secondary);
+  color: var(--color-link);
+}
+
+.btn-primary {
+  background: var(--gradient-action-fill);
+  color: var(--color-on-primary-fill);
 }
 ```
 
 Additional implementation requirements:
-- Primary buttons in light theme must render as solid `var(--color-primary)` with white text.
-- Selected calendar days in light theme must render as solid `var(--color-primary)` with white text.
+- Filled controls paint their label on a measured fill: primary buttons use
+  `--gradient-action-fill` (dark) or solid `--color-primary-fill` (light)
+  with `--color-on-primary-fill`; selected calendar days likewise. Never put
+  a label on raw `--color-primary` or `--gradient-action-primary` (white on
+  `#7272AB` is 4.46:1). See COMPONENTS.md "Foreground on a saturated fill".
+- Links use `--color-link` (4.5:1+ on every surface in both themes).
 - When porting the shared checkbox pattern, copy the full structure and verify the checkmark asset actually exists.
 
 ## 5) Keep Accessibility + Persistence Intact

@@ -27,7 +27,11 @@ Theme note:
   - Use: elevated layers (modal panel, sticky detail panes, high-emphasis cards).
 
 ### Action and State Gradients
-- `--gradient-action-primary` for primary buttons.
+- `--gradient-action-fill` (hover `--gradient-action-fill-hover`) for primary
+  buttons, with `--color-on-primary-fill` labels: its stops are measured so
+  the label holds 4.5:1 at every point.
+- `--gradient-action-primary` is decorative only (no label on it: white on
+  its first stop is 4.46:1).
 - `--gradient-action-success` for success state actions only.
 - `--gradient-action-disabled` for disabled/coming-soon actions only.
 
@@ -71,6 +75,7 @@ body {
 }
 
 .btn-primary {
-  background: var(--gradient-action-primary);
+  background: var(--gradient-action-fill);
+  color: var(--color-on-primary-fill);
 }
 ```
