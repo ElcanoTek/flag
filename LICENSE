@@ -1,30 +1,29 @@
-Copyright (c) 2026 ElcanoTek. All rights reserved.
+MIT License
 
-PROPRIETARY AND CONFIDENTIAL — INTERNAL USE ONLY
+Copyright (c) 2026 ElcanoTek, Inc.
 
-This repository and its contents (the "Work") are the confidential and
-proprietary property of ElcanoTek. The Work is made available solely for
-internal use by ElcanoTek personnel and authorized contractors in the course of
-building and maintaining ElcanoTek products.
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
 
-No licence, express or implied, is granted to any other person or entity. In
-particular, and without limiting the foregoing, no permission is granted to
-copy, reproduce, modify, merge, publish, distribute, sublicense, or sell any
-part of the Work, or to incorporate any part of the Work into a product that is
-distributed under an open-source or source-available licence.
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
 
-The Work carries no outbound licence. Incorporating any part of it — including
-design tokens, icon sprites, logo marks, and stylesheets — into a repository
-published under MIT, the Business Source License, or any similar licence would
-purport to grant recipients rights that ElcanoTek has not granted.
-
-The third-party components listed below are the exception: each is redistributable
-under its own licence, on that licence's own terms.
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
 
 THIRD-PARTY COMPONENTS
 
 Some files in this repository are governed by their own licences, which take
-precedence over this notice for those files:
+precedence over the MIT licence above for those files:
 
   design-system/fonts/nebula-sans/
       Nebula Sans. Copyright (c) 2024 Nebula Entertainment & Broadcasting
@@ -40,20 +39,18 @@ precedence over this notice for those files:
       "Vera"; and public-domain work from the DejaVu project. See
       design-system/fonts/hack/LICENSE.md.
 
+  design-system/icons/core-icons.svg (some glyphs)
+      Drawn after Lucide (https://lucide.dev). ISC License; Copyright (c)
+      for portions of Lucide are held by Cole Bemis 2013-2022 as part of
+      Feather (MIT), all other copyright (c) for Lucide are held by Lucide
+      Contributors 2022. The full ISC notice is in a comment at the top of
+      the sprite, so it travels with every copy.
+
   design-system/preview/vendor/flatpickr/
       flatpickr v4.6.13. Copyright (c) 2017 Gregory Petrosyan.
       MIT License — https://github.com/flatpickr/flatpickr/blob/master/LICENSE.md
 
-Both shipped typefaces may be redistributed, including inside products under
-other licences: the SIL Open Font License 1.1 permits it for Nebula Sans, and
-the MIT and Bitstream Vera licences permit it for Hack. All three require that
-the licence text travel with the font files, so design-system/fonts/nebula-sans/
-OFL.txt and design-system/fonts/hack/LICENSE.md must be copied wherever the font
-binaries are copied. That permission applies to those font files only. It does
-not extend to any other part of the Work.
-
-ElcanoTek trademarks, logo marks, and brand assets are not licensed by this
-notice or by any third-party licence referenced in it.
-
-See design-system/FONTS.md for the typography policy. Every ElcanoTek product
-ships the same two faces; there is no longer a per-product licence tier.
+The shipped typefaces travel with their own licences, which require the
+licence text to be copied with the font binaries: copy
+design-system/fonts/nebula-sans/OFL.txt and design-system/fonts/hack/LICENSE.md
+wherever the fonts are copied.

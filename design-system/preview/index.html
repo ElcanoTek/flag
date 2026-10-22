@@ -34,6 +34,7 @@
   <link rel="stylesheet" href="../fonts/fonts.css" />
   <link rel="stylesheet" href="./vendor/flatpickr/flatpickr.min.css" />
   <link rel="stylesheet" href="../tokens/design-tokens.css" />
+  <link rel="stylesheet" href="./components.css" />
   <link rel="stylesheet" href="./styles.css" />
 </head>
 <body>
@@ -75,14 +76,14 @@
         </summary>
         <div class="section-body">
         <div class="tokens-grid">
-        <div class="swatch"><div class="swatch-chip" style="background:#7272ab"></div><div class="swatch-meta"><strong>Primary</strong><span>#7272AB</span></div></div>
-        <div class="swatch"><div class="swatch-chip" style="background:#586f7c"></div><div class="swatch-meta"><strong>Secondary</strong><span>#586F7C</span></div></div>
-        <div class="swatch"><div class="swatch-chip" style="background:#9da7ef"></div><div class="swatch-meta"><strong>Accent</strong><span>#9DA7EF</span></div></div>
-        <div class="swatch"><div class="swatch-chip" style="background:#ffffff"></div><div class="swatch-meta"><strong>White</strong><span>#FFFFFF</span></div></div>
-        <div class="swatch"><div class="swatch-chip" style="background:#000000"></div><div class="swatch-meta"><strong>Black</strong><span>#000000</span></div></div>
-        <div class="swatch"><div class="swatch-chip" style="background:#1a0b1e"></div><div class="swatch-meta"><strong>Background</strong><span>#1A0B1E</span></div></div>
-        <div class="swatch"><div class="swatch-chip" style="background:#241b31"></div><div class="swatch-meta"><strong>Surface 1</strong><span>#241B31</span></div></div>
-        <div class="swatch"><div class="swatch-chip" style="background:#2f2741"></div><div class="swatch-meta"><strong>Surface 2</strong><span>#2F2741</span></div></div>
+        <div class="swatch" data-token="--color-primary"><div class="swatch-chip" style="background:var(--color-primary)"></div><div class="swatch-meta"><strong>Primary</strong><span data-token-value>#7272AB</span></div></div>
+        <div class="swatch" data-token="--color-secondary"><div class="swatch-chip" style="background:var(--color-secondary)"></div><div class="swatch-meta"><strong>Secondary</strong><span data-token-value>#586F7C</span></div></div>
+        <div class="swatch" data-token="--color-accent"><div class="swatch-chip" style="background:var(--color-accent)"></div><div class="swatch-meta"><strong>Accent</strong><span data-token-value>#9DA7EF</span></div></div>
+        <div class="swatch" data-token="--color-white"><div class="swatch-chip" style="background:var(--color-white)"></div><div class="swatch-meta"><strong>White</strong><span data-token-value>#FFFFFF</span></div></div>
+        <div class="swatch" data-token="--color-black"><div class="swatch-chip" style="background:var(--color-black)"></div><div class="swatch-meta"><strong>Black</strong><span data-token-value>#000000</span></div></div>
+        <div class="swatch" data-token="--color-bg"><div class="swatch-chip" style="background:var(--color-bg)"></div><div class="swatch-meta"><strong>Background</strong><span data-token-value>#1A0B1E</span></div></div>
+        <div class="swatch" data-token="--color-surface-1"><div class="swatch-chip" style="background:var(--color-surface-1)"></div><div class="swatch-meta"><strong>Surface 1</strong><span data-token-value>#241B31</span></div></div>
+        <div class="swatch" data-token="--color-surface-2"><div class="swatch-chip" style="background:var(--color-surface-2)"></div><div class="swatch-meta"><strong>Surface 2</strong><span data-token-value>#2F2741</span></div></div>
       </div>
         </div>
       </details>
@@ -211,6 +212,13 @@
           <h3>MOC App Icon</h3>
           <p>MOC product icon for launch surfaces and icon contexts. Keep 1:1 aspect ratio and no color edits.</p>
         </article>
+        <article class="logo-card">
+          <div class="logo-stage logo-stage-dark">
+            <img src="../logos/fleet-mark.svg" alt="Fleet product mark" />
+          </div>
+          <h3>Fleet Product Mark</h3>
+          <p>Fleet product identity for app-level branding and launch tiles. One file for both themes (primary on any surface, 3:1+).</p>
+        </article>
       </div>
         </div>
       </details>
@@ -242,6 +250,59 @@
         <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#alert-triangle"></use></svg><span>alert-triangle</span></div>
         <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#external-link"></use></svg><span>external-link</span></div>
         <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#chevron-right"></use></svg><span>chevron-right</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#chevron-down"></use></svg><span>chevron-down</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#info"></use></svg><span>info</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#file"></use></svg><span>file</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#folder"></use></svg><span>folder</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#book"></use></svg><span>book</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#menu"></use></svg><span>menu</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#copy"></use></svg><span>copy</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#activity"></use></svg><span>activity</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#arrow-right"></use></svg><span>arrow-right</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#arrow-up"></use></svg><span>arrow-up</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#bar-chart"></use></svg><span>bar-chart</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#brain"></use></svg><span>brain</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#briefcase"></use></svg><span>briefcase</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#bug"></use></svg><span>bug</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#check"></use></svg><span>check</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#check-square"></use></svg><span>check-square</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#cloud"></use></svg><span>cloud</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#compress"></use></svg><span>compress</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#database"></use></svg><span>database</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#dollar-sign"></use></svg><span>dollar-sign</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#dots"></use></svg><span>dots</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#edit"></use></svg><span>edit</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#expand"></use></svg><span>expand</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#file-text"></use></svg><span>file-text</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#globe"></use></svg><span>globe</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#grid"></use></svg><span>grid</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#headphones"></use></svg><span>headphones</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#image"></use></svg><span>image</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#keyboard"></use></svg><span>keyboard</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#layers"></use></svg><span>layers</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#mail"></use></svg><span>mail</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#map-pin"></use></svg><span>map-pin</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#megaphone"></use></svg><span>megaphone</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#message"></use></svg><span>message</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#model"></use></svg><span>model</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#panel-left"></use></svg><span>panel-left</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#persona"></use></svg><span>persona</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#pin"></use></svg><span>pin</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#plug"></use></svg><span>plug</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#puzzle"></use></svg><span>puzzle</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#refresh"></use></svg><span>refresh</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#return-key"></use></svg><span>return-key</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#settings"></use></svg><span>settings</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#shield"></use></svg><span>shield</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#shopping-cart"></use></svg><span>shopping-cart</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#sparkles"></use></svg><span>sparkles</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#stop"></use></svg><span>stop</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#summarize"></use></svg><span>summarize</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#tag"></use></svg><span>tag</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#target"></use></svg><span>target</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#zap"></use></svg><span>zap</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#selector"></use></svg><span>selector</span></div>
+        <div class="icon-item"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#archive"></use></svg><span>archive</span></div>
       </div>
       <div class="demo-row">
         <button class="btn btn-primary"><svg class="icon-inline" aria-hidden="true"><use href="../icons/core-icons.svg#download"></use></svg> Download</button>
@@ -267,10 +328,19 @@
             <img class="ds-app-header__mark" src="../logos/elcano-mark-primary.svg" alt="Elcano" />
             <div class="ds-app-header__text">
               <p class="ds-app-header__eyebrow">Elcano Internal</p>
-              <h3 class="ds-app-header__title">Home</h3>
+              <h3 class="ds-app-header__title">Campaign delivery overview</h3>
             </div>
           </div>
           <div class="ds-app-header__actions">
+            <button class="icon-action" type="button" aria-label="Settings" title="Settings">
+              <svg aria-hidden="true"><use href="../icons/core-icons.svg#settings"></use></svg>
+            </button>
+            <button class="icon-action theme-toggle" type="button" data-preview-theme-proxy aria-pressed="false" aria-label="Switch theme" title="Switch theme">
+              <span class="theme-toggle__icon-wrap" aria-hidden="true">
+                <svg class="icon-inline theme-toggle__icon theme-toggle__icon--sun" aria-hidden="true"><use href="../icons/core-icons.svg#sun"></use></svg>
+                <svg class="icon-inline theme-toggle__icon theme-toggle__icon--moon" aria-hidden="true"><use href="../icons/core-icons.svg#moon"></use></svg>
+              </span>
+            </button>
             <button class="icon-action header-logout-btn" type="button" aria-label="Log out" title="Log out">
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                 <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
@@ -368,11 +438,28 @@
         <button class="btn btn-primary"><span class="spinner" aria-hidden="true"></span> Loading</button>
       </div>
 
+      <p class="section-note">Segmented control: one look for a choice between 2-4 mutually exclusive options. The selected option sits on the measured primary fill.</p>
+      <div class="demo-row">
+        <div class="seg" role="group" aria-label="Calendar view">
+          <button class="seg-option" type="button" aria-pressed="true">List</button>
+          <button class="seg-option" type="button" aria-pressed="false">Week</button>
+          <button class="seg-option" type="button" aria-pressed="false">Month</button>
+        </div>
+        <div class="seg seg--md" role="group" aria-label="Schedule mode">
+          <button class="seg-option" type="button" aria-pressed="false">Once</button>
+          <button class="seg-option" type="button" aria-pressed="true">Repeat</button>
+          <button class="seg-option" type="button" aria-pressed="false" disabled>Cron</button>
+        </div>
+      </div>
+
       <div class="form-grid">
         <div class="field"><label for="f-text">Text</label><input id="f-text" type="text" placeholder="Text input" /></div>
         <div class="field"><label for="f-search">Search</label><input id="f-search" type="search" placeholder="Search" /></div>
-        <div class="field"><label for="f-email">Email</label><input id="f-email" type="email" placeholder="team@elcanotek.com" /></div>
+        <div class="field"><label for="f-email">Email</label><input id="f-email" type="email" placeholder="team@example.com" /></div>
         <div class="field"><label for="f-password">Password</label><input id="f-password" type="password" placeholder="Enter password" /></div>
+        <div class="field"><label for="f-notes">Textarea</label><textarea id="f-notes" rows="3" placeholder="Notes for the reviewer" aria-describedby="f-notes-hint"></textarea><p id="f-notes-hint" class="field-hint">Visible to approvers only.</p></div>
+        <div class="field"><label for="f-budget">Daily budget</label><input id="f-budget" type="text" value="-40" aria-invalid="true" aria-describedby="f-budget-error" /><p id="f-budget-error" class="field-error">Enter an amount of 0 or more.</p></div>
+        <div class="field"><label for="f-locked">Account ID</label><input id="f-locked" type="text" value="acct-0042" disabled /></div>
         <div class="field">
           <label for="f-select">Select</label>
           <div class="select-wrap">
@@ -383,6 +470,13 @@
             <svg class="select-icon" aria-hidden="true"><use href="../icons/core-icons.svg#chevron-down"></use></svg>
           </div>
         </div>
+      </div>
+      <p class="section-note">Native controls without a Flag class keep the browser's own rendering: components.css only redraws what it ships a visual for, so third-party markup is left alone.</p>
+      <div class="demo-row native-controls" data-native-controls>
+        <label><input type="checkbox" checked /> Native checkbox</label>
+        <label><input type="radio" name="native-radio" checked /> Native radio</label>
+        <label>Native range <input type="range" min="0" max="10" value="4" /></label>
+        <label>Native file <input type="file" /></label>
       </div>
         </div>
       </details>
@@ -401,7 +495,7 @@
           <h3>File Upload Dropzone</h3>
           <p class="card-copy">Reference pattern from Lens and MOC with drag states, browse affordance, and file list.</p>
           <div class="file-upload-area">
-            <div class="file-upload-dropzone" id="dropzone" tabindex="0" role="button" aria-label="Upload files">
+            <div class="file-upload-dropzone" id="dropzone" role="group" aria-label="Upload files">
               <div class="dropzone-content">
                 <svg class="dropzone-icon" aria-hidden="true"><use href="../icons/core-icons.svg#paperclip"></use></svg>
                 <p class="dropzone-text">Drag and drop files here</p>
@@ -409,7 +503,7 @@
                 <button type="button" class="dropzone-browse-btn" id="browse-btn">Browse files</button>
                 <p class="dropzone-limit">Max 250 MB per file · Up to 10 files</p>
               </div>
-              <input id="file-input" class="file-input-hidden" type="file" multiple />
+              <input id="file-input" class="file-input-hidden" type="file" multiple tabindex="-1" aria-label="Choose files to upload" />
             </div>
             <div class="file-list" id="file-list">
               <div class="file-item uploading">
@@ -422,6 +516,22 @@
                   <div class="file-item-progress"><div class="file-item-progress-fill" style="width:68%"></div></div>
                   <span class="file-item-percent">68%</span>
                 </div>
+              </div>
+              <div class="file-item uploaded">
+                <span class="file-item-icon">#</span>
+                <div class="file-item-info">
+                  <span class="file-item-name">q1-publishers.csv</span>
+                  <span class="file-item-size">812 KB</span>
+                </div>
+                <span class="file-item-status">Uploaded</span>
+              </div>
+              <div class="file-item error">
+                <span class="file-item-icon">#</span>
+                <div class="file-item-info">
+                  <span class="file-item-name">full-log-export.csv</span>
+                  <span class="file-item-size">412 MB, over the 250 MB limit</span>
+                </div>
+                <span class="file-item-status">Too large</span>
               </div>
             </div>
           </div>
@@ -531,13 +641,19 @@
                 </button>
               </div>
             </li>
+            <li class="input-file-item selectable-item is-disabled">
+              <label class="input-file-select">
+                <input type="radio" name="preview_input_file" value="q3.csv" disabled>
+                <span class="input-file-name" title="q3_archive.csv (archived, not selectable)">q3_archive.csv (archived)</span>
+              </label>
+            </li>
           </ul>
         </article>
 
         <article class="card">
           <h3>Common Checkbox</h3>
           <p class="card-copy">Use this checkbox style for toggles and optional settings across all products.</p>
-          <input id="notify-checkbox" type="checkbox" checked />
+          <input id="notify-checkbox" class="ds-checkbox-input" type="checkbox" checked />
           <label class="ds-checkbox" for="notify-checkbox">
             <span class="ds-checkbox__box" aria-hidden="true">
               <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -546,7 +662,7 @@
             </span>
             <span class="ds-checkbox__label">Send status updates to stakeholders</span>
           </label>
-          <input id="archive-checkbox" type="checkbox" />
+          <input id="archive-checkbox" class="ds-checkbox-input" type="checkbox" />
           <label class="ds-checkbox" for="archive-checkbox">
             <span class="ds-checkbox__box" aria-hidden="true">
               <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -555,15 +671,24 @@
             </span>
             <span class="ds-checkbox__label">Archive source files after processing</span>
           </label>
+          <input id="retain-checkbox" class="ds-checkbox-input" type="checkbox" checked disabled />
+          <label class="ds-checkbox" for="retain-checkbox">
+            <span class="ds-checkbox__box" aria-hidden="true">
+              <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M3.5 8.5l3 3 6-7"></path>
+              </svg>
+            </span>
+            <span class="ds-checkbox__label">Keep audit log (required, disabled)</span>
+          </label>
         </article>
 
         <article class="card">
           <h3>Email Selection Pills (MOC)</h3>
           <p class="card-copy">Use this pill selector pattern for choosing one or more notification recipients in task forms.</p>
           <div class="chips-container" id="emailChipsPreview" role="group" aria-label="Email recipients">
-            <span class="chip chip-email" data-email="ops@elcanotek.com" role="button" tabindex="0" aria-pressed="false" aria-label="Toggle recipient ops@elcanotek.com">ops@elcanotek.com<button class="chip-delete" type="button" aria-label="Remove recipient ops@elcanotek.com">x</button></span>
-            <span class="chip chip-email selected" data-email="ads@elcanotek.com" role="button" tabindex="0" aria-pressed="true" aria-label="Toggle recipient ads@elcanotek.com">ads@elcanotek.com<button class="chip-delete" type="button" aria-label="Remove recipient ads@elcanotek.com">x</button></span>
-            <span class="chip chip-email" data-email="finance@elcanotek.com" role="button" tabindex="0" aria-pressed="false" aria-label="Toggle recipient finance@elcanotek.com">finance@elcanotek.com<button class="chip-delete" type="button" aria-label="Remove recipient finance@elcanotek.com">x</button></span>
+            <span class="chip chip-email" data-email="ops@example.com"><button class="chip-toggle" type="button" aria-pressed="false">ops@example.com</button><button class="chip-delete" type="button" aria-label="Remove recipient ops@example.com">x</button></span>
+            <span class="chip chip-email selected" data-email="ads@example.com"><button class="chip-toggle" type="button" aria-pressed="true">ads@example.com</button><button class="chip-delete" type="button" aria-label="Remove recipient ads@example.com">x</button></span>
+            <span class="chip chip-email" data-email="finance@example.com"><button class="chip-toggle" type="button" aria-pressed="false">finance@example.com</button><button class="chip-delete" type="button" aria-label="Remove recipient finance@example.com">x</button></span>
           </div>
           <div class="custom-email-row">
             <input id="customEmailPreviewInput" type="email" placeholder="Add custom email..." maxlength="254" />
@@ -590,11 +715,12 @@
               <div class="tool-call-item">
                 <div class="tool-call-name"><strong>run_python</strong></div>
                 <div class="tool-call-id">ID: <code>call_9f8a2ce1</code></div>
-                <pre class="tool-call-code"><code class="language-python">import statistics
+                <pre class="tool-call-code" tabindex="0" aria-label="run_python code"><code class="language-python"><span class="tok-keyword">import</span> statistics
 
-samples = [123.4, 128.1, 120.9, 131.7]
-average = statistics.mean(samples)
-print(f"Mean latency: {average:.2f} ms")</code></pre>
+<span class="tok-comment"># Latency samples in milliseconds</span>
+samples <span class="tok-operator">=</span> <span class="tok-punctuation">[</span><span class="tok-number">123.4</span><span class="tok-punctuation">,</span> <span class="tok-number">128.1</span><span class="tok-punctuation">,</span> <span class="tok-number">120.9</span><span class="tok-punctuation">,</span> <span class="tok-number">131.7</span><span class="tok-punctuation">]</span>
+average <span class="tok-operator">=</span> statistics<span class="tok-punctuation">.</span><span class="tok-function">mean</span><span class="tok-punctuation">(</span>samples<span class="tok-punctuation">)</span>
+<span class="tok-builtin">print</span><span class="tok-punctuation">(</span><span class="tok-string">f"Mean latency: {average:.2f} ms"</span><span class="tok-punctuation">)</span></code></pre>
                 <div class="tool-call-other-args">Other arguments: <code>{"timeout": 45}</code></div>
               </div>
             </article>
@@ -606,17 +732,17 @@ print(f"Mean latency: {average:.2f} ms")</code></pre>
                 <div class="task-tracker-cmd">Command: <strong>RECONCILE DELIVERY REPORT</strong></div>
                 <div class="task-tracker-list">
                   <div class="task-tracker-item status-done">
-                    <span class="tt-icon" aria-hidden="true">&#10003;</span>
+                    <span class="tt-icon" aria-hidden="true">&#10003;</span><span class="sr-only">Done:</span>
                     <span class="tt-id">[1]</span>
                     <span class="tt-title">Validate file schema</span>
                   </div>
                   <div class="task-tracker-item status-inprogress">
-                    <span class="tt-icon" aria-hidden="true">&#8635;</span>
+                    <span class="tt-icon" aria-hidden="true">&#8635;</span><span class="sr-only">In progress:</span>
                     <span class="tt-id">[2]</span>
                     <span class="tt-title">Aggregate publisher metrics</span>
                   </div>
                   <div class="task-tracker-item status-todo">
-                    <span class="tt-icon" aria-hidden="true">&#9675;</span>
+                    <span class="tt-icon" aria-hidden="true">&#9675;</span><span class="sr-only">To do:</span>
                     <span class="tt-id">[3]</span>
                     <span class="tt-title">Write QA summary</span>
                   </div>
@@ -635,6 +761,26 @@ print(f"Mean latency: {average:.2f} ms")</code></pre>
         </summary>
         <div class="section-body">
 <div class="card-grid">
+        <article class="card">
+          <h3>Link Tiles</h3>
+          <p class="card-copy">Standalone tiles for launchpads and modal action grids; app icons from the approved logos.</p>
+          <div class="links">
+            <a class="link-tile link-has-app-icon" href="#">
+              <span class="link-app-icon" aria-hidden="true"><img class="link-app-icon__img theme-logo" src="../logos/explorer-favicon.svg" data-logo-dark="../logos/explorer-favicon.svg" data-logo-light="../logos/explorer-favicon-light.svg" alt="" /></span>
+              <span class="link-title">Explorer</span>
+              <span class="link-meta">Reporting and deal analysis.</span>
+            </a>
+            <a class="link-tile link-has-app-icon" href="#">
+              <span class="link-app-icon" aria-hidden="true"><img class="link-app-icon__img theme-logo" src="../logos/lens-favicon.svg" data-logo-dark="../logos/lens-favicon.svg" data-logo-light="../logos/lens-favicon-light.svg" alt="" /></span>
+              <span class="link-title">Lens</span>
+              <span class="link-meta">Inventory classification runs.</span>
+            </a>
+            <a class="link-tile" href="#">
+              <span class="link-title">Flag design system</span>
+              <span class="link-meta">Tokens, icons and components.</span>
+            </a>
+          </div>
+        </article>
         <article class="card">
           <h3>Clickable Action Cards</h3>
           <p class="card-copy">Use this Home-modeled card pattern for primary navigation actions and app launch tiles. Includes default, hover/focus, selected, and disabled states.</p>
@@ -677,7 +823,7 @@ print(f"Mean latency: {average:.2f} ms")</code></pre>
           </div>
         </article>
       </div>
-      <div class="table-wrap">
+      <div class="table-wrap" tabindex="0" role="region" aria-label="Task status table (scrolls horizontally)">
         <table>
           <thead><tr><th scope="col">ID</th><th scope="col">Name</th><th scope="col">Status</th></tr></thead>
           <tbody>

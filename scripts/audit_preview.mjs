@@ -1,0 +1,396 @@
+#!/usr/bin/env node
+// audit_preview.mjs — render the preview in Chromium and audit what is
+// actually painted: axe-core (WCAG 2 A/AA, including computed text contrast)
+// in light and dark at 1440 and 390 wide, with the interactive states that
+// only exist after interaction: the date picker open in range mode, the
+// date-time picker open with its time controls, keyboard focus moved
+// through every focusable element, and the arrow keys moved onto each kind
+// of calendar day to check its focus ring.
+//
+// Needs Node, Playwright with Chromium, and axe-core; nothing else in Flag
+// does, so CI runs the static checks (make check) and this runs locally:
+//
+//   npm install --no-save --prefix /tmp/flag-audit playwright axe-core
+//   NODE_PATH=/tmp/flag-audit/node_modules node scripts/audit_preview.mjs
+//
+// (or `make audit`, which does the same). Exits 1 on any violation.
+
+import { createServer } from "node:http";
+import { createRequire } from "node:module";
+import { readFile } from "node:fs/promises";
+import { existsSync, readFileSync } from "node:fs";
+import { extname, join, normalize, resolve, dirname } from "node:path";
+import { fileURLToPath, pathToFileURL } from "node:url";
+
+const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..", "design-system");
+
+function load(name) {
+  const bases = [import.meta.url, ...(process.env.NODE_PATH || "").split(":").filter(Boolean).map((p) => join(p, "noop.js"))];
+  for (const base of bases) {
+    try {
+      return createRequire(base).resolve(name);
+    } catch {}
+  }
+  throw new Error(`cannot find ${name}; install it and set NODE_PATH (see the header of this file)`);
+}
+
+const pw = await import(pathToFileURL(load("playwright")).href);
+const chromium = pw.chromium || pw.default.chromium;
+const AXE = readFileSync(load("axe-core/axe.min.js"), "utf8");
+
+const TYPES = { ".html": "text/html", ".css": "text/css", ".js": "text/javascript", ".svg": "image/svg+xml",
+  ".png": "image/png", ".woff2": "font/woff2", ".woff": "font/woff", ".json": "application/json" };
+const server = createServer(async (req, res) => {
+  const path = normalize(decodeURIComponent(new URL(req.url, "http://x").pathname)).replace(/^(\.\.[/\\])+/, "");
+  const file = join(ROOT, path);
+  if (!file.startsWith(ROOT) || !existsSync(file)) { res.writeHead(404); res.end(); return; }
+  res.writeHead(200, { "content-type": TYPES[extname(file)] || "application/octet-stream" });
+  res.end(await readFile(file));
+}).listen(0, "127.0.0.1");
+await new Promise((r) => server.on("listening", r));
+const base = `http://127.0.0.1:${server.address().port}`;
+
+const PAGES = ["/preview/index.html", "/preview/email-preview.html", "/email-safe.html"];
+const browser = await chromium.launch();
+let failures = 0;
+
+// Color helpers shared by the in-page checks below.
+const HELPERS_JS = `
+  const parse = (s) => {
+    const out = [];
+    for (const m of s.matchAll(/rgba?\\(([^)]+)\\)|color\\(srgb ([^)]+)\\)|transparent/g)) {
+      if (m[0] === "transparent") { out.push([0, 0, 0, 0]); continue; }
+      if (m[1]) { const v = m[1].split(/[ ,/]+/).filter(Boolean).map(Number); out.push([v[0], v[1], v[2], v.length > 3 ? v[3] : 1]); }
+      else { const v = m[2].split(/[ /]+/).filter(Boolean).map(Number); out.push([v[0] * 255, v[1] * 255, v[2] * 255, v.length > 3 ? v[3] : 1]); }
+    }
+    return out;
+  };
+  const over = (t, b) => [0, 1, 2].map((i) => t[i] * t[3] + b[i] * (1 - t[3])).concat(1);
+  const lum = (c) => { const f = (x) => { x /= 255; return x <= 0.04045 ? x / 12.92 : ((x + 0.055) / 1.055) ** 2.4; };
+    return 0.2126 * f(c[0]) + 0.7152 * f(c[1]) + 0.0722 * f(c[2]); };
+  const ratio = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p); return (x + 0.05) / (y + 0.05); };
+  const visible = (el) => { const r = el.getBoundingClientRect(); if (r.width < 2 || r.height < 2) return false;
+    const cs = getComputedStyle(el); if (cs.visibility === "hidden" || cs.clipPath.includes("inset(50%") || cs.clip === "rect(0px, 0px, 0px, 0px)") return false;
+    for (let n = el; n; n = n.parentElement) { const c = getComputedStyle(n); if (c.display === "none" || parseFloat(c.opacity) === 0) return false; }
+    return true; };
+  const disabled = (el) => {
+    if (el.closest(":disabled, [aria-disabled='true'], .is-disabled, .flatpickr-disabled, .notAllowed")) return true;
+    const label = el.closest("label");
+    return !!(label && label.control && label.control.disabled);
+  };
+  // Every color the element's backdrop can be (gradient stops are each a
+  // candidate), compositing translucent layers from node upward until an
+  // opaque one, and the product of opacities on the way.
+  const backdrop = (node) => {
+    let opacity = 1; const layers = [];
+    for (let n = node; n; n = n.parentElement) {
+      const c = getComputedStyle(n); opacity *= parseFloat(c.opacity);
+      // background-image layers, top first; each gradient layer's stops are candidates.
+      let img = null;
+      if (c.backgroundImage.includes("gradient")) {
+        const parts = []; let depth = 0, cur = "";
+        for (const ch of c.backgroundImage) { if (ch === "(") depth++; if (ch === ")") depth--; if (ch === "," && depth === 0) { parts.push(cur); cur = ""; } else cur += ch; }
+        parts.push(cur);
+        img = parts.map((s) => parse(s)).filter((l) => l.length);
+      }
+      const col = parse(c.backgroundColor)[0];
+      layers.push({ col, img });
+      const opaqueImg = img && img.length && img[img.length - 1].every((s) => s[3] === 1);
+      if ((col && col[3] === 1) || opaqueImg) break;
+    }
+    let backs = [[255, 255, 255, 1]];
+    for (const L of layers.reverse()) {
+      if (L.col && L.col[3] > 0) backs = backs.map((b) => over(L.col, b));
+      if (L.img) for (const stops of [...L.img].reverse()) {
+        const nb = []; for (const b of backs) for (const s of stops) nb.push(over(s, b));
+        backs = [...new Map(nb.map((c) => [c.map(Math.round).join(), c])).values()].slice(0, 96);
+      }
+    }
+    return { backs, opacity };
+  };
+  // Pull the paint of a non-text indicator: a property's color, or every stop
+  // of a background gradient.
+  const paints = (el, prop) => {
+    const cs = getComputedStyle(el);
+    if (prop === "background") {
+      const img = cs.backgroundImage.includes("gradient") ? parse(cs.backgroundImage) : [];
+      return img.length ? img.filter((c) => c[3] > 0) : parse(cs.backgroundColor);
+    }
+    return parse(cs[prop]);
+  };
+`;
+
+// Computed text contrast, including what axe reports as "incomplete": text
+// over gradients is measured against every color stop of every gradient
+// beneath it (the worst stop counts), translucent layers are composited, and
+// ancestor opacity fades the text. Disabled controls are exempt (WCAG 1.4.3).
+const CONTRAST_JS = `(() => {
+${HELPERS_JS}
+  const fails = [];
+  const els = [...document.querySelectorAll("body *")].filter((el) =>
+    ([...el.childNodes].some((n) => n.nodeType === 3 && n.textContent.trim()) || (el.matches("input:not([type]), input[type=text], input[type=search], input[type=email], input[type=password], input[type=tel], input[type=url], input[type=number], input[type=date], input[type=time], input[type=datetime-local], textarea") && el.value)) && !el.closest("svg, style, script, iframe"));
+  for (const el of els) {
+    if (!visible(el) || disabled(el)) continue;
+    const cs = getComputedStyle(el);
+    let fg = parse(cs.color)[0]; if (!fg) continue;
+    const { backs, opacity } = backdrop(el);
+    fg = [fg[0], fg[1], fg[2], fg[3] * opacity];
+    const size = parseFloat(cs.fontSize); const bold = parseInt(cs.fontWeight, 10) >= 700;
+    const floor = size >= 24 || (bold && size >= 18.66) ? 3 : 4.5;
+    let worst = 99, at = null; for (const b of backs) { const r = ratio(over(fg, b), b); if (r < worst) { worst = r; at = b; } }
+    if (worst < floor - 0.005) fails.push(\`\${worst.toFixed(2)}:1 < \${floor} (over rgb(\${at.slice(0, 3).map(Math.round).join(",")})) on \${el.tagName.toLowerCase()}.\${String(el.className).trim().replace(/\\s+/g, ".")} "\${(el.value || el.textContent).trim().slice(0, 30)}"\`);
+  }
+  // Non-text, state-bearing indicators (WCAG 1.4.11): each painted color
+  // against what the indicator sits on, 3:1.
+  const NONTEXT = [
+    [".spinner", "borderTopColor"],
+    [".file-item-progress-fill", "background"],
+    [".ds-checkbox__box", "borderTopColor"],
+    [".ds-checkbox-input:checked + .ds-checkbox .ds-checkbox__box", "borderTopColor"],
+    [".input-file-select input", "borderTopColor"],
+    [".switch", "background"],
+    [".switch__knob", "background"],
+    [".seg-option[aria-pressed='true']", "background"],
+    [".flatpickr-calendar.open .flatpickr-day.inRange", "background"],
+    [".flatpickr-calendar.open .flatpickr-day.selected", "background"],
+  ];
+  // Two-part indicators: the part against its own track, the track
+  // composited over whatever is under it. [part selector, part paint,
+  // track element (from the part), track paint].
+  const TWO_PART = [
+    [".spinner", "borderTopColor", (el) => el, "borderRightColor"],
+    [".file-item-progress-fill", "background", (el) => el.parentElement, "background"],
+    [".switch__knob", "background", (el) => el.closest(".switch"), "background"],
+  ];
+  for (const [sel, prop, trackOf, trackProp] of TWO_PART) {
+    for (const el of document.querySelectorAll(sel)) {
+      const track = trackOf(el);
+      if (!track || !visible(el) || disabled(el)) continue;
+      const under = backdrop(track.parentElement).backs;
+      const tracks = [];
+      for (const t of paints(track, trackProp)) for (const b of under) tracks.push(over(t, b));
+      for (const c of paints(el, prop)) {
+        let worst = 99; for (const t of tracks) worst = Math.min(worst, ratio(over(c, t), t));
+        if (worst < 3 - 0.005) fails.push(\`\${worst.toFixed(2)}:1 < 3 (\${sel} \${prop} against its track) on \${(track.parentElement.className || track.parentElement.tagName).toString().slice(0, 40)}\`);
+      }
+    }
+  }
+  for (const [sel, prop] of NONTEXT) {
+    for (const el of document.querySelectorAll(sel)) {
+      if (!visible(el) || disabled(el)) continue;
+      const { backs } = backdrop(el.parentElement);
+      for (const c of paints(el, prop)) {
+        let worst = 99; for (const b of backs) worst = Math.min(worst, ratio(over(c, b), b));
+        if (worst < 3 - 0.005) fails.push(\`\${worst.toFixed(2)}:1 < 3 (non-text \${prop}) on \${sel}\`);
+      }
+    }
+  }
+  return fails;
+})()`;
+
+// Keyboard focus on a calendar day: the focused day (document.activeElement)
+// must match :focus-visible and paint an inset ring, at least 2px, whose
+// color holds 3:1 against every color of the day's own fill (gradient stops
+// each count, translucent fills composited over the calendar).
+const DAY_RING_JS = `(() => {
+${HELPERS_JS}
+  const el = document.activeElement;
+  if (!el || !el.classList.contains("flatpickr-day")) return "focus is not on a day (" + (el ? el.outerHTML.slice(0, 80) : "none") + ")";
+  if (!el.matches(":focus-visible")) return "the day is focused but not :focus-visible";
+  const shadow = getComputedStyle(el).boxShadow;
+  const ring = shadow.split(/,(?![^(]*\\))/).map((l) => l.trim()).find((l) => /\\binset\\b/.test(l));
+  if (!ring) return "no inset ring (box-shadow: " + shadow + ")";
+  const spread = parseFloat((ring.replace(/rgba?\\([^)]*\\)/, "").match(/-?[\\d.]+px/g) || []).pop());
+  if (!(spread >= 2)) return "ring is " + spread + "px, needs 2px";
+  const color = parse(ring)[0];
+  const { backs } = backdrop(el);
+  let worst = 99; for (const b of backs) worst = Math.min(worst, ratio(over(color, b), b));
+  return worst < 3 - 0.005 ? "ring " + worst.toFixed(2) + ":1 against the day's fill, needs 3:1" : null;
+})()`;
+
+async function contrast(page, label) {
+  const fails = [...new Set(await page.evaluate(CONTRAST_JS))];
+  failures += fails.length;
+  for (const f of fails.slice(0, 20)) console.log(`FAIL ${label}: contrast ${f}`);
+  if (fails.length > 20) console.log(`     ... ${fails.length - 20} more`);
+}
+
+// Keyboard onto the open calendar, then arrow to each kind of day and check
+// its focus ring. flatpickr moves focus into the grid on ArrowDown from the
+// field only when typing is off (with allowInput, which the preview enables,
+// the field keeps the arrow keys), so typing is switched off for this check:
+// from then on it is real key presses only.
+const DAY_KINDS = {
+  "range start": ".startRange",
+  "range end": ".endRange",
+  "in-range day": ".inRange:not(.startRange):not(.endRange)",
+  "today": ".today:not(.inRange):not(.startRange):not(.endRange):not(.selected)",
+  "plain day": ":not(.inRange):not(.startRange):not(.endRange):not(.selected):not(.today):not(.flatpickr-disabled):not(.notAllowed)",
+};
+async function dayFocus(page, label) {
+  await page.evaluate(() => { const fp = document.querySelector("#f-date")._flatpickr; fp.set("allowInput", false); (fp.altInput || fp.input).focus(); });
+  await page.keyboard.press("ArrowDown");
+  try {
+    await dayFocusSteps(page, label);
+  } finally {
+    await page.evaluate(() => document.querySelector("#f-date")._flatpickr.set("allowInput", true));
+  }
+}
+async function dayFocusSteps(page, label) {
+  for (const [kind, sel] of Object.entries(DAY_KINDS)) {
+    let reached = false;
+    for (let step = 0; step < 50; step++) {
+      const dir = await page.evaluate((sel) => {
+        const cur = document.activeElement;
+        const days = [...document.querySelectorAll(".flatpickr-calendar.open .dayContainer .flatpickr-day")];
+        const i = days.indexOf(cur);
+        if (i < 0) return "lost";
+        if (cur.matches(".flatpickr-day" + sel)) return "here";
+        const t = days.findIndex((d) => d.matches(".flatpickr-day" + sel));
+        return t < 0 ? "none" : t > i ? "ArrowRight" : "ArrowLeft";
+      }, sel);
+      if (dir === "here") { reached = true; break; }
+      if (dir === "none") break;
+      if (dir === "lost") { failures++; console.log(`FAIL ${label}: keyboard focus left the calendar on the way to the ${kind}`); return; }
+      await page.keyboard.press(dir);
+    }
+    if (!reached) continue; // this range has no such day in view
+    const bad = await page.evaluate(DAY_RING_JS);
+    if (bad) { failures++; console.log(`FAIL ${label}: ${kind} with keyboard focus: ${bad}`); }
+  }
+}
+
+async function axe(page, label) {
+  await contrast(page, label);
+  await page.addScriptTag({ content: AXE });
+  const violations = await page.evaluate(async () =>
+    (await window.axe.run(document, { runOnly: ["wcag2a", "wcag2aa"] })).violations.map((v) => ({
+      id: v.id, nodes: v.nodes.map((n) => `${n.target.join(" ")} :: ${(n.any[0] || {}).message || n.failureSummary}`),
+    })));
+  for (const v of violations) {
+    failures += v.nodes.length;
+    console.log(`FAIL ${label}: ${v.id} (${v.nodes.length})`);
+    for (const n of v.nodes.slice(0, 12)) console.log(`     ${n.slice(0, 220)}`);
+  }
+  return violations.length;
+}
+
+for (const theme of ["light", "dark"]) {
+  for (const width of [1440, 390]) {
+    const ctx = await browser.newContext({ viewport: { width, height: 900 }, colorScheme: theme, reducedMotion: "reduce" });
+    await ctx.addInitScript((t) => { try { localStorage.setItem("flag-theme-preference", t); } catch {} }, theme);
+    const page = await ctx.newPage();
+    page.on("pageerror", (e) => { failures++; console.log(`FAIL ${theme} ${width}: page error ${e.message}`); });
+    for (const path of PAGES) {
+      await page.goto(base + path, { waitUntil: "networkidle" });
+      await page.evaluate(() => document.fonts.ready);
+      await axe(page, `${theme} ${width} ${path}`);
+      // No horizontal page scroll at any width.
+      const overflow = await page.evaluate(() => document.documentElement.scrollWidth - window.innerWidth);
+      if (overflow > 0) { failures++; console.log(`FAIL ${theme} ${width} ${path}: page scrolls sideways by ${overflow}px`); }
+      if (path !== "/preview/index.html") continue;
+
+      // Unclassed native controls keep the browser's rendering: components.css
+      // must not turn third-party checkboxes, radios, ranges or file inputs
+      // into empty text-field shells.
+      // Each is compared with a pristine twin in a shadow root, where page
+      // styles do not reach.
+      const shelled = await page.evaluate(() => {
+        const host = document.createElement("div");
+        document.body.append(host);
+        const root = host.attachShadow({ mode: "open" });
+        const out = [];
+        for (const el of document.querySelectorAll("[data-native-controls] input")) {
+          const twin = document.createElement("input");
+          twin.type = el.type;
+          // font: inherit is Flag's one rule for every control (normalize);
+          // give the twin the same font so only the shell would show.
+          twin.style.font = getComputedStyle(el).font;
+          root.append(twin);
+          const a = getComputedStyle(el), b = getComputedStyle(twin);
+          const bad = ["appearance", "height", "border-top-style", "padding-left", "background-color"]
+            .filter((p) => a.getPropertyValue(p) !== b.getPropertyValue(p))
+            .map((p) => `${p} ${a.getPropertyValue(p)} (native ${b.getPropertyValue(p)})`);
+          if (Math.abs(el.getBoundingClientRect().width - twin.getBoundingClientRect().width) > 1) bad.push("width changed");
+          if (bad.length) out.push(`${el.type}: ${bad.join(", ")}`);
+        }
+        host.remove();
+        return out;
+      });
+      for (const s of shelled) { failures++; console.log(`FAIL ${theme} ${width}: native ${s}`); }
+
+      // Every focusable element must show a visible focus indicator.
+      const unfocused = await page.evaluate(async () => {
+        const out = [];
+        const sel = "a[href]:not([tabindex='-1']), button:not([disabled]), input:not([disabled]):not([tabindex='-1']), select, textarea, summary, [tabindex='0']";
+        for (const el of document.querySelectorAll(sel)) {
+          if (!el.getClientRects().length || getComputedStyle(el).visibility === "hidden") continue;
+          el.focus({ focusVisible: true });
+          if (document.activeElement !== el) continue;
+          const shown = (node) => {
+            for (const n of [node, node.parentElement, node.nextElementSibling && node.nextElementSibling.querySelector && node.nextElementSibling]) {
+              if (!n) continue;
+              const cs = getComputedStyle(n);
+              if ((cs.outlineStyle !== "none" && parseFloat(cs.outlineWidth) > 0) || (cs.boxShadow && cs.boxShadow !== "none")) return true;
+              const box = n.querySelector && n.querySelector(".ds-checkbox__box");
+              if (box && getComputedStyle(box).boxShadow !== "none") return true;
+            }
+            return false;
+          };
+          if (!shown(el)) out.push(el.outerHTML.slice(0, 120));
+        }
+        document.activeElement && document.activeElement.blur();
+        return out;
+      });
+      for (const u of unfocused) { failures++; console.log(`FAIL ${theme} ${width}: no visible focus on ${u}`); }
+
+      // Date picker in range mode: a range inside the month, ranges that
+      // cross into the previous and the next month (selected and in-range
+      // days that are also prevMonthDay / nextMonthDay), and one around today.
+      const RANGES = {
+        "range in month": "[new Date(y, m, 5), new Date(y, m, 12)]",
+        "range from previous month": "[new Date(y, m - 1, 27), new Date(y, m, 3)]",
+        "range into next month": "[new Date(y, m, 27), new Date(y, m + 1, 3)]",
+        "range around today": "[new Date(y, m, d - 2), new Date(y, m, d + 2)]",
+      };
+      for (const [name, expr] of Object.entries(RANGES)) {
+        const opened = await page.evaluate((expr) => {
+          const date = document.querySelector("#f-date");
+          if (!date || !date._flatpickr) return false;
+          const fp = date._flatpickr;
+          const now = new Date(); const y = now.getFullYear(), m = now.getMonth(), d = now.getDate();
+          const range = eval(expr);
+          fp.set("mode", "range");
+          fp.setDate(range, false);
+          fp.jumpToDate(new Date(y, m, 15));
+          fp.open();
+          return true;
+        }, expr);
+        if (!opened) continue;
+        await page.waitForFunction(() => { const c = document.querySelector(".flatpickr-calendar.open"); return c && getComputedStyle(c).opacity === "1" && !c.getAnimations().some((a) => a.playState === "running"); }, null, { timeout: 5000 });
+        await axe(page, `${theme} ${width} date picker (${name})`);
+        await dayFocus(page, `${theme} ${width} date picker (${name})`);
+        await page.evaluate(() => document.querySelector("#f-date")._flatpickr.close());
+      }
+      const timed = await page.evaluate(() => {
+        const dt = document.querySelector("#f-datetime");
+        if (!dt || !dt._flatpickr) return false;
+        dt._flatpickr.open();
+        return true;
+      });
+      if (timed) {
+        await page.waitForFunction(() => { const c = document.querySelector(".flatpickr-calendar.open"); return c && getComputedStyle(c).opacity === "1" && !c.getAnimations().some((a) => a.playState === "running"); }, null, { timeout: 5000 });
+        await axe(page, `${theme} ${width} date-time picker`);
+        await page.evaluate(() => document.querySelector("#f-datetime")._flatpickr.close());
+      }
+    }
+    await ctx.close();
+  }
+}
+await browser.close();
+server.close();
+if (failures) {
+  console.log(`audit-preview: ${failures} problem(s)`);
+  process.exit(1);
+}
+console.log("audit-preview: ok (axe WCAG 2 A/AA, text and non-text contrast as painted, visible focus, calendar-day focus rings by keyboard, light and dark, 1440 and 390, pickers open)");

@@ -19,22 +19,23 @@ Palette roots observed across products:
 
 Canonical semantic tokens:
 
-| Token | Value | Purpose | Rules |
-|---|---|---|---|
-| `color.primary` | `#7272AB` | Primary CTA and key emphasis | Use only for primary actions and active states |
-| `color.secondary` | `#586F7C` | Secondary controls and supportive accents | Never used as danger/success |
-| `color.accent` | `#9DA7EF` | Highlights, focus, selected states | Use sparingly for emphasis |
-| `color.bg` | `#1A0B1E` | App background base | Default shell background |
-| `color.surface.1` | `#241B31` | Primary panel/card surface | Main content containers |
-| `color.surface.2` | `#2F2741` | Elevated/interactive surface | Hovered cards, modal nesting |
-| `color.border` | `rgba(114, 114, 171, 0.35)` | Standard border | Default border token |
-| `color.text.primary` | `#FFFFFF` | High-emphasis text | Headings, key labels |
-| `color.text.secondary` | `#D2D9DE` | Secondary text | Metadata, support copy |
-| `color.text.muted` | `#BEB6CD` | Tertiary text | Placeholders and low-emphasis labels |
-| `color.success` | `#50FA7B` | Positive state | Status/success messages only |
-| `color.warning` | `#FFB86C` | Warning state | Caution messages only |
-| `color.danger` | `#FF5555` | Error/destructive | Error and destructive actions only |
-| `color.info` | `#8A8BC0` | Informational state | Neutral/informational badges |
+| Token | Dark | Light | Purpose | Rules |
+|---|---|---|---|---|
+| `--color-primary` | `#7272AB` | `#7272AB` | Primary emphasis, active states | Never put a label on it; filled controls use `--color-primary-fill` |
+| `--color-secondary` | `#586F7C` | `#586F7C` | Secondary controls and supportive accents | Never used as danger/success; light-theme link color |
+| `--color-accent` | `#9DA7EF` | `#5A64B8` | Highlights, focus, selected states | Use sparingly; light value deepened from `#9DA7EF` (2.1:1) so focus rings and focus/hover borders reach 3:1 |
+| `--color-bg` | `#1A0B1E` | `#F4F6FB` | App background base | Default shell background |
+| `--color-surface-1` | `#241B31` | `#FFFFFF` | Primary panel/card surface | Main content containers |
+| `--color-surface-2` | `#2F2741` | `#E9EEFC` | Elevated/interactive surface | Hovered cards, popovers, modal nesting |
+| `--color-border` | `rgba(114, 114, 171, 0.35)` | `rgba(38, 55, 92, 0.2)` | Standard border | Default border token |
+| `--color-text-primary` | `#FFFFFF` | `#141824` | High-emphasis text | Headings, key labels |
+| `--color-text-secondary` | `#D2D9DE` | `#33415F` | Secondary text | Metadata, support copy |
+| `--color-text-muted` | `#BEB6CD` | `#5C6A87` | Tertiary text | Placeholders and low-emphasis labels |
+| `--color-link` | `#9DA7EF` | `#5F5F97` | Link text | Default link color; 4.5:1+ on every surface |
+| `--color-success` | `#50FA7B` | `#1E7A3F` | Positive state | Status/success messages only |
+| `--color-warning` | `#FF8847` | `#8F3E10` | Warning state | Caution messages only |
+| `--color-danger` | `#FF5757` | `#B3261E` | Error/destructive | Error and destructive actions only |
+| `--color-info` | `#8E8EC2` | `#4F5496` | Informational state | Neutral/informational badges |
 
 Connection picker tokens (switch, compact search, pills, kickers, group
 headers, match highlight, state panels, scrim; see COMPONENTS.md
@@ -50,7 +51,7 @@ headers, match highlight, state panels, scrim; see COMPONENTS.md
 | `color.picker.selectedBg` / `selectedBorder` | `rgba(89,86,213,0.2)` / `rgba(157,167,239,0.4)` | Active row and selected filter fill; popover/modal border |
 | `color.picker.rowActiveBorder` | `#9DA7EF` (light `#6262A0`) | Active row and selected filter ring (6.2:1 / 4.8:1 on the popover) |
 | `color.picker.pillBorder` / `pillHoverBg` | `rgba(255,255,255,0.14)` / `rgba(255,255,255,0.06)` | Small pill button |
-| `color.picker.switchTrackOff` / `switchKnob` | `#7A7392` / `#F4F5F9` (light `#80829E` / `#FFFFFF`); each off track is at least 3:1 on the popover and under the knob | Switch |
+| `color.picker.switchTrackOn` / `switchTrackOff` / `switchKnob` | `#7976DD` / `#837D9A` / `#F4F5F9` (light `#6262A0` / `#80829E` / `#FFFFFF`); each track is at least 3:1 on the popover and its active row, and the knob at least 3:1 on each track | Switch |
 | `color.picker.matchBg` | `rgba(157,167,239,0.22)` | Search match highlight |
 | `color.picker.stateOk` / `stateWarn` / `stateDeny` | `#4ECB8F` / `#E0A94A` / `#E08AA3` (light `#1B7950` / `#8E611E` / `#9C546A`, each ≥ 4.5:1) | Status kickers, dots and icons |
 | `color.picker.panel{Ok,Warn,Deny}{Bg,Border}` | 12% fill / 30-32% border of the state color | State panels |
@@ -58,31 +59,110 @@ headers, match highlight, state panels, scrim; see COMPONENTS.md
 | `color.picker.railBg` | `rgba(0,0,0,0.16)` | Modal filter rail |
 | `color.picker.scrim` | `rgba(26,11,30,0.55)` | Modal backdrop (with a 3px blur) |
 | `shadow.switchKnob` | `none` (light: `0 1px 2px rgba(26,11,30,0.28)`) | Switch knob lift in light mode |
-| `shadow.focusRingPicker` | `--focus-ring` (light: 2px white + 2px `#6262A0`, 5.6:1 on white) | Focus ring on picker fields, pills, switches and icon buttons |
+| `shadow.focusRingPicker` | `--focus-ring` in both themes | Focus ring on picker fields, pills, switches and icon buttons. Light used a separate `#6262A0` ring while the base light ring was under 3:1; with the light accent deepened it inherits `--focus-ring`, and stays a token so product CSS keeps resolving |
 | `shadow.popover` | `0 24px 60px -22px rgba(0,0,0,0.55)` | Popover and modal elevation |
+
+Control edge: `--color-control-border` (`#7A7392` dark, `#586F7C` light) draws
+the edge of a small control with no other boundary (checkbox box, radio
+ring); it is at least 3:1 on every surface. Checked checkboxes switch the edge
+to `--color-accent`.
+
+Non-text indicators (spinner arcs, the upload progress fill, checkbox and
+radio edges and marks, switch tracks and knob, selected fills, the date-range
+fill, the today ring, focus rings) are each measured at 3:1 against what they
+are painted on, overlays composited, in both themes: `check_tokens.py` holds
+the pairs and `check_refs.py` checks that each component rule paints the
+token that was measured. An indicator made of two painted parts (the
+spinner's arc and track, the progress fill and track, the switch knob and
+track) is also measured part against part, the track composited over each
+surface it can sit on (`TWO_PART` in `check_tokens.py`); `make audit` repeats
+that measurement on the rendered page. Flag leaves `<input type="range">`
+native, so it adds no pair.
 
 Neutral utility tokens:
 - `color.white` = `#FFFFFF`
 - `color.black` = `#000000`
 
 Default semantic usage clarifications:
-- Links and email-address affordances default to `color.secondary`.
-- Primary buttons in light theme use a solid `color.primary` fill with `color.white` text.
-- Selected calendar days in light theme use a solid `color.primary` fill with `color.white` text.
+- Links and email-address affordances use `--color-link`. Light-theme
+  products may keep the long-standing `--color-secondary` (4.5:1+ there) with
+  `--color-primary-hover` on hover; `--color-secondary` is not a dark-theme
+  link color (2.7-3.6:1). A link inside running text is underlined, not told
+  apart by color alone.
+- Primary buttons and selected calendar days in light theme use a solid
+  `--color-primary-fill` with `--color-on-primary-fill` text (see "Filled
+  controls" below).
+
+### Filled controls
+
+White on `--color-primary` (`#7272AB`) is 4.46:1, just under WCAG AA. Every
+filled control therefore paints its label on a measured fill:
+
+| Token | Value | Use |
+|---|---|---|
+| `--color-primary-fill` | `#7171A9`: primary 1% toward black (4.53:1 under white) | Filled buttons, selected chips/options, selected calendar day, segmented selection |
+| `--color-primary-fill-hover` | `#656598`: primary 11% toward black (5.43:1) | Hover of the above: hover only ever raises contrast |
+| `--color-on-primary` / `--color-on-primary-fill` | `#FFFFFF` | The label on either fill (`--color-on-primary-fill` reads `--color-on-primary`) |
+| `--color-secondary-fill` / `-hover` | `#586F7C` / `#4F6470` (10% toward black) | Far stop of the action gradient |
+| `--gradient-action-fill` / `-hover` | primary-fill to secondary-fill (light: the hover stops) | Primary buttons in dark; the label holds 4.5:1 at every point of the blend |
+
+`--color-primary` stays for things with nothing painted on them (an active
+bar, a checkbox accent, tints, borders); `--gradient-action-primary` stays for
+decoration. Neither carries a label. Upstreamed from fleet's measured fill
+pair. Every token is a static value: the mixes are precomputed, because a
+browser without `color-mix()` drops a custom property that uses it and would
+paint a transparent button under a white label (`check_tokens.py` rejects
+newer color functions in the token sheet).
+
+### Wells, syntax and focus
+
+- `--color-surface-inset`: a recessed in-flow surface (code and output wells,
+  preview toolbars, tool-result panels). Dark: the same black wash as
+  `--color-overlay-strong`; light: opaque `#EEF1F2`, so a well stays
+  near-white inside any card. `--color-overlay-strong` is the modal scrim
+  only. Wells paint exactly this token (`check_refs.py` enforces it for the
+  code display), so the syntax contrast measured here is what renders.
+- `--color-syntax-{keyword,string,number,comment,function,builtin,operator,punctuation}`:
+  code highlighting. Each holds 4.5:1 in an inset well over `--color-bg`,
+  `--color-surface-1` and `--color-surface-2`, in both themes.
+- `--focus-ring`: 2px of the page color, then 2px of `--color-accent`. The
+  outer color reaches 3:1 against every surface in both themes (WCAG 1.4.11);
+  in light that needed the deeper light accent (`#5A64B8`; it was `#9DA7EF`,
+  2.1:1).
+- `--focus-ring-day`, `--focus-ring-day-on-range`, `--focus-ring-day-on-fill`:
+  keyboard focus on a calendar day. Neighbouring days would cover an outer
+  ring, so each is a 2px inset ring in the color that holds 3:1 against the
+  fill it sits on: `--color-accent` on a plain or hovered day,
+  `--color-on-accent-strong` on `--color-accent-strong` (in range), and
+  `--color-on-primary-fill` on the selected fill (every stop of
+  `--gradient-action-fill`, and solid `--color-primary-fill` in light).
+
+### Contrast is measured, not asserted
+
+`scripts/check_tokens.py` (run by `make check` and CI) resolves the token
+sheet the way a browser does, including `var()` and `color-mix()`, and
+measures every text, badge, fill, gradient, switch and focus-ring pair above
+in both themes. A token change that drops a pair below 4.5:1 (text) or 3:1
+(non-text) fails the build.
 
 Status mapping for task/node badges:
 
-| Status | Foreground | Background | Border |
+| Status | Foreground (dark / light) | Background (dark / light) | Border (dark / light) |
 |---|---|---|---|
-| `pending` | `color.text.secondary` | `rgba(88,111,124,0.18)` | `rgba(88,111,124,0.55)` |
-| `scheduled` | `#E9DBB8` | `rgba(255,184,108,0.14)` | `rgba(255,184,108,0.55)` |
-| `assigned` | `#D4DEFF` | `rgba(138,139,192,0.18)` | `rgba(138,139,192,0.55)` |
-| `leased` | `#D4DEFF` | `rgba(138,139,192,0.14)` | `rgba(114,114,171,0.55)` |
-| `running` | `#D4DEFF` | `rgba(114,114,171,0.2)` | `rgba(114,114,171,0.6)` |
-| `analyzing` | `#D8E5FF` | `rgba(62,146,196,0.18)` | `rgba(62,146,196,0.52)` |
-| `success` | `#CBFDD8` | `rgba(80,250,123,0.14)` | `rgba(80,250,123,0.6)` |
-| `error` | `#FFD2D2` | `rgba(255,85,85,0.14)` | `rgba(255,85,85,0.6)` |
-| `cancelled` | `#D2D9DE` | `rgba(88,111,124,0.2)` | `rgba(88,111,124,0.52)` |
+| `pending` | `#D3DDE6` / `#33415F` | `rgba(124, 140, 152, 0.2)` / `rgba(124, 140, 152, 0.18)` | `rgba(124, 140, 152, 0.6)` / `rgba(124, 140, 152, 0.42)` |
+| `scheduled` | `#FFE4B8` / `#7A4A12` | `rgba(224, 171, 74, 0.18)` / `rgba(224, 171, 74, 0.24)` | `rgba(224, 171, 74, 0.62)` / `rgba(224, 171, 74, 0.54)` |
+| `assigned` | `#CFE3FF` / `#1F3F87` | `rgba(90, 132, 255, 0.2)` / `rgba(90, 132, 255, 0.2)` | `rgba(90, 132, 255, 0.58)` / `rgba(90, 132, 255, 0.44)` |
+| `leased` | `#E5D6FF` / `#5A2F8F` | `rgba(168, 119, 255, 0.2)` / `rgba(168, 119, 255, 0.18)` | `rgba(168, 119, 255, 0.58)` / `rgba(168, 119, 255, 0.42)` |
+| `running` | `#C9F0FF` / `#0F5E78` | `rgba(47, 183, 220, 0.22)` / `rgba(47, 183, 220, 0.22)` | `rgba(47, 183, 220, 0.62)` / `rgba(47, 183, 220, 0.46)` |
+| `analyzing` | `#D6DDFF` / `#3B3391` | `rgba(124, 107, 255, 0.22)` / `rgba(124, 107, 255, 0.2)` | `rgba(124, 107, 255, 0.62)` / `rgba(124, 107, 255, 0.44)` |
+| `success` | `#CBFDD8` / `#1C5A33` | `rgba(80, 250, 123, 0.14)` / `rgba(80, 250, 123, 0.16)` | `rgba(80, 250, 123, 0.6)` / `rgba(80, 250, 123, 0.42)` |
+| `warning` | `#FFD2A1` / `#8F3E10` | `rgba(255, 136, 71, 0.2)` / `rgba(255, 136, 71, 0.24)` | `rgba(255, 136, 71, 0.62)` / `rgba(255, 136, 71, 0.48)` |
+| `error` | `#FFD2D2` / `#7C1F1F` | `rgba(255, 85, 85, 0.14)` / `rgba(255, 85, 85, 0.18)` | `rgba(255, 85, 85, 0.6)` / `rgba(255, 85, 85, 0.44)` |
+| `cancelled` | `#C7CED4` / `#556074` | `rgba(108, 118, 130, 0.16)` / `rgba(108, 118, 130, 0.16)` | `rgba(108, 118, 130, 0.48)` / `rgba(108, 118, 130, 0.34)` |
+
+Each `--color-status-<state>-{fg,bg,border}` triple is a badge: the
+foreground holds 4.5:1 on its own tint over every surface, in both themes
+(`scripts/check_tokens.py`).
 
 ## 2) Typography
 
@@ -247,7 +327,8 @@ Surface gradients:
 - `gradient.surface.elevated` (`--gradient-surface-elevated`)
 
 Action/state gradients:
-- `gradient.action.primary` (`--gradient-action-primary`)
+- `gradient.action.fill` (`--gradient-action-fill`, hover `--gradient-action-fill-hover`): primary buttons, with `--color-on-primary-fill` labels
+- `gradient.action.primary` (`--gradient-action-primary`): decorative only, never under a label
 - `gradient.action.success` (`--gradient-action-success`)
 - `gradient.action.disabled` (`--gradient-action-disabled`)
 
@@ -258,6 +339,12 @@ Usage reference and rationale are in `BACKGROUNDS.md`.
 Theme behavior is canonical and token-based:
 - Dark theme: `:root` values applied via `html[data-theme="dark"]` (or default when no explicit override).
 - Light theme: `:root[data-theme="light"]` overrides in `tokens/design-tokens.css`.
+- Legacy alias: `body.theme-light` selects the light theme too (older product
+  markup). The token sheet applies its light overrides under it, and every
+  `[data-theme="light"]` rule in `components.css` carries a
+  `body.theme-light` twin in the same selector list (`check_refs.py` enforces
+  it), so a legacy page gets light components, not just light tokens. New
+  code sets `html[data-theme]`.
 - Theme preference storage key: `flag-theme-preference`.
 - Default mode: `system` (`prefers-color-scheme`), with explicit user choice taking precedence when stored.
 

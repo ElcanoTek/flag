@@ -81,9 +81,9 @@ Example table fallback:
 ```text
 Campaign Performance
 
-- Amazon US OLV | Current: $311,402 | Prior: $405,928 | WoW: -23.3%
-- Amazon CA Display | Current: $72,119 | Prior: $68,004 | WoW: +6.1%
-- Pepsi Display | Current: $54,882 | Prior: $58,131 | WoW: -5.6%
+- Acme US OLV | Current: $311,402 | Prior: $405,928 | WoW: -23.3%
+- Acme CA Display | Current: $72,119 | Prior: $68,004 | WoW: +6.1%
+- Globex Display | Current: $54,882 | Prior: $58,131 | WoW: -5.6%
 ```
 
 ## Review Fixtures

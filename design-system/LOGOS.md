@@ -24,6 +24,9 @@ This document defines approved logo assets, usage contexts, and implementation r
   - MOC app icon for dark theme surfaces.
 - `logos/moc-icon-192-light.png`
   - MOC app icon for light theme surfaces.
+- `logos/fleet-mark.svg`
+  - Fleet product mark, one file for both themes (`--color-primary` fill,
+    3:1 or more on every surface).
 
 ## Which Logo to Use
 
@@ -33,6 +36,7 @@ This document defines approved logo assets, usage contexts, and implementation r
   - Lens -> `lens-favicon.svg` (dark), `lens-favicon-light.svg` (light)
   - Explorer -> `explorer-favicon.svg` (dark), `explorer-favicon-light.svg` (light)
   - MOC -> `moc-icon-192.png` (dark), `moc-icon-192-light.png` (light)
+  - Fleet -> `fleet-mark.svg` (both themes)
   - Victoria surfaces -> `victoria-ship-white.svg` (dark), `victoria-ship-dark.svg` (light)
 - Internal launchpad/directory tiles:
   - suite/internal workspaces without a product-specific mark -> `elcano-mark-primary.svg`

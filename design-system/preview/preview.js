@@ -171,19 +171,22 @@
   }
 
   function updateThemeToggleUi(activeTheme) {
-    if (!toggleThemeBtn) {
-      return;
-    }
-
     var isDarkTheme = activeTheme === THEME_DARK;
-    toggleThemeBtn.setAttribute("aria-pressed", isDarkTheme ? "true" : "false");
-    toggleThemeBtn.setAttribute("aria-label", isDarkTheme ? "Switch to light mode" : "Switch to dark mode");
-    toggleThemeBtn.setAttribute("title", isDarkTheme ? "Dark mode" : "Light mode");
+    var nextAction = isDarkTheme ? "Switch to light mode" : "Switch to dark mode";
+    // The page toggle and every proxy (the header demo's) share one state,
+    // as theme/theme-controller.js does for every [data-flag-theme-toggle].
+    var toggles = document.querySelectorAll("#toggleTheme, [data-preview-theme-proxy]");
+    Array.prototype.forEach.call(toggles, function (toggle) {
+      toggle.setAttribute("aria-pressed", isDarkTheme ? "true" : "false");
+      toggle.setAttribute("aria-label", nextAction);
+      toggle.setAttribute("title", toggle === toggleThemeBtn ? (isDarkTheme ? "Dark mode" : "Light mode") : nextAction);
+    });
 
     if (toggleThemeBtnText) {
       toggleThemeBtnText.textContent = isDarkTheme ? "Dark mode" : "Light mode";
     }
   }
+
 
   function updateThemeLogos(activeTheme) {
     var useLightAsset = activeTheme === THEME_LIGHT;
@@ -279,25 +282,12 @@
 
       var chip = event.target.closest(".chip");
       if (chip) {
-        chip.classList.toggle("selected");
-        chip.setAttribute("aria-pressed", chip.classList.contains("selected") ? "true" : "false");
-        announce((chip.classList.contains("selected") ? 'Selected ' : 'Deselected ') + (chip.dataset.email || 'recipient'));
-      }
-    });
-
-    emailChips.addEventListener("keydown", function (event) {
-      if (event.target.closest(".chip-delete")) {
-        return;
-      }
-      var chip = event.target.closest('.chip[role="button"]');
-      if (!chip) {
-        return;
-      }
-      if (event.key === "Enter" || event.key === " ") {
-        event.preventDefault();
-        chip.classList.toggle("selected");
-        chip.setAttribute("aria-pressed", chip.classList.contains("selected") ? "true" : "false");
-        announce((chip.classList.contains("selected") ? 'Selected ' : 'Deselected ') + (chip.dataset.email || 'recipient'));
+        var selected = chip.classList.toggle("selected");
+        var toggle = chip.querySelector(".chip-toggle");
+        if (toggle) {
+          toggle.setAttribute("aria-pressed", selected ? "true" : "false");
+        }
+        announce((selected ? 'Selected ' : 'Deselected ') + (chip.dataset.email || 'recipient'));
       }
     });
   }
@@ -325,11 +315,13 @@
     var chip = document.createElement("span");
     chip.className = "chip chip-email selected";
     chip.dataset.email = email;
-    chip.setAttribute("role", "button");
-    chip.setAttribute("tabindex", "0");
-    chip.setAttribute("aria-pressed", "true");
-    chip.setAttribute("aria-label", "Toggle recipient " + email);
-    chip.appendChild(document.createTextNode(email));
+
+    var toggleBtn = document.createElement("button");
+    toggleBtn.type = "button";
+    toggleBtn.className = "chip-toggle";
+    toggleBtn.setAttribute("aria-pressed", "true");
+    toggleBtn.textContent = email;
+    chip.appendChild(toggleBtn);
 
     var deleteBtn = document.createElement("button");
     deleteBtn.type = "button";
@@ -355,6 +347,43 @@
       }
     });
   }
+
+  // Color swatches show the live token value for the current theme.
+  function refreshSwatches() {
+    var styles = window.getComputedStyle(document.documentElement);
+    Array.prototype.forEach.call(document.querySelectorAll(".swatch[data-token]"), function (swatch) {
+      var label = swatch.querySelector("[data-token-value]");
+      var value = styles.getPropertyValue(swatch.getAttribute("data-token")).trim();
+      if (label && value) {
+        label.textContent = value.toUpperCase();
+      }
+    });
+  }
+  refreshSwatches();
+  new MutationObserver(refreshSwatches).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+
+  // The demo header's theme toggle drives the page toggle.
+  Array.prototype.forEach.call(document.querySelectorAll("[data-preview-theme-proxy]"), function (proxy) {
+    proxy.addEventListener("click", function () {
+      var main = document.getElementById("toggleTheme");
+      if (main) {
+        main.click();
+      }
+    });
+  });
+
+  // Segmented controls: a button group with one aria-pressed option.
+  Array.prototype.forEach.call(document.querySelectorAll('.seg[role="group"]'), function (group) {
+    group.addEventListener("click", function (event) {
+      var option = event.target.closest(".seg-option");
+      if (!option || option.disabled) {
+        return;
+      }
+      Array.prototype.forEach.call(group.querySelectorAll(".seg-option"), function (other) {
+        other.setAttribute("aria-pressed", other === option ? "true" : "false");
+      });
+    });
+  });
 
   function cssEscape(value) {
     return value.replace(/(["\\])/g, "\\$1");

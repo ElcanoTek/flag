@@ -5,7 +5,7 @@ This directory is the single documented source of truth for shared UI design dec
 ## Read Order
 1. `AGENT_GUIDE.md` - strict implementation contract (human + agent)
 2. `TOKENS.md` - canonical foundations and token usage
-3. `FONTS.md` - **typography and font licensing: which brand face each product tier may ship**
+3. `FONTS.md` - **typography and font licensing: the two faces every product ships**
 4. `COMPONENTS.md` - component structures, states, and class mappings
 5. `INTERACTION_ACCESSIBILITY.md` - required interaction and accessibility behavior
 6. `SYSTEM.md` - system principles and architecture
@@ -22,6 +22,7 @@ This directory is the single documented source of truth for shared UI design dec
 - `fonts/nebula-sans/` - Nebula Sans, the text face (SIL OFL 1.1; notice in `OFL.txt`, which must travel with the binaries)
 - `fonts/hack/` - Hack, the code face (MIT + Bitstream Vera; notice in `LICENSE.md`, which must travel with the binaries)
 - `theme/theme-controller.js` - canonical light/dark theme controller for product adoption
+- `components/components.css` - the vendorable component stylesheet (Tier A); the preview loads a synced copy (`sh design-system/sync-preview.sh`)
 - `logos/` - approved SVG/PNG logo assets
 - `icons/core-icons.svg` - canonical SVG sprite
 - `EMAIL.md` - approved email modules, plain-text guidance, and email-only color rules
@@ -35,8 +36,8 @@ Source precedence (when docs and examples differ):
 
 ## Visual Review
 - `preview/index.html` - browsable style guide and component showcase
-- Live preview: `https://flag-71q.pages.dev/`
-- Cloudflare Pages is connected to GitHub; changes go live automatically when they are pushed to `main`.
+- Live preview: <https://flag-71q.pages.dev/>
+- Cloudflare Pages is connected to GitHub; changes go live automatically when they are pushed to `main`. The site is `preview/` with `tokens/`, `fonts/`, `icons/` and `logos/` copied beside it, so the preview may reference only those four directories outside itself (`scripts/check_refs.py` enforces this).
 - `preview/email-safe.html` is a deployed preview copy of the canonical `email-safe.html`. After editing the canonical template, run `bash design-system/sync-email-preview.sh` before pushing so the Pages preview stays in sync.
 Preview includes:
 - canonical sun/moon light-dark theme toggle (system-default + persisted user preference)
@@ -46,14 +47,14 @@ Preview includes:
 - email template preview with light/dark inbox simulation and responsive viewport sizing
 - implementation examples for key patterns
 
-Open locally:
+Open locally, from the repo root (serve `design-system/`, not `preview/`, so
+`../tokens` and `../fonts` resolve):
 
 ```bash
-cd /root/flag/design-system/preview
-python3 -m http.server 8765
+make preview        # = cd design-system && python3 -m http.server 8765
 ```
 
-Then visit `http://localhost:8765`.
+Then visit <http://localhost:8765/preview/>.
 
 Sync the deployed email preview copy:
 

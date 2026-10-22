@@ -2,7 +2,7 @@
 
 > **Note:** This is a historical document from the initial creation of the design system. It is preserved for context only. Do not use this file as a reference for current component patterns. The single source of truth is COMPONENTS.md.
 >
-> **Typography guidance here is superseded.** The brand face now depends on the product's licence tier — see [`FONTS.md`](FONTS.md).
+> **Typography guidance here is superseded.** Every product now loads one font sheet and renders in Nebula Sans + Hack — see [`FONTS.md`](FONTS.md).
 
 ## Adoption Strategy
 

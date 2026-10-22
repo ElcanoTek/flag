@@ -14,11 +14,21 @@ If a product needs additional behavior, extend this contract. Do not replace it 
 
 ## 1) Copy Foundations First
 
-Copy or import these sources before product component work:
+Products **vendor** Flag files (copy them into the product repo and serve them
+from the product's own binary — no CDN, no runtime dependency on this repo).
+Every copy is recorded in a lock file so it cannot drift silently; see
+[Vendoring and drift](#vendoring-and-drift) below. Never copy by hand.
+
+Copy these sources before product component work:
 - `tokens/design-tokens.css`
 - `tokens/design-tokens.json`
 - `icons/core-icons.svg`
 - `theme/theme-controller.js`
+- `components/components.css`: the component layer (buttons, fields, chips,
+  cards, badges, tables, segmented control, ...) for server-rendered (Tier A)
+  products. Load it after the tokens and keep product styling in a separate
+  sheet that loads after it. Tier B (React) products may skip it and build
+  the same specs as components.
 - the font sheet and both face directories (see [`FONTS.md`](FONTS.md)):
   `fonts/fonts.css` + `fonts/nebula-sans/` + `fonts/hack/`. Copy `nebula-sans/OFL.txt`
   and `hack/LICENSE.md` along with the font binaries — both licences require it.
@@ -29,17 +39,17 @@ Import the font stylesheet alongside `design-tokens.css`:
 ```html
 <link rel="stylesheet" href="/path/to/fonts/fonts.css" />
 <link rel="stylesheet" href="/path/to/design-tokens.css" />
+<link rel="stylesheet" href="/path/to/components.css" />
 ```
 
-Order between the two does not matter — the font sheet sets `--font-brand` and the
+Order between the first two does not matter — the font sheet sets `--font-brand` and the
 two code variables, which the token sheet only reads. A product that loads neither
 falls back to a system stack, which looks visibly wrong rather than quietly
 substituting some other brand face.
 
-> This repository is proprietary and internal (see the root `LICENSE`). Copying
-> tokens, icons, or logo marks out of it into a repo that ships an outbound
-> licence is not covered by that licence — confirm the arrangement before
-> vendoring flag assets into a public product.
+> Flag is MIT-licensed (see the root `LICENSE`), so any product may vendor it;
+> list Flag (MIT, ElcanoTek) in the product's `NOTICE` or licensing doc, and
+> copy the font licence files with the fonts.
 
 ## 2) Wire Theme in App Shell
 
@@ -108,13 +118,22 @@ Do not write product-local theme color values.
 }
 
 a {
-  color: var(--color-secondary);
+  color: var(--color-link);
+}
+
+.btn-primary {
+  background: var(--gradient-action-fill);
+  color: var(--color-on-primary-fill);
 }
 ```
 
 Additional implementation requirements:
-- Primary buttons in light theme must render as solid `var(--color-primary)` with white text.
-- Selected calendar days in light theme must render as solid `var(--color-primary)` with white text.
+- Filled controls paint their label on a measured fill: primary buttons use
+  `--gradient-action-fill` (dark) or solid `--color-primary-fill` (light)
+  with `--color-on-primary-fill`; selected calendar days likewise. Never put
+  a label on raw `--color-primary` or `--gradient-action-primary` (white on
+  `#7272AB` is 4.46:1). See COMPONENTS.md "Foreground on a saturated fill".
+- Links use `--color-link` (4.5:1+ on every surface in both themes).
 - When porting the shared checkbox pattern, copy the full structure and verify the checkmark asset actually exists.
 
 ## 5) Keep Accessibility + Persistence Intact
@@ -138,7 +157,7 @@ When implementing an internal home/launchpad screen:
 - Use the shared `.page-header` and standard shell first.
 - Prefer featured cards for top-priority workflows.
 - Use `details/summary` groups with `.link-tile` entries for secondary resource directories.
-- Include the live Flag design-system site in docs/resources sections when the product exposes internal reference links.
+- Include the live Flag design-system site (<https://flag-71q.pages.dev/>) in docs/resources sections when the product exposes internal reference links.
 - If directory links need app/service icons, use the shared iconography rules from `COMPONENTS.md` and `LOGOS.md` rather than inventing custom badge treatments.
 
 ## 8) What Not to Change
@@ -155,3 +174,81 @@ When implementing an internal home/launchpad screen:
 3. Add shared theme toggle and verify accessibility attributes.
 4. Migrate component styles to semantic tokens only.
 5. Validate visual parity and interaction/accessibility behavior in both themes.
+
+## Vendoring and drift
+
+Every Elcano product vendors Flag the same way, with two scripts shared
+verbatim across the product repos (`scripts/flag-sync.sh` and
+`scripts/stack-check.sh`) and a weekly drift workflow. The canonical copies
+ship in this repo under [`tools/product/`](../tools/product/README.md):
+`flag-sync.sh` (`FLAG_SYNC_VERSION=17`), `stack-check.sh`
+(`STACK_CHECK_VERSION=27`), `flag-drift.yml` and the `AGENTS.md` standard
+block that `stack-check.sh` pins. They are identical in every product; change
+them here and in all products at once.
+
+- **Bootstrapping a product:** copy `tools/product/flag-sync.sh` and
+  `tools/product/stack-check.sh` into the product's `scripts/` (they find the
+  product root as the parent of their own directory, so they run only from
+  there), `tools/product/flag-drift.yml` into `.github/workflows/`, paste
+  `tools/product/agents-standard-block.md` into `AGENTS.md` unchanged, and
+  write `stack.conf`. Then vendor files with `add` (below) and run
+  `scripts/stack-check.sh`. The [tools/product README](../tools/product/README.md#bootstrapping-a-product)
+  has the commands.
+
+- `flag.lock` at the product repo root records the Flag commit and the sha256
+  of every vendored file (`file <sha256> <flag-path> <repo-path>`), plus `dir`
+  lines for directories that must contain only locked Flag files.
+- **Paths:** a `<flag-path>` is always relative to Flag's `design-system/`
+  directory (`tokens/design-tokens.css` is
+  `design-system/tokens/design-tokens.css` in this repo); a `<repo-path>` is
+  relative to the product repo root. flag-sync reads the files from the Flag
+  checkout's committed `HEAD` (never its working tree) and refuses a checkout
+  with uncommitted changes under `design-system/`.
+- `scripts/flag-sync.sh check` runs offline in the product's CI and fails on
+  any hand edit, missing file, or unlocked file inside a vendored directory.
+  It is the PR gate (run through `scripts/stack-check.sh`).
+- `scripts/flag-sync.sh add ../flag <flag-path> <repo-path>` vendors a new file
+  or directory, for example
+  `scripts/flag-sync.sh add ../flag components/components.css static/flag/components/components.css`;
+  `scripts/flag-sync.sh sync ../flag` re-copies everything at a newer Flag
+  commit (a locked `dir` mirrors its Flag directory: new upstream files are
+  added and removed ones deleted);
+  `scripts/flag-sync.sh status ../flag` lists what is stale, including files
+  Flag added to a locked `dir` (exit 3 when stale). All three take a local
+  checkout of this repo (a sibling `../flag` by default).
+- `.github/workflows/flag-drift.yml` (shared verbatim, like the scripts) runs
+  weekly: it checks out this repo's `main` and runs `flag-sync.sh status`, so
+  a product learns that Flag moved on without anyone remembering to look. The
+  PR gate catches hand edits; the weekly job reports upstream staleness.
+- Every product vendors Flag's `design-system/LICENSE` (the MIT text, kept
+  identical to the repo-root `LICENSE` by this repo's CI) next to its vendored
+  files, so the notice travels with them. Because `<flag-path>` is relative to
+  `design-system/`, the command names it as just `LICENSE`:
+  `scripts/flag-sync.sh add ../flag LICENSE static/flag/LICENSE` copies
+  `design-system/LICENSE`, never the repo-root file. The font licence files
+  travel inside `fonts/`, and the sprite carries its Lucide ISC notice inline.
+
+Rules for product repos:
+
+1. **Vendored files are byte-identical to Flag.** Product styling lives outside
+   the vendored directories and reads tokens. A product that needs a new icon,
+   logo, token or a fix asks for it here (a PR to this repo) and re-syncs; it
+   never patches its copy.
+2. **Vendor only what the product uses.** Lock individual icons/logos rather
+   than whole directories when a product uses a few of them.
+3. **Re-sync deliberately.** After a Flag change lands, each product re-syncs
+   in its own PR, renders its pages in both themes, and fixes anything the
+   change breaks.
+
+Rules for this repo, so that files stay safe to vendor verbatim:
+
+- Files under `tokens/`, `fonts/`, `theme/`, `icons/` and `logos/` must not
+  depend on where they sit relative to this repo's docs: name docs as
+  "Flag's design-system/FONTS.md", never with a relative path like
+  `../FONTS.md` that is wrong once copied. `check-vendorable.sh` enforces this.
+- Renaming or removing an icon id, logo file, or token is a breaking change
+  for every product that vendors it: say so in the PR and list the products.
+  So is changing an existing token value or redrawing an icon (every product
+  changes look on its next sync): do it only as a deliberate fix, with
+  before/after renders. See `CONTRIBUTING.md` at the repo root.
+

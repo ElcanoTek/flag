@@ -49,17 +49,21 @@ Use this precedence when implementing:
 - Shared theme toggle must use sun/moon icons from `icons/core-icons.svg`.
 - Do not invent product-specific theme state logic when the shared flag pattern applies.
 - Shell background default is `--gradient-bg-home-signature` unless exception is explicitly documented.
-- Primary actions must use primary variant semantics.
+- Primary actions must use primary variant semantics, painted with the measured fill tokens (`--color-primary-fill` / `--gradient-action-fill` + `--color-on-primary-fill`), never a label on raw `--color-primary`.
+- Text meets 4.5:1 and state-bearing non-text 3:1 in both themes; see `INTERACTION_ACCESSIBILITY.md` "Contrast".
 - Danger actions must use danger semantics.
 - Focus ring must use `var(--focus-ring)` and remain stronger than hover.
 
 ## Quick Token Map
-- Primary: `--color-primary`
+- Primary: `--color-primary` (emphasis only; never under a label)
+- Filled controls: `--color-primary-fill` / `--color-primary-fill-hover` with `--color-on-primary-fill`; gradient `--gradient-action-fill`
+- Links: `--color-link`
 - Secondary: `--color-secondary`
 - Accent: `--color-accent`
 - White/Black: `--color-white`, `--color-black`
 - Background: `--color-bg`
-- Surface: `--color-surface-1`, `--color-surface-2`
+- Surface: `--color-surface-1`, `--color-surface-2`; code/output wells `--color-surface-inset`
+- Syntax highlighting: `--color-syntax-*`
 - Border: `--color-border`
 - Text: `--color-text-primary`, `--color-text-secondary`, `--color-text-muted`
 - Status: `--color-success`, `--color-warning`, `--color-danger`, `--color-info`

@@ -3,8 +3,26 @@
 This spec standardizes shared components used across Lens, Explorer, Home, MOC, and Victoria Voice.
 
 Implementation note:
-- Examples in this file are based on real patterns in `preview/index.html` and `preview/styles.css`.
+- `components/components.css` implements the classes in this file, in plain
+  CSS that reads tokens only. It is the vendorable component layer for
+  server-rendered (Tier A) products: vendor it next to the tokens and fonts
+  and use the markup below. The preview loads a byte-identical copy
+  (`preview/components.css`, refreshed by `sync-preview.sh`), so what the
+  preview shows is what products get; `preview/styles.css` holds only the
+  preview page's own layout.
+- It is safe next to third-party markup. Rules on bare elements are limited
+  to what is harmless for any instance: `box-sizing` on `*`, the link color on
+  `a`, `font: inherit` on form controls, tabular figures on `table`. The
+  text-field shell reaches only text-like inputs (never checkbox, radio,
+  range, color, file, button-type or hidden inputs), single selects and
+  textareas; native appearance is removed only where Flag draws a
+  replacement; labels, tables and cells are styled only inside `.field` and
+  `.table-wrap`. `make check` enforces this, and the preview shows unclassed
+  native controls keeping their browser rendering.
+- Examples in this file are the markup `preview/index.html` uses.
 - Keep class names and state contracts aligned with these examples for deterministic implementation.
+- React (Tier B) products implement the same specs in their own components,
+  reading the same tokens.
 
 ## Logos and Logo Usage
 - Approved logo assets and rules are defined in `LOGOS.md`.
@@ -54,8 +72,11 @@ Theme behavior:
 
 ### Primary
 - Purpose: strongest positive action (`Submit`, `Start`, `Save`).
-- Fill: `color.primary`; text: `color.text.primary`.
-- Light-theme clarification: primary buttons use a solid `color.primary` fill with `color.white` text.
+- Fill: `--gradient-action-fill` (dark) or a solid `--color-primary-fill`
+  (light); label `--color-on-primary-fill`; hover `--gradient-action-fill-hover`
+  / `--color-primary-hover`. Never a label on the raw `--color-primary` or
+  `--gradient-action-primary`: white on `#7272AB` is 4.46:1, just under AA.
+  See "Foreground on a saturated fill" below.
 
 ### Secondary
 - Purpose: alternative actions.
@@ -71,6 +92,31 @@ Theme behavior:
 
 States for all button variants:
 - Default, hover, focus-visible, active, disabled, loading.
+- Hover never lowers label contrast: no `filter: brightness()` or `opacity`
+  fade on a filled button; move to the `-hover` fill instead.
+
+### Foreground on a saturated fill
+An element filled with a brand or status color needs a foreground chosen for
+that fill, in both themes:
+
+| Fill | Foreground |
+|---|---|
+| `--color-primary-fill` (hover `--color-primary-fill-hover`) | `--color-on-primary-fill` |
+| `--gradient-action-fill` (hover `--gradient-action-fill-hover`) | `--color-on-primary-fill` |
+| `--color-accent-strong` | `--color-on-accent-strong` |
+| `--color-success` | `--color-on-success` |
+
+`--color-text-primary` is the foreground for ordinary surfaces; on a filled
+control it is the common mistake. The raw `--color-primary` is for things
+with nothing painted on them (an active bar, a checkbox accent, tints,
+borders). `scripts/check_tokens.py` measures every pair above, in both themes
+and at every point of the gradients.
+
+### Button and pill shapes
+Shape tells a reader what can be pressed. Every text button uses
+`--radius-md`. Full pills (`--radius-pill`) are for things that are not text
+buttons: status badges, removable chips, segmented tracks, switch tracks,
+avatars, count bubbles, round icon-only buttons and progress bars.
 
 Example:
 
@@ -97,17 +143,45 @@ Example:
   - datetime-local
   - file attachment
 - Height: min `2.5rem`; radius: `radius-md`.
-- Label always visible; helper and validation text below control.
-- Error state uses `color.danger`; warning uses `color.warning`.
+- Label always visible; helper and validation text below control
+  (`.field-hint`, `.field-error`, `.field-warning`; tie them to the control
+  with `aria-describedby`).
+- Error state: `aria-invalid="true"` on the control (danger border) plus a
+  `.field-error` message; warning: `.is-warning` on the control plus
+  `.field-warning`. Disabled fields use the native `disabled` attribute.
 
 Production baseline requirements:
-- Number controls must use the canonical `number-input` stepper pattern (minus button, centered value, plus button, focus-within ring).
+- Number controls must use the canonical `number-input` stepper pattern (minus button, centered value, plus button, focus-within ring). A disabled stepper disables its field and buttons and marks the wrapper `.is-disabled`.
 - Date and datetime controls must use the canonical `custom-datepicker` treatment (left-aligned value, right icon affordance, themed popover classes).
-- File attachment controls must use the canonical dropzone pattern with drag-over state, browse action, and file queue list.
+- File attachment controls must use the canonical dropzone pattern with drag-over state, browse action, and file queue list. An upload area that cannot take files is `.file-upload-dropzone.is-disabled` (or `aria-disabled="true"`) with its browse button disabled.
 
 ## Dropdowns
 - Match input styling and radius.
 - Selected/active options use `color.accent` tone.
+
+## Segmented Control
+- Use for a choice between 2-4 mutually exclusive options (theme, schedule
+  mode, list/week view). One look everywhere: `.seg` / `.seg-option`, a pill
+  track with the selected option on `--color-primary-fill` /
+  `--color-on-primary-fill`; unselected options are `--color-text-muted` and
+  turn `--color-text-primary` on hover.
+- Selection is read from the ARIA state the control already uses:
+  `aria-pressed` (button group, `role="group"` + `aria-label`),
+  `aria-checked` (radiogroup) or `aria-selected` (tablist). Behavior stays
+  with each caller; only the look is shared.
+- `.seg--md` is the form-field size, for a segmented control that is the
+  field itself.
+- Focus: a 2px `--color-accent` outline outside the option, where it meets
+  the page at 3:1 or more in both themes.
+- Not for underlined page tabs, filter chips with counts, or choice cards.
+
+```html
+<div class="seg" role="group" aria-label="Calendar view">
+  <button class="seg-option" type="button" aria-pressed="true">List</button>
+  <button class="seg-option" type="button" aria-pressed="false">Week</button>
+  <button class="seg-option" type="button" aria-pressed="false">Month</button>
+</div>
+```
 
 ## Date Pickers
 - Tokenized shell, no third-party default styles left un-themed.
@@ -117,8 +191,9 @@ Production baseline requirements:
 Theme contract:
 - Input uses `.custom-datepicker` spacing and right-side icon affordance.
 - Flatpickr-compatible classes (`.flatpickr-calendar`, `.flatpickr-day`, `.flatpickr-weekday`) must be themed to token colors.
-- Selected date state uses primary gradient and maintains accessible contrast.
-- Light-theme clarification: selected day uses solid `color.primary` with `color.white` text.
+- Selected date state uses `--gradient-action-fill` with `--color-on-primary-fill`.
+- Light-theme clarification: selected day uses solid `--color-primary-fill` with `--color-on-primary-fill` text.
+- Keyboard focus (`:focus-visible`) on a day is an inset 2px ring, never just a color change. Days sit edge to edge, so the ring is inset and takes the color that holds 3:1 on that day's fill: `--focus-ring-day` (`--color-accent`) on a plain, hovered or today day, `--focus-ring-day-on-range` (`--color-on-accent-strong`) on an in-range day, and `--focus-ring-day-on-fill` (`--color-on-primary-fill`) on a selected or range-end day. These rules come after every day-state rule so they win at equal specificity.
 
 Shared disclosure/search-panel spacing:
 - When date filters and secondary search filters appear in the same disclosure block, keep visible spacing between the date range area, any add/remove controls, and the next filter group.
@@ -133,10 +208,12 @@ Shared disclosure/search-panel spacing:
 - Required states:
   - default
   - hover
-  - drag-over
-  - uploading
-  - uploaded
-  - error
+  - drag-over (`.file-upload-dropzone.is-dragover`)
+  - uploading (`.file-item.uploading`, with `.file-item-progress` / `.file-item-percent`)
+  - uploaded (`.file-item.uploaded`)
+  - error (`.file-item.error`)
+- Terminal rows say what happened in a `.file-item-status` caption
+  ("Uploaded", "Too large"); color alone never carries the state.
 - Required metadata:
   - file name
   - file size
@@ -172,6 +249,8 @@ Example:
   - truncated file name
   - optional action icons (download/delete)
 - Hover and focus-within states must be visible on the row.
+- Disabled: the native `disabled` radio plus `.is-disabled` on the row (muted
+  ring and dot, disabled text, not-allowed cursor, no row hover).
 
 ## Checkbox
 - Use one shared checkbox style across all products.
@@ -179,10 +258,10 @@ Example:
   - visible checkmark on checked state
   - visible focus ring on keyboard focus
   - proper label hit area
-  - disabled styling where applicable
+  - disabled styling where applicable (`.ds-checkbox-input:disabled`: faded box, disabled text color, not-allowed cursor)
 - Keep checkbox checked styling separate from focus styling (focus ring appears on keyboard focus only).
 - Required structure contract:
-  - visually hidden checkbox input immediately before its label
+  - visually hidden checkbox input (`.ds-checkbox-input`) immediately before its label
   - label uses `.ds-checkbox`
   - visual box uses `.ds-checkbox__box`
   - label text uses `.ds-checkbox__label`
@@ -199,6 +278,12 @@ Example:
 ## Modals
 - Surface: `surface.1`; border `strong`; shadow `lg`.
 - Must include: title, close affordance, escape key close, backdrop close policy.
+- Markup: a `<dialog>` opened with `showModal()`, or an element with
+  `role="dialog"`, `aria-modal="true"` and `aria-labelledby` pointing at the
+  title. Move focus into it on open, keep Tab inside it while open, and
+  return focus to the control that opened it on close. The close control is
+  a `<button type="button">` with an `aria-label` ("Close") when it shows
+  only an icon.
 - Actions aligned right on desktop; stacked on narrow screens.
 
 Modal action-grid variant:
@@ -314,6 +399,24 @@ Example with app icon:
   - external vendor destinations should use approved service icons or the documented fallback
 
 ## Tables and List Rows
+- Wrap a data table in `.table-wrap` (scroll container, border, radius);
+  the table component's width, padding, borders and header style apply
+  inside it. Any table gets tabular figures.
+- The wrapper scrolls sideways on narrow screens, so keyboard users must be
+  able to reach and scroll it (WCAG 2.1.1): give it `tabindex="0"`,
+  `role="region"` and an `aria-label` that names the table (it is announced
+  when focus lands there). Header cells take `scope="col"`.
+
+```html
+<div class="table-wrap" tabindex="0" role="region" aria-label="Task status table (scrolls horizontally)">
+  <table>
+    <thead><tr><th scope="col">ID</th><th scope="col">Name</th><th scope="col">Status</th></tr></thead>
+    <tbody>
+      <tr><td>T-1023</td><td>Daily Optimization</td><td><span class="badge badge-success">success</span></td></tr>
+    </tbody>
+  </table>
+</div>
+```
 - Head row: uppercase optional, but consistent across app.
 - Row hover allowed for clickable rows only.
 - Status columns should use standardized status badge tokens.
@@ -331,6 +434,12 @@ Example with app icon:
 
 ### Code Display Block
 - Use this for code execution payloads (for example, `run_python` tool calls).
+- The code well is `--color-surface-inset` (not `--color-overlay-strong`,
+  which is the modal scrim and reads as a muddy band in light).
+- Syntax highlighting uses the `--color-syntax-*` tokens (keyword, string,
+  number, comment, function, builtin, operator, punctuation); each holds
+  4.5:1 in a well on every surface in both themes. A scrollable `<pre>` gets
+  `tabindex="0"` and an `aria-label` so keyboard users can scroll it.
 - Required classes:
   - `.tool-call-item`
   - `.tool-call-name`
@@ -344,7 +453,7 @@ Example:
 <div class="tool-call-item">
   <div class="tool-call-name"><strong>run_python</strong></div>
   <div class="tool-call-id">ID: <code>call_9f8a2ce1</code></div>
-  <pre class="tool-call-code"><code class="language-python">print("hello")</code></pre>
+  <pre class="tool-call-code" tabindex="0" aria-label="run_python code"><code class="language-python">print("hello")</code></pre>
   <div class="tool-call-other-args">Other arguments: <code>{"timeout": 45}</code></div>
 </div>
 ```
@@ -361,6 +470,9 @@ Example:
   - `.status-done`
   - `.status-inprogress`
   - `.status-todo`
+- The icon and title styling show the state only visually: hide the icon
+  from assistive tech (`aria-hidden="true"`) and say the state in a
+  `.sr-only` span ("Done:", "In progress:", "To do:").
 
 Example:
 
@@ -368,9 +480,9 @@ Example:
 <div class="task-tracker-container" role="group" aria-label="Task tracker">
   <div class="task-tracker-cmd">Command: <strong>RECONCILE DELIVERY REPORT</strong></div>
   <div class="task-tracker-list">
-    <div class="task-tracker-item status-done"><span class="tt-icon">&#10003;</span><span class="tt-id">[1]</span><span class="tt-title">Validate file schema</span></div>
-    <div class="task-tracker-item status-inprogress"><span class="tt-icon">&#8635;</span><span class="tt-id">[2]</span><span class="tt-title">Aggregate publisher metrics</span></div>
-    <div class="task-tracker-item status-todo"><span class="tt-icon">&#9675;</span><span class="tt-id">[3]</span><span class="tt-title">Write QA summary</span></div>
+    <div class="task-tracker-item status-done"><span class="tt-icon" aria-hidden="true">&#10003;</span><span class="sr-only">Done:</span><span class="tt-id">[1]</span><span class="tt-title">Validate file schema</span></div>
+    <div class="task-tracker-item status-inprogress"><span class="tt-icon" aria-hidden="true">&#8635;</span><span class="sr-only">In progress:</span><span class="tt-id">[2]</span><span class="tt-title">Aggregate publisher metrics</span></div>
+    <div class="task-tracker-item status-todo"><span class="tt-icon" aria-hidden="true">&#9675;</span><span class="sr-only">To do:</span><span class="tt-id">[3]</span><span class="tt-title">Write QA summary</span></div>
   </div>
 </div>
 ```
@@ -396,6 +508,14 @@ Example:
 
 ## Loaders
 - Spinner size: `12px` inline, `32px` panel-level.
+- `.spinner` draws its arc in `--color-link` on a faint `--color-overlay-soft`
+  track (4.6:1 arc against track, 5:1 against the surface; the old
+  `--color-primary` arc on `--color-border-strong` was 1.67:1); inside a primary
+  button (`.btn-primary .spinner`) the arc takes `--color-on-primary-fill` and
+  the track `--color-primary-fill-hover`, since a primary arc on the primary
+  fill is invisible (1.01:1). Under `prefers-reduced-motion` it stays a static
+  ring.
+- Upload progress fills use `--color-link` (3:1+ on the track in both themes).
 - Use semantic loading text for long operations.
 
 ## Error States
@@ -411,11 +531,15 @@ Example:
 Email selection pills:
 - Use this when selecting one or more recipient emails.
 - Container: `chips-container` style region with wrap and spacing.
-- Pill: `chip chip-email` with selectable state (`selected`).
+- Pill: `chip chip-email` with selectable state (`selected`). The pill is a
+  plain container holding two sibling buttons: `chip-toggle`
+  (`aria-pressed`) and `chip-delete`. Do not make the pill itself a
+  `role="button"` around the delete button: a control inside a control is
+  unreachable for assistive technology (axe `nested-interactive`).
 - Remove affordance: small inline `x` control (`chip-delete`) for custom/saved entries.
 - Interaction rules:
   - click pill toggles selection
-  - Enter/Space toggles selection when pill is focused
+  - Enter/Space on the focused `chip-toggle` toggles selection (native button behavior)
   - click delete removes pill
   - delete affordance must be keyboard and screen-reader accessible
   - custom email input can add new pills
@@ -427,9 +551,9 @@ Example:
 
 ```html
 <div class="chips-container" role="group" aria-label="Email recipients">
-  <span class="chip chip-email selected" data-email="ads@elcanotek.com" role="button" tabindex="0" aria-pressed="true" aria-label="Toggle recipient ads@elcanotek.com">
-    ads@elcanotek.com
-    <button class="chip-delete" type="button" aria-label="Remove recipient ads@elcanotek.com">x</button>
+  <span class="chip chip-email selected" data-email="ads@example.com">
+    <button class="chip-toggle" type="button" aria-pressed="true">ads@example.com</button>
+    <button class="chip-delete" type="button" aria-label="Remove recipient ads@example.com">x</button>
   </span>
 </div>
 ```
@@ -472,6 +596,8 @@ Every color is a token from `tokens/design-tokens.css` ("Connection picker
 components" block); light-mode values live there too.
 
 ### Switch
+- Disabled (`:disabled` / `aria-disabled="true"`): 50% and not-allowed,
+  though a row that cannot be switched should show a status icon instead.
 - `button.switch[role="switch"][aria-checked]`, 30x18 (`.switch--lg` 38x22).
 - Track: `--color-switch-track-on` when checked, else `--color-switch-track-off`.
   The off track must reach 3:1 against the surface and under the knob, so
@@ -529,14 +655,21 @@ components" block); light-mode values live there too.
   `--radius-md`, 0.625rem 0.875rem padding, 0.8125rem body text.
 - One short sentence; at most one link (`external-link` icon). Links in the
   picker (Set up, Open library, panel links) use `--color-link`, and keep it
-  on hover and focus (underline instead of a color change).
+  on hover and focus (underline instead of a color change). A link inside a
+  sentence (the state panel's) is underlined at rest too: color alone does
+  not distinguish it from the surrounding text (WCAG 1.4.1).
 
 ### Popover and Modal Surfaces
 - Popover: 21.75rem wide, `max-width: 100%` on narrow screens;
   `--color-surface-2`, 1px `--color-selected-border`,
   `--radius-lg`, `--shadow-popover`. Rows 64px with 2-line descriptions
   (`--color-text-subtle`); the active row is `--color-selected-bg` with an
-  inset 1px `--color-row-active-border` ring (at least 3:1 on the popover).
+  inset 1px `--color-row-active-border` ring (at least 3:1 on the popover),
+  and its description/meta step up to `--color-text-muted` (text-subtle is
+  4.2:1 on that tint). A dimmed (unavailable) row keeps readable text: its
+  status icon carries the state and its name steps down to
+  `--color-text-secondary` at weight 500. Never fade row text with
+  `opacity`.
 - Modal: `--color-surface-1`, 1px `--color-selected-border`, `--radius-xl`,
   `--shadow-popover`, header icon in a `--color-icon-tile` square
   (`--color-accent` glyph). Filter rail on `--color-rail-bg`; the selected
