@@ -1,0 +1,31 @@
+name: Bug report
+description: Something in Flag renders or behaves incorrectly
+labels: [bug]
+body:
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What did you see, and what did you expect? Name the token, icon, component or doc.
+    validations:
+      required: true
+  - type: dropdown
+    id: theme
+    attributes:
+      label: Theme
+      options: [Dark, Light, Both]
+  - type: input
+    id: where
+    attributes:
+      label: Where
+      description: A preview section, a file path, or the product and page where a vendored Flag file misbehaves.
+  - type: input
+    id: version
+    attributes:
+      label: Flag commit
+      description: The commit you looked at (the product's flag.lock `flag` line, or `git rev-parse --short HEAD`).
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: Screenshots
+      description: Light and/or dark. Scrub real data.

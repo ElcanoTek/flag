@@ -142,7 +142,7 @@ When implementing an internal home/launchpad screen:
 - Use the shared `.page-header` and standard shell first.
 - Prefer featured cards for top-priority workflows.
 - Use `details/summary` groups with `.link-tile` entries for secondary resource directories.
-- Include the live Flag design-system site in docs/resources sections when the product exposes internal reference links.
+- Include the live Flag design-system site (<https://flag-71q.pages.dev/>) in docs/resources sections when the product exposes internal reference links.
 - If directory links need app/service icons, use the shared iconography rules from `COMPONENTS.md` and `LOGOS.md` rather than inventing custom badge treatments.
 
 ## 8) What Not to Change
@@ -172,10 +172,23 @@ are identical everywhere — change them in all repos at once):
   lines for directories that must contain only locked Flag files.
 - `scripts/flag-sync.sh check` runs offline in the product's CI and fails on
   any hand edit, missing file, or unlocked file inside a vendored directory.
+  It is the PR gate (run through `scripts/stack-check.sh`).
 - `scripts/flag-sync.sh add ../flag <flag-path> <repo-path>` vendors a new file
   or directory; `scripts/flag-sync.sh sync ../flag` re-copies everything at a
-  newer Flag commit; `scripts/flag-sync.sh status ../flag` lists what is stale.
-  All three take a local checkout of this repo (a sibling `../flag` by default).
+  newer Flag commit (since v2 a locked `dir` mirrors its Flag directory: new
+  upstream files are added and removed ones deleted);
+  `scripts/flag-sync.sh status ../flag` lists what is stale, including files
+  Flag added to a locked `dir` (exit 3 when stale). All three take a local
+  checkout of this repo (a sibling `../flag` by default).
+- `.github/workflows/flag-drift.yml` (shared verbatim, like the scripts) runs
+  weekly: it checks out this repo's `main` and runs `flag-sync.sh status`, so
+  a product learns that Flag moved on without anyone remembering to look. The
+  PR gate catches hand edits; the weekly job reports upstream staleness.
+- Every product vendors `LICENSE` from Flag's `design-system/` (the MIT text,
+  kept identical to the root `LICENSE` by this repo's CI) next to its vendored
+  files, so the notice travels with them: `scripts/flag-sync.sh add ../flag
+  LICENSE <vendored-dir>/LICENSE`. The font licence files travel inside
+  `fonts/`, and the sprite carries its Lucide ISC notice inline.
 
 Rules for product repos:
 
@@ -197,4 +210,7 @@ Rules for this repo, so that files stay safe to vendor verbatim:
   `../FONTS.md` that is wrong once copied. `check-vendorable.sh` enforces this.
 - Renaming or removing an icon id, logo file, or token is a breaking change
   for every product that vendors it: say so in the PR and list the products.
+  So is changing an existing token value or redrawing an icon (every product
+  changes look on its next sync): do it only as a deliberate fix, with
+  before/after renders. See `CONTRIBUTING.md` at the repo root.
 

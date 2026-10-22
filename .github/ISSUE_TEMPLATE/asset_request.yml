@@ -1,0 +1,29 @@
+name: Token, icon, logo or component request
+description: Ask Flag for something a product needs
+labels: [enhancement]
+body:
+  - type: dropdown
+    id: kind
+    attributes:
+      label: What is missing
+      options: [Token, Icon, Logo, Component or pattern, Fix to an existing value]
+    validations:
+      required: true
+  - type: textarea
+    id: need
+    attributes:
+      label: Need
+      description: What the product is trying to show or do, and which product(s). For an icon, what it should depict; for a token, the role it plays.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposal
+      description: A name, a value or SVG, a sketch. Attach the asset if you have it.
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope
+      options:
+        - label: This renames, removes or changes an existing token, icon or logo (breaking for products that use it; see CONTRIBUTING.md)

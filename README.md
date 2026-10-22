@@ -1,95 +1,149 @@
-# Flag Design System
+# Flag
 
-This repository is the canonical source of truth for Elcano product design across services.
+**Flag is the design system behind every Elcano product**: one set of tokens,
+two typefaces, one icon sprite, the approved logos, a light/dark theme
+contract and the component specs that Lens, Explorer, Pages, Home, Auth,
+Voice, Manifest and Fleet all build on. It is the source of truth for design;
+products copy its files verbatim and never patch their copies.
 
-## Repo Purpose
-- Define a single shared design language (tokens, components, interaction rules).
-- Provide implementation-ready CSS/JSON tokens for product repos.
-- Provide agent-readable guidance for deterministic UI implementation.
-- Provide a visual preview surface for review and QA.
+**Live preview: <https://flag-71q.pages.dev/>**
 
-## Quick Start
-Run preview locally:
+<p align="center">
+  <img src="docs/preview-dark.png" alt="The Flag preview in dark theme: the app header, theme toggle and the color token swatches" width="49%">
+  <img src="docs/preview-light.png" alt="The same preview in light theme" width="49%">
+</p>
+
+## What is in it
+
+- **Tokens** for color, type, spacing, radius, shadow, gradients and motion,
+  in CSS (`design-tokens.css`, what products load) and JSON
+  (`design-tokens.json`, for tools). CI keeps the two identical and measures
+  every text, badge, fill and focus-ring pair against WCAG AA in both themes.
+- **Two typefaces**, self-hosted: Nebula Sans for text and Hack for code, in
+  one font sheet.
+- **71 stroke icons** in one SVG sprite, and the Elcano and product **logos**.
+- **A theme contract**: `html[data-theme="light|dark"]`, system default,
+  explicit choice stored under `flag-theme-preference`, and a small
+  dependency-free controller.
+- **Component specs** (buttons, inputs, date picker, upload, chips, segmented
+  control, tables, connection picker, logs/code display, email) with
+  required states and accessibility behavior, all rendered in the preview.
+- **An email-safe HTML template** for generated reports, with its own limits
+  and dark-mode guidance.
+
+## Quick start
+
+Preview it locally (Python 3 is the only requirement):
 
 ```bash
-cd design-system/preview
-python3 -m http.server 8765
+git clone https://github.com/ElcanoTek/flag.git
+cd flag
+make preview          # serves design-system/ on http://localhost:8765/preview/
 ```
 
-Then open `http://localhost:8765`.
+Run every check CI runs (no npm, no network):
 
-## File Map
-- `design-system/README.md` - design-system navigation and usage order
-- `design-system/AGENT_GUIDE.md` - strict implementation contract for coding agents
-- `design-system/TOKENS.md` - token model and usage rules
-- `design-system/COMPONENTS.md` - component specs and class/state contracts
-- `design-system/INTERACTION_ACCESSIBILITY.md` - required interaction and a11y behavior
-- `design-system/APPLY_TO_PRODUCT.md` - how to adopt this system in another repo
-- `design-system/FONTS.md` - typography and font licensing policy (which face each product may ship)
-- `design-system/tokens/design-tokens.css` - canonical runtime token source
-- `design-system/tokens/design-tokens.json` - canonical machine-readable token source
-- `design-system/icons/core-icons.svg` - icon sprite
-- `design-system/logos/` - approved logo assets
-- `design-system/email-safe.html` - canonical email-safe HTML reference
-- `design-system/check-vendorable.sh` - CI check that vendored files stay safe to copy verbatim (see `APPLY_TO_PRODUCT.md` "Vendoring and drift")
-- `design-system/preview/index.html` - live visual reference
+```bash
+make check
+```
 
-## Licensing and Fonts
+Use it in a page:
 
-Flag is released under the **MIT License** — see [`LICENSE`](LICENSE). Products
-under any licence (MIT, BSL 1.1, internal-only) may vendor its tokens, icons,
-logos, theme controller and stylesheets; keep the copyright notice with them
-(each product lists Flag in its `NOTICE` or licensing doc). The bundled fonts
-keep their own licences, listed in `LICENSE`.
+```html
+<link rel="stylesheet" href="/static/flag/fonts/fonts.css" />
+<link rel="stylesheet" href="/static/flag/tokens/design-tokens.css" />
+<script src="/static/flag/theme/theme-controller.js"></script>
 
-Flag ships two typefaces, and every product uses both — there is no tier to choose
-between:
+<button class="btn btn-primary" type="button">Save</button>
+<svg class="icon" aria-hidden="true"><use href="/static/flag/icons/core-icons.svg#download"></use></svg>
+```
 
-| Role | Face | Licence | Font sheet |
-|---|---|---|---|
-| Text — headings, body, UI | **Nebula Sans** | SIL OFL 1.1 | `design-system/fonts/fonts.css` |
-| Code — logs, tabular output | **Hack** | MIT (+ Bitstream Vera) | `design-system/fonts/fonts.css` |
+```css
+.panel {
+  background: var(--gradient-surface-panel);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  color: var(--color-text-primary);
+}
+```
 
-One sheet declares both. Both faces are freely redistributable, so the same sheet
-is correct for MIT, BSL 1.1, and internal-only products alike — which is why the
-old two-tier split (Dubai for internal tools, IBM Plex for public repos) is gone.
-`design-tokens.css` names no face directly; it resolves `--font-brand` and the two
-code variables, falling back to a system stack so a product that forgets the sheet
-looks visibly wrong rather than quietly rendering in a different brand face.
+Product CSS reads tokens and never hardcodes a color, radius, spacing value or
+font family. Start with [`design-system/AGENT_GUIDE.md`](design-system/AGENT_GUIDE.md).
 
-Read [`design-system/FONTS.md`](design-system/FONTS.md) before adding or changing a
-typeface in any product.
+## How products consume Flag
 
-## Source of Truth Order
-Use this precedence when there is ambiguity:
-1. `design-system/tokens/design-tokens.css`
-2. `design-system/tokens/design-tokens.json`
-3. `design-system/AGENT_GUIDE.md`
-4. component and pattern docs (`COMPONENTS.md`, `SYSTEM.md`, `INTERACTION_ACCESSIBILITY.md`)
+Products **vendor** Flag: they copy the files they use into their own repo and
+serve them from their own binary (no CDN, no runtime dependency on this repo).
 
-## Implementation Workflow
-1. Import `design-system/fonts/fonts.css`, then `design-system/tokens/design-tokens.css`.
-2. Implement UI using semantic tokens only (`var(--color-primary)`, `var(--radius-md)`, etc.).
-3. Apply canonical component structure/classes from `COMPONENTS.md`.
-4. Implement required states (`hover`, `focus-visible`, `active`, `disabled`).
-5. Verify behavior in preview and against `INTERACTION_ACCESSIBILITY.md`.
+- `flag.lock` at the product root records the Flag commit and the sha256 of
+  every vendored file.
+- `scripts/flag-sync.sh` (shared verbatim by every product) adds files
+  (`add`), re-copies them at a newer Flag commit (`sync`), reports what is
+  stale (`status`), and fails CI on any hand edit (`check`).
+- **On every PR** the product's CI runs the offline `check` (through
+  `scripts/stack-check.sh`). **Every week** a `flag-drift` workflow checks out
+  this repo's `main` and runs `status`, reporting when Flag has moved on.
+- Products vendor [`design-system/LICENSE`](design-system/LICENSE) next to
+  their copies so the MIT notice travels with them.
+- A product that needs a new icon, logo, token or a fix asks for it here and
+  re-syncs; it never edits its copy.
 
-## Agent Workflow
-For coding agents working in product repos:
-1. Read `design-system/AGENT_GUIDE.md` first.
-2. Follow `design-system/APPLY_TO_PRODUCT.md` for adoption steps.
-3. Use token variables; do not hardcode colors, radii, spacing, or transition values.
-4. Support light/dark via the canonical root theme contract (`html[data-theme]`) and shared theme controller behavior.
+The full contract, including the rules this repo follows so files stay safe
+to copy, is in
+[`APPLY_TO_PRODUCT.md` "Vendoring and drift"](design-system/APPLY_TO_PRODUCT.md#vendoring-and-drift).
 
-## Canonical Theme Behavior
-- This repo is the source-of-truth implementation for light/dark mode across all Elcano products.
-- Default behavior is system-driven: preview resolves theme from `prefers-color-scheme` when there is no stored user preference.
-- Explicit user choice is persisted in `localStorage` using `flag-theme-preference`.
-- Stored user choice wins over system changes; system changes only auto-apply when preference is `system`/unset.
-- The canonical root selector is `html[data-theme="light"]` or `html[data-theme="dark"]`.
+## File map
 
-Implementation lives in:
-- `design-system/preview/index.html` (theme toggle UI with shared sun/moon icons)
-- `design-system/preview/preview.js` (theme controller + persistence + system sync)
-- `design-system/preview/styles.css` (theme toggle visuals + transition polish)
-- `design-system/tokens/design-tokens.css` and `design-system/tokens/design-tokens.json` (theme token contract)
+| Path | What it is |
+|---|---|
+| [`design-system/README.md`](design-system/README.md) | Read order and navigation for the docs |
+| [`design-system/AGENT_GUIDE.md`](design-system/AGENT_GUIDE.md) | The implementation contract for people and coding agents |
+| [`design-system/TOKENS.md`](design-system/TOKENS.md) | Token model, values and usage rules |
+| [`design-system/COMPONENTS.md`](design-system/COMPONENTS.md) | Component structures, classes and states |
+| [`design-system/INTERACTION_ACCESSIBILITY.md`](design-system/INTERACTION_ACCESSIBILITY.md) | Interaction, contrast and accessibility rules |
+| [`design-system/FONTS.md`](design-system/FONTS.md) | Typography and font licensing |
+| [`design-system/ICONS.md`](design-system/ICONS.md), [`LOGOS.md`](design-system/LOGOS.md), [`BACKGROUNDS.md`](design-system/BACKGROUNDS.md), [`EMAIL.md`](design-system/EMAIL.md) | Icons, logos, gradients, email |
+| [`design-system/APPLY_TO_PRODUCT.md`](design-system/APPLY_TO_PRODUCT.md) | Adopting Flag in a product; vendoring and drift |
+| [`design-system/SYSTEM.md`](design-system/SYSTEM.md), [`MIGRATION.md`](design-system/MIGRATION.md), [`AUDIT.md`](design-system/AUDIT.md) | Principles, and historical rollout/audit context |
+| `design-system/tokens/` | `design-tokens.css` (runtime source of truth) and `design-tokens.json` |
+| `design-system/fonts/` | `fonts.css` plus Nebula Sans and Hack, each with its licence |
+| `design-system/icons/core-icons.svg` | The icon sprite |
+| `design-system/logos/` | Approved logo files |
+| `design-system/theme/theme-controller.js` | The light/dark controller |
+| `design-system/email-safe.html` | Canonical email template (`preview/email-safe.html` is a synced copy) |
+| `design-system/preview/` | The preview site deployed at <https://flag-71q.pages.dev/> |
+| `design-system/LICENSE` | The MIT notice products vendor with their copies |
+| `scripts/` | The checks behind `make check` |
+
+When sources disagree: `design-tokens.css`, then `design-tokens.json`, then
+`AGENT_GUIDE.md`, then the component and pattern docs.
+
+## Theme behavior
+
+- Default follows the system (`prefers-color-scheme`) until the user chooses.
+- An explicit choice is stored in `localStorage` under `flag-theme-preference`
+  and wins over system changes; system changes apply only while unset.
+- The root selector is `html[data-theme="light"]` or `html[data-theme="dark"]`;
+  light values are token overrides in `design-tokens.css`.
+- The shared toggle uses the `sun` and `moon` icons and keeps `aria-pressed`
+  and `aria-label` accurate (`theme/theme-controller.js`).
+
+## Contributing
+
+Proposals for tokens, icons, logos and fixes are welcome; see
+[`CONTRIBUTING.md`](CONTRIBUTING.md). In short: additive changes are easy,
+renames and removals are breaking for every product, `make check` must pass,
+and visual changes come with light and dark screenshots. Security reports go
+to the address in [`SECURITY.md`](SECURITY.md), never a public issue.
+Participation is governed by the [Code of Conduct](CODE_OF_CONDUCT.md).
+Coding agents working in this repo read [`AGENTS.md`](AGENTS.md).
+
+## Licence
+
+Flag is released under the [MIT License](LICENSE), copyright ElcanoTek, Inc.
+Products under any licence may vendor it; keep the notice with the copies.
+The bundled fonts keep their own licences: Nebula Sans under the SIL Open Font
+License 1.1 and Hack under the MIT License (with the Bitstream Vera licence for
+its Vera-derived glyphs). Some icons are drawn after Lucide (ISC), and the
+preview vendors flatpickr (MIT). Details are in [`LICENSE`](LICENSE) and
+[`design-system/FONTS.md`](design-system/FONTS.md).

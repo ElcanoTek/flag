@@ -345,6 +345,20 @@
     });
   }
 
+  // Color swatches show the live token value for the current theme.
+  function refreshSwatches() {
+    var styles = window.getComputedStyle(document.documentElement);
+    Array.prototype.forEach.call(document.querySelectorAll(".swatch[data-token]"), function (swatch) {
+      var label = swatch.querySelector("[data-token-value]");
+      var value = styles.getPropertyValue(swatch.getAttribute("data-token")).trim();
+      if (label && value) {
+        label.textContent = value.toUpperCase();
+      }
+    });
+  }
+  refreshSwatches();
+  new MutationObserver(refreshSwatches).observe(document.documentElement, { attributes: true, attributeFilter: ["data-theme"] });
+
   // Segmented controls: a button group with one aria-pressed option.
   Array.prototype.forEach.call(document.querySelectorAll('.seg[role="group"]'), function (group) {
     group.addEventListener("click", function (event) {
