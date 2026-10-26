@@ -355,10 +355,10 @@
         return rows.map(function (row, index) {
           var bg = index % 2 === 1 ? '#F4F6FB' : '#FAFAFA';
           return '<tr>' +
-            '<td class="campaign-name" style="background-color:' + bg + '; color:#141824; font-size:15px; line-height:22px; padding:10px 8px; border-bottom:1px solid #E6EBF5;"><span class="mobile-label" style="display:none;">Campaign</span>' + row.campaign + '</td>' +
-            '<td align="right" style="background-color:' + bg + '; color:#141824; font-size:15px; line-height:22px; padding:10px 8px; border-bottom:1px solid #E6EBF5;"><span class="mobile-label" style="display:none;">Current</span>' + row.current + '</td>' +
-            '<td align="right" style="background-color:' + bg + '; color:#141824; font-size:15px; line-height:22px; padding:10px 8px; border-bottom:1px solid #E6EBF5;"><span class="mobile-label" style="display:none;">Prior</span>' + row.prior + '</td>' +
-            '<td align="right" style="background-color:' + bg + '; color:' + row.wowColor + '; font-size:15px; line-height:22px; font-weight:700; padding:10px 8px;' + (index === rows.length - 1 ? '' : ' border-bottom:1px solid #E6EBF5;') + '"><span class="mobile-label" style="display:none; color:#586F7C;">WoW</span>' + row.wow + '</td>' +
+            '<td class="campaign-name" style="background-color:' + bg + '; color:#141824; font-size:15px; line-height:22px; padding:10px 8px; border-bottom:1px solid #E6EBF5;"><span class="mobile-label" style="display:none; font-size:0; line-height:0; max-height:0; overflow:hidden;">Campaign</span>' + row.campaign + '</td>' +
+            '<td align="right" style="background-color:' + bg + '; color:#141824; font-size:15px; line-height:22px; padding:10px 8px; border-bottom:1px solid #E6EBF5;"><span class="mobile-label" style="display:none; font-size:0; line-height:0; max-height:0; overflow:hidden;">Current</span>' + row.current + '</td>' +
+            '<td align="right" style="background-color:' + bg + '; color:#141824; font-size:15px; line-height:22px; padding:10px 8px; border-bottom:1px solid #E6EBF5;"><span class="mobile-label" style="display:none; font-size:0; line-height:0; max-height:0; overflow:hidden;">Prior</span>' + row.prior + '</td>' +
+            '<td align="right" style="background-color:' + bg + '; color:' + row.wowColor + '; font-size:15px; line-height:22px; font-weight:700; padding:10px 8px;' + (index === rows.length - 1 ? '' : ' border-bottom:1px solid #E6EBF5;') + '"><span class="mobile-label" style="display:none; font-size:0; line-height:0; max-height:0; overflow:hidden; color:#586F7C;">WoW</span>' + row.wow + '</td>' +
           '</tr>';
         }).join('');
       }

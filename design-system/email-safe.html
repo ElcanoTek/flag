@@ -17,24 +17,26 @@
     <style>
       /* Mobile-responsive overrides — email clients that support <style> */
       @media only screen and (max-width: 480px) {
-        .email-container { width: 100% !important; }
+        .email-container { width: 100% !important; max-width: 100% !important; }
         .header-pad, .body-pad, .footer-pad { padding-left: 16px !important; padding-right: 16px !important; }
         .status-pad { padding-left: 16px !important; padding-right: 16px !important; }
         .table-pad { padding-left: 12px !important; padding-right: 12px !important; }
         .header-kicker, .header-date { font-size: 11px !important; }
         .header-subject { font-size: 18px !important; line-height: 24px !important; }
         .header-meta { font-size: 13px !important; line-height: 19px !important; }
+        .mobile-stack { display: block !important; width: 100% !important; box-sizing: border-box !important; margin-bottom: 8px !important; }
+        .mobile-stack:last-child { margin-bottom: 0 !important; }
         .data-table { width: 100% !important; max-width: 100% !important; border: 0 !important; border-collapse: separate !important; border-spacing: 0 !important; table-layout: fixed !important; }
         .data-table thead { display: none !important; }
         .data-table tbody, .data-table tr, .data-table td { display: block !important; width: 100% !important; }
         .data-table tr { width: 100% !important; margin-bottom: 12px !important; }
         .data-table tr:last-child { margin-bottom: 0 !important; }
-        .data-table td { box-sizing: border-box !important; background-color: #FAFAFA !important; font-size: 15px !important; line-height: 20px !important; padding: 8px 10px !important; text-align: left !important; border-left: 1px solid #D7DEEE !important; border-right: 1px solid #D7DEEE !important; border-bottom: 1px solid #E6EBF5 !important; }
+        .data-table td { box-sizing: border-box !important; background-color: #FAFAFA !important; font-size: 15px !important; line-height: 20px !important; padding: 8px 10px !important; text-align: left !important; white-space: normal !important; word-break: break-word !important; border-left: 1px solid #D7DEEE !important; border-right: 1px solid #D7DEEE !important; border-bottom: 1px solid #E6EBF5 !important; }
         .data-table td:first-child { border-top: 1px solid #D7DEEE !important; }
         .data-table td:last-child { border-bottom: 0 !important; }
         .data-table tr td:last-child { border-bottom: 1px solid #D7DEEE !important; }
         .data-table .campaign-name { background-color: #EEF3FF !important; font-weight: 700 !important; }
-        .mobile-label { display: inline-block !important; min-width: 78px !important; font-size: 13px !important; line-height: 18px !important; font-weight: 700 !important; color: #586F7C !important; }
+        .data-table td .mobile-label, .mobile-label { display: inline-block !important; min-width: 78px !important; font-size: 13px !important; line-height: 18px !important; max-height: none !important; overflow: visible !important; font-weight: 700 !important; color: #586F7C !important; }
       }
     </style>
   </head>
@@ -182,33 +184,33 @@
             </tr>
             <tr>
               <td class="table-pad" style="padding:8px 28px 0 28px;">
-                <table class="data-table" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%; border-collapse:collapse; border:1px solid #D7DEEE;">
+                <table class="data-table" width="100%" cellpadding="0" cellspacing="0" border="0" style="width:100%; table-layout:fixed; border-collapse:collapse; border:1px solid #D7DEEE;">
                   <thead>
                     <tr>
-                      <th scope="col" align="left" style="background-color:#EEF3FF; color:#33415F; font-size:13px; line-height:18px; font-weight:700; padding:10px 8px; border-bottom:1px solid #D7DEEE;">Campaign</th>
-                      <th scope="col" align="right" style="background-color:#EEF3FF; color:#33415F; font-size:13px; line-height:18px; font-weight:700; padding:10px 8px; border-bottom:1px solid #D7DEEE;">Current</th>
-                      <th scope="col" align="right" style="background-color:#EEF3FF; color:#33415F; font-size:13px; line-height:18px; font-weight:700; padding:10px 8px; border-bottom:1px solid #D7DEEE;">Prior</th>
-                      <th scope="col" align="right" style="background-color:#EEF3FF; color:#33415F; font-size:13px; line-height:18px; font-weight:700; padding:10px 8px; border-bottom:1px solid #D7DEEE;">WoW</th>
+                      <th scope="col" width="37%" align="left" style="background-color:#EEF3FF; color:#33415F; font-size:13px; line-height:18px; font-weight:700; padding:10px 8px; border-bottom:1px solid #D7DEEE;">Campaign</th>
+                      <th scope="col" width="21%" align="right" style="background-color:#EEF3FF; color:#33415F; font-size:13px; line-height:18px; font-weight:700; padding:10px 8px; border-bottom:1px solid #D7DEEE;">Current</th>
+                      <th scope="col" width="21%" align="right" style="background-color:#EEF3FF; color:#33415F; font-size:13px; line-height:18px; font-weight:700; padding:10px 8px; border-bottom:1px solid #D7DEEE;">Prior</th>
+                      <th scope="col" width="21%" align="right" style="background-color:#EEF3FF; color:#33415F; font-size:13px; line-height:18px; font-weight:700; padding:10px 8px; border-bottom:1px solid #D7DEEE;">WoW</th>
                     </tr>
                   </thead>
                   <tbody data-preview="campaign-table-body">
                     <tr>
-                      <td class="campaign-name" style="background-color:#FAFAFA; color:#141824; font-size:15px; line-height:22px; padding:10px 8px; border-bottom:1px solid #E6EBF5;"><span class="mobile-label" style="display:none;">Campaign</span>Acme US OLV</td>
-                      <td align="right" style="background-color:#FAFAFA; color:#141824; font-size:15px; line-height:22px; padding:10px 8px; border-bottom:1px solid #E6EBF5;"><span class="mobile-label" style="display:none;">Current</span>$311,402</td>
-                      <td align="right" style="background-color:#FAFAFA; color:#141824; font-size:15px; line-height:22px; padding:10px 8px; border-bottom:1px solid #E6EBF5;"><span class="mobile-label" style="display:none;">Prior</span>$405,928</td>
-                      <td align="right" style="background-color:#FAFAFA; color:#7C1F1F; font-size:15px; line-height:22px; font-weight:700; padding:10px 8px; border-bottom:1px solid #E6EBF5;"><span class="mobile-label" style="display:none; color:#586F7C;">WoW</span>-23.3%</td>
+                      <td class="campaign-name" style="background-color:#FAFAFA; color:#141824; font-size:15px; line-height:22px; padding:10px 8px; border-bottom:1px solid #E6EBF5;"><span class="mobile-label" style="display:none; font-size:0; line-height:0; max-height:0; overflow:hidden;">Campaign</span>Acme US OLV</td>
+                      <td align="right" style="background-color:#FAFAFA; color:#141824; font-size:15px; line-height:22px; padding:10px 8px; border-bottom:1px solid #E6EBF5;"><span class="mobile-label" style="display:none; font-size:0; line-height:0; max-height:0; overflow:hidden;">Current</span>$311,402</td>
+                      <td align="right" style="background-color:#FAFAFA; color:#141824; font-size:15px; line-height:22px; padding:10px 8px; border-bottom:1px solid #E6EBF5;"><span class="mobile-label" style="display:none; font-size:0; line-height:0; max-height:0; overflow:hidden;">Prior</span>$405,928</td>
+                      <td align="right" style="background-color:#FAFAFA; color:#7C1F1F; font-size:15px; line-height:22px; font-weight:700; padding:10px 8px; border-bottom:1px solid #E6EBF5;"><span class="mobile-label" style="display:none; font-size:0; line-height:0; max-height:0; overflow:hidden; color:#586F7C;">WoW</span>-23.3%</td>
                     </tr>
                     <tr>
-                      <td class="campaign-name" style="background-color:#F4F6FB; color:#141824; font-size:15px; line-height:22px; padding:10px 8px; border-bottom:1px solid #E6EBF5;"><span class="mobile-label" style="display:none;">Campaign</span>Acme CA Display</td>
-                      <td align="right" style="background-color:#F4F6FB; color:#141824; font-size:15px; line-height:22px; padding:10px 8px; border-bottom:1px solid #E6EBF5;"><span class="mobile-label" style="display:none;">Current</span>$72,119</td>
-                      <td align="right" style="background-color:#F4F6FB; color:#141824; font-size:15px; line-height:22px; padding:10px 8px; border-bottom:1px solid #E6EBF5;"><span class="mobile-label" style="display:none;">Prior</span>$68,004</td>
-                      <td align="right" style="background-color:#F4F6FB; color:#1C5A33; font-size:15px; line-height:22px; font-weight:700; padding:10px 8px; border-bottom:1px solid #E6EBF5;"><span class="mobile-label" style="display:none; color:#586F7C;">WoW</span>+6.1%</td>
+                      <td class="campaign-name" style="background-color:#F4F6FB; color:#141824; font-size:15px; line-height:22px; padding:10px 8px; border-bottom:1px solid #E6EBF5;"><span class="mobile-label" style="display:none; font-size:0; line-height:0; max-height:0; overflow:hidden;">Campaign</span>Acme CA Display</td>
+                      <td align="right" style="background-color:#F4F6FB; color:#141824; font-size:15px; line-height:22px; padding:10px 8px; border-bottom:1px solid #E6EBF5;"><span class="mobile-label" style="display:none; font-size:0; line-height:0; max-height:0; overflow:hidden;">Current</span>$72,119</td>
+                      <td align="right" style="background-color:#F4F6FB; color:#141824; font-size:15px; line-height:22px; padding:10px 8px; border-bottom:1px solid #E6EBF5;"><span class="mobile-label" style="display:none; font-size:0; line-height:0; max-height:0; overflow:hidden;">Prior</span>$68,004</td>
+                      <td align="right" style="background-color:#F4F6FB; color:#1C5A33; font-size:15px; line-height:22px; font-weight:700; padding:10px 8px; border-bottom:1px solid #E6EBF5;"><span class="mobile-label" style="display:none; font-size:0; line-height:0; max-height:0; overflow:hidden; color:#586F7C;">WoW</span>+6.1%</td>
                     </tr>
                     <tr>
-                      <td class="campaign-name" style="background-color:#FAFAFA; color:#141824; font-size:15px; line-height:22px; padding:10px 8px;"><span class="mobile-label" style="display:none;">Campaign</span>Globex Display</td>
-                      <td align="right" style="background-color:#FAFAFA; color:#141824; font-size:15px; line-height:22px; padding:10px 8px;"><span class="mobile-label" style="display:none;">Current</span>$54,882</td>
-                      <td align="right" style="background-color:#FAFAFA; color:#141824; font-size:15px; line-height:22px; padding:10px 8px;"><span class="mobile-label" style="display:none;">Prior</span>$58,131</td>
-                      <td align="right" style="background-color:#FAFAFA; color:#7C1F1F; font-size:15px; line-height:22px; font-weight:700; padding:10px 8px;"><span class="mobile-label" style="display:none; color:#586F7C;">WoW</span>-5.6%</td>
+                      <td class="campaign-name" style="background-color:#FAFAFA; color:#141824; font-size:15px; line-height:22px; padding:10px 8px;"><span class="mobile-label" style="display:none; font-size:0; line-height:0; max-height:0; overflow:hidden;">Campaign</span>Globex Display</td>
+                      <td align="right" style="background-color:#FAFAFA; color:#141824; font-size:15px; line-height:22px; padding:10px 8px;"><span class="mobile-label" style="display:none; font-size:0; line-height:0; max-height:0; overflow:hidden;">Current</span>$54,882</td>
+                      <td align="right" style="background-color:#FAFAFA; color:#141824; font-size:15px; line-height:22px; padding:10px 8px;"><span class="mobile-label" style="display:none; font-size:0; line-height:0; max-height:0; overflow:hidden;">Prior</span>$58,131</td>
+                      <td align="right" style="background-color:#FAFAFA; color:#7C1F1F; font-size:15px; line-height:22px; font-weight:700; padding:10px 8px;"><span class="mobile-label" style="display:none; font-size:0; line-height:0; max-height:0; overflow:hidden; color:#586F7C;">WoW</span>-5.6%</td>
                     </tr>
                   </tbody>
                 </table>
