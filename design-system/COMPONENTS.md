@@ -497,6 +497,9 @@ Example:
   - right: utility and session actions (`Settings`, `Log out`, profile)
 - Use the same header pattern across all products for cohesion.
 - Keep eyebrow text `Elcano Internal` for internal suite apps unless formally rebranded.
+- Mobile top-bar density (`< 40rem` / `sm`):
+  - Collapse verbose support/contact CTAs (such as `"Email Elcano CTO"`) to a compact label (`"Help"`) on mobile while preserving the full `aria-label` for assistive technology.
+  - Hide desktop-only controls (such as keyboard-shortcut cheat sheets) and duplicate view toggles when those actions are already reachable inside a primary toolbar overflow menu (`More options`).
 
 ## Tabs
 - Active tab: accent border/fill and clear selected state.
