@@ -622,7 +622,9 @@ components" block); light-mode values live there too.
 ### Small Pill Button
 - `.pill-btn`, 22-24px high, `--radius-pill`, 1px `--color-pill-border`,
   transparent fill, 0.75rem `--color-text-secondary`.
-- Hover (enabled pills only): `--color-pill-hover-bg` fill, `--color-text-primary`.
+- Hover (enabled, unselected pills): `--color-pill-hover-bg` fill, `--color-text-primary`.
+- Selected (`aria-pressed="true"`, `aria-checked="true"`, or `aria-selected="true"`):
+  `--color-selected-bg` fill, `--color-row-active-border` edge, `--color-text-primary` at weight 600.
 - Pressed: `--color-selected-bg` fill and `--color-selected-border` (the icon
   button too).
 - A pill whose action would change nothing is `aria-disabled="true"` with its
@@ -670,10 +672,17 @@ components" block); light-mode values live there too.
   status icon carries the state and its name steps down to
   `--color-text-secondary` at weight 500. Never fade row text with
   `opacity`.
-- Modal: `--color-surface-1`, 1px `--color-selected-border`, `--radius-xl`,
-  `--shadow-popover`, header icon in a `--color-icon-tile` square
-  (`--color-accent` glyph). Filter rail on `--color-rail-bg`; the selected
-  filter uses the active-row treatment.
+- Modal (`.picker-modal`): `--color-surface-1`, 1px `--color-selected-border`, `--radius-xl`,
+  `--shadow-popover`, header (`.picker-modal__head`) with icon in a `.picker-icon-tile` square
+  (`--color-accent` glyph), `.picker-modal__title`, and `.picker-icon-btn` close control.
+  Filter/mode rail (`.picker-modal__rail`) on `--color-rail-bg`; the selected
+  filter uses the active-row treatment (`.pill-btn[aria-pressed="true"]`).
+  Scrollable content sits in `.picker-modal__body` and summary/actions in
+  `.picker-modal__foot`, with safe-area padding (`env(safe-area-inset-top)` /
+  `env(safe-area-inset-bottom)`). Inside `.scrim`, `.picker-modal` becomes a
+  full-viewport sheet (`100dvh`, edge-to-edge) below `40rem` and a centered
+  modal (`max-width: 35rem`, `max-height: min(39rem, calc(100dvh - 4rem))`) at
+  `40rem` and above.
 - Scrim: `.scrim`, `--color-scrim` with a 3px backdrop blur.
 - Divider lines inside both: `--color-divider`.
 - Count badge on the trigger: `--color-accent-strong` fill,

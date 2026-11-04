@@ -104,7 +104,7 @@ Recommended implementation order for new product adoption:
 - Use full task status badge set where applicable: pending, scheduled, assigned, leased, running, analyzing, success, error, cancelled.
 - For recipient selection in task forms, use canonical email selection pills (`chips-container`, `chip chip-email`, `chip-delete`).
 - App header must use the common canonical pattern (brand mark + `Elcano Internal` eyebrow + page title + right-side utility actions).
-- Modals: surface container, max-width tokens, explicit close button and escape key.
+- Modals: surface container, max-width tokens, explicit close button and escape key. For tool/picker/scheduler windows with a header icon tile, filter/mode rail, scrollable body, and footer actions that adapt into a full-viewport sheet on mobile (`< 40rem`), use `.picker-modal` (`.picker-modal__head`, `.picker-modal__title`, `.picker-modal__rail`, `.picker-modal__body`, `.picker-modal__foot`) inside `.scrim`.
 - Empty/Loading/Error: always include heading, explanatory body text, and next action.
 - Common icon glyphs must come from `icons/core-icons.svg` (`download`, `trash`, `logout`, `paperclip`, etc.).
 - Logos must come from `design-system/logos/` and follow `LOGOS.md` usage mapping.
