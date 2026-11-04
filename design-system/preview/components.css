@@ -2145,6 +2145,11 @@ table {
   box-shadow: var(--shadow-popover); overflow: hidden;
 }
 
+.scrim:has(> .picker-modal) {
+  position: fixed; inset: 0; z-index: 1200;
+  display: flex; align-items: stretch; justify-content: center; padding: 0;
+}
+
 @media (max-width: 39.999rem) {
   .scrim > .picker-modal {
     max-width: 100%; height: 100dvh; border: 0; border-radius: 0; box-shadow: none;
@@ -2152,6 +2157,10 @@ table {
 }
 
 @media (min-width: 40rem) {
+  .scrim:has(> .picker-modal) {
+    align-items: center; padding: 1rem;
+  }
+
   .scrim > .picker-modal {
     max-height: min(39rem, calc(100dvh - 4rem));
   }
@@ -2163,9 +2172,13 @@ table {
 }
 
 .picker-modal__title {
-  margin: 0; font-family: var(--font-heading); font-size: var(--font-size-subtitle);
+  flex: 1; min-width: 0; margin: 0; font-family: var(--font-heading); font-size: var(--font-size-subtitle);
   line-height: var(--line-height-subtitle); font-weight: var(--font-weight-bold);
   color: var(--color-text-primary);
+}
+
+.picker-modal__head > .picker-icon-btn:last-child {
+  margin-left: auto;
 }
 
 .picker-modal__rail {
