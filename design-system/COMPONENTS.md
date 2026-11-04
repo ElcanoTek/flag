@@ -498,7 +498,7 @@ Example:
 - Use the same header pattern across all products for cohesion.
 - Keep eyebrow text `Elcano Internal` for internal suite apps unless formally rebranded.
 - Mobile top-bar density (`< 40rem` / `sm`):
-  - Collapse verbose support/contact CTAs (such as `"Email Elcano CTO"`) to a compact label (`"Help"`) on mobile while preserving the full `aria-label` for assistive technology.
+  - Collapse verbose support/contact CTAs (such as `"Email Elcano CTO"`) to a compact label (`"Help"`) on mobile while including the visible `"Help"` text in `aria-label` (for example `aria-label="Help — Email Elcano CTO"` so WCAG 2.5.3 Label in Name holds on both mobile and desktop).
   - Hide desktop-only controls (such as keyboard-shortcut cheat sheets) and duplicate view toggles when those actions are already reachable inside a primary toolbar overflow menu (`More options`).
 
 ## Tabs
