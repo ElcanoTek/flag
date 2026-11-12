@@ -31,12 +31,16 @@ function CopyButton({
   onCopySuccess?: (value: string) => void
 }) {
   const [copied, setCopied] = React.useState(false)
+  const mountedRef = React.useRef(true)
   const timeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null)
 
   React.useEffect(() => {
+    mountedRef.current = true
     return () => {
+      mountedRef.current = false
       if (timeoutRef.current !== null) {
         clearTimeout(timeoutRef.current)
+        timeoutRef.current = null
       }
     }
   }, [])
@@ -54,22 +58,25 @@ function CopyButton({
       onClick={(event) => {
         onClick?.(event)
         if (event.defaultPrevented || !navigator.clipboard?.writeText) return
-        void navigator.clipboard.writeText(value).then(
-          () => {
+        void (async () => {
+          try {
+            await navigator.clipboard.writeText(value)
+            if (!mountedRef.current) return
             setCopied(true)
             onCopySuccess?.(value)
             if (timeoutRef.current !== null) {
               clearTimeout(timeoutRef.current)
             }
             timeoutRef.current = setTimeout(() => {
+              if (!mountedRef.current) return
               setCopied(false)
               timeoutRef.current = null
             }, copiedDurationMs)
-          },
-          () => {
+          } catch {
+            if (!mountedRef.current) return
             /* clipboard write may fail in non-secure contexts */
           }
-        )
+        })()
       }}
       {...props}
       data-slot="copy-button"

@@ -12,13 +12,18 @@ import { cn } from "@/lib/utils"
 function Progress({
   className,
   value,
+  max = 100,
   ...props
 }: React.ComponentProps<typeof ProgressPrimitive.Root>) {
-  const clamped = Math.min(100, Math.max(0, value || 0))
+  const safeMax =
+    typeof max === "number" && Number.isFinite(max) && max > 0 ? max : 100
+  const pct =
+    value == null ? 0 : Math.min(100, Math.max(0, (value / safeMax) * 100))
   return (
     <ProgressPrimitive.Root
       data-slot="progress"
       value={value}
+      max={safeMax}
       className={cn(
         "relative h-2 w-full overflow-hidden rounded-full border border-border bg-surface-2",
         className
@@ -28,7 +33,7 @@ function Progress({
       <ProgressPrimitive.Indicator
         data-slot="progress-indicator"
         className="h-full w-full flex-1 bg-primary [transition:transform_var(--transition-base)]"
-        style={{ transform: `translateX(-${100 - clamped}%)` }}
+        style={{ transform: `translateX(-${100 - pct}%)` }}
       />
     </ProgressPrimitive.Root>
   )
