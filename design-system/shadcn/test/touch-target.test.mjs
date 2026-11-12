@@ -74,8 +74,9 @@ const HIT_AREA = [
   "any-pointer-coarse:after:absolute",
   "any-pointer-coarse:after:top-1/2",
   "any-pointer-coarse:after:left-1/2",
-  "any-pointer-coarse:after:size-11",
-  "any-pointer-coarse:after:-translate-1/2",
+  "any-pointer-coarse:after:h-6",
+  "any-pointer-coarse:after:w-11",
+    "any-pointer-coarse:after:-translate-1/2",
 ]
 
 for (const [name, render] of [
@@ -83,7 +84,7 @@ for (const [name, render] of [
   ["RadioGroupItem", (p) => RadioGroupItem(p)],
   ["Switch", (p) => Switch(p)],
 ]) {
-  test(`${name} gets a 44px hit area on coarse pointers, anchored to itself`, () => {
+  test(`${name} gets a 44x24px hit area on coarse pointers, anchored to itself`, () => {
     const tokens = render({}).props.className.split(/\s+/)
     assert.ok(tokens.includes("relative"), `${name} must be position: relative for its ::after`)
     for (const t of HIT_AREA) assert.ok(tokens.includes(t), `${name} is missing ${t}`)

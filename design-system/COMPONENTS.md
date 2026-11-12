@@ -273,10 +273,10 @@ Example:
 - Reuse the same checkbox pattern in filter popovers, settings lists, and dense forms; do not create alternate checkbox implementations per product.
 
 ## Touch targets
-- On a touch screen (`any-pointer: coarse`, so a touchscreen laptop whose primary pointer is a trackpad counts too) every control is at least 44x44px to tap, without changing how it looks.
-- Controls drawn smaller than that (`@flag/checkbox`, `@flag/radio-group` items, `@flag/switch`) carry an invisible `::after` hit area, 44x44px and centred on the control, under `any-pointer-coarse:`. The control itself is `position: relative` for it. Mouse and pen layouts are unchanged.
-- A caller that needs a different hit area (a whole table cell or card column) wraps the control in a `<label>` that covers it, rather than overriding the `::after`.
-- Keep 44px tap targets apart: two small controls closer than that compete for the same tap; space them or give each its own row.
+- On a touch screen (`any-pointer: coarse`, so a touchscreen laptop whose primary pointer is a trackpad counts too) a control's tap target is never smaller than 24x24px (WCAG 2.5.8), and a row or button a person taps on its own is 44px tall.
+- Controls drawn smaller than that (`@flag/checkbox`, `@flag/radio-group` items, `@flag/switch`) carry an invisible `::after` hit area under `any-pointer-coarse:`, 44px wide and 24px tall, centred on the control; the control itself is `position: relative` for it. 24px tall keeps controls stacked 24px apart (a 16px box plus an 8px gap) from stealing each other's taps. Mouse and pen layouts are unchanged.
+- For a 44px-tall target, wrap the control in a `<label>` row (or a table cell) that is at least 44px tall on a coarse pointer (`any-pointer-coarse:min-h-11`), rather than overriding the `::after`.
+- A text link or icon button drawn smaller than 44px gets a fixed-size invisible hit area (44px tall, at least 44px wide), not one that grows with its text; where that would overlap a neighbouring control (a chip's remove button beside its input), use 24x24px.
 
 ## App Header
 - Use the shared `.page-header` with `.ds-app-header` brand/actions anatomy as the default page-level header.
