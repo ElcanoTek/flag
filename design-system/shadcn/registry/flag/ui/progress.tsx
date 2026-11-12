@@ -17,12 +17,15 @@ function Progress({
 }: React.ComponentProps<typeof ProgressPrimitive.Root>) {
   const safeMax =
     typeof max === "number" && Number.isFinite(max) && max > 0 ? max : 100
-  const pct =
-    value == null ? 0 : Math.min(100, Math.max(0, (value / safeMax) * 100))
+  const safeValue =
+    typeof value === "number" && Number.isFinite(value)
+      ? Math.min(safeMax, Math.max(0, value))
+      : null
+  const pct = safeValue === null ? 0 : (safeValue / safeMax) * 100
   return (
     <ProgressPrimitive.Root
       data-slot="progress"
-      value={value}
+      value={safeValue}
       max={safeMax}
       className={cn(
         "relative h-2 w-full overflow-hidden rounded-full border border-border bg-surface-2",

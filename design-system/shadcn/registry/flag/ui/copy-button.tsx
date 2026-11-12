@@ -30,20 +30,38 @@ function CopyButton({
   copiedDurationMs?: number
   onCopySuccess?: (value: string) => void
 }) {
-  const [copied, setCopied] = React.useState(false)
+  const [copiedValue, setCopiedValue] = React.useState<string | null>(null)
   const mountedRef = React.useRef(true)
+  const copyIdRef = React.useRef(0)
+  const prevValueRef = React.useRef(value)
   const timeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null)
+  const copied = copiedValue !== null && copiedValue === value
 
   React.useEffect(() => {
     mountedRef.current = true
     return () => {
       mountedRef.current = false
+      copyIdRef.current += 1
       if (timeoutRef.current !== null) {
         clearTimeout(timeoutRef.current)
         timeoutRef.current = null
       }
     }
   }, [])
+
+  React.useEffect(() => {
+    if (prevValueRef.current === value) return
+    prevValueRef.current = value
+    copyIdRef.current += 1
+    if (timeoutRef.current !== null) {
+      clearTimeout(timeoutRef.current)
+      timeoutRef.current = setTimeout(() => {
+        if (!mountedRef.current) return
+        setCopiedValue(null)
+        timeoutRef.current = null
+      }, 0)
+    }
+  }, [value])
 
   const resolvedAriaLabel =
     ariaLabel ?? (children ? undefined : copied ? copiedLabel : label)
@@ -58,22 +76,25 @@ function CopyButton({
       onClick={(event) => {
         onClick?.(event)
         if (event.defaultPrevented || !navigator.clipboard?.writeText) return
+        const targetValue = value
+        const copyId = ++copyIdRef.current
+        if (timeoutRef.current !== null) {
+          clearTimeout(timeoutRef.current)
+          timeoutRef.current = null
+        }
         void (async () => {
           try {
-            await navigator.clipboard.writeText(value)
-            if (!mountedRef.current) return
-            setCopied(true)
-            onCopySuccess?.(value)
-            if (timeoutRef.current !== null) {
-              clearTimeout(timeoutRef.current)
-            }
+            await navigator.clipboard.writeText(targetValue)
+            if (!mountedRef.current || copyId !== copyIdRef.current) return
+            setCopiedValue(targetValue)
+            onCopySuccess?.(targetValue)
             timeoutRef.current = setTimeout(() => {
-              if (!mountedRef.current) return
-              setCopied(false)
+              if (!mountedRef.current || copyId !== copyIdRef.current) return
+              setCopiedValue(null)
               timeoutRef.current = null
             }, copiedDurationMs)
           } catch {
-            if (!mountedRef.current) return
+            if (!mountedRef.current || copyId !== copyIdRef.current) return
             /* clipboard write may fail in non-secure contexts */
           }
         })()
