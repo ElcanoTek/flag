@@ -272,6 +272,12 @@ Example:
   - do not reference a sprite symbol name that is not present in `icons/core-icons.svg`
 - Reuse the same checkbox pattern in filter popovers, settings lists, and dense forms; do not create alternate checkbox implementations per product.
 
+## Touch targets
+- On a touch screen (`pointer: coarse`) every control is at least 44x44px to tap, without changing how it looks.
+- Controls drawn smaller than that (`@flag/checkbox`, `@flag/radio-group` items, `@flag/switch`) carry an invisible `::after` hit area, 44x44px and centred on the control, under `pointer-coarse:`. The control itself is `position: relative` for it. Mouse and pen layouts are unchanged.
+- A caller that needs a different hit area (a whole table cell or card column) wraps the control in a `<label>` that covers it, rather than overriding the `::after`.
+- Keep 44px tap targets apart: two small controls closer than that compete for the same tap; space them or give each its own row.
+
 ## App Header
 - Use the shared `.page-header` with `.ds-app-header` brand/actions anatomy as the default page-level header.
 - Optional support copy (`header_intro`) may be omitted when the page already communicates purpose through surrounding UI.
