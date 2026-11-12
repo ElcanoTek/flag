@@ -113,7 +113,7 @@ test("NativeSelect preserves chevron right-padding when caller passes px-* or p-
   assert.ok(withP.tokens.includes("data-[size=sm]:pr-7"))
 })
 
-test("NativeSelect yields to explicit pr-* and pe-* overrides", () => {
+test("NativeSelect yields only to physical pr-* overrides and preserves pr-8 alongside logical pe-*", () => {
   const withPr = selectTokens({ className: "pr-10" })
   assert.ok(withPr.tokens.includes("pr-10"))
   assert.ok(!withPr.tokens.includes("pr-8"))
@@ -130,7 +130,10 @@ test("NativeSelect yields to explicit pr-* and pe-* overrides", () => {
 
   const withPe = selectTokens({ className: "pe-9" })
   assert.ok(withPe.tokens.includes("pe-9"))
-  assert.ok(!withPe.tokens.includes("pr-8"))
+  assert.ok(
+    withPe.tokens.includes("pr-8"),
+    "logical pe-* pads left in RTL while chevron stays at physical right-2.5"
+  )
 
   const withImportantPostfix = selectTokens({ className: "pr-6!" })
   assert.ok(withImportantPostfix.tokens.includes("pr-6!"))

@@ -4,11 +4,12 @@ import { ChevronDownIcon } from "lucide-react"
 import { cn } from "@/lib/utils"
 
 // Shorthand `px-*` / `p-*` in caller `className` would otherwise strip `pr-8`
-// via tailwind-merge and let option text collide with the overlaid chevron;
-// keep the chevron gutter unless an explicit `pr-*` / `pe-*` is supplied.
-const EXPLICIT_RIGHT_PADDING = /(?:^|\s)!?-?(?:pr|pe)-\S+/
+// via tailwind-merge and let option text collide with the overlaid chevron
+// (`right-2.5`); keep the physical right gutter unless an explicit physical
+// `pr-*` override is supplied (`pe-*` pads the left side under `dir="rtl"`).
+const EXPLICIT_RIGHT_PADDING = /(?:^|\s)!?-?pr-\S+/
 const EXPLICIT_SM_RIGHT_PADDING =
-  /(?:^|\s)data-\[size=sm\]:!?-?(?:pr|pe)-\S+/
+  /(?:^|\s)data-\[size=sm\]:!?-?pr-\S+/
 
 // Flag COMPONENTS.md "Form Inputs" / "Dropdowns": native <select> with a
 // chevron affordance, matching Flag's field shell (2.5rem default, 2rem sm,
