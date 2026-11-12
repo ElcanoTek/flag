@@ -1,0 +1,20 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "progress",
+  "title": "Progress",
+  "description": "Flag pill progress bar on surface-2 with a measured primary-fill indicator.",
+  "dependencies": [
+    "radix-ui@^1.6.7"
+  ],
+  "registryDependencies": [
+    "@flag/utils"
+  ],
+  "files": [
+    {
+      "path": "registry/flag/ui/progress.tsx",
+      "content": "\"use client\"\n\nimport * as React from \"react\"\nimport { Progress as ProgressPrimitive } from \"radix-ui\"\n\nimport { cn } from \"@/lib/utils\"\n\n// Pill progress bar: surface-2 track with --color-primary-fill indicator\n// (measured >= 3:1 against the track in both themes). Pass `aria-label` or\n// `aria-labelledby` so assistive technology can name the progressbar.\n// Tier A: .progress > .progress__bar.\nfunction Progress({\n  className,\n  value,\n  max = 100,\n  ...props\n}: React.ComponentProps<typeof ProgressPrimitive.Root>) {\n  const safeMax =\n    typeof max === \"number\" && Number.isFinite(max) && max > 0 ? max : 100\n  const safeValue =\n    typeof value === \"number\" && Number.isFinite(value)\n      ? Math.min(safeMax, Math.max(0, value))\n      : null\n  const pct = safeValue === null ? 0 : (safeValue / safeMax) * 100\n  return (\n    <ProgressPrimitive.Root\n      data-slot=\"progress\"\n      value={safeValue}\n      max={safeMax}\n      className={cn(\n        \"relative h-2 w-full overflow-hidden rounded-full border border-border bg-surface-2\",\n        className\n      )}\n      {...props}\n    >\n      <ProgressPrimitive.Indicator\n        data-slot=\"progress-indicator\"\n        className=\"h-full w-full flex-1 bg-primary [transition:transform_var(--transition-base)]\"\n        style={{ transform: `translateX(-${100 - pct}%)` }}\n      />\n    </ProgressPrimitive.Root>\n  )\n}\n\nexport { Progress }\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

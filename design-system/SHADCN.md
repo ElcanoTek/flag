@@ -140,7 +140,9 @@ example `bg-(--color-status-running-bg)`.
 | `alert` | variants `info`, `success`, `warning` beside `default` and `destructive` |
 | `tabs` | `TabsList variant="default"` is Flag's segmented control; `variant="line"` is page tabs |
 | `switch` | sizes `default` (30x18) and `lg` (38x22), from the connection picker |
-| `table` | `TableRow interactive` turns on row hover and pointer (Flag: hover only on clickable rows); the container scrolls from the keyboard |
+| `table` | `TableRow interactive` turns on row hover and pointer (Flag: hover only on clickable rows); `Table scrollLabel="…"` opts horizontal-overflow tables into a focusable region (`role="region"`, `aria-label`, `tabIndex={0}`) without adding dead tab stops to static tables |
+| `empty-state` | Flag empty-state card (`EmptyState`, `EmptyStateIcon`, `EmptyStateTitle`, `EmptyStateDescription`, `EmptyStateActions`) |
+| `copy-button` | `CopyButton` wrapping Flag's `Button` with transient `CheckIcon` confirmation and polite screen-reader announcement |
 | `sonner` | follows `html[data-theme]` through `useFlagTheme` (`@flag/use-flag-theme`) instead of `next-themes` |
 | `utils` | `cn` knows Flag's `text-*` sizes, so `cn("text-caption", "text-subtle")` keeps both |
 

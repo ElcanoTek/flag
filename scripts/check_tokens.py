@@ -225,6 +225,7 @@ TWO_PART = [
     ("primary-button spinner arc on its track", "--color-on-primary-fill", ["--color-primary-fill-hover"],
      ("--color-bg",)),
     ("upload progress fill on its track", "--color-link", ["--color-overlay-strong"], SURFACES),
+    ("progress bar (.progress__bar) on its track", "--color-primary-fill", ["--color-surface-2"], SURFACES),
     ("switch knob on its track (off)", "--color-switch-knob", ["--color-switch-track-off"], POPOVER),
     ("switch knob on its track (on)", "--color-switch-knob", ["--color-switch-track-on"], POPOVER),
 ]

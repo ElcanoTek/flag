@@ -8,7 +8,7 @@
 # Serves design-system/preview/ locally so the registry resolves at
 # http://localhost:$PORT/r/{name}.json, the same path as production.
 # Needs Node 22+, python3 and a Chromium for Playwright (PLAYWRIGHT_BROWSERS_PATH;
-# the pinned playwright below matches chromium-1194). Writes PNGs and
+# PLAYWRIGHT_VERSION defaults to 1.64.1, matching chromium-1248). Writes PNGs and
 # axe-report.json to OUT_DIR (default: a temp dir). --preview also refreshes
 # the screenshots the Flag preview shows (preview/shadcn/*.webp; needs
 # ImageMagick).
@@ -27,7 +27,7 @@ trap cleanup EXIT
 (cd "$DS/preview" && exec python3 -m http.server "$PORT" >/dev/null 2>&1) & SRV=$!
 
 cd "$WORK"
-cat > package.json <<'JSON'
+cat > package.json <<JSON
 {
   "name": "flag-shadcn-kitchen-sink",
   "private": true,
@@ -40,7 +40,7 @@ cat > package.json <<'JSON'
     "@types/react": "19.3.0",
     "@types/react-dom": "19.3.0",
     "@vitejs/plugin-react": "6.1.2",
-    "playwright": "1.56.1",
+    "playwright": "${PLAYWRIGHT_VERSION:-1.64.1}",
     "tailwindcss": "4.3.3",
     "typescript": "5.9.3",
     "vite": "8.3.4"

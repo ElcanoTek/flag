@@ -1,0 +1,17 @@
+{
+  "$schema": "https://ui.shadcn.com/schema/registry-item.json",
+  "name": "empty-state",
+  "title": "Empty State",
+  "description": "Flag empty state panel: dashed subtle surface with icon tile, heading, description and action row.",
+  "registryDependencies": [
+    "@flag/utils"
+  ],
+  "files": [
+    {
+      "path": "registry/flag/ui/empty-state.tsx",
+      "content": "import * as React from \"react\"\n\nimport { cn } from \"@/lib/utils\"\n\n// Flag COMPONENTS.md \"Empty States\": optional icon tile, title, explanation\n// and next action on a subtle dashed surface. Tier A: .empty-state /\n// .empty-state__icon / .empty-state__title / .empty-state__description /\n// .empty-state__actions.\nfunction EmptyState({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"empty-state\"\n      className={cn(\n        \"flex flex-col items-center justify-center gap-2 rounded-lg border border-dashed border-border bg-(--color-overlay-soft) px-6 py-10 text-center\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction EmptyStateIcon({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"empty-state-icon\"\n      aria-hidden=\"true\"\n      className={cn(\n        \"mb-1 inline-flex size-10 shrink-0 items-center justify-center rounded-md bg-(--color-icon-tile) text-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-5\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction EmptyStateTitle({ className, ...props }: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"empty-state-title\"\n      className={cn(\n        \"font-heading text-subtitle font-semibold text-foreground\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nfunction EmptyStateDescription({\n  className,\n  ...props\n}: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"empty-state-description\"\n      className={cn(\"max-w-md text-body-md text-subtle\", className)}\n      {...props}\n    />\n  )\n}\n\nfunction EmptyStateActions({\n  className,\n  ...props\n}: React.ComponentProps<\"div\">) {\n  return (\n    <div\n      data-slot=\"empty-state-actions\"\n      className={cn(\n        \"mt-2 flex flex-wrap items-center justify-center gap-2\",\n        className\n      )}\n      {...props}\n    />\n  )\n}\n\nexport {\n  EmptyState,\n  EmptyStateActions,\n  EmptyStateDescription,\n  EmptyStateIcon,\n  EmptyStateTitle,\n}\n",
+      "type": "registry:ui"
+    }
+  ],
+  "type": "registry:ui"
+}

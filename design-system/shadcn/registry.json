@@ -498,6 +498,91 @@
           "type": "registry:ui"
         }
       ]
+    },
+    {
+      "name": "native-select",
+      "type": "registry:ui",
+      "title": "Native Select",
+      "description": "Flag native <select> wrapper with right chevron, default and sm sizes, and Flag field states.",
+      "dependencies": [
+        "lucide-react@^1.49.0"
+      ],
+      "registryDependencies": [
+        "@flag/utils"
+      ],
+      "files": [
+        {
+          "path": "registry/flag/ui/native-select.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "progress",
+      "type": "registry:ui",
+      "title": "Progress",
+      "description": "Flag pill progress bar on surface-2 with a measured primary-fill indicator.",
+      "dependencies": [
+        "radix-ui@^1.6.7"
+      ],
+      "registryDependencies": [
+        "@flag/utils"
+      ],
+      "files": [
+        {
+          "path": "registry/flag/ui/progress.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "kbd",
+      "type": "registry:ui",
+      "title": "Kbd",
+      "description": "Flag inline keyboard shortcut keycap and combination group.",
+      "registryDependencies": [
+        "@flag/utils"
+      ],
+      "files": [
+        {
+          "path": "registry/flag/ui/kbd.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "empty-state",
+      "type": "registry:ui",
+      "title": "Empty State",
+      "description": "Flag empty state panel: dashed subtle surface with icon tile, heading, description and action row.",
+      "registryDependencies": [
+        "@flag/utils"
+      ],
+      "files": [
+        {
+          "path": "registry/flag/ui/empty-state.tsx",
+          "type": "registry:ui"
+        }
+      ]
+    },
+    {
+      "name": "copy-button",
+      "type": "registry:ui",
+      "title": "Copy Button",
+      "description": "Accessible clipboard button wrapping Flag's Button with transient CheckIcon confirmation.",
+      "dependencies": [
+        "lucide-react@^1.49.0"
+      ],
+      "registryDependencies": [
+        "@flag/utils",
+        "@flag/button"
+      ],
+      "files": [
+        {
+          "path": "registry/flag/ui/copy-button.tsx",
+          "type": "registry:ui"
+        }
+      ]
     }
   ]
 }

@@ -414,6 +414,7 @@ DOCUMENTED_STATES = [
     ".avatar--sm", ".avatar--lg", ".separator--vertical", ".select-wrap--sm select",
     ".badge-default", ".badge-secondary", ".badge-outline", ".badge-accent",
     "input[type=\"radio\"].ds-radio:checked", "input[type=\"radio\"].ds-radio:disabled:checked",
+    ".btn-copy[data-copied=\"true\"] > svg",
 ]
 
 
@@ -461,6 +462,8 @@ MEASURED_PAINT = [
     (".badge-default", "color", "var(--color-on-primary-fill)"),
     (".badge-accent", "background", "var(--color-accent)"),
     (".badge-accent", "color", "var(--flag-on-accent)"),
+    (".progress", "background", "var(--color-surface-2)"),
+    (".progress__bar", "background", "var(--color-primary-fill)"),
 ]
 
 
