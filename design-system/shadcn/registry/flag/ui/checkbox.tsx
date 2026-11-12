@@ -10,7 +10,7 @@ import { cn } from "@/lib/utils"
 // every surface), --color-accent edge on the running tint when checked or
 // indeterminate, focus ring on keyboard focus only, no hover while disabled.
 // Tier A: .ds-checkbox / .ds-checkbox__box.
-// Touch: on a coarse pointer an invisible ::after centred on the control
+// Touch: on any coarse pointer (a touchscreen, even beside a mouse) an invisible ::after centred on the control
 // widens its hit area to 44x44px (COMPONENTS.md "Touch targets"); the drawn
 // control keeps its size. For a bigger area, wrap it in a covering <label>.
 function Checkbox({
@@ -21,7 +21,7 @@ function Checkbox({
     <CheckboxPrimitive.Root
       data-slot="checkbox"
       className={cn(
-        "peer group/checkbox relative size-4 shrink-0 cursor-pointer rounded-[0.25rem] border-[1.5px] border-(--color-control-border) bg-(--color-overlay-soft) text-foreground [transition:var(--transition-fast)] outline-none enabled:hover:border-(--color-accent) focus-visible:shadow-(--focus-ring) disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive data-[state=checked]:border-(--color-accent) data-[state=checked]:bg-(--color-status-running-bg) data-[state=indeterminate]:border-(--color-accent) data-[state=indeterminate]:bg-(--color-status-running-bg) pointer-coarse:after:absolute pointer-coarse:after:top-1/2 pointer-coarse:after:left-1/2 pointer-coarse:after:size-11 pointer-coarse:after:-translate-1/2",
+        "peer group/checkbox relative size-4 shrink-0 cursor-pointer rounded-[0.25rem] border-[1.5px] border-(--color-control-border) bg-(--color-overlay-soft) text-foreground [transition:var(--transition-fast)] outline-none enabled:hover:border-(--color-accent) focus-visible:shadow-(--focus-ring) disabled:cursor-not-allowed disabled:opacity-50 aria-invalid:border-destructive data-[state=checked]:border-(--color-accent) data-[state=checked]:bg-(--color-status-running-bg) data-[state=indeterminate]:border-(--color-accent) data-[state=indeterminate]:bg-(--color-status-running-bg) any-pointer-coarse:after:absolute any-pointer-coarse:after:top-1/2 any-pointer-coarse:after:left-1/2 any-pointer-coarse:after:size-11 any-pointer-coarse:after:-translate-1/2",
         className
       )}
       {...props}

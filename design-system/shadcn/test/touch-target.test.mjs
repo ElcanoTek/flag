@@ -71,11 +71,11 @@ const { RadioGroupItem } = loadTsModule("registry/flag/ui/radio-group.tsx", mods
 const { Switch } = loadTsModule("registry/flag/ui/switch.tsx", mods)
 
 const HIT_AREA = [
-  "pointer-coarse:after:absolute",
-  "pointer-coarse:after:top-1/2",
-  "pointer-coarse:after:left-1/2",
-  "pointer-coarse:after:size-11",
-  "pointer-coarse:after:-translate-1/2",
+  "any-pointer-coarse:after:absolute",
+  "any-pointer-coarse:after:top-1/2",
+  "any-pointer-coarse:after:left-1/2",
+  "any-pointer-coarse:after:size-11",
+  "any-pointer-coarse:after:-translate-1/2",
 ]
 
 for (const [name, render] of [

@@ -22,7 +22,7 @@ function RadioGroup({
 // --color-control-border edge on surface-1, a secondary edge and dot and the
 // selected halo (--shadow-control-selected) when checked; disabled draws a
 // muted ring and dot. Tier A: input[type=radio].ds-radio.
-// Touch: on a coarse pointer an invisible ::after centred on the control
+// Touch: on any coarse pointer (a touchscreen, even beside a mouse) an invisible ::after centred on the control
 // widens its hit area to 44x44px (COMPONENTS.md "Touch targets"); the drawn
 // control keeps its size. For a bigger area, wrap it in a covering <label>.
 function RadioGroupItem({
@@ -33,7 +33,7 @@ function RadioGroupItem({
     <RadioGroupPrimitive.Item
       data-slot="radio-group-item"
       className={cn(
-        "group/radio relative aspect-square size-4 shrink-0 cursor-pointer rounded-full border-[1.5px] border-(--color-control-border) bg-surface-1 [transition:var(--transition-fast)] outline-none enabled:hover:border-(--color-accent) focus-visible:shadow-(--focus-ring) disabled:cursor-not-allowed disabled:border-border disabled:bg-(--color-overlay-soft) disabled:shadow-none aria-invalid:border-destructive data-[state=checked]:border-(--color-secondary) data-[state=checked]:shadow-(--shadow-control-selected) data-[state=checked]:focus-visible:shadow-(--focus-ring) disabled:data-[state=checked]:shadow-none pointer-coarse:after:absolute pointer-coarse:after:top-1/2 pointer-coarse:after:left-1/2 pointer-coarse:after:size-11 pointer-coarse:after:-translate-1/2",
+        "group/radio relative aspect-square size-4 shrink-0 cursor-pointer rounded-full border-[1.5px] border-(--color-control-border) bg-surface-1 [transition:var(--transition-fast)] outline-none enabled:hover:border-(--color-accent) focus-visible:shadow-(--focus-ring) disabled:cursor-not-allowed disabled:border-border disabled:bg-(--color-overlay-soft) disabled:shadow-none aria-invalid:border-destructive data-[state=checked]:border-(--color-secondary) data-[state=checked]:shadow-(--shadow-control-selected) data-[state=checked]:focus-visible:shadow-(--focus-ring) disabled:data-[state=checked]:shadow-none any-pointer-coarse:after:absolute any-pointer-coarse:after:top-1/2 any-pointer-coarse:after:left-1/2 any-pointer-coarse:after:size-11 any-pointer-coarse:after:-translate-1/2",
         className
       )}
       {...props}

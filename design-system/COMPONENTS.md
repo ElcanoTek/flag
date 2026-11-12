@@ -273,8 +273,8 @@ Example:
 - Reuse the same checkbox pattern in filter popovers, settings lists, and dense forms; do not create alternate checkbox implementations per product.
 
 ## Touch targets
-- On a touch screen (`pointer: coarse`) every control is at least 44x44px to tap, without changing how it looks.
-- Controls drawn smaller than that (`@flag/checkbox`, `@flag/radio-group` items, `@flag/switch`) carry an invisible `::after` hit area, 44x44px and centred on the control, under `pointer-coarse:`. The control itself is `position: relative` for it. Mouse and pen layouts are unchanged.
+- On a touch screen (`any-pointer: coarse`, so a touchscreen laptop whose primary pointer is a trackpad counts too) every control is at least 44x44px to tap, without changing how it looks.
+- Controls drawn smaller than that (`@flag/checkbox`, `@flag/radio-group` items, `@flag/switch`) carry an invisible `::after` hit area, 44x44px and centred on the control, under `any-pointer-coarse:`. The control itself is `position: relative` for it. Mouse and pen layouts are unchanged.
 - A caller that needs a different hit area (a whole table cell or card column) wraps the control in a `<label>` that covers it, rather than overriding the `::after`.
 - Keep 44px tap targets apart: two small controls closer than that compete for the same tap; space them or give each its own row.
 
