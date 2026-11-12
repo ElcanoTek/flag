@@ -273,10 +273,10 @@ Example:
 - Reuse the same checkbox pattern in filter popovers, settings lists, and dense forms; do not create alternate checkbox implementations per product.
 
 ## Touch targets
-- On a touch screen (`any-pointer: coarse`, so a touchscreen laptop whose primary pointer is a trackpad counts too) a control's tap target is never smaller than 24x24px (WCAG 2.5.8), and a row or button a person taps on its own is 44px tall.
-- Controls drawn smaller than that (`@flag/checkbox`, `@flag/radio-group` items, `@flag/switch`) carry an invisible `::after` hit area under `any-pointer-coarse:`, 44px wide and 24px tall, centred on the control; the control itself is `position: relative` for it. 24px tall keeps controls stacked 24px apart (a 16px box plus an 8px gap) from stealing each other's taps. Mouse and pen layouts are unchanged.
-- For a 44px-tall target, wrap the control in a `<label>` row (or a table cell) that is at least 44px tall on a coarse pointer (`any-pointer-coarse:min-h-11`), rather than overriding the `::after`.
-- A text link or icon button drawn smaller than 44px gets a fixed-size invisible hit area (44px tall, at least 44px wide), not one that grows with its text; where that would overlap a neighbouring control (a chip's remove button beside its input), use 24x24px.
+- On a touch screen (`any-pointer: coarse`, so a touchscreen laptop whose primary pointer is a trackpad counts too) no control's tap target is smaller than 24x24px (WCAG 2.5.8), and rows or buttons people tap on their own are 44px tall.
+- Controls drawn smaller than 24px (`@flag/checkbox`, `@flag/radio-group` items, `@flag/switch`) carry an invisible `::after` under `any-pointer-coarse:`, centred on the control: 24x24px for a checkbox or radio, 24px tall at full width for a switch. The control itself is `position: relative` for it. Mouse and pen layouts are unchanged.
+- An invisible hit area never grows past 24px: anything bigger overlaps a neighbour placed closer than its size (a radio group in a row, stacked options, two links side by side), and the later one then catches taps meant for the earlier one.
+- A 44px target comes from layout, not from a pseudo-element: wrap the control in a `<label>` row or table cell that is at least 44px on a coarse pointer (`any-pointer-coarse:min-h-11`), or give a standalone button that min-height.
 
 ## App Header
 - Use the shared `.page-header` with `.ds-app-header` brand/actions anatomy as the default page-level header.

@@ -74,19 +74,19 @@ const HIT_AREA = [
   "any-pointer-coarse:after:absolute",
   "any-pointer-coarse:after:top-1/2",
   "any-pointer-coarse:after:left-1/2",
-  "any-pointer-coarse:after:h-6",
-  "any-pointer-coarse:after:w-11",
     "any-pointer-coarse:after:-translate-1/2",
 ]
 
-for (const [name, render] of [
-  ["Checkbox", (p) => Checkbox(p)],
-  ["RadioGroupItem", (p) => RadioGroupItem(p)],
-  ["Switch", (p) => Switch(p)],
+for (const [name, render, size] of [
+  ["Checkbox", (p) => Checkbox(p), ["any-pointer-coarse:after:size-6"]],
+  ["RadioGroupItem", (p) => RadioGroupItem(p), ["any-pointer-coarse:after:size-6"]],
+  ["Switch", (p) => Switch(p), ["any-pointer-coarse:after:h-6", "any-pointer-coarse:after:w-full"]],
 ]) {
-  test(`${name} gets a 44x24px hit area on coarse pointers, anchored to itself`, () => {
+  test(`${name} gets a 24px minimum hit area on coarse pointers, anchored to itself`, () => {
     const tokens = render({}).props.className.split(/\s+/)
     assert.ok(tokens.includes("relative"), `${name} must be position: relative for its ::after`)
-    for (const t of HIT_AREA) assert.ok(tokens.includes(t), `${name} is missing ${t}`)
+    for (const t of [...HIT_AREA, ...size]) assert.ok(tokens.includes(t), `${name} is missing ${t}`)
+    // Never wider than 24px beyond the control: neighbours 24px apart must not overlap.
+    assert.ok(!tokens.some((t) => /after:(size|w|h)-(7|8|9|10|11|12)\b/.test(t)), `${name} hit area grew past 24px`)
   })
 }
