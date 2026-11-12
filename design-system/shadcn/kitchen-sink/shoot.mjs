@@ -27,6 +27,12 @@ for (const theme of ["dark", "light"]) {
     await page.screenshot({ path: `${out}/kitchen-sink-${tag}.png`, fullPage: true })
     const axe = await new AxeBuilder({ page }).analyze()
     report[`page-${tag}`] = axe.violations.map((v) => ({ id: v.id, impact: v.impact, nodes: v.nodes.map((n) => n.target.join(" ") + " :: " + n.failureSummary.split("\n").slice(1, 2).join("")) }))
+    const badSelectPadding = await page.evaluate(() =>
+      [...document.querySelectorAll('[data-slot="native-select"]')]
+        .map((el) => ({ id: el.id || "(anon)", pr: parseFloat(getComputedStyle(el).paddingRight) }))
+        .filter((x) => !(x.pr >= 28))
+    )
+    if (badSelectPadding.length) errors.push(`native-select chevron gutter < 28px: ${JSON.stringify(badSelectPadding)}`)
     for (const o of overlays) {
       const btn = page.locator(`[data-open=${o}]`)
       await btn.scrollIntoViewIfNeeded()

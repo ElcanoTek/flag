@@ -286,7 +286,7 @@ export function App() {
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="native-cadence">Cadence (native sm)</Label>
-                <NativeSelect id="native-cadence" size="sm" defaultValue="hourly">
+                <NativeSelect id="native-cadence" size="sm" className="px-2.5" defaultValue="hourly">
                   <NativeSelectOption value="hourly">Hourly</NativeSelectOption>
                   <NativeSelectOption value="daily">Daily</NativeSelectOption>
                   <NativeSelectOption value="weekly">Weekly</NativeSelectOption>

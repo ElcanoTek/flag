@@ -577,6 +577,68 @@ def check_appearance_disabled(css_text, sels):
                 err("components.css: `%s` removes native appearance but has no disabled state" % s)
 
 
+def check_tier_a_hardening(css_text):
+    """Guard Tier A contracts uncovered during cross-product migrations:
+
+    1. components.css protects HTML `[hidden]` (`[hidden]:not([hidden="until-found"])
+       { display: none !important }`) because Tier A pages load without
+       Tailwind Preflight and component `display: flex | inline-flex | grid`
+       rules otherwise beat the browser UA `[hidden]` rule.
+    2. Bare prose `a` rules exclude component-classed anchors (`.btn`,
+       `.icon-action`, `.tab`, `.seg-option`, `.menu-item`, `.featured-link`,
+       `.link-tile`) via zero-specificity `:where(:not(...))` so light-mode
+       link rules never override control foregrounds; `.btn` centers and clears
+       underline; `.icon-action` zeroes UA button padding.
+    3. Viewport upper-bound media queries use Media Queries Level 4 range
+       syntax (`@media (width < ...rem)`) rather than `max-width` / fractional
+       subpixel hacks (`39.999rem`, `39.9375rem`, `47.9375rem`, `640px`).
+    """
+    base_css = (DS / "components" / "components.css").read_text()
+    base_rules = css_rules(base_css)
+    has_hidden_guard = any(
+        '[hidden]:not([hidden="until-found"])' in split_selectors(sel)
+        and re.search(r"(?:^|;)\s*display\s*:\s*none\s*!important\b", body)
+        for sel, body, _r in base_rules
+    )
+    if not has_hidden_guard:
+        err('components.css: missing `[hidden]:not([hidden="until-found"]) { display: none !important }` guard')
+
+    anchor_excluded = {".btn", ".icon-action", ".tab", ".seg-option", ".menu-item", ".featured-link", ".link-tile"}
+    for sel, _body, _r in css_rules(css_text):
+        for s in split_selectors(sel):
+            core = s.replace('[data-theme="light"] ', "").replace("body.theme-light ", "")
+            compounds = re.split(r"\s+(?![^()]*\))", core)
+            if len(compounds) == 1 and re.match(r"^a(?=[:\s]|$)", compounds[0]):
+                missing = sorted(c for c in anchor_excluded if c not in compounds[0] or ":where(:not(" not in compounds[0])
+                if missing:
+                    err("components.css: bare anchor selector `%s` must exclude %s via :where(:not(...))"
+                        % (s, ", ".join(missing)))
+
+    btn_props = {}
+    icon_action_props = {}
+    for sel, body, _r in base_rules:
+        sels = split_selectors(sel)
+        decls = {m.group(1): " ".join(m.group(2).split())
+                 for m in re.finditer(r"(?:^|;)\s*([\w-]+)\s*:\s*([^;]+)", body)}
+        if ".btn" in sels:
+            btn_props.update(decls)
+        if ".icon-action" in sels:
+            icon_action_props.update(decls)
+    if btn_props.get("justify-content") != "center":
+        err("components.css: `.btn` must set `justify-content: center`")
+    if btn_props.get("text-decoration") != "none":
+        err("components.css: `.btn` must set `text-decoration: none` for `<a class=\"btn\">`")
+    if icon_action_props.get("padding") != "0":
+        err("components.css: `.icon-action` must set `padding: 0` so UA button padding cannot squeeze icons")
+
+    cleaned = re.sub(r"/\*.*?\*/", "", css_text, flags=re.S)
+    for m in re.finditer(r"@media\s*([^{]+)\{", cleaned):
+        cond = " ".join(m.group(1).split())
+        if "max-width" in cond:
+            err("components.css: `@media %s` uses `max-width` (subpixel dead zone on fractional DPI); "
+                "use range syntax `@media (width < ...rem)`" % cond)
+
+
 def check_flatpickr_cascade(css_text):
     """Simulate the cascade for every day-state x modifier combination.
 
@@ -874,6 +936,7 @@ def check_component_coverage():
     check_two_part(css)
     check_hover_gates(sels)
     check_bare_elements(css)
+    check_tier_a_hardening(css)
     check_appearance_disabled(css, sels_nogate)
     check_flatpickr_cascade(css)
 

@@ -223,6 +223,7 @@ input[type="radio"].ds-radio:disabled:checked {
   font: inherit;
   font-size: var(--font-size-body-md);
   font-weight: var(--font-weight-medium);
+  text-decoration: none;
   cursor: pointer;
   transition: color var(--transition-fast), background-color var(--transition-fast), border-color var(--transition-fast);
 }
@@ -304,7 +305,7 @@ input[type="radio"].ds-radio:disabled:checked {
   margin-top: var(--space-4);
 }
 
-@media (max-width: 39.9375rem) {
+@media (width < 40rem) {
   .modal__footer {
     flex-direction: column-reverse;
   }
@@ -364,6 +365,7 @@ input[type="radio"].ds-radio:disabled:checked {
   font: inherit;
   font-size: var(--font-size-body-md);
   text-align: left;
+  text-decoration: none;
   cursor: pointer;
 }
 
