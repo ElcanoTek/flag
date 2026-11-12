@@ -11,8 +11,10 @@ Implementation note:
   preview shows is what products get; `preview/styles.css` holds only the
   preview page's own layout.
 - It is safe next to third-party markup. Rules on bare elements are limited
-  to what is harmless for any instance: `box-sizing` on `*`, the link color on
-  `a`, `font: inherit` on form controls, tabular figures on `table`. The
+  to what is harmless for any instance: `box-sizing` on `*`, `[hidden]`
+  protection (`[hidden]:not([hidden="until-found"])`), the link color on
+  prose `a` (excluding component-classed anchors such as `.btn` and
+  `.icon-action`), `font: inherit` on form controls, tabular figures on `table`. The
   text-field shell reaches only text-like inputs (never checkbox, radio,
   range, color, file, button-type or hidden inputs), single selects and
   textareas; native appearance is removed only where Flag draws a

@@ -321,6 +321,129 @@ for (const theme of ["light", "dark"]) {
       });
       for (const s of shelled) { failures++; console.log(`FAIL ${theme} ${width}: native ${s}`); }
 
+      // Tier A hardening: [hidden] beats component display rules (while leaving
+      // hidden="until-found" intact), <a class="btn ..."> and <a class="icon-action">
+      // match <button> colors/alignment/underline at rest and on hover, and
+      // .icon-action zeroes UA button padding.
+      const tierAProblems = await page.evaluate((hasParity) => {
+        const out = [];
+        const probe = document.createElement("div");
+        probe.setAttribute("data-tier-a-probe", "");
+        document.body.append(probe);
+        for (const cls of ["btn btn-primary", "field", "picker-modal", ...(hasParity ? ["alert", "empty-state"] : [])]) {
+          const el = document.createElement("div");
+          el.className = cls;
+          el.hidden = true;
+          probe.append(el);
+          if (getComputedStyle(el).display !== "none") out.push(`[hidden] on .${cls.replace(/\s+/g, ".")} computed display=${getComputedStyle(el).display}`);
+          el.setAttribute("hidden", "until-found");
+          if (getComputedStyle(el).display === "none") out.push(`[hidden="until-found"] on .${cls.replace(/\s+/g, ".")} was forced to display:none`);
+        }
+        const variants = ["btn-primary", "btn-secondary", "btn-ghost", "btn-danger", ...(hasParity ? ["btn-outline", "btn-link"] : [])];
+        for (const v of variants) {
+          const a = document.createElement("a");
+          a.href = "#probe";
+          a.className = `btn ${v}`;
+          a.textContent = "Probe";
+          const b = document.createElement("button");
+          b.type = "button";
+          b.className = `btn ${v}`;
+          b.textContent = "Probe";
+          probe.append(a, b);
+          const ca = getComputedStyle(a), cb = getComputedStyle(b);
+          if (ca.color !== cb.color) out.push(`a.btn.${v} color ${ca.color} != button ${cb.color}`);
+          if (ca.textDecorationLine !== "none") out.push(`a.btn.${v} text-decoration-line=${ca.textDecorationLine}`);
+          if (ca.justifyContent !== "center") out.push(`a.btn.${v} justify-content=${ca.justifyContent}`);
+        }
+        const iaBtn = document.createElement("button");
+        iaBtn.type = "button";
+        iaBtn.className = "icon-action";
+        const iaLink = document.createElement("a");
+        iaLink.href = "#probe";
+        iaLink.className = "icon-action";
+        probe.append(iaBtn, iaLink);
+        if (getComputedStyle(iaBtn).paddingLeft !== "0px" || getComputedStyle(iaBtn).paddingTop !== "0px") {
+          out.push(`button.icon-action padding=${getComputedStyle(iaBtn).padding}`);
+        }
+        if (getComputedStyle(iaLink).color !== getComputedStyle(iaBtn).color) {
+          out.push(`a.icon-action color ${getComputedStyle(iaLink).color} != button ${getComputedStyle(iaBtn).color}`);
+        }
+        probe.remove();
+        return out;
+      }, path === "/preview/shadcn.html");
+      for (const p of tierAProblems) { failures++; console.log(`FAIL ${theme} ${width} ${path}: ${p}`); }
+
+      // Real pointer :hover check on <a class="btn btn-primary"> (and
+      // <a class="btn btn-link"> when shadcn-parity.css is loaded) so light-mode
+      // prose link hover rules never override primary button foreground contrast
+      // and .btn-link keeps its hover underline + link color on <a>.
+      const anchorHoverBad = await (async () => {
+        await page.evaluate(() => {
+          const a = document.createElement("a");
+          a.id = "__flag_hover_probe";
+          a.href = "#probe";
+          a.className = "btn btn-primary";
+          a.textContent = "Primary link";
+          a.style.position = "fixed";
+          a.style.top = "8px";
+          a.style.left = "8px";
+          a.style.zIndex = "9999";
+          document.body.append(a);
+        });
+        await page.locator("#__flag_hover_probe").hover();
+        const bad = await page.evaluate(`(() => {
+          ${HELPERS_JS}
+          const a = document.getElementById("__flag_hover_probe");
+          const cs = getComputedStyle(a);
+          const fg = parse(cs.color)[0];
+          const { backs } = backdrop(a);
+          let worst = 99;
+          for (const b of backs) worst = Math.min(worst, ratio(over(fg, b), b));
+          const dec = cs.textDecorationLine;
+          a.remove();
+          if (dec !== "none") return "a.btn.btn-primary:hover text-decoration-line=" + dec;
+          return worst < 4.5 - 0.005 ? "a.btn.btn-primary:hover contrast " + worst.toFixed(2) + ":1 < 4.5" : null;
+        })()`);
+        if (bad || path !== "/preview/shadcn.html") {
+          await page.mouse.move(0, 0);
+          return bad;
+        }
+        await page.evaluate(() => {
+          const wrap = document.createElement("div");
+          wrap.id = "__flag_hover_link_wrap";
+          wrap.style.position = "fixed";
+          wrap.style.top = "8px";
+          wrap.style.left = "8px";
+          wrap.style.zIndex = "9999";
+          wrap.style.background = "var(--color-surface-1)";
+          const a = document.createElement("a");
+          a.id = "__flag_hover_link_probe";
+          a.href = "#probe";
+          a.className = "btn btn-link";
+          a.textContent = "Action link";
+          wrap.append(a);
+          document.body.append(wrap);
+        });
+        await page.locator("#__flag_hover_link_probe").hover();
+        const linkBad = await page.evaluate(`(() => {
+          ${HELPERS_JS}
+          const wrap = document.getElementById("__flag_hover_link_wrap");
+          const a = document.getElementById("__flag_hover_link_probe");
+          const cs = getComputedStyle(a);
+          const fg = parse(cs.color)[0];
+          const { backs } = backdrop(a);
+          let worst = 99;
+          for (const b of backs) worst = Math.min(worst, ratio(over(fg, b), b));
+          const dec = cs.textDecorationLine;
+          wrap.remove();
+          if (!dec.includes("underline")) return "a.btn.btn-link:hover lost underline (text-decoration-line=" + dec + ")";
+          return worst < 4.5 - 0.005 ? "a.btn.btn-link:hover contrast " + worst.toFixed(2) + ":1 < 4.5" : null;
+        })()`);
+        await page.mouse.move(0, 0);
+        return linkBad;
+      })();
+      if (anchorHoverBad) { failures++; console.log(`FAIL ${theme} ${width} ${path}: ${anchorHoverBad}`); }
+
       // Every focusable element must show a visible focus indicator.
       const unfocused = await page.evaluate(async () => {
         const out = [];
