@@ -272,6 +272,12 @@ Example:
   - do not reference a sprite symbol name that is not present in `icons/core-icons.svg`
 - Reuse the same checkbox pattern in filter popovers, settings lists, and dense forms; do not create alternate checkbox implementations per product.
 
+## Touch targets
+- On a touch screen (`any-pointer: coarse`, so a touchscreen laptop whose primary pointer is a trackpad counts too) no control's tap target is smaller than 24x24px (WCAG 2.5.8), and rows or buttons people tap on their own are 44px tall.
+- Controls drawn smaller than 24px (`@flag/checkbox`, `@flag/radio-group` items, `@flag/switch`) carry an invisible `::after` under `any-pointer-coarse:`, centred on the control: 24x24px for a checkbox or radio, 24px tall at full width for a switch. The control itself is `position: relative` for it. Mouse and pen layouts are unchanged.
+- An invisible hit area never grows past 24px: anything bigger overlaps a neighbour placed closer than its size (a radio group in a row, stacked options, two links side by side), and the later one then catches taps meant for the earlier one.
+- A 44px target comes from layout, not from a pseudo-element: wrap the control in a `<label>` row or table cell that is at least 44px on a coarse pointer (`any-pointer-coarse:min-h-11`), or give a standalone button that min-height.
+
 ## App Header
 - Use the shared `.page-header` with `.ds-app-header` brand/actions anatomy as the default page-level header.
 - Optional support copy (`header_intro`) may be omitted when the page already communicates purpose through surrounding UI.

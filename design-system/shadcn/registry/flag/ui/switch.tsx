@@ -8,6 +8,10 @@ import { cn } from "@/lib/utils"
 // Flag COMPONENTS.md "Switch": 30x18 (lg 38x22), on/off track tokens that
 // hold 3:1, a 14px (16px) knob inset 2px (3px), a hover halo, a dimmed
 // pressed track and --focus-ring-picker. Tier A: .switch / .switch--lg.
+// Touch: on any coarse pointer (a touchscreen, even beside a mouse) an
+// invisible ::after centred on the control widens its hit area to the 24px
+// minimum (COMPONENTS.md "Touch targets"); the drawn control keeps its
+// size. For a 44px target, wrap it in a 44px label row.
 function Switch({
   className,
   size = "default",
@@ -20,7 +24,7 @@ function Switch({
       data-slot="switch"
       data-size={size}
       className={cn(
-        "peer group/switch relative inline-flex shrink-0 cursor-pointer items-center rounded-full border-0 [transition:var(--transition-fast)] outline-none enabled:hover:shadow-[0_0_0_3px_var(--color-pill-hover-bg)] focus-visible:shadow-(--focus-ring-picker) enabled:active:brightness-[0.92] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-[18px] data-[size=default]:w-[30px] data-[size=lg]:h-[22px] data-[size=lg]:w-[38px] data-[state=checked]:bg-(--color-switch-track-on) data-[state=unchecked]:bg-(--color-switch-track-off)",
+        "peer group/switch relative inline-flex shrink-0 cursor-pointer items-center rounded-full border-0 [transition:var(--transition-fast)] outline-none enabled:hover:shadow-[0_0_0_3px_var(--color-pill-hover-bg)] focus-visible:shadow-(--focus-ring-picker) enabled:active:brightness-[0.92] disabled:cursor-not-allowed disabled:opacity-50 data-[size=default]:h-[18px] data-[size=default]:w-[30px] data-[size=lg]:h-[22px] data-[size=lg]:w-[38px] data-[state=checked]:bg-(--color-switch-track-on) data-[state=unchecked]:bg-(--color-switch-track-off) any-pointer-coarse:after:absolute any-pointer-coarse:after:top-1/2 any-pointer-coarse:after:left-1/2 any-pointer-coarse:after:h-6 any-pointer-coarse:after:w-full any-pointer-coarse:after:-translate-1/2",
         className
       )}
       {...props}
