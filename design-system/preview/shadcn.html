@@ -94,8 +94,8 @@ npx shadcn@4.21.4 add @flag/flag-theme @flag/button @flag/dialog</code>
         <summary><h2>Kitchen sink</h2></summary>
         <div class="section-body">
           <p>Every registry item installed into a scratch Vite app with <code>shadcn add</code> and rendered by <code>design-system/shadcn/kitchen-sink/verify.sh</code> (which also runs axe). The screenshot follows this page's theme.</p>
-          <img class="shadcn-shot shadcn-shot--dark" src="./shadcn/kitchen-sink-dark.webp" alt="All Flag shadcn components (dark theme)" width="1440" height="3209" loading="lazy" />
-          <img class="shadcn-shot shadcn-shot--light" src="./shadcn/kitchen-sink-light.webp" alt="All Flag shadcn components (light theme)" width="1440" height="3209" loading="lazy" />
+          <img class="shadcn-shot shadcn-shot--dark" src="./shadcn/kitchen-sink-dark.webp" alt="All Flag shadcn components (dark theme)" width="1440" height="3684" loading="lazy" />
+          <img class="shadcn-shot shadcn-shot--light" src="./shadcn/kitchen-sink-light.webp" alt="All Flag shadcn components (light theme)" width="1440" height="3684" loading="lazy" />
         </div>
       </details>
     </section>
@@ -170,6 +170,28 @@ npx shadcn@4.21.4 add @flag/flag-theme @flag/button @flag/dialog</code>
               <div class="skeleton" style="height:1rem;width:8rem" aria-hidden="true"></div>
             </div>
           </div>
+          <div class="demo-row">
+            <div class="select-wrap select-wrap--sm" style="width:10rem">
+              <select aria-label="Cadence"><option>Hourly</option><option>Daily</option></select>
+              <svg class="select-icon" aria-hidden="true"><use href="../icons/core-icons.svg#chevron-down"></use></svg>
+            </div>
+            <kbd class="kbd-group"><kbd class="kbd">&#8984;</kbd><kbd class="kbd">K</kbd></kbd>
+            <kbd class="kbd">Esc</kbd>
+            <button class="btn btn-ghost btn-icon btn-sm btn-copy" type="button" aria-label="Copy task ID"><svg class="icon-inline" aria-hidden="true"><use href="../icons/core-icons.svg#copy"></use></svg></button>
+            <button class="btn btn-ghost btn-icon btn-sm btn-copy" type="button" aria-label="Copied" data-copied="true"><svg class="icon-inline" aria-hidden="true"><use href="../icons/core-icons.svg#check"></use></svg></button>
+          </div>
+          <div class="progress" role="progressbar" aria-label="Reconciling delivery rows" aria-valuemin="0" aria-valuemax="100" aria-valuenow="68" style="max-width:24rem">
+            <div class="progress__bar" style="width:68%"></div>
+          </div>
+          <div class="empty-state">
+            <div class="empty-state__icon" aria-hidden="true"><svg class="icon" aria-hidden="true"><use href="../icons/core-icons.svg#folder"></use></svg></div>
+            <p class="empty-state__title">No scheduled reports</p>
+            <p class="empty-state__description">Connect a supply source or create a recurring schedule to start delivering reports.</p>
+            <div class="empty-state__actions">
+              <button class="btn btn-primary btn-sm" type="button">New schedule</button>
+              <button class="btn btn-secondary btn-sm" type="button">Import config</button>
+            </div>
+          </div>
         </div>
       </details>
     </section>
@@ -183,16 +205,21 @@ npx shadcn@4.21.4 add @flag/flag-theme @flag/button @flag/dialog</code>
             <li><a href="./r/utils.json"><code>@flag/utils</code></a></li>
             <li><a href="./r/use-flag-theme.json"><code>@flag/use-flag-theme</code></a></li>
             <li><a href="./r/button.json"><code>@flag/button</code></a></li>
+            <li><a href="./r/copy-button.json"><code>@flag/copy-button</code></a></li>
             <li><a href="./r/input.json"><code>@flag/input</code></a></li>
             <li><a href="./r/textarea.json"><code>@flag/textarea</code></a></li>
             <li><a href="./r/label.json"><code>@flag/label</code></a></li>
             <li><a href="./r/select.json"><code>@flag/select</code></a></li>
+            <li><a href="./r/native-select.json"><code>@flag/native-select</code></a></li>
             <li><a href="./r/checkbox.json"><code>@flag/checkbox</code></a></li>
             <li><a href="./r/radio-group.json"><code>@flag/radio-group</code></a></li>
             <li><a href="./r/switch.json"><code>@flag/switch</code></a></li>
             <li><a href="./r/card.json"><code>@flag/card</code></a></li>
             <li><a href="./r/badge.json"><code>@flag/badge</code></a></li>
             <li><a href="./r/alert.json"><code>@flag/alert</code></a></li>
+            <li><a href="./r/progress.json"><code>@flag/progress</code></a></li>
+            <li><a href="./r/kbd.json"><code>@flag/kbd</code></a></li>
+            <li><a href="./r/empty-state.json"><code>@flag/empty-state</code></a></li>
             <li><a href="./r/separator.json"><code>@flag/separator</code></a></li>
             <li><a href="./r/tabs.json"><code>@flag/tabs</code></a></li>
             <li><a href="./r/dialog.json"><code>@flag/dialog</code></a></li>

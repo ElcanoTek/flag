@@ -145,6 +145,7 @@ ${HELPERS_JS}
   const NONTEXT = [
     [".spinner", "borderTopColor"],
     [".file-item-progress-fill", "background"],
+    [".progress__bar", "background"],
     [".ds-checkbox__box", "borderTopColor"],
     [".ds-checkbox-input:checked + .ds-checkbox .ds-checkbox__box", "borderTopColor"],
     [".input-file-select input", "borderTopColor"],
@@ -160,6 +161,7 @@ ${HELPERS_JS}
   const TWO_PART = [
     [".spinner", "borderTopColor", (el) => el, "borderRightColor"],
     [".file-item-progress-fill", "background", (el) => el.parentElement, "background"],
+    [".progress__bar", "background", (el) => el.closest(".progress"), "background"],
     [".switch__knob", "background", (el) => el.closest(".switch"), "background"],
   ];
   for (const [sel, prop, trackOf, trackProp] of TWO_PART) {

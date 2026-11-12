@@ -3,15 +3,16 @@ import {
   BellIcon,
   CalendarIcon,
   ChevronDownIcon,
+  CircleCheckIcon,
   DownloadIcon,
+  FolderOpenIcon,
+  InfoIcon,
   MoonIcon,
   PlusIcon,
   SettingsIcon,
   SunIcon,
   Trash2Icon,
   TriangleAlertIcon,
-  CircleCheckIcon,
-  InfoIcon,
 } from "lucide-react"
 import { toast } from "sonner"
 
@@ -41,6 +42,7 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Checkbox } from "@/components/ui/checkbox"
+import { CopyButton } from "@/components/ui/copy-button"
 import {
   Command,
   CommandEmpty,
@@ -71,8 +73,21 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import {
+  EmptyState,
+  EmptyStateActions,
+  EmptyStateDescription,
+  EmptyStateIcon,
+  EmptyStateTitle,
+} from "@/components/ui/empty-state"
 import { Input } from "@/components/ui/input"
+import { Kbd, KbdGroup } from "@/components/ui/kbd"
 import { Label } from "@/components/ui/label"
+import {
+  NativeSelect,
+  NativeSelectOptGroup,
+  NativeSelectOption,
+} from "@/components/ui/native-select"
 import {
   Popover,
   PopoverContent,
@@ -81,6 +96,7 @@ import {
   PopoverTitle,
   PopoverTrigger,
 } from "@/components/ui/popover"
+import { Progress } from "@/components/ui/progress"
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import {
@@ -181,7 +197,7 @@ export function App() {
             <ThemeToggle />
           </header>
 
-          <Section title="Button" id="button">
+          <Section title="Button, Copy Button, Kbd" id="button">
             <Row>
               <Button>Primary</Button>
               <Button variant="secondary">Secondary</Button>
@@ -198,10 +214,24 @@ export function App() {
               <Button size="icon" variant="secondary" aria-label="Settings"><SettingsIcon /></Button>
               <Button size="icon-sm" variant="ghost" aria-label="Notifications"><BellIcon /></Button>
               <Button size="icon-sm" variant="destructive" aria-label="Delete row"><Trash2Icon /></Button>
+              <CopyButton value="T-1023" label="Copy task ID" />
+              <CopyButton value="https://flag.elcanotek.com/r/registry.json" variant="secondary" size="sm">Copy URL</CopyButton>
+            </Row>
+            <Row>
+              <span className="text-caption text-subtle">Shortcuts:</span>
+              <KbdGroup>
+                <Kbd>⌘</Kbd>
+                <Kbd>K</Kbd>
+              </KbdGroup>
+              <KbdGroup>
+                <Kbd>Shift</Kbd>
+                <Kbd>?</Kbd>
+              </KbdGroup>
+              <Kbd>Esc</Kbd>
             </Row>
           </Section>
 
-          <Section title="Input, Textarea, Label, Select" id="inputs">
+          <Section title="Input, Textarea, Label, Select, Native Select" id="inputs">
             <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
               <div className="grid gap-2">
                 <Label htmlFor="email">Email</Label>
@@ -242,6 +272,32 @@ export function App() {
                 <Label htmlFor="date">Start date</Label>
                 <Input id="date" type="date" defaultValue="2026-10-22" />
               </div>
+              <div className="grid gap-2">
+                <Label htmlFor="native-region">Region (native)</Label>
+                <NativeSelect id="native-region" defaultValue="us-east">
+                  <NativeSelectOptGroup label="North America">
+                    <NativeSelectOption value="us-east">US East</NativeSelectOption>
+                    <NativeSelectOption value="us-west">US West</NativeSelectOption>
+                  </NativeSelectOptGroup>
+                  <NativeSelectOptGroup label="Europe">
+                    <NativeSelectOption value="eu-central">EU Central</NativeSelectOption>
+                  </NativeSelectOptGroup>
+                </NativeSelect>
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="native-cadence">Cadence (native sm)</Label>
+                <NativeSelect id="native-cadence" size="sm" defaultValue="hourly">
+                  <NativeSelectOption value="hourly">Hourly</NativeSelectOption>
+                  <NativeSelectOption value="daily">Daily</NativeSelectOption>
+                  <NativeSelectOption value="weekly">Weekly</NativeSelectOption>
+                </NativeSelect>
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="native-disabled">Locked source</Label>
+                <NativeSelect id="native-disabled" disabled defaultValue="locked">
+                  <NativeSelectOption value="locked">Managed by workspace</NativeSelectOption>
+                </NativeSelect>
+              </div>
               <div className="grid gap-2 md:col-span-3">
                 <Label htmlFor="notes">Notes</Label>
                 <Textarea id="notes" placeholder="Anything the reviewer should know" />
@@ -255,6 +311,10 @@ export function App() {
                 <div className="flex items-center gap-2">
                   <Checkbox id="c1" checked={notify} onCheckedChange={(v) => setNotify(v === true)} />
                   <Label htmlFor="c1" className="text-body-md text-foreground">Notify on completion</Label>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Checkbox id="c-indet" checked="indeterminate" />
+                  <Label htmlFor="c-indet" className="text-body-md text-foreground">Partial selection</Label>
                 </div>
                 <div className="flex items-center gap-2">
                   <Checkbox id="c2" />
@@ -349,7 +409,7 @@ export function App() {
             </div>
           </Section>
 
-          <Section title="Alert, Skeleton" id="feedback">
+          <Section title="Alert, Progress, Skeleton, Empty State" id="feedback">
             <Alert>
               <InfoIcon />
               <AlertTitle>Sync paused</AlertTitle>
@@ -370,6 +430,13 @@ export function App() {
               <AlertTitle>Upload failed</AlertTitle>
               <AlertDescription>The file has no header row. Add one and upload again.</AlertDescription>
             </Alert>
+            <div className="grid max-w-md gap-1.5">
+              <div className="flex items-center justify-between text-caption text-subtle">
+                <span id="progress-label">Reconciling delivery rows</span>
+                <span className="font-mono tabular-nums">68%</span>
+              </div>
+              <Progress value={68} aria-labelledby="progress-label" />
+            </div>
             <div className="flex items-center gap-4" role="status" aria-busy="true">
               <span className="sr-only">Loading example</span>
               <Skeleton className="size-10 rounded-full" />
@@ -378,6 +445,19 @@ export function App() {
                 <Skeleton className="h-4 w-1/2" />
               </div>
             </div>
+            <EmptyState>
+              <EmptyStateIcon>
+                <FolderOpenIcon />
+              </EmptyStateIcon>
+              <EmptyStateTitle>No scheduled reports</EmptyStateTitle>
+              <EmptyStateDescription>
+                Connect a supply source or create a recurring schedule to start delivering reports.
+              </EmptyStateDescription>
+              <EmptyStateActions>
+                <Button size="sm"><PlusIcon />New schedule</Button>
+                <Button size="sm" variant="secondary">Import config</Button>
+              </EmptyStateActions>
+            </EmptyState>
           </Section>
 
           <Section title="Tabs" id="tabs">
@@ -405,7 +485,7 @@ export function App() {
           </Section>
 
           <Section title="Table, Scroll Area" id="table">
-            <Table>
+            <Table scrollLabel="Recent tasks">
               <TableCaption>Recent tasks</TableCaption>
               <TableHeader>
                 <TableRow>

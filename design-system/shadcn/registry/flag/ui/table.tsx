@@ -6,15 +6,29 @@ import { cn } from "@/lib/utils"
 
 // Flag COMPONENTS.md "Tables and List Rows": bordered, radius-md wrapper;
 // uppercase caption-size muted head; 0.625rem cells; tabular figures; row
-// hover only for clickable rows (pass `interactive`). Tier A: .table-wrap >
-// table, tr.is-interactive.
-function Table({ className, ...props }: React.ComponentProps<"table">) {
+// hover only for clickable rows (pass `interactive`). Pass `scrollLabel` when
+// a table may overflow horizontally so keyboard users can focus and scroll the
+// region without turning static tables into dead tab stops. Tier A:
+// .table-wrap > table, tr.is-interactive.
+function Table({
+  className,
+  containerClassName,
+  scrollLabel,
+  ...props
+}: React.ComponentProps<"table"> & {
+  containerClassName?: string
+  scrollLabel?: string
+}) {
   return (
     <div
       data-slot="table-container"
-      // Focusable so a table wider than the screen scrolls from the keyboard.
-      tabIndex={0}
-      className="relative w-full overflow-x-auto rounded-md border border-border outline-none focus-visible:shadow-(--focus-ring)"
+      {...(scrollLabel
+        ? { role: "region", "aria-label": scrollLabel, tabIndex: 0 }
+        : undefined)}
+      className={cn(
+        "relative w-full overflow-x-auto rounded-md border border-border outline-none focus-visible:shadow-(--focus-ring)",
+        containerClassName
+      )}
     >
       <table
         data-slot="table"
