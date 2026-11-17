@@ -3,12 +3,13 @@
 This is the shared icon vocabulary for all Elcano microservices.
 
 ## Source
-- Sprite file: `icons/core-icons.svg` (72 symbols; every one is shown in the
+- Sprite file: `icons/core-icons.svg` (75 symbols; every one is shown in the
   preview's Core Icons section).
 - Style: stroke-based on a 24px grid, `currentColor`, rounded caps and joins.
-- Stroke width: `1.75` to `2` (new glyphs use `1.9`). Two glyphs are filled
+- Stroke width: `1.75` to `2` (new glyphs use `1.9`). Four glyphs are filled
   on purpose because a stroke reads poorly at their size: `dots` (overflow
-  menu) and `stop` (stop a running operation).
+  menu) and the media-style controls `stop`, `play` and `pause`, which are
+  drawn as one solid set so they read the same side by side.
 - Some glyphs are drawn after [Lucide](https://lucide.dev) (ISC); the notice
   lives in a comment at the top of the sprite, so it travels with every copy.
 
@@ -103,6 +104,9 @@ This is the shared icon vocabulary for all Elcano microservices.
 - `zap` - automation, triggers and quick actions
 - `selector` - up/down caret on a picker or select trigger (smaller than `expand`)
 - `archive` - archive an item (move out of the active list without deleting)
+- `play` - start or run now (e.g. run a schedule immediately, resume); filled glyph
+- `pause` - pause something that keeps its state and can resume; filled glyph
+- `collapse-down` - fold a bar or panel down out of view without closing what it shows (pairs with `chevron-down`)
 
 ## Accessibility Rules
 - Decorative icons: `aria-hidden="true"`.
