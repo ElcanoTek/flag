@@ -3,7 +3,7 @@
 This is the shared icon vocabulary for all Elcano microservices.
 
 ## Source
-- Sprite file: `icons/core-icons.svg` (75 symbols; every one is shown in the
+- Sprite file: `icons/core-icons.svg` (76 symbols; every one is shown in the
   preview's Core Icons section).
 - Style: stroke-based on a 24px grid, `currentColor`, rounded caps and joins.
 - Stroke width: `1.75` to `2` (new glyphs use `1.9`). Four glyphs are filled
@@ -107,6 +107,7 @@ This is the shared icon vocabulary for all Elcano microservices.
 - `play` - start or run now (e.g. run a schedule immediately, resume); filled glyph
 - `pause` - pause something that keeps its state and can resume; filled glyph
 - `collapse-down` - fold a bar or panel down out of view without closing what it shows (pairs with `chevron-down`)
+- `hourglass` - something that is running out: a temporary item that expires, a time-limited state. Not a schedule or a time of day (`clock`, `calendar`)
 
 ## Accessibility Rules
 - Decorative icons: `aria-hidden="true"`.
