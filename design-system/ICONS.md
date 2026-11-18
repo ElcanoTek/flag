@@ -3,7 +3,7 @@
 This is the shared icon vocabulary for all Elcano microservices.
 
 ## Source
-- Sprite file: `icons/core-icons.svg` (76 symbols; every one is shown in the
+- Sprite file: `icons/core-icons.svg` (79 symbols; every one is shown in the
   preview's Core Icons section).
 - Style: stroke-based on a 24px grid, `currentColor`, rounded caps and joins.
 - Stroke width: `1.75` to `2` (new glyphs use `1.9`). Four glyphs are filled
@@ -108,6 +108,9 @@ This is the shared icon vocabulary for all Elcano microservices.
 - `pause` - pause something that keeps its state and can resume; filled glyph
 - `collapse-down` - fold a bar or panel down out of view without closing what it shows (pairs with `chevron-down`)
 - `hourglass` - something that is running out: a temporary item that expires, a time-limited state. Not a schedule or a time of day (`clock`, `calendar`)
+- `link` - a link to the item itself: share by URL, copy link. Not a link that leaves the surface (`external-link`)
+- `users` - a team or group of people: shared with a team, a group audience. One person or an agent is `persona`
+- `unarchive` - bring an archived item back into the active list (the way out of `archive`, drawn on the same box)
 
 ## Accessibility Rules
 - Decorative icons: `aria-hidden="true"`.
