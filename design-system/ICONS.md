@@ -3,7 +3,7 @@
 This is the shared icon vocabulary for all Elcano microservices.
 
 ## Source
-- Sprite file: `icons/core-icons.svg` (79 symbols; every one is shown in the
+- Sprite file: `icons/core-icons.svg` (80 symbols; every one is shown in the
   preview's Core Icons section).
 - Style: stroke-based on a 24px grid, `currentColor`, rounded caps and joins.
 - Stroke width: `1.75` to `2` (new glyphs use `1.9`). Four glyphs are filled
@@ -111,6 +111,7 @@ This is the shared icon vocabulary for all Elcano microservices.
 - `link` - a link to the item itself: share by URL, copy link. Not a link that leaves the surface (`external-link`)
 - `users` - a team or group of people: shared with a team, a group audience. One person or an agent is `persona`
 - `unarchive` - bring an archived item back into the active list (the way out of `archive`, drawn on the same box)
+- `branch` - a copy that forks off an original and continues on its own (a branched conversation, a fork)
 
 ## Accessibility Rules
 - Decorative icons: `aria-hidden="true"`.
